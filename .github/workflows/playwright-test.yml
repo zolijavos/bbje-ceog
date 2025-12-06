@@ -1,0 +1,84 @@
+name: Playwright E2E Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: test_password
+          MYSQL_DATABASE: ceog_test
+          MYSQL_USER: ceog_test_user
+          MYSQL_PASSWORD: test_password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup Prisma
+        env:
+          DATABASE_URL: "mysql://ceog_test_user:test_password@127.0.0.1:3306/ceog_test"
+        run: |
+          npx prisma generate
+          npx prisma migrate deploy
+
+      - name: Seed test database
+        env:
+          DATABASE_URL: "mysql://ceog_test_user:test_password@127.0.0.1:3306/ceog_test"
+        run: npm run db:seed || echo "No seed script found, skipping..."
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright E2E Tests (Headless)
+        env:
+          DATABASE_URL: "mysql://ceog_test_user:test_password@127.0.0.1:3306/ceog_test"
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_TEST_SECRET_KEY }}
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_TEST_PUBLISHABLE_KEY }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_TEST_WEBHOOK_SECRET }}
+          APP_SECRET: "test_secret_min_64_chars_for_magic_links_XXXXXXXXXXXXXXXX"
+          QR_SECRET: "test_qr_secret_min_64_chars_for_jwt_tokens_YYYYYYYYYYYYYYYY"
+          NEXTAUTH_SECRET: "test_nextauth_secret_32_chars_ZZZZ"
+          NEXTAUTH_URL: "http://localhost:3000"
+        run: npx playwright test --project=chromium
+
+      - name: Upload Playwright Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-test-results
+          path: test-results/
+          retention-days: 30

@@ -1,0 +1,322 @@
+// CEO Gala Registration System - Database Schema
+// Prisma ORM 5.19+ with MySQL 8.0+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================================
+// GUESTS & REGISTRATIONS
+// ==================================
+
+model Guest {
+  id                     Int                @id @default(autoincrement())
+  email                  String             @unique @db.VarChar(255)
+  name                   String             @db.VarChar(255)
+  title                  String?            @db.VarChar(50)  // Megszólítás: Dr., Prof., stb.
+  phone                  String?            @db.VarChar(20)  // Telefonszám (kötelező regisztrációnál)
+  company                String?            @db.VarChar(255) // Cég neve
+  position               String?            @db.VarChar(100) // Beosztás
+  guest_type             GuestType          // vip, paying_single, paying_paired
+  registration_status    RegistrationStatus @default(invited) // invited, registered, approved, declined
+  magic_link_hash        String?            @db.VarChar(255)
+  magic_link_expires_at  DateTime?
+  dietary_requirements   String?            @db.Text  // Diéta, ételérzékenység, allergia
+  seating_preferences    String?            @db.Text  // Ültetési preferenciák (kivel szeretne ülni)
+  applied_at             DateTime?          // When applicant submitted their application
+  rejection_reason       String?            @db.Text  // Reason for rejection (if rejected)
+  pwa_auth_code          String?            @unique @db.VarChar(20)  // PWA login code (e.g., "CEOG-ABC123")
+  push_token             String?            @db.VarChar(500)          // Firebase FCM push notification token
+  created_at             DateTime           @default(now())
+  updated_at             DateTime           @updatedAt
+
+  // Partner kapcsolat - páros jegynél a fő vendég és partner összekapcsolása
+  // A fő vendég (paired_with_id = null) hivatkozik a partnerre (partner_of)
+  // A partner (paired_with_id = fő vendég id) a fő vendéghez tartozik
+  paired_with_id         Int?               @unique // Ha ez egy partner, a fő vendég ID-ja (1:1 kapcsolat)
+  paired_with            Guest?             @relation("GuestPartner", fields: [paired_with_id], references: [id], onDelete: SetNull)
+  partner_of             Guest?             @relation("GuestPartner") // Ha ez a fő vendég, a partnere
+
+  // Relations
+  registration    Registration?
+  table_assignment TableAssignment?
+  checkin          Checkin?
+  email_logs       EmailLog[]
+
+  @@index([email])
+  @@index([registration_status])
+  @@index([paired_with_id])
+  @@index([pwa_auth_code])
+  @@map("guests")
+}
+
+model Registration {
+  id                  Int              @id @default(autoincrement())
+  guest_id            Int              @unique
+  ticket_type         TicketType       // vip_free, paid_single, paid_paired
+  partner_name        String?          @db.VarChar(255)
+  partner_email       String?          @db.VarChar(255)
+  payment_method      PaymentMethod?   // card, bank_transfer
+  qr_code_hash        String?          @unique @db.VarChar(500) // JWT token
+  qr_code_generated_at DateTime?
+  registered_at       DateTime         @default(now())
+
+  // GDPR és lemondási feltételek
+  gdpr_consent             Boolean   @default(false)
+  gdpr_consent_at          DateTime?
+  cancellation_accepted    Boolean   @default(false)
+  cancellation_accepted_at DateTime?
+
+  // Relations
+  guest        Guest        @relation(fields: [guest_id], references: [id], onDelete: Cascade)
+  payment      Payment?
+  checkin      Checkin?
+  billing_info BillingInfo?
+
+  @@index([guest_id])
+  @@map("registrations")
+}
+
+model Payment {
+  id                   Int           @id @default(autoincrement())
+  registration_id      Int           @unique
+  stripe_session_id    String?       @unique @db.VarChar(255)
+  stripe_payment_intent_id String?   @db.VarChar(255)
+  amount               Decimal       @db.Decimal(10, 2)
+  currency             String        @default("HUF") @db.VarChar(3)
+  payment_status       PaymentStatus @default(pending) // pending, paid, failed, refunded
+  payment_method       PaymentMethod // card, bank_transfer
+  paid_at              DateTime?
+  created_at           DateTime      @default(now())
+
+  // Relations
+  registration Registration @relation(fields: [registration_id], references: [id], onDelete: Cascade)
+
+  @@index([registration_id])
+  @@index([payment_status])
+  @@index([stripe_session_id])
+  @@map("payments")
+}
+
+// ==================================
+// CHECK-IN SYSTEM
+// ==================================
+
+model Checkin {
+  id              Int      @id @default(autoincrement())
+  registration_id Int      @unique
+  guest_id        Int      @unique
+  staff_user_id   Int?
+  checked_in_at   DateTime @default(now())
+  method          String   @default("qr") @db.VarChar(20) // qr, manual
+  is_override     Boolean  @default(false) // Admin manual override
+  notes           String?  @db.Text
+
+  // Relations
+  registration Registration @relation(fields: [registration_id], references: [id], onDelete: Cascade)
+  guest        Guest        @relation(fields: [guest_id], references: [id], onDelete: Cascade)
+  staff_user   User?        @relation(fields: [staff_user_id], references: [id])
+
+  @@index([registration_id])
+  @@index([guest_id])
+  @@index([checked_in_at])
+  @@map("checkins")
+}
+
+// ==================================
+// SEATING MANAGEMENT
+// ==================================
+
+model Table {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique @db.VarChar(100)
+  capacity   Int         // Number of seats
+  type       String      @default("standard") @db.VarChar(50) // standard, vip, reserved
+  pos_x      Float?      // X coordinate in meters for visual map
+  pos_y      Float?      // Y coordinate in meters for visual map
+  status     TableStatus @default(available) // available, full, reserved
+  created_at DateTime    @default(now())
+
+  // Relations
+  assignments TableAssignment[]
+
+  @@index([name])
+  @@map("tables")
+}
+
+model TableAssignment {
+  id          Int      @id @default(autoincrement())
+  table_id    Int
+  guest_id    Int      @unique
+  seat_number Int?     // Seat position at table
+  assigned_at DateTime @default(now())
+  assigned_by Int?     // User ID who made assignment
+
+  // Relations
+  table Table @relation(fields: [table_id], references: [id], onDelete: Cascade)
+  guest Guest @relation(fields: [guest_id], references: [id], onDelete: Cascade)
+
+  @@unique([table_id, seat_number]) // One guest per seat
+  @@index([table_id])
+  @@index([guest_id])
+  @@map("table_assignments")
+}
+
+// ==================================
+// ADMIN USERS
+// ==================================
+
+model User {
+  id            Int       @id @default(autoincrement())
+  email         String    @unique @db.VarChar(255)
+  password_hash String    @db.VarChar(255) // bcrypt hash
+  name          String    @db.VarChar(255)
+  role          UserRole  @default(staff) // admin, staff
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+
+  // Relations
+  checkins Checkin[]
+
+  @@index([email])
+  @@map("users")
+}
+
+// ==================================
+// EMAIL LOGGING
+// ==================================
+
+model EmailLog {
+  id            Int       @id @default(autoincrement())
+  guest_id      Int
+  email_type    String    @db.VarChar(100) // magic_link, ticket_delivery, confirmation
+  recipient     String    @db.VarChar(255)
+  subject       String    @db.VarChar(500)
+  status        String    @default("sent") @db.VarChar(50) // sent, failed, bounced
+  error_message String?   @db.Text
+  sent_at       DateTime  @default(now())
+
+  // Relations
+  guest Guest @relation(fields: [guest_id], references: [id], onDelete: Cascade)
+
+  @@index([guest_id])
+  @@index([email_type])
+  @@index([sent_at])
+  @@map("email_logs")
+}
+
+// ==================================
+// BILLING INFO (Fizetős vendégek számlázási adatai)
+// ==================================
+
+model BillingInfo {
+  id              Int          @id @default(autoincrement())
+  registration_id Int          @unique
+  billing_name    String       @db.VarChar(255)  // Számlázási név
+  company_name    String?      @db.VarChar(255)  // Cégnév (opcionális)
+  tax_number      String?      @db.VarChar(50)   // Adószám (opcionális, magyar format: 12345678-1-12)
+  address_line1   String       @db.VarChar(255)  // Cím 1. sor
+  address_line2   String?      @db.VarChar(255)  // Cím 2. sor (opcionális)
+  city            String       @db.VarChar(100)  // Város
+  postal_code     String       @db.VarChar(20)   // Irányítószám
+  country         String       @default("HU") @db.VarChar(2)  // Országkód ISO 3166-1 alpha-2
+  created_at      DateTime     @default(now())
+  updated_at      DateTime     @updatedAt
+
+  // Reláció
+  registration Registration @relation(fields: [registration_id], references: [id], onDelete: Cascade)
+
+  @@index([registration_id])
+  @@map("billing_info")
+}
+
+// ==================================
+// EMAIL TEMPLATES
+// ==================================
+
+model EmailTemplate {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique @db.VarChar(100)  // e.g., "magic_link", "ticket_delivery"
+  name        String   @db.VarChar(255)          // Human-readable name
+  subject     String   @db.VarChar(500)          // Email subject line
+  html_body   String   @db.Text                  // HTML template content
+  text_body   String   @db.Text                  // Plain text template content
+  variables   String   @db.Text                  // JSON array of available variables
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@index([slug])
+  @@map("email_templates")
+}
+
+// ==================================
+// RATE LIMITING
+// ==================================
+
+model RateLimitEntry {
+  id         Int      @id @default(autoincrement())
+  key        String   @db.VarChar(255)  // e.g., "auth:admin@example.com" or "email:123"
+  attempts   Int      @default(1)
+  expires_at DateTime
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@unique([key])
+  @@index([expires_at])
+  @@map("rate_limit_entries")
+}
+
+// ==================================
+// ENUMS
+// ==================================
+
+enum GuestType {
+  vip
+  paying_single
+  paying_paired
+  applicant       // Non-invited guest who applied to attend
+}
+
+enum RegistrationStatus {
+  invited           // Magic link sent, not yet registered
+  registered        // Form submitted, awaiting approval (if paying)
+  approved          // Registration approved
+  declined          // Guest declined invitation
+  pending_approval  // Applicant waiting for admin approval
+  rejected          // Applicant rejected by admin
+}
+
+enum TicketType {
+  vip_free
+  paid_single
+  paid_paired
+}
+
+enum PaymentMethod {
+  card
+  bank_transfer
+}
+
+enum PaymentStatus {
+  pending       // Awaiting payment
+  paid          // Payment confirmed
+  failed        // Payment failed
+  refunded      // Payment refunded
+}
+
+enum TableStatus {
+  available
+  full
+  reserved
+}
+
+enum UserRole {
+  admin
+  staff
+}

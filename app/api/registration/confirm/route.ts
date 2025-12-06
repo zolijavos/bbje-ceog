@@ -1,0 +1,137 @@
+/**
+ * Registration Confirmation API
+ *
+ * POST /api/registration/confirm
+ *
+ * Handles VIP guest registration confirmation or decline.
+ */
+
+import { NextRequest, NextResponse } from 'next/server';
+import { processVIPRegistration } from '@/lib/services/registration';
+import { logError } from '@/lib/utils/logger';
+
+interface ConfirmBody {
+  guest_id: number;
+  attendance: 'confirm' | 'decline';
+  title?: string | null;
+  phone?: string | null;
+  company?: string | null;
+  position?: string | null;
+  dietary_requirements?: string | null;
+  seating_preferences?: string | null;
+  gdpr_consent?: boolean;
+  cancellation_accepted?: boolean;
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const body: ConfirmBody = await request.json();
+    const { guest_id, attendance, title, phone, company, position, dietary_requirements, seating_preferences, gdpr_consent, cancellation_accepted } = body;
+
+    // Validate required fields
+    if (!guest_id || typeof guest_id !== 'number') {
+      return NextResponse.json(
+        { success: false, error: 'guest_id is required' },
+        { status: 400 }
+      );
+    }
+
+    if (!attendance || !['confirm', 'decline'].includes(attendance)) {
+      return NextResponse.json(
+        { success: false, error: 'attendance must be "confirm" or "decline"' },
+        { status: 400 }
+      );
+    }
+
+    // Validate required profile fields for confirmation
+    if (attendance === 'confirm') {
+      if (!phone || phone.trim().length < 9) {
+        return NextResponse.json(
+          { success: false, error: 'Phone number is required' },
+          { status: 400 }
+        );
+      }
+      if (!company || company.trim().length < 1) {
+        return NextResponse.json(
+          { success: false, error: 'Company name is required' },
+          { status: 400 }
+        );
+      }
+      if (!position || position.trim().length < 1) {
+        return NextResponse.json(
+          { success: false, error: 'Position is required' },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Process VIP registration with all profile data
+    const result = await processVIPRegistration({
+      guest_id,
+      attendance,
+      title,
+      phone,
+      company,
+      position,
+      dietary_requirements,
+      seating_preferences,
+      gdpr_consent,
+      cancellation_accepted,
+    });
+
+    if (!result.success) {
+      // Return 409 for already registered
+      if (result.error === 'Already registered for this event') {
+        return NextResponse.json(
+          {
+            success: false,
+            error: result.error,
+            status: result.status,
+            registrationId: result.registrationId,
+          },
+          { status: 409 }
+        );
+      }
+
+      // Return 403 for non-VIP
+      if (result.error === 'This page is only available for VIP guests') {
+        return NextResponse.json(
+          { success: false, error: result.error },
+          { status: 403 }
+        );
+      }
+
+      // Return 404 for guest not found
+      if (result.error === 'Guest not found') {
+        return NextResponse.json(
+          { success: false, error: result.error },
+          { status: 404 }
+        );
+      }
+
+      // Generic error
+      return NextResponse.json(
+        { success: false, error: result.error },
+        { status: 400 }
+      );
+    }
+
+    // Success response
+    return NextResponse.json({
+      success: true,
+      status: result.status,
+      registrationId: result.registrationId,
+      message:
+        attendance === 'confirm'
+          ? 'Attendance confirmed successfully!'
+          : 'Response recorded. Thank you!',
+    });
+  } catch (error) {
+    logError('[REGISTRATION-CONFIRM]', error);
+
+    return NextResponse.json(
+      { success: false, error: 'Server error occurred' },
+      { status: 500 }
+    );
+  }
+}

@@ -1,0 +1,378 @@
+<story-context id="bmad/bmm/workflows/4-implementation/story-context/template" v="1.0">
+  <metadata>
+    <epicId>1</epicId>
+    <storyId>1.2</storyId>
+    <title>Admin Authentication & Session Management</title>
+    <status>drafted</status>
+    <generatedAt>2025-11-27</generatedAt>
+    <generator>BMAD Story Context Workflow</generator>
+    <sourceStoryPath>docs/sprint-artifacts/1-2-admin-authentication-session-management.md</sourceStoryPath>
+  </metadata>
+
+  <story>
+    <asA>admin user</asA>
+    <iWant>log in securely with email and password</iWant>
+    <soThat>I can access the admin dashboard and manage guests</soThat>
+    <tasks>
+### Task 1: NextAuth.js Setup & Configuration (AC: #1.2.2, #1.2.3)
+- Install NextAuth.js 4.24.11 + bcryptjs dependencies
+- Create NextAuth.js config file: app/api/auth/[...nextauth]/route.ts
+- Configure Credentials provider with Prisma user lookup
+- Implement bcrypt.compare() password verification
+- Configure session strategy: JWT (default)
+- Set session maxAge: 24 hours (86400 seconds)
+- Configure secure cookie options (HttpOnly, Secure, SameSite=Strict)
+- Add NEXTAUTH_SECRET and NEXTAUTH_URL to .env.local
+
+### Task 2: Login Page UI Component (AC: #1.2.1)
+- Create login page: app/(auth)/admin/login/page.tsx (client component)
+- Design form layout (mobile-first, Tailwind CSS)
+- Add form validation (client-side email format, required fields)
+- Implement form submission handler with signIn('credentials')
+- Add loading state during authentication
+- Accessibility: ARIA labels, keyboard navigation, focus management
+
+### Task 3: Middleware Route Protection (AC: #1.2.3)
+- Create middleware.ts in project root
+- Implement NextAuth.js middleware wrapper
+- Configure matcher: ['/admin/:path*']
+- Test unauthenticated/authenticated access
+- Add redirect URL preservation (returnUrl query param)
+
+### Task 4: Admin Dashboard Landing Page (AC: #1.2.2)
+- Create admin dashboard: app/admin/page.tsx (server component)
+- Display welcome message with admin name (from session)
+- Add navigation links to guest management pages
+- Add logout button (signOut())
+- Show current session info (email, role)
+
+### Task 5: Session Type Definitions & Utilities (AC: #1.2.2)
+- Extend NextAuth session type in types/next-auth.d.ts
+- Create session utility: lib/auth/session.ts
+- Create client hook: hooks/useSession.ts
+
+### Task 6: Error Handling & Rate Limiting (AC: #1.2.4)
+- Implement rate limiting in authorize() callback (max 5 attempts/5 minutes)
+- Add error handling in login form
+- Add CSRF protection (NextAuth.js built-in)
+
+### Task 7: E2E & Integration Testing (AC: All)
+- Write Playwright E2E test: tests/e2e/admin-login.spec.ts
+- Write integration test for NextAuth API: tests/integration/auth-api.test.ts
+- Manual testing checklist (mobile, keyboard, screen reader, cross-browser)
+    </tasks>
+  </story>
+
+  <acceptanceCriteria>
+### AC-1.2.1: Login Form Megjelenítés
+Given I am an unauthenticated admin
+When I navigate to /admin/login
+Then I see a login form with email and password fields
+And I can enter credentials (admin@ceogala.test / Admin123!)
+
+### AC-1.2.2: Sikeres Bejelentkezés
+When I submit the form with valid credentials
+Then my password is verified using bcrypt (cost=12)
+And a secure session cookie is created (HttpOnly, Secure, SameSite=Strict)
+And I am redirected to /admin dashboard
+
+### AC-1.2.3: Route Protection
+When I try to access /admin/* routes without authentication
+Then I am redirected to /admin/login
+And the session expires after 24 hours of inactivity
+
+### AC-1.2.4: Invalid Credentials Handling
+When I submit the form with invalid credentials
+Then I see an error message: "Invalid email or password"
+And I remain on the login page
+And rate limiting prevents brute-force attacks (max 5 attempts/5 minutes)
+  </acceptanceCriteria>
+
+  <artifacts>
+    <docs>
+      <doc>
+        <path>docs/sprint-artifacts/tech-spec-epic-1.md</path>
+        <title>Epic 1 Technical Specification</title>
+        <section>APIs and Interfaces - Authentication</section>
+        <snippet>NextAuth.js 4.24.11 with Credentials provider. bcryptjs for password hashing (cost=12). JWT session strategy (HttpOnly, Secure, SameSite=Strict). Session expiry: 24 hours inactivity.</snippet>
+      </doc>
+      <doc>
+        <path>docs/sprint-artifacts/tech-spec-epic-1.md</path>
+        <title>Epic 1 Technical Specification</title>
+        <section>Security - Admin Session</section>
+        <snippet>Password: bcrypt hash (cost=12, ~250ms hash time). Session: JWT strategy (stateless, no database storage). Middleware protection for /admin/* routes. CSRF protection built-in via NextAuth.js.</snippet>
+      </doc>
+      <doc>
+        <path>docs/sprint-artifacts/tech-spec-epic-1.md</path>
+        <title>Epic 1 Technical Specification</title>
+        <section>Data Models - users Table</section>
+        <snippet>User model: id (INT PK), email (VARCHAR UNIQUE), password_hash (VARCHAR bcrypt cost=12), name (VARCHAR), role (UserRole: admin/staff), created_at, updated_at. Seed data: 2 admin users (admin@ceogala.test, janos@ceogala.test).</snippet>
+      </doc>
+      <doc>
+        <path>docs/FUNKCIONALIS-KOVETELMENY.md</path>
+        <title>Functional Requirements</title>
+        <section>FR-2.7.2: Admin Dashboard Requirements</section>
+        <snippet>Admin authentication via email+password. bcrypt password hashing. Session management with 24-hour expiry. Role-based access (admin, staff).</snippet>
+      </doc>
+      <doc>
+        <path>docs/tech-spec.md</path>
+        <title>Quick Flow Technical Specification</title>
+        <section>Project Stack - Framework</section>
+        <snippet>Next.js 14+ App Router full-stack architecture. React 18. TypeScript (recommended). Node.js 18+. Tailwind CSS mobile-first design.</snippet>
+      </doc>
+      <doc>
+        <path>CLAUDE.md</path>
+        <title>Project Instructions for Claude Code</title>
+        <section>Architecture - Next.js App Router Pattern</section>
+        <snippet>app/(auth)/admin/login/page.tsx - Login form. app/api/auth/[...nextauth]/route.ts - NextAuth config. middleware.ts - Route protection. NextAuth session management (JWT strategy, HttpOnly cookies, role-based access).</snippet>
+      </doc>
+    </docs>
+    <code>
+      <artifact>
+        <path>prisma/schema.prisma</path>
+        <kind>database-schema</kind>
+        <symbol>User</symbol>
+        <lines>151-165</lines>
+        <reason>User model definition with email, password_hash (bcrypt), name, role (admin/staff). Required for NextAuth Credentials provider authorization.</reason>
+      </artifact>
+      <artifact>
+        <path>prisma/schema.prisma</path>
+        <kind>database-schema</kind>
+        <symbol>UserRole</symbol>
+        <lines>231-234</lines>
+        <reason>UserRole enum (admin, staff) for role-based access control in sessions.</reason>
+      </artifact>
+      <artifact>
+        <path>prisma/seed.ts</path>
+        <kind>seed-script</kind>
+        <symbol>adminUsers</symbol>
+        <lines>1-50</lines>
+        <reason>Seed script creates 2 admin users with bcrypt hashed passwords. Credentials: admin@ceogala.test / Admin123!, janos@ceogala.test / Admin456!. Used for login testing.</reason>
+      </artifact>
+      <artifact>
+        <path>.env.local</path>
+        <kind>config</kind>
+        <symbol>environment-variables</symbol>
+        <lines>all</lines>
+        <reason>Add NEXTAUTH_SECRET (min 32 chars random), NEXTAUTH_URL (http://localhost:3000 dev / production URL). Required for NextAuth.js session encryption.</reason>
+      </artifact>
+      <artifact>
+        <path>package.json</path>
+        <kind>dependencies</kind>
+        <symbol>dependencies</symbol>
+        <lines>all</lines>
+        <reason>Install next-auth@4.24.11, bcryptjs, @types/bcryptjs. Existing deps: Next.js 15.0.3, React 19, Prisma 5.22.0, Tailwind CSS 3.4.15.</reason>
+      </artifact>
+    </code>
+    <dependencies>
+      <node>
+        <package>next-auth</package>
+        <version>4.24.11</version>
+        <reason>Authentication library - Credentials provider, JWT sessions, middleware</reason>
+      </node>
+      <node>
+        <package>bcryptjs</package>
+        <version>^2.4.3</version>
+        <reason>Password hashing verification (bcrypt.compare)</reason>
+      </node>
+      <node>
+        <package>@types/bcryptjs</package>
+        <version>^2.4.6</version>
+        <reason>TypeScript types for bcryptjs</reason>
+      </node>
+      <node>
+        <package>next</package>
+        <version>^15.0.3</version>
+        <reason>Existing - Next.js framework (App Router, API routes, middleware)</reason>
+      </node>
+      <node>
+        <package>react</package>
+        <version>^19.0.0</version>
+        <reason>Existing - UI component library</reason>
+      </node>
+      <node>
+        <package>@prisma/client</package>
+        <version>^5.22.0</version>
+        <reason>Existing - Database client for user lookup in authorize() callback</reason>
+      </node>
+      <node>
+        <package>tailwindcss</package>
+        <version>^3.4.15</version>
+        <reason>Existing - CSS framework for login form styling</reason>
+      </node>
+    </dependencies>
+  </artifacts>
+
+  <constraints>
+### Architecture Constraints
+- NextAuth.js Credentials Provider pattern (single file: app/api/auth/[...nextauth]/route.ts exports GET + POST handlers)
+- Session stored as JWT (stateless, no database session storage)
+- Middleware runs before every /admin/* request
+- Server Components use getServerSession(), Client Components use useSession() hook
+
+### Security Constraints
+- Password verification ONLY via bcrypt.compare() (never direct comparison)
+- bcrypt cost factor: 12 (from seed script, ~250ms hash time)
+- Session cookie: HttpOnly, Secure (prod), SameSite=Strict
+- CSRF protection (NextAuth.js built-in)
+- Rate limiting: max 5 failed login attempts per 5-minute window per email (in-memory Map for MVP)
+- Session expiry: 24 hours inactivity (session.maxAge: 86400)
+
+### Database Constraints
+- User lookup via Prisma: prisma.user.findUnique({ where: { email } })
+- User model fields: id, email (UNIQUE), password_hash, name, role
+- Role-based access: admin (full access), staff (check-in only - Epic 3)
+
+### Testing Constraints
+- E2E tests with Playwright (tests/e2e/admin-login.spec.ts)
+- Integration tests with Vitest (tests/integration/auth-api.test.ts)
+- Manual testing: mobile responsive, keyboard navigation, screen reader, cross-browser (Chrome 90+, Firefox 88+, Safari 14+)
+- Performance target: login response < 500ms
+
+### Code Organization Constraints
+- Login page: app/(auth)/admin/login/page.tsx (Client Component with 'use client')
+- Dashboard: app/admin/page.tsx (Server Component)
+- NextAuth config: app/api/auth/[...nextauth]/route.ts
+- Middleware: middleware.ts (project root)
+- Session utilities: lib/auth/session.ts
+- Type extensions: types/next-auth.d.ts
+- Client hook: hooks/useSession.ts
+  </constraints>
+
+  <interfaces>
+### NextAuth.js API
+<interface>
+  <name>POST /api/auth/callback/credentials</name>
+  <kind>REST endpoint</kind>
+  <signature>
+Request Body: { email: string; password: string; }
+Response: { ok: boolean; error?: string; url?: string; }
+Side Effect: Creates session cookie on success
+  </signature>
+  <path>app/api/auth/[...nextauth]/route.ts</path>
+</interface>
+
+<interface>
+  <name>authorize() callback</name>
+  <kind>function</kind>
+  <signature>
+async function authorize(credentials: { email: string; password: string }) {
+  // 1. Prisma user lookup: prisma.user.findUnique({ where: { email } })
+  // 2. Password verify: bcrypt.compare(credentials.password, user.password_hash)
+  // 3. Rate limiting check (5 attempts/5 min)
+  // 4. Return user object { id, email, name, role } or null
+}
+  </signature>
+  <path>app/api/auth/[...nextauth]/route.ts</path>
+</interface>
+
+### Session Utilities
+<interface>
+  <name>getServerSession()</name>
+  <kind>function</kind>
+  <signature>
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+
+const session = await getServerSession(authOptions);
+// Returns: { user: { id, email, name, role }, expires } | null
+  </signature>
+  <path>lib/auth/session.ts</path>
+</interface>
+
+<interface>
+  <name>useSession() hook</name>
+  <kind>React hook</kind>
+  <signature>
+'use client';
+import { useSession } from 'next-auth/react';
+
+const { data: session, status } = useSession();
+// status: 'loading' | 'authenticated' | 'unauthenticated'
+// session: { user: { id, email, name, role }, expires } | null
+  </signature>
+  <path>hooks/useSession.ts</path>
+</interface>
+
+### NextAuth Session Type Extension
+<interface>
+  <name>Session type extension</name>
+  <kind>TypeScript module augmentation</kind>
+  <signature>
+import { UserRole } from '@prisma/client';
+
+declare module 'next-auth' {
+  interface Session {
+    user: {
+      id: number;
+      email: string;
+      name: string;
+      role: UserRole;
+    };
+  }
+  interface User {
+    id: number;
+    role: UserRole;
+  }
+}
+  </signature>
+  <path>types/next-auth.d.ts</path>
+</interface>
+
+### Prisma User Model
+<interface>
+  <name>User model</name>
+  <kind>Prisma schema</kind>
+  <signature>
+model User {
+  id            Int       @id @default(autoincrement())
+  email         String    @unique @db.VarChar(255)
+  password_hash String    @db.VarChar(255)  // bcrypt cost=12
+  name          String    @db.VarChar(255)
+  role          UserRole  @default(staff)   // admin, staff
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+}
+
+enum UserRole {
+  admin
+  staff
+}
+  </signature>
+  <path>prisma/schema.prisma</path>
+</interface>
+  </interfaces>
+
+  <tests>
+    <standards>
+Testing Framework: Playwright for E2E (tests/e2e/), Vitest for integration (tests/integration/).
+Pattern: BDD Given/When/Then for E2E tests. Mock Prisma client for integration tests.
+Coverage targets: 100% critical paths (login flow, route protection, logout), 80%+ API routes.
+Manual testing: Mobile responsive (iPhone 12, iPad), keyboard navigation, screen reader (NVDA/VoiceOver), cross-browser (Chrome, Firefox, Safari).
+    </standards>
+    <locations>
+tests/e2e/admin-login.spec.ts
+tests/integration/auth-api.test.ts
+    </locations>
+    <ideas>
+### E2E Tests (Playwright)
+- AC-1.2.1: Navigate to /admin/login → verify form exists with email + password fields
+- AC-1.2.2: Submit valid credentials (admin@ceogala.test) → verify redirect to /admin dashboard
+- AC-1.2.2: Verify session cookie created (HttpOnly, Secure, SameSite=Strict)
+- AC-1.2.3: Access /admin/guests unauthenticated → verify redirect to /admin/login?callbackUrl=...
+- AC-1.2.3: Login + wait 24 hours (mock time) → verify session expired, redirect to login
+- AC-1.2.4: Submit invalid credentials → verify error message "Invalid email or password"
+- AC-1.2.4: Submit 5 invalid login attempts → verify rate limit error "Too many login attempts"
+- Logout flow: Click logout button → verify redirect to /admin/login
+
+### Integration Tests (Vitest)
+- Test authorize() callback with valid credentials → returns user object
+- Test authorize() callback with invalid password → returns null
+- Test authorize() callback with non-existent email → returns null
+- Test rate limiting logic → 5 failed attempts within 5 minutes triggers rate limit
+- Test rate limiting reset → failed attempts cleared after 5-minute window
+- Mock Prisma user lookup (prisma.user.findUnique)
+- Mock bcrypt.compare (correct password true, incorrect false)
+    </ideas>
+  </tests>
+</story-context>

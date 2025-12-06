@@ -1,0 +1,423 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========================================
+   CEO GALA DESIGN SYSTEM
+   Monochrome palette with teal accent (BBJ CEO Gala branding)
+   Fonts: Playfair Display (headlines), Open Sans (body)
+   Colors: Teal (#00A0A0), Neutral grays, Gold (awards only)
+   See docs/DESIGN-GUIDE.md for full specification
+   ======================================== */
+
+/* Base layer overrides */
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-neutral-50 text-neutral-900 antialiased font-sans;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* CEO Gala Typography */
+  h1 {
+    @apply font-display text-4xl md:text-5xl font-semibold text-neutral-800 tracking-tight;
+  }
+
+  h2 {
+    @apply font-display text-3xl md:text-4xl font-semibold text-neutral-800 tracking-tight;
+  }
+
+  h3 {
+    @apply font-display text-2xl md:text-3xl font-medium text-neutral-800;
+  }
+
+  h4 {
+    @apply font-display text-xl md:text-2xl font-medium text-neutral-800;
+  }
+
+  h5 {
+    @apply font-display text-lg md:text-xl font-medium text-neutral-800;
+  }
+
+  h6 {
+    @apply font-sans text-base md:text-lg font-semibold text-neutral-800 uppercase tracking-wider;
+  }
+
+  p {
+    @apply font-sans text-base text-neutral-600 leading-relaxed;
+  }
+
+  a {
+    @apply text-accent-teal hover:text-accent-teal-dark transition-colors;
+  }
+}
+
+/* ========================================
+   FORM INPUT STYLES - CEO Gala branded
+   ======================================== */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="tel"],
+select,
+textarea {
+  @apply border border-neutral-300 px-4 py-3 text-base font-sans
+         bg-white text-neutral-900
+         transition-all duration-200 ease-out
+         focus:outline-none focus:border-neutral-800 focus:ring-2 focus:ring-neutral-800/20;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  box-shadow: 0 0 0 3px rgba(38, 38, 38, 0.1);
+}
+
+input:hover:not(:focus),
+select:hover:not(:focus),
+textarea:hover:not(:focus) {
+  @apply border-neutral-400;
+}
+
+/* Placeholder styling */
+input::placeholder,
+textarea::placeholder {
+  @apply text-neutral-400 font-sans;
+}
+
+/* ========================================
+   CEO GALA BUTTON SYSTEM
+   Elegant, sophisticated buttons
+   ======================================== */
+
+/* Base button */
+.btn {
+  @apply inline-flex items-center justify-center gap-2
+         px-6 py-3 text-sm font-sans font-semibold uppercase tracking-wider
+         border-0
+         transition-all duration-200 ease-out
+         select-none cursor-pointer;
+}
+
+/* Primary Button - Teal accent */
+.btn-primary {
+  @apply bg-accent-teal text-white;
+  box-shadow: 0 2px 8px rgba(0, 160, 160, 0.35);
+}
+
+.btn-primary:hover {
+  @apply bg-accent-teal-dark;
+  box-shadow: 0 4px 12px rgba(0, 160, 160, 0.45);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  @apply bg-accent-teal-dark;
+  box-shadow: 0 1px 4px rgba(0, 160, 160, 0.25);
+  transform: translateY(0);
+}
+
+/* Secondary Button - Charcoal */
+.btn-secondary {
+  @apply bg-neutral-800 text-white;
+  box-shadow: 0 2px 8px rgba(38, 38, 38, 0.25);
+}
+
+.btn-secondary:hover {
+  @apply bg-neutral-700;
+  box-shadow: 0 4px 12px rgba(38, 38, 38, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-secondary:active {
+  @apply bg-neutral-800;
+  box-shadow: 0 1px 4px rgba(38, 38, 38, 0.2);
+  transform: translateY(0);
+}
+
+/* Ghost Button - Outlined */
+.btn-ghost {
+  @apply bg-transparent text-neutral-800 border-2 border-neutral-300;
+  box-shadow: none;
+}
+
+.btn-ghost:hover {
+  @apply bg-neutral-100 border-neutral-400;
+}
+
+.btn-ghost:active {
+  @apply bg-neutral-200;
+}
+
+/* Teal Outline Button */
+.btn-teal-outline {
+  @apply bg-transparent text-accent-teal border-2 border-accent-teal;
+}
+
+.btn-teal-outline:hover {
+  @apply bg-accent-teal text-white;
+}
+
+/* Danger Button - Red accent */
+.btn-danger {
+  @apply bg-red-600 text-white;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+}
+
+.btn-danger:hover {
+  @apply bg-red-700;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-danger:active {
+  @apply bg-red-800;
+  transform: translateY(0);
+}
+
+/* Success Button - Green accent */
+.btn-success {
+  @apply bg-emerald-600 text-white;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
+}
+
+.btn-success:hover {
+  @apply bg-emerald-700;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-success:active {
+  @apply bg-emerald-800;
+  transform: translateY(0);
+}
+
+/* Small Button variant */
+.btn-sm {
+  @apply px-4 py-2 text-xs;
+}
+
+/* Large Button variant */
+.btn-lg {
+  @apply px-8 py-4 text-base;
+}
+
+/* Icon-only Button */
+.btn-icon {
+  @apply p-3;
+}
+
+/* Disabled state */
+.btn:disabled {
+  @apply opacity-50 cursor-not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ========================================
+   CARD / PANEL SYSTEM - CEO Gala styled
+   ======================================== */
+.panel {
+  @apply bg-white border border-neutral-200;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.panel-hover {
+  @apply transition-all duration-300;
+}
+
+.panel-hover:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Teal accent panel */
+.panel-accent {
+  @apply bg-white border-l-4 border-l-accent-teal border border-neutral-200;
+}
+
+/* ========================================
+   TABLE STYLES - Elegant tables
+   ======================================== */
+table {
+  @apply w-full font-sans;
+}
+
+th {
+  @apply text-left font-semibold text-neutral-800 text-xs uppercase tracking-wider py-3 px-4;
+  @apply border-b-2 border-neutral-300;
+}
+
+td {
+  @apply text-neutral-900 py-3 px-4 border-b border-neutral-100;
+}
+
+tr:hover td {
+  @apply bg-neutral-50;
+}
+
+/* ========================================
+   BADGE / TAG STYLES - Refined badges
+   ======================================== */
+.badge {
+  @apply inline-flex items-center px-3 py-1 text-xs font-sans font-semibold uppercase tracking-wider;
+}
+
+.badge-primary {
+  @apply bg-accent-teal/10 text-accent-teal-dark;
+}
+
+.badge-success {
+  @apply bg-emerald-50 text-emerald-700;
+}
+
+.badge-warning {
+  @apply bg-amber-50 text-amber-700;
+}
+
+.badge-danger {
+  @apply bg-red-50 text-red-700;
+}
+
+.badge-neutral {
+  @apply bg-neutral-100 text-neutral-600;
+}
+
+.badge-vip {
+  @apply bg-accent-gold text-white;
+}
+
+/* ========================================
+   ICON BUTTON (for toolbar icons)
+   ======================================== */
+.icon-btn {
+  @apply p-2.5 bg-neutral-50 text-neutral-500
+         border border-neutral-200
+         transition-all duration-200 ease-out
+         hover:bg-accent-teal/10 hover:text-accent-teal hover:border-accent-teal/30
+         active:bg-accent-teal/20;
+}
+
+.icon-btn-active {
+  @apply bg-accent-teal/10 text-accent-teal border-accent-teal/30;
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s ease-out;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.4s ease-out;
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ========================================
+   LOADING SPINNER - Teal themed
+   ======================================== */
+.spinner {
+  @apply w-5 h-5 border-2 border-accent-teal/30 border-t-accent-teal;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.spinner-lg {
+  @apply w-8 h-8;
+  border-width: 3px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   CEO GALA SPECIAL COMPONENTS
+   ======================================== */
+
+/* Decorative teal line */
+.accent-line {
+  @apply h-1 bg-gradient-to-r from-transparent via-accent-teal to-transparent;
+}
+
+/* VIP highlight (uses gold for special/award status) */
+.vip-highlight {
+  @apply relative;
+}
+
+.vip-highlight::before {
+  content: '';
+  @apply absolute -left-3 top-0 bottom-0 w-1 bg-accent-gold;
+}
+
+/* Elegant section divider */
+.section-divider {
+  @apply flex items-center gap-4 my-8;
+}
+
+.section-divider::before,
+.section-divider::after {
+  content: '';
+  @apply flex-1 h-px bg-gradient-to-r from-transparent via-neutral-300 to-transparent;
+}
+
+/* Page header with teal accent */
+.page-header {
+  @apply relative pb-4 mb-8;
+}
+
+.page-header::after {
+  content: '';
+  @apply absolute bottom-0 left-0 w-16 h-1 bg-accent-teal;
+}
+
+/* Halftone pattern (BBJ-style decorative background) */
+.halftone-pattern {
+  background-image: radial-gradient(#D4D4D4 1px, transparent 1px);
+  background-size: 8px 8px;
+  opacity: 0.5;
+}

@@ -1,0 +1,262 @@
+/**
+ * Registration Submit API
+ *
+ * POST /api/registration/submit
+ *
+ * Handles paid guest registration form submission.
+ */
+
+import { NextRequest, NextResponse } from 'next/server';
+import { processPaidRegistration, PaidRegistrationData, BillingInfoData } from '@/lib/services/registration';
+import { logError } from '@/lib/utils/logger';
+
+interface BillingInfoInput {
+  billing_name: string;
+  company_name?: string | null;
+  tax_number?: string | null;
+  address_line1: string;
+  address_line2?: string | null;
+  city: string;
+  postal_code: string;
+  country?: string;
+}
+
+interface SubmitBody {
+  guest_id: number;
+  ticket_type: 'paid_single' | 'paid_paired';
+  billing_info: BillingInfoInput;
+  partner_name?: string | null;
+  partner_email?: string | null;
+  // Profile fields
+  title?: string | null;
+  phone?: string | null;
+  company?: string | null;
+  position?: string | null;
+  dietary_requirements?: string | null;
+  seating_preferences?: string | null;
+  // Consent fields
+  gdpr_consent: boolean;
+  cancellation_accepted: boolean;
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const body: SubmitBody = await request.json();
+    const {
+      guest_id,
+      ticket_type,
+      billing_info,
+      partner_name,
+      partner_email,
+      title,
+      phone,
+      company,
+      position,
+      dietary_requirements,
+      seating_preferences,
+      gdpr_consent,
+      cancellation_accepted,
+    } = body;
+
+    // Validate required fields
+    if (!guest_id || typeof guest_id !== 'number') {
+      return NextResponse.json(
+        { success: false, error: 'guest_id is required' },
+        { status: 400 }
+      );
+    }
+
+    if (!ticket_type || !['paid_single', 'paid_paired'].includes(ticket_type)) {
+      return NextResponse.json(
+        { success: false, error: 'ticket_type must be "paid_single" or "paid_paired"' },
+        { status: 400 }
+      );
+    }
+
+    // Validate required profile fields
+    if (!phone || phone.trim().length < 9) {
+      return NextResponse.json(
+        { success: false, error: 'Phone number is required' },
+        { status: 400 }
+      );
+    }
+    if (!company || company.trim().length < 1) {
+      return NextResponse.json(
+        { success: false, error: 'Company name is required' },
+        { status: 400 }
+      );
+    }
+    if (!position || position.trim().length < 1) {
+      return NextResponse.json(
+        { success: false, error: 'Position is required' },
+        { status: 400 }
+      );
+    }
+
+    // Validate billing info
+    if (!billing_info || typeof billing_info !== 'object') {
+      return NextResponse.json(
+        { success: false, error: 'billing_info is required' },
+        { status: 400 }
+      );
+    }
+
+    if (!billing_info.billing_name || billing_info.billing_name.length < 2) {
+      return NextResponse.json(
+        { success: false, error: 'Billing name is required (min. 2 characters)' },
+        { status: 400 }
+      );
+    }
+
+    if (!billing_info.address_line1 || billing_info.address_line1.length < 5) {
+      return NextResponse.json(
+        { success: false, error: 'Address is required (min. 5 characters)' },
+        { status: 400 }
+      );
+    }
+
+    if (!billing_info.city || billing_info.city.length < 2) {
+      return NextResponse.json(
+        { success: false, error: 'City is required' },
+        { status: 400 }
+      );
+    }
+
+    // Validate Hungarian postal code (4 digits)
+    if (!billing_info.postal_code || !/^[0-9]{4}$/.test(billing_info.postal_code)) {
+      return NextResponse.json(
+        { success: false, error: 'Postal code must be 4 digits' },
+        { status: 400 }
+      );
+    }
+
+    // Validate Hungarian tax number format if provided
+    if (billing_info.tax_number && !/^[0-9]{8}-[0-9]-[0-9]{2}$/.test(billing_info.tax_number)) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid tax number format (e.g.: 12345678-1-42)' },
+        { status: 400 }
+      );
+    }
+
+    // Validate consent fields
+    if (gdpr_consent !== true) {
+      return NextResponse.json(
+        { success: false, error: 'GDPR consent is required' },
+        { status: 400 }
+      );
+    }
+
+    if (cancellation_accepted !== true) {
+      return NextResponse.json(
+        { success: false, error: 'Acceptance of cancellation terms is required' },
+        { status: 400 }
+      );
+    }
+
+    // Validate partner info for paired tickets
+    if (ticket_type === 'paid_paired') {
+      if (!partner_name || typeof partner_name !== 'string' || partner_name.length < 2) {
+        return NextResponse.json(
+          { success: false, error: 'Partner name is required for paired tickets (min. 2 characters)' },
+          { status: 400 }
+        );
+      }
+
+      if (!partner_email || typeof partner_email !== 'string') {
+        return NextResponse.json(
+          { success: false, error: 'Partner email is required for paired tickets' },
+          { status: 400 }
+        );
+      }
+
+      // Basic email format validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(partner_email)) {
+        return NextResponse.json(
+          { success: false, error: 'Invalid partner email format' },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Process paid registration
+    const registrationData: PaidRegistrationData = {
+      guest_id,
+      ticket_type,
+      billing_info: {
+        billing_name: billing_info.billing_name,
+        company_name: billing_info.company_name || null,
+        tax_number: billing_info.tax_number || null,
+        address_line1: billing_info.address_line1,
+        address_line2: billing_info.address_line2 || null,
+        city: billing_info.city,
+        postal_code: billing_info.postal_code,
+        country: billing_info.country || 'HU',
+      },
+      partner_name: partner_name || null,
+      partner_email: partner_email || null,
+      title: title || null,
+      phone: phone || null,
+      company: company || null,
+      position: position || null,
+      dietary_requirements: dietary_requirements || null,
+      seating_preferences: seating_preferences || null,
+      gdpr_consent,
+      cancellation_accepted,
+    };
+
+    const result = await processPaidRegistration(registrationData);
+
+    if (!result.success) {
+      // Return 409 for already registered
+      if (result.error === 'Already registered for this event') {
+        return NextResponse.json(
+          {
+            success: false,
+            error: result.error,
+            status: result.status,
+            registrationId: result.registrationId,
+          },
+          { status: 409 }
+        );
+      }
+
+      // Return 403 for non-paying guest
+      if (result.error === 'This page is only available for paying guests') {
+        return NextResponse.json(
+          { success: false, error: result.error },
+          { status: 403 }
+        );
+      }
+
+      // Return 404 for guest not found
+      if (result.error === 'Guest not found') {
+        return NextResponse.json(
+          { success: false, error: result.error },
+          { status: 404 }
+        );
+      }
+
+      // Generic error
+      return NextResponse.json(
+        { success: false, error: result.error },
+        { status: 400 }
+      );
+    }
+
+    // Success response
+    return NextResponse.json({
+      success: true,
+      status: result.status,
+      registrationId: result.registrationId,
+      message: 'Registration saved successfully!',
+    });
+  } catch (error) {
+    logError('[REGISTRATION-SUBMIT]', error);
+
+    return NextResponse.json(
+      { success: false, error: 'Server error occurred' },
+      { status: 500 }
+    );
+  }
+}

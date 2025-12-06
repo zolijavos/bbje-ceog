@@ -1,0 +1,554 @@
+/**
+ * Registration Service Module
+ * Handles guest registration flows for VIP and paid guests
+ */
+
+import { prisma } from '@/lib/db/prisma';
+import { TicketType, RegistrationStatus, PaymentStatus, PaymentMethod } from '@prisma/client';
+import { getErrorMessage } from '@/lib/utils/errors';
+import { logError } from '@/lib/utils/logger';
+import crypto from 'crypto';
+
+/**
+ * Generate a unique PWA auth code for guests
+ * Format: CEOG-XXXXXX (6 alphanumeric characters)
+ */
+export function generatePWAAuthCode(): string {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Exclude confusing chars: I, O, 0, 1
+  let code = 'CEOG-';
+  for (let i = 0; i < 6; i++) {
+    const randomIndex = crypto.randomInt(0, chars.length);
+    code += chars[randomIndex];
+  }
+  return code;
+}
+
+/**
+ * Generate unique PWA auth code with retry for collisions
+ */
+async function generateUniquePWAAuthCode(maxRetries = 5): Promise<string> {
+  for (let i = 0; i < maxRetries; i++) {
+    const code = generatePWAAuthCode();
+    const existing = await prisma.guest.findFirst({
+      where: { pwa_auth_code: code },
+    });
+    if (!existing) {
+      return code;
+    }
+  }
+  // Fallback: add timestamp suffix
+  return `CEOG-${Date.now().toString(36).toUpperCase().slice(-6)}`;
+}
+
+/**
+ * VIP Registration Result
+ */
+export interface VIPRegistrationResult {
+  success: boolean;
+  registrationId?: number;
+  status?: RegistrationStatus;
+  error?: string;
+}
+
+/**
+ * Guest Registration Status Check Result
+ */
+export interface RegistrationCheckResult {
+  isRegistered: boolean;
+  status: RegistrationStatus;
+  registrationId?: number;
+  ticketType?: TicketType;
+}
+
+/**
+ * VIP Registration Data with profile fields
+ */
+export interface VIPRegistrationInput {
+  guest_id: number;
+  attendance: 'confirm' | 'decline';
+  title?: string | null;
+  phone?: string | null;
+  company?: string | null;
+  position?: string | null;
+  dietary_requirements?: string | null;
+  seating_preferences?: string | null;
+  gdpr_consent?: boolean;
+  cancellation_accepted?: boolean;
+}
+
+/**
+ * Process VIP guest registration
+ *
+ * For VIP guests (guest_type = 'vip'):
+ * - confirm: Update status to 'registered', create registration with ticket_type='vip_free'
+ * - decline: Update status to 'declined', no registration record
+ *
+ * @param data - VIP registration input data with optional profile fields
+ * @returns VIPRegistrationResult
+ */
+export async function processVIPRegistration(
+  data: VIPRegistrationInput
+): Promise<VIPRegistrationResult> {
+  const { guest_id: guestId, attendance } = data;
+  try {
+    // 1. Get guest and verify they are VIP
+    const guest = await prisma.guest.findUnique({
+      where: { id: guestId },
+      include: { registration: true },
+    });
+
+    if (!guest) {
+      return {
+        success: false,
+        error: 'Guest not found',
+      };
+    }
+
+    if (guest.guest_type !== 'vip') {
+      return {
+        success: false,
+        error: 'This page is only accessible to VIP guests',
+      };
+    }
+
+    // 2. Check if already registered
+    if (guest.registration) {
+      return {
+        success: false,
+        error: 'You have already registered for this event',
+        status: guest.registration_status,
+        registrationId: guest.registration.id,
+      };
+    }
+
+    // 3. Handle decline
+    if (attendance === 'decline') {
+      await prisma.guest.update({
+        where: { id: guestId },
+        data: {
+          registration_status: 'declined',
+        },
+      });
+
+      return {
+        success: true,
+        status: 'declined',
+      };
+    }
+
+    // 4. Handle confirm - create registration and update status with profile data
+    // Generate PWA auth code for guest app access
+    const pwaAuthCode = await generateUniquePWAAuthCode();
+
+    const result = await prisma.$transaction(async (tx) => {
+      // Update guest profile and status with PWA auth code
+      await tx.guest.update({
+        where: { id: guestId },
+        data: {
+          title: data.title || null,
+          phone: data.phone || null,
+          company: data.company || null,
+          position: data.position || null,
+          dietary_requirements: data.dietary_requirements || null,
+          seating_preferences: data.seating_preferences || null,
+          registration_status: 'registered',
+          pwa_auth_code: pwaAuthCode,
+        },
+      });
+
+      // Create registration record with consent fields
+      const registration = await tx.registration.create({
+        data: {
+          guest_id: guestId,
+          ticket_type: 'vip_free',
+          gdpr_consent: data.gdpr_consent ?? false,
+          gdpr_consent_at: data.gdpr_consent ? new Date() : null,
+          cancellation_accepted: data.cancellation_accepted ?? false,
+          cancellation_accepted_at: data.cancellation_accepted ? new Date() : null,
+        },
+      });
+
+      return registration;
+    });
+
+    return {
+      success: true,
+      registrationId: result.id,
+      status: 'registered',
+    };
+  } catch (error) {
+    logError('VIP registration error:', error);
+    return {
+      success: false,
+      error: getErrorMessage(error),
+    };
+  }
+}
+
+/**
+ * Check if a guest is already registered
+ *
+ * @param guestId - The ID of the guest
+ * @returns Registration check result
+ */
+export async function checkGuestRegistration(
+  guestId: number
+): Promise<RegistrationCheckResult | null> {
+  const guest = await prisma.guest.findUnique({
+    where: { id: guestId },
+    include: { registration: true },
+  });
+
+  if (!guest) {
+    return null;
+  }
+
+  return {
+    isRegistered: guest.registration !== null,
+    status: guest.registration_status,
+    registrationId: guest.registration?.id,
+    ticketType: guest.registration?.ticket_type,
+  };
+}
+
+/**
+ * Get guest details for registration page
+ *
+ * @param guestId - The ID of the guest
+ * @returns Guest details or null
+ */
+export async function getGuestForRegistration(guestId: number) {
+  return prisma.guest.findUnique({
+    where: { id: guestId },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      guest_type: true,
+      registration_status: true,
+      registration: {
+        select: {
+          id: true,
+          ticket_type: true,
+          registered_at: true,
+        },
+      },
+    },
+  });
+}
+
+/**
+ * Billing Info Data for BillingInfo model
+ */
+export interface BillingInfoData {
+  billing_name: string;
+  company_name?: string | null;
+  tax_number?: string | null;
+  address_line1: string;
+  address_line2?: string | null;
+  city: string;
+  postal_code: string;
+  country?: string;
+}
+
+/**
+ * Paid Registration Form Data
+ */
+export interface PaidRegistrationData {
+  guest_id: number;
+  ticket_type: 'paid_single' | 'paid_paired';
+  billing_info: BillingInfoData;
+  partner_name?: string | null;
+  partner_email?: string | null;
+  // Profile fields
+  title?: string | null;
+  phone?: string | null;
+  company?: string | null;
+  position?: string | null;
+  dietary_requirements?: string | null;
+  seating_preferences?: string | null;
+  // Consent fields
+  gdpr_consent: boolean;
+  cancellation_accepted: boolean;
+}
+
+/**
+ * Paid Registration Result
+ */
+export interface PaidRegistrationResult {
+  success: boolean;
+  registrationId?: number;
+  status?: RegistrationStatus;
+  error?: string;
+}
+
+/**
+ * Process paid guest registration
+ *
+ * For paid guests (guest_type = 'paying_single' or 'paying_paired'):
+ * - Validates guest type
+ * - Creates registration with billing and optional partner info
+ * - Updates guest status to 'registered'
+ *
+ * @param data - Form data with billing and partner info
+ * @returns PaidRegistrationResult
+ */
+export async function processPaidRegistration(
+  data: PaidRegistrationData
+): Promise<PaidRegistrationResult> {
+  try {
+    // 1. Get guest and verify they are a paying guest
+    const guest = await prisma.guest.findUnique({
+      where: { id: data.guest_id },
+      include: { registration: true },
+    });
+
+    if (!guest) {
+      return {
+        success: false,
+        error: 'Guest not found',
+      };
+    }
+
+    if (guest.guest_type !== 'paying_single' && guest.guest_type !== 'paying_paired') {
+      return {
+        success: false,
+        error: 'This page is only accessible to paying guests',
+      };
+    }
+
+    // 2. Check if already registered
+    if (guest.registration) {
+      return {
+        success: false,
+        error: 'You have already registered for this event',
+        status: guest.registration_status,
+        registrationId: guest.registration.id,
+      };
+    }
+
+    // 3. Validate paired ticket requires partner info
+    if (data.ticket_type === 'paid_paired') {
+      if (!data.partner_name || !data.partner_email) {
+        return {
+          success: false,
+          error: 'Partner details are required for paired tickets',
+        };
+      }
+    }
+
+    // 4. Create registration, billing info, partner guest (if paired), and update guest status
+    // Generate PWA auth code for guest app access
+    const pwaAuthCode = await generateUniquePWAAuthCode();
+
+    const result = await prisma.$transaction(async (tx) => {
+      // Update guest profile fields with PWA auth code
+      await tx.guest.update({
+        where: { id: data.guest_id },
+        data: {
+          title: data.title || null,
+          phone: data.phone || null,
+          company: data.company || null,
+          position: data.position || null,
+          dietary_requirements: data.dietary_requirements || null,
+          seating_preferences: data.seating_preferences || null,
+          registration_status: 'registered',
+          pwa_auth_code: pwaAuthCode,
+        },
+      });
+
+      // Create registration record
+      const registration = await tx.registration.create({
+        data: {
+          guest_id: data.guest_id,
+          ticket_type: data.ticket_type,
+          partner_name: data.partner_name || null,
+          partner_email: data.partner_email || null,
+          gdpr_consent: data.gdpr_consent,
+          gdpr_consent_at: data.gdpr_consent ? new Date() : null,
+          cancellation_accepted: data.cancellation_accepted,
+          cancellation_accepted_at: data.cancellation_accepted ? new Date() : null,
+        },
+      });
+
+      // Create billing info record
+      await tx.billingInfo.create({
+        data: {
+          registration_id: registration.id,
+          billing_name: data.billing_info.billing_name,
+          company_name: data.billing_info.company_name || null,
+          tax_number: data.billing_info.tax_number || null,
+          address_line1: data.billing_info.address_line1,
+          address_line2: data.billing_info.address_line2 || null,
+          city: data.billing_info.city,
+          postal_code: data.billing_info.postal_code,
+          country: data.billing_info.country || 'HU',
+        },
+      });
+
+      // For paired tickets: Create partner as separate Guest record linked to main guest
+      if (data.ticket_type === 'paid_paired' && data.partner_name && data.partner_email) {
+        // Check if partner already exists as guest
+        const existingPartner = await tx.guest.findUnique({
+          where: { email: data.partner_email },
+        });
+
+        if (!existingPartner) {
+          // Create new partner guest linked to main guest
+          await tx.guest.create({
+            data: {
+              email: data.partner_email,
+              name: data.partner_name,
+              guest_type: 'paying_paired',
+              registration_status: 'registered', // Auto-registered through main guest
+              paired_with_id: data.guest_id, // Link to main guest
+            },
+          });
+        } else {
+          // Link existing guest as partner
+          await tx.guest.update({
+            where: { id: existingPartner.id },
+            data: {
+              paired_with_id: data.guest_id,
+              registration_status: 'registered',
+            },
+          });
+        }
+      }
+
+      return registration;
+    });
+
+    return {
+      success: true,
+      registrationId: result.id,
+      status: 'registered',
+    };
+  } catch (error) {
+    logError('Paid registration error:', error);
+    return {
+      success: false,
+      error: getErrorMessage(error),
+    };
+  }
+}
+
+/**
+ * Guest Status Response Interface
+ */
+export interface GuestStatusResult {
+  success: boolean;
+  error?: string;
+  guest?: {
+    name: string;
+    email: string;
+    guestType: string;
+  };
+  registration?: {
+    id: number;
+    ticketType: TicketType;
+    registeredAt: Date;
+    partnerName: string | null;
+  } | null;
+  payment?: {
+    status: PaymentStatus;
+    method: PaymentMethod | null;
+    paidAt: Date | null;
+  } | null;
+  ticket?: {
+    available: boolean;
+    qrCodeHash: string | null;
+  };
+}
+
+/**
+ * Get guest status for status dashboard page
+ * Returns registration, payment, and ticket information
+ *
+ * @param guestId - The ID of the guest
+ * @returns GuestStatusResult with all status information
+ */
+export async function getGuestStatus(guestId: number): Promise<GuestStatusResult> {
+  try {
+    const guest = await prisma.guest.findUnique({
+      where: { id: guestId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        guest_type: true,
+        registration_status: true,
+        registration: {
+          select: {
+            id: true,
+            ticket_type: true,
+            registered_at: true,
+            partner_name: true,
+            qr_code_hash: true,
+            payment: {
+              select: {
+                payment_status: true,
+                payment_method: true,
+                paid_at: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!guest) {
+      return {
+        success: false,
+        error: 'Guest not found',
+      };
+    }
+
+    // Determine ticket availability
+    const isVIP = guest.guest_type === 'vip';
+    const isPaid = guest.registration?.payment?.payment_status === 'paid';
+    const hasQRCode = !!guest.registration?.qr_code_hash;
+    const ticketAvailable = isVIP || (isPaid && hasQRCode);
+
+    return {
+      success: true,
+      guest: {
+        name: guest.name,
+        email: guest.email,
+        guestType: guest.guest_type,
+      },
+      registration: guest.registration
+        ? {
+            id: guest.registration.id,
+            ticketType: guest.registration.ticket_type,
+            registeredAt: guest.registration.registered_at,
+            partnerName: guest.registration.partner_name,
+          }
+        : null,
+      payment: guest.registration?.payment
+        ? {
+            status: guest.registration.payment.payment_status,
+            method: guest.registration.payment.payment_method,
+            paidAt: guest.registration.payment.paid_at,
+          }
+        : isVIP
+        ? {
+            // VIP guests have implicit "paid" status
+            status: 'paid' as PaymentStatus,
+            method: null,
+            paidAt: guest.registration?.registered_at || null,
+          }
+        : null,
+      ticket: {
+        available: ticketAvailable,
+        qrCodeHash: guest.registration?.qr_code_hash || null,
+      },
+    };
+  } catch (error) {
+    logError('Get guest status error:', error);
+    return {
+      success: false,
+      error: getErrorMessage(error),
+    };
+  }
+}

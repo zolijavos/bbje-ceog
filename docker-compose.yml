@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # MySQL 8.0 database for local development
+  mysql:
+    image: mysql:8.0
+    container_name: ceog-mysql-dev
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: localDevRootPassword123
+      MYSQL_DATABASE: ceog_dev
+      MYSQL_USER: ceog_user
+      MYSQL_PASSWORD: ceog_password
+    ports:
+      - "3307:3306"  # Use port 3307 to avoid conflict with native MySQL
+    volumes:
+      - mysql-data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # (Optional) phpMyAdmin for database GUI management
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: ceog-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: ceog_user
+      PMA_PASSWORD: ceog_password
+    depends_on:
+      - mysql
+
+volumes:
+  mysql-data:
+    driver: local
+
+# Usage:
+# Start:   docker-compose up -d
+# Stop:    docker-compose down
+# Logs:    docker-compose logs -f mysql
+# Reset:   docker-compose down -v (deletes all data!)
+#
+# Connect to MySQL:
+#   Host: localhost
+#   Port: 3306
+#   User: ceog_user
+#   Password: ceog_password
+#   Database: ceog_dev
+#
+# phpMyAdmin: http://localhost:8080

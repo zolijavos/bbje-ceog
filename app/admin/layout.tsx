@@ -1,0 +1,26 @@
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth/auth-options';
+import { redirect } from 'next/navigation';
+import AdminHeader from './AdminHeader';
+import Providers from './Providers';
+
+export default async function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    redirect('/admin/login');
+  }
+
+  return (
+    <Providers>
+      <div className="min-h-screen bg-neutral-50">
+        <AdminHeader />
+        {children}
+      </div>
+    </Providers>
+  );
+}

@@ -1,0 +1,215 @@
+<story-context id="1-3-email-service-setup-magic-link-sender" v="1.0">
+  <metadata>
+    <epicId>1</epicId>
+    <storyId>1.3</storyId>
+    <title>Email Service Setup &amp; Magic Link Sender</title>
+    <status>drafted</status>
+    <generatedAt>2025-11-28</generatedAt>
+    <generator>BMAD Story Context Workflow</generator>
+    <sourceStoryPath>docs/sprint-artifacts/1-3-email-service-setup-magic-link-sender.md</sourceStoryPath>
+  </metadata>
+
+  <story>
+    <asA>admin user</asA>
+    <iWant>send magic link invitation emails to guests from the admin dashboard</iWant>
+    <soThat>guests can securely access the registration system using passwordless authentication</soThat>
+    <tasks>
+      <task id="1" ac="1.3.2">Email Service Module Setup - Install Nodemailer, create lib/services/email.ts</task>
+      <task id="2" ac="1.3.1">Magic Link Hash Generation - Create lib/auth/magic-link.ts with SHA-256 hash</task>
+      <task id="3" ac="1.3.2">Magic Link Email Function - sendMagicLinkEmail() with template</task>
+      <task id="4" ac="1.3.2">Email Template Creation - lib/email-templates/magic-link.ts</task>
+      <task id="5" ac="1.3.3">Rate Limiting Implementation - 5 emails/hour/guest database check</task>
+      <task id="6" ac="1.3.2,1.3.5">API Route Handler - app/api/email/send-magic-link/route.ts</task>
+      <task id="7" ac="1.3.2,1.3.5">Admin UI Integration - "Send Invitation" button on dashboard</task>
+      <task id="8" ac="1.3.4">Email Logging - logEmailDelivery() to email_logs table</task>
+      <task id="9" ac="all">E2E &amp; Integration Testing</task>
+    </tasks>
+  </story>
+
+  <acceptanceCriteria>
+    <criterion id="AC-1.3.1">
+      <title>Magic Link Hash Generation</title>
+      <given>I have a guest record with email address</given>
+      <when>I trigger magic link email sending</when>
+      <then>
+        - A unique hash is generated using SHA-256(email + APP_SECRET + timestamp)
+        - The hash is stored in guests.magic_link_hash column
+        - The expiry timestamp (5 minutes) is stored in guests.magic_link_expires_at
+      </then>
+    </criterion>
+    <criterion id="AC-1.3.2">
+      <title>Email Sending Functionality</title>
+      <given>I am on the admin dashboard or guest list</given>
+      <when>I click "Send Invitation" for a guest</when>
+      <then>
+        - A magic link email is sent via Nodemailer SMTP
+        - Email contains: Personal greeting, event info, magic link URL, CTA button
+      </then>
+    </criterion>
+    <criterion id="AC-1.3.3">
+      <title>Rate Limiting</title>
+      <given>I have already sent 5 magic link emails to a guest in the last hour</given>
+      <when>I try to send another magic link email</when>
+      <then>
+        - I receive error: "Rate limit exceeded. Maximum 5 emails per hour."
+        - The email is NOT sent
+      </then>
+    </criterion>
+    <criterion id="AC-1.3.4">
+      <title>Email Logging</title>
+      <given>A magic link email is sent (or fails)</given>
+      <when>The delivery attempt completes</when>
+      <then>
+        - A record is created in email_logs table with: guest_id, email_type, recipient, subject, status, error_message, sent_at
+      </then>
+    </criterion>
+    <criterion id="AC-1.3.5">
+      <title>Bulk Email Sending</title>
+      <given>I have selected multiple guests from the guest list</given>
+      <when>I click "Send Invitations" bulk action</when>
+      <then>
+        - Magic link emails are sent to all selected guests
+        - I see a summary: "X emails sent, Y failed"
+        - Failed emails are logged with error details
+      </then>
+    </criterion>
+  </acceptanceCriteria>
+
+  <artifacts>
+    <docs>
+      <doc>
+        <path>docs/sprint-artifacts/tech-spec-epic-1.md</path>
+        <title>Epic 1 Technical Specification</title>
+        <section>Services and Modules</section>
+        <snippet>email.ts - Email delivery orchestration with sendMagicLinkEmail(), logEmailDelivery(). magic-link.ts - generateMagicLinkHash(), validateMagicLink()</snippet>
+      </doc>
+      <doc>
+        <path>docs/sprint-artifacts/tech-spec-epic-1.md</path>
+        <title>Epic 1 Technical Specification</title>
+        <section>APIs and Interfaces - POST /api/email/send-magic-link</section>
+        <snippet>Request: { guest_ids: number[] }. Response: { success, sent, failed, errors[] }. Rate limiting check, Nodemailer SMTP, email_logs tracking.</snippet>
+      </doc>
+      <doc>
+        <path>docs/sprint-artifacts/tech-spec-epic-1.md</path>
+        <title>Epic 1 Technical Specification</title>
+        <section>Security - Magic Link</section>
+        <snippet>Hash: SHA-256(email + APP_SECRET + timestamp). Expiry: 5 minutes. Single-use. Rate limiting: Max 5 resend/hour per guest (tracked in email_logs).</snippet>
+      </doc>
+      <doc>
+        <path>docs/sprint-artifacts/1-2-admin-authentication-session-management.md</path>
+        <title>Story 1.2 (Completed)</title>
+        <section>Learnings</section>
+        <snippet>NextAuth.js setup available in lib/auth/auth-options.ts. Session utilities in lib/auth/session.ts. Use getServerSession(authOptions) for admin validation.</snippet>
+      </doc>
+    </docs>
+    <code>
+      <file>
+        <path>lib/auth/auth-options.ts</path>
+        <kind>auth-config</kind>
+        <symbol>authOptions, failedAttempts (rate limiter)</symbol>
+        <reason>Reference for NextAuth configuration and in-memory rate limiting pattern</reason>
+      </file>
+      <file>
+        <path>lib/auth/session.ts</path>
+        <kind>utility</kind>
+        <symbol>getServerSession(), requireAuth(), requireRole()</symbol>
+        <reason>Session utilities to use for admin API route protection</reason>
+      </file>
+      <file>
+        <path>prisma/schema.prisma</path>
+        <kind>schema</kind>
+        <symbol>Guest (magic_link_hash, magic_link_expires_at), EmailLog</symbol>
+        <lines>17-37, 171-188</lines>
+        <reason>Database models for magic link storage and email logging</reason>
+      </file>
+      <file>
+        <path>app/admin/page.tsx</path>
+        <kind>page</kind>
+        <symbol>AdminDashboard</symbol>
+        <reason>Target page for adding "Send Invitation" button UI</reason>
+      </file>
+      <file>
+        <path>tests/e2e/admin-login.spec.ts</path>
+        <kind>test</kind>
+        <symbol>Playwright test patterns</symbol>
+        <reason>Reference for E2E test structure and patterns</reason>
+      </file>
+    </code>
+    <dependencies>
+      <ecosystem name="node">
+        <package name="nodemailer" version="^7.0.7" status="installed">Email sending via SMTP</package>
+        <package name="@types/nodemailer" version="^6.4.15" status="installed">TypeScript types</package>
+        <package name="next-auth" version="^4.24.11" status="installed">Session management</package>
+        <package name="@prisma/client" version="^5.19.0" status="installed">Database access</package>
+        <package name="zod" version="^3.23.0" status="installed">Request validation</package>
+      </ecosystem>
+    </dependencies>
+  </artifacts>
+
+  <constraints>
+    <constraint type="security">
+      <rule>Magic link hash must use SHA-256 with APP_SECRET (min 64 chars) + email + timestamp</rule>
+      <rule>Magic link expires after 5 minutes from generation</rule>
+      <rule>Rate limit: Max 5 emails per guest per hour (database-backed via email_logs)</rule>
+      <rule>API routes must validate admin session using getServerSession(authOptions)</rule>
+    </constraint>
+    <constraint type="architecture">
+      <rule>Email service at lib/services/email.ts - singleton Nodemailer transport</rule>
+      <rule>Magic link logic at lib/auth/magic-link.ts - separate from email sending</rule>
+      <rule>API route at app/api/email/send-magic-link/route.ts</rule>
+      <rule>Email templates at lib/email-templates/magic-link.ts</rule>
+    </constraint>
+    <constraint type="environment">
+      <rule>SMTP credentials via environment variables: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM</rule>
+      <rule>APP_SECRET for magic link hashing (already in .env.local)</rule>
+      <rule>APP_URL for magic link URL generation</rule>
+    </constraint>
+  </constraints>
+
+  <interfaces>
+    <interface>
+      <name>POST /api/email/send-magic-link</name>
+      <kind>REST endpoint</kind>
+      <signature>POST { guest_ids: number[] } =&gt; { success: boolean, sent: number, failed: number, errors: Array&lt;{ guest_id: number, error: string }&gt; }</signature>
+      <path>app/api/email/send-magic-link/route.ts</path>
+    </interface>
+    <interface>
+      <name>generateMagicLinkHash</name>
+      <kind>function</kind>
+      <signature>generateMagicLinkHash(email: string): { hash: string, expiresAt: Date }</signature>
+      <path>lib/auth/magic-link.ts</path>
+    </interface>
+    <interface>
+      <name>sendMagicLinkEmail</name>
+      <kind>function</kind>
+      <signature>sendMagicLinkEmail(guestId: number): Promise&lt;Result&lt;EmailLog, Error&gt;&gt;</signature>
+      <path>lib/services/email.ts</path>
+    </interface>
+    <interface>
+      <name>checkRateLimit</name>
+      <kind>function</kind>
+      <signature>checkRateLimit(guestId: number): Promise&lt;boolean&gt;</signature>
+      <path>lib/services/email.ts</path>
+    </interface>
+  </interfaces>
+
+  <tests>
+    <standards>
+      Playwright for E2E tests (tests/e2e/), Vitest for unit/integration tests. Follow existing patterns from admin-login.spec.ts. Mock SMTP transport for testing. Test both success and error paths.
+    </standards>
+    <locations>
+      <location>tests/e2e/email-send.spec.ts</location>
+      <location>tests/integration/email-service.test.ts</location>
+      <location>tests/unit/magic-link.test.ts</location>
+    </locations>
+    <ideas>
+      <idea ac="1.3.1">Unit test: hash generation produces consistent output for same inputs</idea>
+      <idea ac="1.3.1">Unit test: expiry is exactly 5 minutes from generation time</idea>
+      <idea ac="1.3.2">E2E test: click "Send Invitation" shows success notification</idea>
+      <idea ac="1.3.2">Integration test: email contains correct magic link URL format</idea>
+      <idea ac="1.3.3">Integration test: 6th email attempt returns rate limit error</idea>
+      <idea ac="1.3.4">Integration test: email_logs record created after send</idea>
+      <idea ac="1.3.5">E2E test: bulk send shows "X sent, Y failed" summary</idea>
+    </ideas>
+  </tests>
+</story-context>

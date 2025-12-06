@@ -1,0 +1,103 @@
+# Sprint Status Tracking File
+# Generated: 2025-11-27
+# Project: CEO Gala registration - v2
+# Tracking System: file-system
+# Story Location: /home/javo/DEV/CEOG-1/docs/sprint-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic exists in epic file but not contexted
+#   - contexted: Epic tech context created (required before drafting stories)
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - drafted: Story file created in stories folder
+#   - ready-for-dev: Draft approved and story context created
+#   - in-progress: Developer actively working on implementation
+#   - review: Under SM review (via code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - completed: Retrospective has been done
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epics should be 'contexted' before stories can be 'drafted'
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically drafts next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', SM reviews, then Dev moves to 'done'
+
+generated: 2025-11-27
+project: CEO Gala registration - v2
+project_key: CEOG-1
+tracking_system: file-system
+story_location: /home/javo/DEV/CEOG-1/docs/sprint-artifacts
+
+development_status:
+  # Epic 1: Core Registration (MVP)
+  epic-1: contexted
+  1-1-project-foundation-database-setup: done
+  1-2-admin-authentication-session-management: done
+  1-3-email-service-setup-magic-link-sender: done
+  1-4-csv-guest-list-import: done
+  1-5-magic-link-validation-registration-landing: done
+  1-6-vip-guest-registration-instant-confirmation: done
+  1-7-paid-guest-registration-form-no-payment-yet: done
+  1-8-admin-guest-list-dashboard: done
+  1-9-admin-guest-crud-operations: done
+  epic-1-retrospective: optional
+
+  # Epic 2: Payment & Ticketing
+  epic-2: contexted
+  2-1-stripe-checkout-session-integration: done
+  2-2-stripe-webhook-handler-payment-confirmation: done
+  2-3-qr-code-jwt-generation-storage: done
+  2-4-e-ticket-email-delivery-with-qr-code: done
+  2-5-manual-bank-transfer-payment-approval: done
+  2-6-payment-status-dashboard-for-guests: done
+  epic-2-retrospective: optional
+
+  # Epic 3: Check-in System
+  epic-3: contexted
+  3-1-qr-code-validation-api-jwt-verification: done
+  3-2-mobile-qr-scanner-interface: done
+  3-3-check-in-recording-duplicate-prevention: done
+  3-4-admin-check-in-log-dashboard: done
+  epic-3-retrospective: optional
+
+  # Epic 4: Seating Management
+  epic-4: contexted
+  4-1-table-crud-operations: done
+  4-2-manual-guest-to-table-assignment: done
+  4-3-bulk-csv-table-assignment: done
+  4-4-interactive-drag-and-drop-seating-map: done
+  4-5-seating-arrangement-export-reports: done
+  epic-4-retrospective: optional
+
+  # Epic 5: Vendég Profil Bővítés
+  epic-5: contexted
+  5-1-data-model-extension: done          # Prisma séma módosítás
+  5-2-validation-layer: done              # Zod sémák létrehozása
+  5-3-vip-registration-profile-fields: done      # VIP regisztráció profil mezők - UI kész
+  5-4-paying-registration-billing-form: done     # Fizetős regisztráció számlázási űrlap - UI kész
+  epic-5-retrospective: optional
+
+  # Epic 6: PWA Guest App (Progressive Web App)
+  epic-6: contexted
+  6-1-pwa-basics: done                    # manifest.json, service worker, install prompt
+  6-2-qr-based-authentication: done       # QR kód és kód alapú belépés
+  6-3-guest-profile-view-edit: done       # Profil megtekintés és szerkesztés
+  6-4-qr-code-display-offline: done       # QR jegy megjelenítés offline támogatással
+  6-5-table-number-display: done          # Asztalszám megjelenítés
+  6-6-push-notification-integration: done # Push értesítés infrastruktúra (Firebase kész)
+  6-7-offline-cache-strategy: done        # Service worker cache, offline mód
+  6-8-myforgelabs-branding: done          # "Powered by MyForge Labs" footer
+  epic-6-retrospective: optional
+
+  # Epic 7: Jelentkező Flow (Applicant Flow)
+  epic-7: contexted
+  7-1-applicant-registration-flow: done   # Nyilvános jelentkezési űrlap nem meghívott vendégeknek
+  7-2-admin-applicant-management: done    # Admin felület jelentkezők kezeléséhez
+  epic-7-retrospective: optional
