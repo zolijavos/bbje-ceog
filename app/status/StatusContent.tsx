@@ -45,8 +45,8 @@ const BANK_DETAILS = {
 
 // Ticket prices for display
 const TICKET_PRICES: Record<string, string> = {
-  paid_single: '20,000 Ft',
-  paid_paired: '40,000 Ft',
+  paid_single: '100,000 Ft',
+  paid_paired: '180,000 Ft',
   vip_free: 'Free',
 };
 

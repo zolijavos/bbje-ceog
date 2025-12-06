@@ -135,7 +135,7 @@ export default function PWATicketPage() {
     if (!qrDataUrl) return;
 
     const link = document.createElement('a');
-    link.download = `ceo-gala-2025-ticket-${data?.guest.name.replace(/\s+/g, '-')}.png`;
+    link.download = `ceo-gala-2026-ticket-${data?.guest.name.replace(/\s+/g, '-')}.png`;
     link.href = qrDataUrl;
     link.click();
   };

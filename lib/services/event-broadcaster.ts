@@ -15,7 +15,7 @@
  * Current limitation: If guest's PWA connects to instance A and check-in
  * happens on instance B, the notification won't be delivered.
  *
- * For CEO Gala 2025: Single-instance deployment is acceptable given
+ * For CEO Gala 2026: Single-instance deployment is acceptable given
  * expected load (~500 guests). Monitor and upgrade if scaling needed.
  */
 

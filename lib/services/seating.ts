@@ -904,40 +904,87 @@ export async function exportSeatingArrangement(): Promise<string> {
 
 /**
  * Get seating statistics
+ * Note: Paired guests (paying_paired) count as 2 occupied seats
  */
 export async function getSeatingStats() {
-  const [tables, totalGuests, assignedGuests] = await Promise.all([
+  const [tables, totalGuests, assignments] = await Promise.all([
     prisma.table.findMany({
       include: {
-        _count: {
-          select: { assignments: true },
+        assignments: {
+          include: {
+            guest: {
+              select: {
+                guest_type: true,
+                paired_with_id: true,
+                registration: {
+                  select: { ticket_type: true },
+                },
+              },
+            },
+          },
         },
       },
     }),
     prisma.guest.count({
       where: { registration_status: 'approved' },
     }),
-    prisma.tableAssignment.count(),
+    prisma.tableAssignment.findMany({
+      include: {
+        guest: {
+          select: {
+            guest_type: true,
+            paired_with_id: true,
+            registration: {
+              select: { ticket_type: true },
+            },
+          },
+        },
+      },
+    }),
   ]);
 
+  // Calculate total occupied seats (paired guests = 2 seats, skip partner records)
+  const calculateOccupiedSeats = (tableAssignments: typeof assignments) => {
+    let seats = 0;
+    for (const assignment of tableAssignments) {
+      // Skip partner guests - they're counted with their main guest
+      if (assignment.guest.paired_with_id) {
+        continue;
+      }
+      // Paired guests take 2 seats
+      if (assignment.guest.guest_type === 'paying_paired' ||
+          assignment.guest.registration?.ticket_type === 'paid_paired') {
+        seats += 2;
+      } else {
+        seats += 1;
+      }
+    }
+    return seats;
+  };
+
+  const totalOccupiedSeats = calculateOccupiedSeats(assignments);
   const totalCapacity = tables.reduce((sum, t) => sum + t.capacity, 0);
+
   const byType = tables.reduce((acc, t) => {
     if (!acc[t.type]) {
       acc[t.type] = { tables: 0, capacity: 0, occupied: 0 };
     }
     acc[t.type].tables++;
     acc[t.type].capacity += t.capacity;
-    acc[t.type].occupied += t._count.assignments;
+    acc[t.type].occupied += calculateOccupiedSeats(t.assignments);
     return acc;
   }, {} as Record<string, { tables: number; capacity: number; occupied: number }>);
+
+  // Count assigned guests (actual people, not seats)
+  const assignedGuestCount = assignments.length;
 
   return {
     totalTables: tables.length,
     totalCapacity,
-    totalOccupied: assignedGuests,
-    occupancyRate: totalCapacity > 0 ? (assignedGuests / totalCapacity) * 100 : 0,
+    totalOccupied: totalOccupiedSeats,
+    occupancyRate: totalCapacity > 0 ? (totalOccupiedSeats / totalCapacity) * 100 : 0,
     totalGuests,
-    unassignedGuests: totalGuests - assignedGuests,
+    unassignedGuests: totalGuests - assignedGuestCount,
     byType,
   };
 }

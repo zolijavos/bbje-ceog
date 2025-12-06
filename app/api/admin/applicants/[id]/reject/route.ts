@@ -74,20 +74,20 @@ export async function POST(
     try {
       await sendEmail({
         to: applicant.email,
-        subject: 'CEO Gala 2025 - Application Status Update',
+        subject: 'CEO Gala 2026 - Application Status Update',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <h1 style="color: #4b5563;">Application Status Update</h1>
             <p>Dear ${applicant.name},</p>
-            <p>Thank you for your interest in the <strong>CEO Gala 2025</strong>.</p>
+            <p>Thank you for your interest in the <strong>CEO Gala 2026</strong>.</p>
             <p>After careful consideration, we regret to inform you that we are unable to accommodate your attendance request at this time due to limited capacity.</p>
             <p>We appreciate your understanding and hope to welcome you to future events.</p>
             <p>Best regards,<br>The CEO Gala Team</p>
             <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
-            <p style="color: #999; font-size: 12px;">CEO Gala 2025 Registration System</p>
+            <p style="color: #999; font-size: 12px;">CEO Gala 2026 Registration System</p>
           </div>
         `,
-        text: `Dear ${applicant.name},\n\nThank you for your interest in the CEO Gala 2025.\n\nAfter careful consideration, we regret to inform you that we are unable to accommodate your attendance request at this time due to limited capacity.\n\nWe appreciate your understanding and hope to welcome you to future events.\n\nBest regards,\nThe CEO Gala Team`,
+        text: `Dear ${applicant.name},\n\nThank you for your interest in the CEO Gala 2026.\n\nAfter careful consideration, we regret to inform you that we are unable to accommodate your attendance request at this time due to limited capacity.\n\nWe appreciate your understanding and hope to welcome you to future events.\n\nBest regards,\nThe CEO Gala Team`,
       });
 
       // Log the email
@@ -96,7 +96,7 @@ export async function POST(
           guest_id: guestId,
           email_type: 'application_rejected',
           recipient: applicant.email,
-          subject: 'CEO Gala 2025 - Application Status Update',
+          subject: 'CEO Gala 2026 - Application Status Update',
           status: 'sent',
         },
       });
@@ -108,7 +108,7 @@ export async function POST(
           guest_id: guestId,
           email_type: 'application_rejected',
           recipient: applicant.email,
-          subject: 'CEO Gala 2025 - Application Status Update',
+          subject: 'CEO Gala 2026 - Application Status Update',
           status: 'failed',
           error_message: emailError instanceof Error ? emailError.message : 'Unknown error',
         },

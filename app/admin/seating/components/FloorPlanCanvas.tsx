@@ -12,7 +12,7 @@
  * - Zoom and pan the canvas
  */
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo, memo } from 'react';
 import { Stage, Layer, Circle, Text, Rect, Group, Transformer } from 'react-konva';
 import type { TableData, Assignment } from '../types';
 import { Users, User, UsersFour } from '@phosphor-icons/react';
@@ -23,6 +23,29 @@ const GUEST_TYPE_LABELS: Record<string, string> = {
   paying_single: 'Paying',
   paying_paired: 'Paired',
 };
+
+/**
+ * Calculate actual occupied seats for a table
+ * Paired guests (paying_paired or paid_paired ticket) count as 2 seats
+ * Partners (guests with paired_with_id) are not counted separately - they're included in main guest's count
+ */
+function calculateOccupiedSeats(assignments: TableData['assignments']): number {
+  let seats = 0;
+  for (const assignment of assignments) {
+    // Skip partner guests - they're counted with their main guest
+    if (assignment.guest.paired_with_id) {
+      continue;
+    }
+    // Paired guests take 2 seats
+    if (assignment.guest.guest_type === 'paying_paired' ||
+        assignment.guest.registration?.ticket_type === 'paid_paired') {
+      seats += 2;
+    } else {
+      seats += 1;
+    }
+  }
+  return seats;
+}
 
 // Table type labels
 const TABLE_TYPE_LABELS: Record<string, string> = {
@@ -63,7 +86,7 @@ const MAX_TABLE_RADIUS = 80;
 const MIN_CAPACITY = 4;
 const MAX_CAPACITY = 12;
 
-export default function FloorPlanCanvas({
+function FloorPlanCanvas({
   tables,
   roomConfig,
   onTableMove,
@@ -80,6 +103,12 @@ export default function FloorPlanCanvas({
   // Tooltip state
   const [hoveredTable, setHoveredTable] = useState<TableData | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+
+  // Generate a key based on table data to force re-render when assignments change
+  // Uses calculateOccupiedSeats instead of length to detect paired guest seat changes
+  const tablesKey = useMemo(() => {
+    return tables.map(t => `${t.id}:${calculateOccupiedSeats(t.assignments)}`).join(',');
+  }, [tables]);
 
   // Calculate room dimensions in pixels
   const roomWidthPx = roomConfig.width * PIXELS_PER_METER;
@@ -206,7 +235,7 @@ export default function FloorPlanCanvas({
 
   // Get occupancy color intensity
   const getOccupancyColor = (table: TableData) => {
-    const occupied = table.assignments.length;
+    const occupied = calculateOccupiedSeats(table.assignments);
     const ratio = occupied / table.capacity;
 
     if (ratio >= 1) return '#EF4444'; // Full - red
@@ -233,7 +262,7 @@ export default function FloorPlanCanvas({
           setPosition({ x: e.target.x(), y: e.target.y() });
         }}
       >
-        <Layer>
+        <Layer key={tablesKey}>
           {/* Room background */}
           <Rect
             x={0}
@@ -276,7 +305,8 @@ export default function FloorPlanCanvas({
             const color = getOccupancyColor(table);
             const isSelected = selectedTableId === table.id;
             const isResizing = resizingTableId === table.id;
-            const occupied = table.assignments.length;
+            // Calculate actual occupied seats (paired guests = 2 seats)
+            const occupied = calculateOccupiedSeats(table.assignments);
             const displayCapacity = tableRadii[table.id]
               ? radiusToCapacity(tableRadii[table.id])
               : table.capacity;
@@ -452,18 +482,23 @@ export default function FloorPlanCanvas({
           </div>
 
           {/* Occupancy */}
-          <div className="flex justify-between items-center mb-3 text-sm">
-            <span className="text-neutral-600">Occupancy:</span>
-            <span className={`font-semibold ${
-              hoveredTable.assignments.length >= hoveredTable.capacity
-                ? 'text-red-600'
-                : hoveredTable.assignments.length > 0
-                  ? 'text-emerald-600'
-                  : 'text-neutral-500'
-            }`}>
-              {hoveredTable.assignments.length} / {hoveredTable.capacity} seats
-            </span>
-          </div>
+          {(() => {
+            const occupiedSeats = calculateOccupiedSeats(hoveredTable.assignments);
+            return (
+              <div className="flex justify-between items-center mb-3 text-sm">
+                <span className="text-neutral-600">Occupancy:</span>
+                <span className={`font-semibold ${
+                  occupiedSeats >= hoveredTable.capacity
+                    ? 'text-red-600'
+                    : occupiedSeats > 0
+                      ? 'text-emerald-600'
+                      : 'text-neutral-500'
+                }`}>
+                  {occupiedSeats} / {hoveredTable.capacity} seats
+                </span>
+              </div>
+            );
+          })()}
 
           {/* Guest list */}
           {hoveredTable.assignments.length > 0 ? (
@@ -511,3 +546,16 @@ export default function FloorPlanCanvas({
     </div>
   );
 }
+
+// Memoize component to prevent unnecessary re-renders when parent state changes
+// Only re-render when tables data, roomConfig, or callbacks actually change
+export default memo(FloorPlanCanvas, (prevProps, nextProps) => {
+  // Custom comparison for performance
+  // Return true if props are equal (skip re-render)
+  return (
+    prevProps.tables === nextProps.tables &&
+    prevProps.roomConfig === nextProps.roomConfig &&
+    prevProps.onTableMove === nextProps.onTableMove &&
+    prevProps.onTableResize === nextProps.onTableResize
+  );
+});

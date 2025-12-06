@@ -6,7 +6,7 @@
  * Takes 2 seats when assigned to a table
  */
 
-import { forwardRef } from 'react';
+import { forwardRef, memo } from 'react';
 import type { DraggableGuest } from '../types';
 
 interface PairedGuestChipProps {
@@ -73,4 +73,5 @@ export const PairedGuestChip = forwardRef<HTMLDivElement, PairedGuestChipProps &
 
 PairedGuestChip.displayName = 'PairedGuestChip';
 
-export default PairedGuestChip;
+// Memoize to prevent re-renders during drag operations on other guests
+export default memo(PairedGuestChip);

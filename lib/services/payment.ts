@@ -19,8 +19,8 @@ const stripe = new Stripe(STRIPE_SECRET_KEY);
 // Stripe requires amounts in smallest currency unit (fillér for HUF)
 // 1 HUF = 100 fillér
 const TICKET_PRICES_FILLER: Record<TicketType, number> = {
-  paid_single: 2000000, // 20,000 Ft = 2,000,000 fillér
-  paid_paired: 4000000, // 40,000 Ft = 4,000,000 fillér
+  paid_single: 10000000, // 100,000 Ft = 10,000,000 fillér
+  paid_paired: 18000000, // 180,000 Ft = 18,000,000 fillér
   vip_free: 0,
 };
 

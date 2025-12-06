@@ -5,7 +5,7 @@
  * Renders a draggable guest card for single guests
  */
 
-import { forwardRef } from 'react';
+import { forwardRef, memo } from 'react';
 import { GUEST_TYPE_LABELS } from '@/lib/constants';
 import type { DraggableGuest } from '../types';
 
@@ -54,4 +54,5 @@ export const GuestChip = forwardRef<HTMLDivElement, GuestChipProps & React.HTMLA
 
 GuestChip.displayName = 'GuestChip';
 
-export default GuestChip;
+// Memoize to prevent re-renders during drag operations on other guests
+export default memo(GuestChip);

@@ -5,8 +5,9 @@
 
 import crypto from 'crypto';
 
-const MAGIC_LINK_EXPIRY_HOURS = 72;
-const MAGIC_LINK_EXPIRY_MINUTES = MAGIC_LINK_EXPIRY_HOURS * 60; // 72 hours
+// Reduced from 72h to 48h for security - shorter window for link interception
+const MAGIC_LINK_EXPIRY_HOURS = 48;
+const MAGIC_LINK_EXPIRY_MINUTES = MAGIC_LINK_EXPIRY_HOURS * 60; // 48 hours
 
 /**
  * Generate a magic link hash and expiry timestamp
@@ -113,7 +114,7 @@ export async function validateMagicLink(
     return {
       valid: false,
       errorType: 'expired',
-      error: 'The invitation link has expired (invalid after 72 hours)',
+      error: 'The invitation link has expired (invalid after 48 hours)',
     };
   }
 

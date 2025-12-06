@@ -52,6 +52,11 @@ model Guest {
   @@index([registration_status])
   @@index([paired_with_id])
   @@index([pwa_auth_code])
+  // Composite indexes for common query patterns
+  @@index([registration_status, guest_type])        // Guest list filtering by status + type
+  @@index([registration_status, created_at])        // Guest list filtering + sorting
+  @@index([guest_type, created_at])                 // Seating page unassigned guests
+  @@index([guest_type, name])                       // Seating page sorting
   @@map("guests")
 }
 
@@ -146,6 +151,7 @@ model Table {
   assignments TableAssignment[]
 
   @@index([name])
+  @@index([type, name])  // Table list sorting by type + name
   @@map("tables")
 }
 

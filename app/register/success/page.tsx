@@ -45,7 +45,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
   const isPaid = registrationType === 'paid' || guest.guest_type === 'paying_single' || guest.guest_type === 'paying_paired';
   const ticketType = guest.registration?.ticket_type;
   const isPairedTicket = ticketType === 'paid_paired';
-  const ticketPrice = isPairedTicket ? '40,000 Ft' : '20,000 Ft';
+  const ticketPrice = isPairedTicket ? '180,000 Ft' : '100,000 Ft';
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-neutral-800 to-neutral-700 flex items-center justify-center p-4">

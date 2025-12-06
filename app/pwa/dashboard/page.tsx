@@ -243,7 +243,7 @@ export default function PWADashboardPage() {
       {/* Header */}
       <header className="bg-slate-800 text-white px-4 py-6">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="font-playfair text-xl">CEO Gála 2025</h1>
+          <h1 className="font-playfair text-xl">CEO Gála 2026</h1>
           <button
             onClick={handleLogout}
             className="text-slate-300 text-sm hover:text-white"

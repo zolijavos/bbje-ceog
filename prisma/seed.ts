@@ -157,7 +157,7 @@ async function main() {
       data: {
         registration_id: registration.id,
         stripe_session_id: `cs_test_${guest.id}`,
-        amount: 25000, // 25,000 HUF
+        amount: 100000, // 100,000 HUF
         currency: 'HUF',
         payment_status: guestData.paymentStatus,
         payment_method: 'card',
@@ -320,7 +320,7 @@ async function main() {
       data: {
         registration_id: mainRegistration.id,
         stripe_session_id: pairedData.paymentMethod === 'card' ? `cs_paired_${mainGuest.id}` : undefined,
-        amount: 40000, // 40,000 HUF (paired ticket)
+        amount: 180000, // 180,000 HUF (paired ticket)
         currency: 'HUF',
         payment_status: pairedData.paymentStatus,
         payment_method: pairedData.paymentMethod,
@@ -392,7 +392,7 @@ async function main() {
           data: {
             registration_id: reg.id,
             stripe_session_id: `cs_unassigned_${unassignedGuest.id}`,
-            amount: 25000,
+            amount: 100000, // 100,000 HUF
             currency: 'HUF',
             payment_status: 'paid',
             payment_method: 'card',
@@ -483,7 +483,7 @@ async function main() {
     data: {
       registration_id: pairedMainReg.id,
       stripe_session_id: `cs_paired_unassigned_${pairedUnassignedMain.id}`,
-      amount: 45000,
+      amount: 180000, // 180,000 HUF (paired ticket)
       currency: 'HUF',
       payment_status: 'paid',
       payment_method: 'card',

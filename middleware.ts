@@ -80,7 +80,11 @@ function validateCsrf(request: NextRequest): boolean {
     return true;
   }
 
-  const expectedHost = request.nextUrl.host;
+  // Use X-Forwarded-Host if behind reverse proxy (Nginx), otherwise use nextUrl.host
+  // SECURITY: Nginx MUST set X-Forwarded-Host to prevent spoofing attacks.
+  // The proxy_set_header X-Forwarded-Host $host; directive overwrites any client-sent header.
+  const forwardedHost = request.headers.get('x-forwarded-host');
+  const expectedHost = forwardedHost || request.headers.get('host') || request.nextUrl.host;
 
   // Check origin header
   if (origin) {

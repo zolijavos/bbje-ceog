@@ -21,11 +21,29 @@ import { generateAndSendTicket } from '@/lib/services/email';
 import { logError } from '@/lib/utils/logger';
 import Stripe from 'stripe';
 
-// Webhook event log for debugging
+// Webhook event log for debugging - uses structured logging
 function logWebhookEvent(eventType: string, sessionId: string, status: 'processing' | 'success' | 'error', details?: string) {
-  const timestamp = new Date().toISOString();
-  const logLevel = status === 'error' ? 'ERROR' : 'INFO';
-  console.log(`[${timestamp}] [WEBHOOK] [${logLevel}] ${eventType} | session: ${sessionId} | status: ${status}${details ? ` | ${details}` : ''}`);
+  const logData = {
+    timestamp: new Date().toISOString(),
+    component: 'WEBHOOK',
+    level: status === 'error' ? 'ERROR' : 'INFO',
+    eventType,
+    sessionId,
+    status,
+    details,
+  };
+
+  // Use structured logging for production (easier to parse in log aggregators)
+  if (process.env.NODE_ENV === 'production') {
+    if (status === 'error') {
+      logError(`[WEBHOOK] ${eventType} | ${sessionId}`, details);
+    }
+    // In production, only log errors to reduce noise
+    return;
+  }
+
+  // In development, log everything for debugging
+  console.log(JSON.stringify(logData));
 }
 
 export async function POST(request: NextRequest) {

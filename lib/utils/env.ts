@@ -114,9 +114,9 @@ export function validateEnv(): void {
     // Email
     validateEmail();
 
-    // NextAuth (must be at least 32 chars)
+    // NextAuth (must be at least 64 chars for security - prevents brute force attacks)
     validateEnvVar('NEXTAUTH_URL');
-    validateSecret('NEXTAUTH_SECRET', 32);
+    validateSecret('NEXTAUTH_SECRET', 64);
 
     // Optional vars (don't throw if missing)
     validateEnvVar('APP_URL', false);

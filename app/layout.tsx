@@ -22,8 +22,8 @@ const openSans = Open_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'CEO Gála 2025 - Regisztrációs Rendszer',
-  description: 'CEO Gála 2025 esemény regisztráció és beléptetés',
+  title: 'CEO Gála 2026 - Regisztrációs Rendszer',
+  description: 'CEO Gála 2026 esemény regisztráció és beléptetés',
   manifest: '/manifest.json',
   themeColor: '#1e293b',
   appleWebApp: {

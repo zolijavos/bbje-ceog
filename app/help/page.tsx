@@ -74,7 +74,7 @@ const faqs: FAQItem[] = [
     id: 'pay-2',
     category: 'Payment',
     question: 'How much does a ticket cost?',
-    answer: 'Single ticket: 25,000 HUF. Paired ticket (for two people): 40,000 HUF. VIP guests receive complimentary tickets at no cost.',
+    answer: 'Single ticket: 100,000 HUF. Paired ticket (for two people): 180,000 HUF. VIP guests receive complimentary tickets at no cost.',
     keywords: ['price', 'cost', 'how much', 'ticket price', 'fee'],
   },
   {

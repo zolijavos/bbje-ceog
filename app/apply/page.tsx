@@ -149,7 +149,7 @@ export default function ApplyPage() {
           </div>
           <h1 className="text-2xl font-bold text-slate-800 mb-2">Application Submitted!</h1>
           <p className="text-slate-600 mb-6">
-            Thank you for your interest in the CEO Gala 2025. We have received your application and will review it shortly.
+            Thank you for your interest in the CEO Gala 2026. We have received your application and will review it shortly.
           </p>
           <p className="text-slate-500 text-sm">
             You will receive an email notification once your application has been reviewed.
@@ -164,7 +164,7 @@ export default function ApplyPage() {
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">CEO Gala 2025</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">CEO Gala 2026</h1>
           <h2 className="text-xl text-amber-400">Application to Attend</h2>
           <p className="text-slate-300 mt-4 max-w-md mx-auto">
             Not on the guest list? Apply here and we will review your application.
@@ -309,7 +309,7 @@ export default function ApplyPage() {
 
         {/* Footer */}
         <p className="text-center text-slate-400 text-sm mt-6">
-          CEO Gala 2025 &copy; All rights reserved
+          CEO Gala 2026 &copy; All rights reserved
         </p>
       </div>
     </div>

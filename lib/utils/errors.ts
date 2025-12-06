@@ -5,16 +5,57 @@
  */
 
 /**
- * Extracts error message from unknown error type
+ * Sensitive patterns that should never be exposed in error messages
  */
-export function getErrorMessage(error: unknown): string {
+const SENSITIVE_PATTERNS = [
+  /password/i,
+  /secret/i,
+  /token/i,
+  /api.?key/i,
+  /credential/i,
+  /connection.*string/i,
+  /database.*url/i,
+];
+
+/**
+ * Sanitizes error message to prevent information leakage
+ */
+function sanitizeErrorMessage(message: string): string {
+  // Check if message contains sensitive information
+  for (const pattern of SENSITIVE_PATTERNS) {
+    if (pattern.test(message)) {
+      return 'An internal error occurred';
+    }
+  }
+
+  // Remove file paths that might reveal server structure
+  const sanitized = message.replace(/\/[^\s]+\.(ts|js|tsx|jsx)/g, '[file]');
+
+  // Remove line numbers
+  return sanitized.replace(/:\d+:\d+/g, '');
+}
+
+/**
+ * Extracts error message from unknown error type
+ * In production, sensitive information is sanitized
+ */
+export function getErrorMessage(error: unknown, sanitize: boolean = true): string {
+  let message: string;
+
   if (error instanceof Error) {
-    return error.message;
+    message = error.message;
+  } else if (typeof error === 'string') {
+    message = error;
+  } else {
+    message = 'An unknown error occurred';
   }
-  if (typeof error === 'string') {
-    return error;
+
+  // Only sanitize in production
+  if (sanitize && process.env.NODE_ENV === 'production') {
+    return sanitizeErrorMessage(message);
   }
-  return 'An unknown error occurred';
+
+  return message;
 }
 
 /**

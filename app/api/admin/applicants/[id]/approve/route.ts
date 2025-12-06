@@ -74,12 +74,12 @@ export async function POST(
 
       await sendEmail({
         to: applicant.email,
-        subject: 'Your CEO Gala 2025 Application Has Been Approved!',
+        subject: 'Your CEO Gala 2026 Application Has Been Approved!',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <h1 style="color: #d97706;">Great News!</h1>
             <p>Dear ${applicant.name},</p>
-            <p>We are pleased to inform you that your application to attend the <strong>CEO Gala 2025</strong> has been approved!</p>
+            <p>We are pleased to inform you that your application to attend the <strong>CEO Gala 2026</strong> has been approved!</p>
             <p>Please complete your registration by clicking the link below:</p>
             <p style="margin: 30px 0;">
               <a href="${magicLinkUrl}" style="background-color: #d97706; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
@@ -90,10 +90,10 @@ export async function POST(
               This link will expire in 72 hours. If you did not apply for this event, please ignore this email.
             </p>
             <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
-            <p style="color: #999; font-size: 12px;">CEO Gala 2025 Registration System</p>
+            <p style="color: #999; font-size: 12px;">CEO Gala 2026 Registration System</p>
           </div>
         `,
-        text: `Dear ${applicant.name},\n\nYour application to attend the CEO Gala 2025 has been approved!\n\nPlease complete your registration at: ${magicLinkUrl}\n\nThis link will expire in 72 hours.`,
+        text: `Dear ${applicant.name},\n\nYour application to attend the CEO Gala 2026 has been approved!\n\nPlease complete your registration at: ${magicLinkUrl}\n\nThis link will expire in 72 hours.`,
       });
 
       // Log the email
@@ -102,7 +102,7 @@ export async function POST(
           guest_id: guestId,
           email_type: 'application_approved',
           recipient: applicant.email,
-          subject: 'Your CEO Gala 2025 Application Has Been Approved!',
+          subject: 'Your CEO Gala 2026 Application Has Been Approved!',
           status: 'sent',
         },
       });
@@ -114,7 +114,7 @@ export async function POST(
           guest_id: guestId,
           email_type: 'application_approved',
           recipient: applicant.email,
-          subject: 'Your CEO Gala 2025 Application Has Been Approved!',
+          subject: 'Your CEO Gala 2026 Application Has Been Approved!',
           status: 'failed',
           error_message: emailError instanceof Error ? emailError.message : 'Unknown error',
         },

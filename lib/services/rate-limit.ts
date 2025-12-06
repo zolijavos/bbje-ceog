@@ -122,7 +122,7 @@ export const RATE_LIMITS = {
     windowMs: 60 * 60 * 1000, // 1 hour
   },
   API: {
-    maxAttempts: 100,
+    maxAttempts: 30, // Reduced from 100 to prevent DoS attacks
     windowMs: 60 * 1000, // 1 minute
   },
 } as const;

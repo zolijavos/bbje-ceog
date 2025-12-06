@@ -1,20 +1,20 @@
 /**
- * CEO Gála 2025 - Event Configuration
+ * CEO Gála 2026 - Event Configuration
  * Centralized configuration for event-related constants
  */
 
 export const EVENT_CONFIG = {
   // Event details
-  name: 'CEO Gála 2025',
-  year: 2025,
+  name: 'CEO Gála 2026',
+  year: 2026,
 
   // Event timing
-  date: '2025-02-15',
+  date: '2026-04-26',
   startTime: '18:00',
-  dateTime: new Date('2025-02-15T18:00:00'),
+  dateTime: new Date('2026-04-26T18:00:00'),
 
   // QR code expiry (end of event day)
-  ticketExpiry: new Date('2025-02-15T23:59:59'),
+  ticketExpiry: new Date('2026-04-26T23:59:59'),
 
   // Venue
   venue: {
@@ -33,7 +33,7 @@ export const EVENT_CONFIG = {
  * Format event date for display (Hungarian)
  */
 export function formatEventDate(): string {
-  return '2025. február 15., szombat';
+  return '2026. április 26., vasárnap';
 }
 
 /**
