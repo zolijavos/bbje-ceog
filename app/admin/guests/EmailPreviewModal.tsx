@@ -65,7 +65,7 @@ export default function EmailPreviewModal({
   const hasMoreRecipients = recipients.length > 5;
 
   // Preview with first recipient's name
-  const previewName = recipients[0]?.name || 'Vendég';
+  const previewName = recipients[0]?.name || 'Guest';
   const previewBody = body
     .replace(/{guestName}/g, previewName)
     .replace(/{magicLinkUrl}/g, 'https://ceogala.hu/register?code=xxx&email=xxx');

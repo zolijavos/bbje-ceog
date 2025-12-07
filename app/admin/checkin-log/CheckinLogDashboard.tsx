@@ -10,6 +10,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { TICKET_TYPE_LABELS } from '@/lib/constants';
 import { logError } from '@/lib/utils/logger';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 // Types
 interface CheckinStats {
@@ -50,6 +51,7 @@ interface CheckinLogResponse {
 }
 
 export default function CheckinLogDashboard() {
+  const { t } = useLanguage();
   const [stats, setStats] = useState<CheckinStats | null>(null);
   const [logData, setLogData] = useState<CheckinLogResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -129,7 +131,7 @@ export default function CheckinLogDashboard() {
         {/* Total Check-ins */}
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">
-            Összes beléptetés
+            {t('checkedIn')}
           </h3>
           <p className="mt-2 text-3xl font-bold text-gray-900">
             {stats?.totalCheckins ?? '-'}
@@ -139,7 +141,7 @@ export default function CheckinLogDashboard() {
         {/* Total Registrations */}
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">
-            Regisztrált vendégek
+            {t('expected')}
           </h3>
           <p className="mt-2 text-3xl font-bold text-gray-900">
             {stats?.totalRegistrations ?? '-'}
@@ -149,7 +151,7 @@ export default function CheckinLogDashboard() {
         {/* Check-in Rate */}
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">
-            Belépési arány
+            {t('checkinRate')}
           </h3>
           <p className="mt-2 text-3xl font-bold text-green-600">
             {stats ? `${stats.checkinRate.toFixed(1)}%` : '-'}
@@ -163,14 +165,14 @@ export default function CheckinLogDashboard() {
           {/* Search */}
           <div className="md:col-span-2">
             <label htmlFor="search" className="block text-sm font-medium text-gray-700">
-              Keresés
+              {t('search')}
             </label>
             <input
               type="text"
               id="search"
               value={search}
               onChange={(e) => handleSearch(e.target.value)}
-              placeholder="Név vagy email..."
+              placeholder={t('searchByNameOrEmail')}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             />
           </div>
@@ -178,7 +180,7 @@ export default function CheckinLogDashboard() {
           {/* Date From */}
           <div>
             <label htmlFor="dateFrom" className="block text-sm font-medium text-gray-700">
-              Dátum (-tól)
+              Date (from)
             </label>
             <input
               type="date"
@@ -195,7 +197,7 @@ export default function CheckinLogDashboard() {
           {/* Date To */}
           <div>
             <label htmlFor="dateTo" className="block text-sm font-medium text-gray-700">
-              Dátum (-ig)
+              Date (to)
             </label>
             <input
               type="date"
@@ -222,7 +224,7 @@ export default function CheckinLogDashboard() {
               }}
               className="text-sm text-blue-600 hover:text-blue-800"
             >
-              Szűrők törlése
+              Clear filters
             </button>
           </div>
         )}
@@ -235,19 +237,19 @@ export default function CheckinLogDashboard() {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Időpont
+                  {t('time')}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Vendég
+                  {t('guest')}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Jegy típus
+                  {t('ticketType')}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Staff
+                  {t('staff')}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Státusz
+                  {t('status')}
                 </th>
               </tr>
             </thead>
@@ -255,13 +257,13 @@ export default function CheckinLogDashboard() {
               {loading ? (
                 <tr>
                   <td colSpan={5} className="px-6 py-10 text-center text-gray-500">
-                    Betöltés...
+                    {t('loading')}
                   </td>
                 </tr>
               ) : logData?.checkins.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-6 py-10 text-center text-gray-500">
-                    Nincs beléptetés a szűrési feltételeknek megfelelően.
+                    {t('noCheckinsYet')}
                   </td>
                 </tr>
               ) : (
@@ -287,10 +289,10 @@ export default function CheckinLogDashboard() {
                       <span
                         className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                           entry.registration.ticket_type === 'vip_free'
-                            ? 'bg-purple-100 text-purple-800'
+                            ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300'
                             : entry.registration.ticket_type === 'paid_paired'
-                            ? 'bg-blue-100 text-blue-800'
-                            : 'bg-gray-100 text-gray-800'
+                            ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300'
+                            : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'
                         }`}
                       >
                         {TICKET_TYPE_LABELS[entry.registration.ticket_type] ||
@@ -302,12 +304,12 @@ export default function CheckinLogDashboard() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {entry.is_override ? (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                          Override
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300">
+                          {t('override')}
                         </span>
                       ) : (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                          OK
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300">
+                          {t('ok')}
                         </span>
                       )}
                     </td>
@@ -327,21 +329,21 @@ export default function CheckinLogDashboard() {
                 disabled={page === 1}
                 className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
               >
-                Előző
+                {t('previous')}
               </button>
               <button
                 onClick={() => setPage((p) => Math.min(logData.totalPages, p + 1))}
                 disabled={page === logData.totalPages}
                 className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
               >
-                Következő
+                {t('next')}
               </button>
             </div>
             <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm text-gray-700">
-                  Összesen <span className="font-medium">{logData.total}</span> beléptetés,{' '}
-                  <span className="font-medium">{page}</span>. oldal /{' '}
+                  Total <span className="font-medium">{logData.total}</span> check-ins,{' '}
+                  page <span className="font-medium">{page}</span> of{' '}
                   <span className="font-medium">{logData.totalPages}</span>
                 </p>
               </div>
@@ -389,7 +391,7 @@ export default function CheckinLogDashboard() {
       {stats && stats.recentCheckins.length > 0 && (
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-lg font-medium text-gray-900 mb-4">
-            Legutóbbi beléptetések
+            Recent Check-ins
           </h3>
           <div className="space-y-2">
             {stats.recentCheckins.map((checkin, index) => (
@@ -410,7 +412,7 @@ export default function CheckinLogDashboard() {
             onClick={fetchStats}
             className="mt-4 text-sm text-blue-600 hover:text-blue-800"
           >
-            Frissítés
+            {t('refresh')}
           </button>
         </div>
       )}

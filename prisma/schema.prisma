@@ -262,6 +262,73 @@ model EmailTemplate {
 }
 
 // ==================================
+// SCHEDULER CONFIGURATION
+// ==================================
+
+model SchedulerConfig {
+  id              Int      @id @default(autoincrement())
+  config_key      String   @unique @db.VarChar(100)  // e.g., "payment_reminder", "event_reminder"
+  enabled         Boolean  @default(true)
+
+  // Schedule timing
+  days_before     Int?     // Days before event (for event-related reminders)
+  days_after      Int?     // Days after event (for follow-ups)
+  interval_days   Int?     // Repeat interval in days (for recurring reminders)
+  send_time       String   @default("09:00") @db.VarChar(10)  // Time of day to send (HH:MM)
+
+  // Target audience
+  target_status   String?  @db.VarChar(255)  // JSON array of registration statuses
+  target_types    String?  @db.VarChar(255)  // JSON array of guest types
+
+  // Template
+  template_slug   String   @db.VarChar(100)  // Email template to use
+
+  // Metadata
+  name            String   @db.VarChar(255)  // Human-readable name
+  description     String?  @db.Text          // Description of the rule
+
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  @@index([config_key])
+  @@index([enabled])
+  @@map("scheduler_configs")
+}
+
+// ==================================
+// SCHEDULED EMAILS
+// ==================================
+
+model ScheduledEmail {
+  id              Int                  @id @default(autoincrement())
+  guest_id        Int?                 // Optional - null for broadcast emails
+  template_slug   String               @db.VarChar(100)  // References email template
+  scheduled_for   DateTime             // When to send
+  status          ScheduledEmailStatus @default(pending)
+  variables       String?              @db.Text          // JSON object of template variables
+  error_message   String?              @db.Text
+  sent_at         DateTime?
+  created_at      DateTime             @default(now())
+  created_by      Int?                 // Admin user who scheduled it
+
+  // Scheduling type metadata
+  schedule_type   String               @default("manual") @db.VarChar(50) // manual, payment_reminder, event_reminder, auto
+
+  @@index([status, scheduled_for])
+  @@index([guest_id])
+  @@index([schedule_type])
+  @@map("scheduled_emails")
+}
+
+enum ScheduledEmailStatus {
+  pending     // Waiting to be sent
+  processing  // Currently being sent
+  sent        // Successfully sent
+  failed      // Failed to send
+  cancelled   // Cancelled by admin
+}
+
+// ==================================
 // RATE LIMITING
 // ==================================
 

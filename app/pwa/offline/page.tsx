@@ -16,12 +16,12 @@ export default function PWAOfflinePage() {
         </div>
 
         <h1 className="font-playfair text-2xl text-slate-800 mb-3">
-          Nincs internetkapcsolat
+          No Internet Connection
         </h1>
 
         <p className="text-slate-600 mb-6">
-          Az oldal betöltéséhez internetkapcsolat szükséges.
-          Ellenőrizd a kapcsolatod, majd próbáld újra.
+          An internet connection is required to load this page.
+          Check your connection and try again.
         </p>
 
         {/* Retry button */}
@@ -29,7 +29,7 @@ export default function PWAOfflinePage() {
           onClick={handleRetry}
           className="w-full bg-slate-800 text-white py-3 rounded-xl font-medium hover:bg-slate-700 transition-colors mb-4"
         >
-          Újrapróbálás
+          Try Again
         </button>
 
         {/* Home link */}
@@ -37,14 +37,14 @@ export default function PWAOfflinePage() {
           href="/pwa"
           className="text-slate-600 underline text-sm"
         >
-          Vissza a főoldalra
+          Back to home
         </Link>
 
         {/* Tip */}
         <div className="mt-8 p-4 bg-amber-50 rounded-xl">
           <p className="text-amber-800 text-sm">
-            💡 <strong>Tipp:</strong> Ha már beléptél korábban,
-            a jegyed offline is elérhető a &quot;Digitális Jegy&quot; menüpontban.
+            💡 <strong>Tip:</strong> If you have logged in before,
+            your ticket is available offline in the &quot;Digital Ticket&quot; section.
           </p>
         </div>
       </div>

@@ -36,6 +36,7 @@ import {
   ArrowsClockwise
 } from '@phosphor-icons/react';
 import { logError } from '@/lib/utils/logger';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { UnassignedPanel } from './components/UnassignedPanel';
 import { DroppableTable } from './components/DroppableTable';
 import { GuestChip } from './components/GuestChip';
@@ -57,6 +58,7 @@ import {
 type ViewMode = 'grid' | 'floorplan';
 
 export default function SeatingDashboard() {
+  const { t } = useLanguage();
   const [tables, setTables] = useState<TableData[]>([]);
   const [unassignedGuests, setUnassignedGuests] = useState<Guest[]>([]);
   const [stats, setStats] = useState<SeatingStats | null>(null);
@@ -182,9 +184,9 @@ export default function SeatingDashboard() {
 
   // Remove guest via button click
   const handleRemoveGuest = useCallback(async (assignmentId: number) => {
-    if (!confirm('Are you sure you want to remove the guest from this table?')) return;
+    if (!confirm(t('confirmRemoveGuest'))) return;
     await handleUnassign(assignmentId);
-  }, [handleUnassign]);
+  }, [handleUnassign, t]);
 
   // DnD Hook
   const {
@@ -260,7 +262,7 @@ export default function SeatingDashboard() {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <div className="spinner mx-auto mb-4" />
-          <p className="text-neutral-500 text-sm">Loading...</p>
+          <p className="text-neutral-500 text-sm">{t('loading')}</p>
         </div>
       </div>
     );
@@ -287,29 +289,29 @@ export default function SeatingDashboard() {
         {stats && (
           <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
             <div className="panel p-4">
-              <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">Tables</p>
+              <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">{t('totalTables')}</p>
               <p className="text-2xl font-bold text-neutral-800">{stats.totalTables}</p>
             </div>
             <div className="panel p-4">
-              <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">Capacity</p>
+              <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">{t('capacity')}</p>
               <p className="text-2xl font-bold text-neutral-800">{stats.totalCapacity}</p>
             </div>
             <div className="panel p-4">
-              <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">Seated</p>
+              <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">{t('assignedSeats')}</p>
               <p className="text-2xl font-bold text-neutral-800">{stats.totalOccupied}</p>
             </div>
             <div className="panel p-4 border-l-4 border-emerald-600">
-              <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">Occupancy</p>
+              <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">{t('occupancy')}</p>
               <p className="text-2xl font-bold text-emerald-700">
                 {stats.occupancyRate.toFixed(1)}%
               </p>
             </div>
             <div className="panel p-4">
-              <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">Guests</p>
+              <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">{t('guests')}</p>
               <p className="text-2xl font-bold text-neutral-800">{stats.totalGuests}</p>
             </div>
             <div className="panel p-4 border-l-4 border-amber-500">
-              <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">Unassigned</p>
+              <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">{t('unassignedGuests')}</p>
               <p className="text-2xl font-bold text-amber-600">
                 {stats.unassignedGuests}
               </p>
@@ -343,7 +345,7 @@ export default function SeatingDashboard() {
               data-testid="view-floorplan-button"
             >
               <MapTrifold size={18} weight="duotone" />
-              Floor Plan
+              {t('floorPlan')}
             </button>
           </div>
 
@@ -355,7 +357,7 @@ export default function SeatingDashboard() {
             data-testid="csv-import-button"
           >
             <UploadSimple size={18} weight="duotone" />
-            CSV Import
+            {t('importCSV')}
           </button>
           <button
             onClick={handleExport}
@@ -363,7 +365,7 @@ export default function SeatingDashboard() {
             data-testid="csv-export-button"
           >
             <DownloadSimple size={18} weight="duotone" />
-            CSV Export
+            {t('exportCSV')}
           </button>
           <button
             onClick={fetchData}
@@ -371,7 +373,7 @@ export default function SeatingDashboard() {
             data-testid="refresh-button"
           >
             <ArrowsClockwise size={18} weight="duotone" />
-            Refresh
+            {t('retry')}
           </button>
         </div>
 
@@ -485,7 +487,7 @@ export default function SeatingDashboard() {
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-accent-600 font-bold">4.</span>
-                <span>Paired guests (2 seats) move together</span>
+                <span>Paired guests (2 {t('seats')}) move together</span>
               </div>
             </div>
           </div>

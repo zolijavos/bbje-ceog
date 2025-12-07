@@ -3,11 +3,16 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Html5QrcodeScanner } from 'html5-qrcode';
+import { Camera, Key, ArrowLeft, Envelope } from '@phosphor-icons/react';
+import ThemeToggle from './components/ui/ThemeToggle';
+import Button3D from './components/ui/Button3D';
+import { useHaptic } from './hooks/useHaptic';
 
 type AuthMode = 'select' | 'scan' | 'code';
 
 export default function PWALoginPage() {
   const router = useRouter();
+  const { patterns } = useHaptic();
   const [mode, setMode] = useState<AuthMode>('select');
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
@@ -52,6 +57,7 @@ export default function PWALoginPage() {
         async (decodedText) => {
           // QR code scanned successfully
           scannerRef.current?.clear();
+          patterns.success();
           await handleQRAuth(decodedText);
         },
         () => {
@@ -62,11 +68,13 @@ export default function PWALoginPage() {
 
     return () => {
       if (scannerRef.current) {
-        scannerRef.current.clear().catch(() => { /* cleanup error ignored */ });
+        scannerRef.current.clear().catch(() => {
+          /* cleanup error ignored */
+        });
         scannerRef.current = null;
       }
     };
-  }, [mode]);
+  }, [mode, patterns]);
 
   const handleQRAuth = async (token: string) => {
     setLoading(true);
@@ -82,13 +90,16 @@ export default function PWALoginPage() {
       const data = await res.json();
 
       if (res.ok && data.success) {
+        patterns.success();
         router.replace('/pwa/dashboard');
       } else {
-        setError(data.error || 'Érvénytelen QR kód');
+        patterns.error();
+        setError(data.error || 'Invalid QR code');
         setMode('select');
       }
     } catch {
-      setError('Hálózati hiba. Kérjük, próbáld újra.');
+      patterns.error();
+      setError('Network error. Please try again.');
       setMode('select');
     } finally {
       setLoading(false);
@@ -110,12 +121,15 @@ export default function PWALoginPage() {
       const data = await res.json();
 
       if (res.ok && data.success) {
+        patterns.success();
         router.replace('/pwa/dashboard');
       } else {
-        setError(data.error || 'Érvénytelen kód');
+        patterns.error();
+        setError(data.error || 'Invalid code');
       }
     } catch {
-      setError('Hálózati hiba. Kérjük, próbáld újra.');
+      patterns.error();
+      setError('Network error. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -123,63 +137,96 @@ export default function PWALoginPage() {
 
   if (checkingSession) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-800">
-        <div className="text-white text-center">
-          <div className="animate-spin w-8 h-8 border-4 border-white border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p>Betöltés...</p>
+      <div className="min-h-screen flex items-center justify-center pwa-bg-base">
+        <div className="text-center">
+          <div
+            className="w-8 h-8 border-4 rounded-full animate-spin mx-auto mb-4"
+            style={{
+              borderColor: 'var(--color-border-subtle)',
+              borderTopColor: 'var(--color-accent)',
+            }}
+          />
+          <p className="pwa-text-secondary">Loading...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-800 to-slate-900 flex flex-col">
+    <div className="min-h-screen pwa-bg-base flex flex-col">
       {/* Header */}
-      <header className="pt-12 pb-8 text-center">
-        <h1 className="font-playfair text-3xl text-white mb-2">CEO Gála 2026</h1>
-        <p className="text-slate-400 text-sm">Vendég Alkalmazás</p>
+      <header className="pt-8 pb-6 text-center relative">
+        {/* Theme toggle - top right */}
+        <div className="absolute top-4 right-4">
+          <ThemeToggle />
+        </div>
+
+        <h1 className="font-display text-3xl pwa-text-primary mb-2">
+          CEO Gala 2026
+        </h1>
+        <p className="pwa-text-tertiary text-sm">Guest App</p>
       </header>
 
       {/* Main content */}
       <div className="flex-1 px-6 pb-20">
-        <div className="bg-white rounded-2xl shadow-xl p-6 max-w-md mx-auto">
+        <div className="card-static p-6 max-w-md mx-auto">
           {mode === 'select' && (
             <>
-              <h2 className="text-xl font-semibold text-slate-800 mb-2 text-center">
-                Üdvözlünk!
+              <h2 className="text-xl font-semibold pwa-text-primary mb-2 text-center">
+                Welcome!
               </h2>
-              <p className="text-slate-600 text-sm text-center mb-6">
-                Lépj be a jegyeden található QR kóddal vagy regisztrációs kóddal.
+              <p className="pwa-text-secondary text-sm text-center mb-6">
+                Log in with the QR code or registration code on your ticket.
               </p>
 
               {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">
+                <div
+                  className="px-4 py-3 mb-4 text-sm border"
+                  style={{
+                    background: 'var(--color-error-bg)',
+                    color: 'var(--color-error)',
+                    borderColor: 'var(--color-error)',
+                  }}
+                >
                   {error}
                 </div>
               )}
 
               <div className="space-y-3">
-                <button
-                  onClick={() => setMode('scan')}
-                  className="w-full bg-slate-800 text-white py-4 rounded-xl font-medium flex items-center justify-center gap-3 hover:bg-slate-700 transition-colors"
+                <Button3D
+                  onClick={() => {
+                    patterns.light();
+                    setMode('scan');
+                  }}
+                  fullWidth
+                  icon={<Camera size={24} weight="fill" />}
                 >
-                  <span className="text-2xl">📷</span>
-                  QR Kód Beolvasása
-                </button>
+                  Scan QR Code
+                </Button3D>
 
                 <div className="flex items-center gap-4 my-4">
-                  <div className="flex-1 h-px bg-slate-200"></div>
-                  <span className="text-slate-400 text-sm">vagy</span>
-                  <div className="flex-1 h-px bg-slate-200"></div>
+                  <div
+                    className="flex-1 h-px"
+                    style={{ background: 'var(--color-border-subtle)' }}
+                  />
+                  <span className="pwa-text-tertiary text-sm">or</span>
+                  <div
+                    className="flex-1 h-px"
+                    style={{ background: 'var(--color-border-subtle)' }}
+                  />
                 </div>
 
-                <button
-                  onClick={() => setMode('code')}
-                  className="w-full bg-white border-2 border-slate-200 text-slate-700 py-4 rounded-xl font-medium flex items-center justify-center gap-3 hover:bg-slate-50 transition-colors"
+                <Button3D
+                  variant="secondary"
+                  onClick={() => {
+                    patterns.light();
+                    setMode('code');
+                  }}
+                  fullWidth
+                  icon={<Key size={24} weight="fill" />}
                 >
-                  <span className="text-2xl">🔑</span>
-                  Kód Megadása
-                </button>
+                  Enter Code
+                </Button3D>
               </div>
             </>
           )}
@@ -188,27 +235,37 @@ export default function PWALoginPage() {
             <>
               <div className="flex items-center justify-between mb-4">
                 <button
-                  onClick={() => setMode('select')}
-                  className="text-slate-600 hover:text-slate-800"
+                  onClick={() => {
+                    patterns.light();
+                    setMode('select');
+                  }}
+                  className="pwa-text-secondary hover:pwa-text-primary transition-colors flex items-center gap-1"
                 >
-                  ← Vissza
+                  <ArrowLeft size={18} />
+                  Back
                 </button>
-                <h2 className="text-lg font-semibold text-slate-800">
-                  QR Beolvasás
+                <h2 className="text-lg font-semibold pwa-text-primary">
+                  QR Scan
                 </h2>
-                <div className="w-16"></div>
+                <div className="w-16" />
               </div>
 
-              <p className="text-slate-600 text-sm text-center mb-4">
-                Tartsd a kamerát a jegyeden található QR kód fölé.
+              <p className="pwa-text-secondary text-sm text-center mb-4">
+                Hold your camera over the QR code on your ticket.
               </p>
 
-              <div id="qr-reader" className="rounded-lg overflow-hidden"></div>
+              <div id="qr-reader" className="overflow-hidden" />
 
               {loading && (
                 <div className="mt-4 text-center">
-                  <div className="animate-spin w-6 h-6 border-2 border-slate-800 border-t-transparent rounded-full mx-auto"></div>
-                  <p className="text-slate-600 text-sm mt-2">Ellenőrzés...</p>
+                  <div
+                    className="w-6 h-6 border-2 rounded-full animate-spin mx-auto"
+                    style={{
+                      borderColor: 'var(--color-border-subtle)',
+                      borderTopColor: 'var(--color-accent)',
+                    }}
+                  />
+                  <p className="pwa-text-secondary text-sm mt-2">Verifying...</p>
                 </div>
               )}
             </>
@@ -218,51 +275,68 @@ export default function PWALoginPage() {
             <>
               <div className="flex items-center justify-between mb-4">
                 <button
-                  onClick={() => setMode('select')}
-                  className="text-slate-600 hover:text-slate-800"
+                  onClick={() => {
+                    patterns.light();
+                    setMode('select');
+                  }}
+                  className="pwa-text-secondary hover:pwa-text-primary transition-colors flex items-center gap-1"
                 >
-                  ← Vissza
+                  <ArrowLeft size={18} />
+                  Back
                 </button>
-                <h2 className="text-lg font-semibold text-slate-800">
-                  Kód Megadása
+                <h2 className="text-lg font-semibold pwa-text-primary">
+                  Enter Code
                 </h2>
-                <div className="w-16"></div>
+                <div className="w-16" />
               </div>
 
-              <p className="text-slate-600 text-sm text-center mb-4">
-                Add meg a jegyeden található regisztrációs kódot.
+              <p className="pwa-text-secondary text-sm text-center mb-4">
+                Enter the registration code on your ticket.
               </p>
 
               {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">
+                <div
+                  className="px-4 py-3 mb-4 text-sm border"
+                  style={{
+                    background: 'var(--color-error-bg)',
+                    color: 'var(--color-error)',
+                    borderColor: 'var(--color-error)',
+                  }}
+                >
                   {error}
                 </div>
               )}
 
               <form onSubmit={handleCodeAuth}>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Regisztrációs kód
+                  <label className="block text-sm font-medium pwa-text-primary mb-1">
+                    Registration code
                   </label>
                   <input
                     type="text"
                     value={code}
                     onChange={(e) => setCode(e.target.value.toUpperCase())}
                     placeholder="CEOG-XXXXXX"
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg text-lg font-mono text-center tracking-wider focus:ring-2 focus:ring-slate-800 focus:border-transparent"
+                    className="w-full px-4 py-3 text-lg font-mono text-center tracking-wider"
+                    style={{
+                      background: 'var(--color-bg-elevated)',
+                      color: 'var(--color-text-primary)',
+                      border: '1px solid var(--color-border-subtle)',
+                    }}
                     maxLength={12}
                     autoComplete="off"
                     autoCapitalize="characters"
                   />
                 </div>
 
-                <button
+                <Button3D
                   type="submit"
                   disabled={loading || code.length < 6}
-                  className="w-full bg-slate-800 text-white py-3 rounded-xl font-medium hover:bg-slate-700 transition-colors disabled:bg-slate-400 disabled:cursor-not-allowed"
+                  loading={loading}
+                  fullWidth
                 >
-                  {loading ? 'Ellenőrzés...' : 'Belépés'}
-                </button>
+                  {loading ? 'Verifying...' : 'Login'}
+                </Button3D>
               </form>
             </>
           )}
@@ -270,12 +344,15 @@ export default function PWALoginPage() {
 
         {/* Help section */}
         <div className="mt-8 text-center">
-          <p className="text-slate-400 text-sm mb-2">Nincs QR kódod?</p>
+          <p className="pwa-text-tertiary text-sm mb-2">
+            Don't have a QR code?
+          </p>
           <a
             href="mailto:info@ceogala.hu"
-            className="text-white underline text-sm hover:text-slate-300"
+            className="inline-flex items-center gap-1 pwa-text-accent text-sm hover:opacity-80 transition-opacity"
           >
-            Írj nekünk emailt
+            <Envelope size={16} />
+            Contact us via email
           </a>
         </div>
       </div>

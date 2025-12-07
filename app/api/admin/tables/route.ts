@@ -8,8 +8,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/auth-options';
+import { requireAuth, validateBody, errorResponse } from '@/lib/api';
 import { getAllTables, createTable } from '@/lib/services/seating';
 import { z } from 'zod';
 
@@ -25,16 +24,13 @@ const createTableSchema = z.object({
 export async function GET() {
   try {
     // Verify admin authentication
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+    const auth = await requireAuth();
+    if (!auth.success) {
+      return auth.response;
     }
 
     const tables = await getAllTables();
-    return NextResponse.json({ tables });
+    return NextResponse.json({ success: true, tables });
   } catch (error) {
     console.error('Tables list API error:', error);
     return NextResponse.json(
@@ -47,42 +43,26 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     // Verify admin authentication
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+    const auth = await requireAuth();
+    if (!auth.success) {
+      return auth.response;
     }
 
     // Parse and validate request body
-    const body = await request.json();
-    const validationResult = createTableSchema.safeParse(body);
-
-    if (!validationResult.success) {
-      return NextResponse.json(
-        {
-          error: 'VALIDATION_ERROR',
-          details: validationResult.error.flatten().fieldErrors,
-        },
-        { status: 400 }
-      );
+    const validation = await validateBody(request, createTableSchema);
+    if (!validation.success) {
+      return validation.response;
     }
 
-    const { name, capacity, type, pos_x, pos_y } = validationResult.data;
+    const { name, capacity, type, pos_x, pos_y } = validation.data;
     const table = await createTable({ name, capacity, type, pos_x, pos_y });
 
-    return NextResponse.json({ table }, { status: 201 });
+    return NextResponse.json({ success: true, table }, { status: 201 });
   } catch (error) {
     console.error('Create table API error:', error);
 
-    if (error instanceof Error) {
-      if (error.message === 'TABLE_NAME_EXISTS') {
-        return NextResponse.json(
-          { error: 'TABLE_NAME_EXISTS', message: 'Ilyen nevű asztal már létezik' },
-          { status: 400 }
-        );
-      }
+    if (error instanceof Error && error.message === 'TABLE_NAME_EXISTS') {
+      return errorResponse('TABLE_NAME_EXISTS', 'Ilyen nevű asztal már létezik');
     }
 
     return NextResponse.json(

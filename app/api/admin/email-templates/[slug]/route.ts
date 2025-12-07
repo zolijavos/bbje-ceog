@@ -7,20 +7,18 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/auth-options';
+import { requireAuth, validateBody } from '@/lib/api';
 import {
   getTemplate,
   upsertTemplate,
   resetTemplateToDefault,
-  renderTemplate,
   DEFAULT_TEMPLATES,
   type TemplateSlug,
 } from '@/lib/services/email-templates';
 import { logError } from '@/lib/utils/logger';
 import { z } from 'zod';
 
-type RouteContext = { params: Promise<{ slug: string }> };
+type SlugContext = { params: Promise<{ slug: string }> };
 
 const updateTemplateSchema = z.object({
   name: z.string().min(1).max(255),
@@ -30,15 +28,10 @@ const updateTemplateSchema = z.object({
   is_active: z.boolean().optional(),
 });
 
-export async function GET(
-  _request: NextRequest,
-  context: RouteContext
-) {
+export async function GET(_request: NextRequest, context: SlugContext) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = await requireAuth();
+    if (!auth.success) return auth.response;
 
     const params = await context.params;
     const { slug } = params;
@@ -82,15 +75,10 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  context: RouteContext
-) {
+export async function PUT(request: NextRequest, context: SlugContext) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = await requireAuth();
+    if (!auth.success) return auth.response;
 
     const params = await context.params;
     const { slug } = params;
@@ -103,15 +91,8 @@ export async function PUT(
       );
     }
 
-    const body = await request.json();
-    const validation = updateTemplateSchema.safeParse(body);
-
-    if (!validation.success) {
-      return NextResponse.json(
-        { error: 'Validation error', details: validation.error.flatten() },
-        { status: 400 }
-      );
-    }
+    const validation = await validateBody(request, updateTemplateSchema);
+    if (!validation.success) return validation.response;
 
     const defaultTemplate = DEFAULT_TEMPLATES[slug as TemplateSlug];
 
@@ -135,15 +116,10 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  _request: NextRequest,
-  context: RouteContext
-) {
+export async function DELETE(_request: NextRequest, context: SlugContext) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = await requireAuth();
+    if (!auth.success) return auth.response;
 
     const params = await context.params;
     const { slug } = params;

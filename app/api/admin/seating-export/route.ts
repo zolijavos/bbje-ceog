@@ -7,20 +7,13 @@
  */
 
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/auth-options';
-import { exportSeatingArrangement, getSeatingStats } from '@/lib/services/seating';
+import { requireAuth } from '@/lib/api';
+import { exportSeatingArrangement } from '@/lib/services/seating';
 
 export async function GET() {
   try {
-    // Verify admin authentication
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
+    const auth = await requireAuth();
+    if (!auth.success) return auth.response;
 
     const csv = await exportSeatingArrangement();
 

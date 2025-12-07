@@ -4,7 +4,12 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import QRCode from 'qrcode';
+import { ArrowLeft, DownloadSimple, WifiSlash } from '@phosphor-icons/react';
 import { EVENT_CONFIG, formatEventDate } from '@/lib/config/event';
+import Card from '../components/ui/Card';
+import Button3D from '../components/ui/Button3D';
+import { SkeletonTicket } from '../components/ui/Skeleton';
+import { useHaptic } from '../hooks/useHaptic';
 
 // Only store minimal display data, NOT the JWT token
 interface CachedTicketData {
@@ -31,6 +36,7 @@ interface TicketData {
 
 export default function PWATicketPage() {
   const router = useRouter();
+  const { patterns } = useHaptic();
   const [data, setData] = useState<TicketData | null>(null);
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -55,16 +61,19 @@ export default function PWATicketPage() {
   useEffect(() => {
     const fetchTicket = async () => {
       try {
-        // Try to get cached QR from localStorage first (only stores QR image, not token)
+        // Try to get cached QR from localStorage first
         const cachedQR = localStorage.getItem('cached_qr_ticket');
         if (cachedQR) {
           const cached: CachedTicketData = JSON.parse(cachedQR);
           setQrDataUrl(cached.qrDataUrl);
-          // Reconstruct minimal data for display
           setData({
             guest: { id: 0, name: cached.guestName, guest_type: '' },
-            registration: { id: cached.registrationId, ticket_type: cached.ticketType, qr_code_hash: null },
-            qrToken: null, // Never store the token in localStorage
+            registration: {
+              id: cached.registrationId,
+              ticket_type: cached.ticketType,
+              qr_code_hash: null,
+            },
+            qrToken: null,
           });
         }
 
@@ -96,7 +105,7 @@ export default function PWATicketPage() {
             });
             setQrDataUrl(qrUrl);
 
-            // Cache only the QR image and display data (NOT the JWT token)
+            // Cache only the QR image and display data
             const cacheData: CachedTicketData = {
               guestName: json.guest.name,
               ticketType: json.registration?.ticket_type || '',
@@ -107,21 +116,24 @@ export default function PWATicketPage() {
             localStorage.setItem('cached_qr_ticket', JSON.stringify(cacheData));
           }
         } else if (!cachedQR) {
-          setError('Offline - Nincs mentett jegy');
+          setError('Offline - No saved ticket');
         }
       } catch {
-        // If offline and we have cache, use it
         const cachedQR = localStorage.getItem('cached_qr_ticket');
         if (cachedQR) {
           const cached: CachedTicketData = JSON.parse(cachedQR);
           setQrDataUrl(cached.qrDataUrl);
           setData({
             guest: { id: 0, name: cached.guestName, guest_type: '' },
-            registration: { id: cached.registrationId, ticket_type: cached.ticketType, qr_code_hash: null },
+            registration: {
+              id: cached.registrationId,
+              ticket_type: cached.ticketType,
+              qr_code_hash: null,
+            },
             qrToken: null,
           });
         } else {
-          setError('Nem sikerült betölteni a jegyet');
+          setError('Failed to load ticket');
         }
       } finally {
         setLoading(false);
@@ -134,6 +146,7 @@ export default function PWATicketPage() {
   const handleDownload = () => {
     if (!qrDataUrl) return;
 
+    patterns.success();
     const link = document.createElement('a');
     link.download = `ceo-gala-2026-ticket-${data?.guest.name.replace(/\s+/g, '-')}.png`;
     link.href = qrDataUrl;
@@ -143,37 +156,29 @@ export default function PWATicketPage() {
   const getTicketTypeName = (type: string) => {
     switch (type) {
       case 'vip_free':
-        return 'VIP Jegy';
+        return 'VIP Ticket';
       case 'paid_single':
-        return 'Egyéni Jegy';
+        return 'Single Ticket';
       case 'paid_paired':
-        return 'Páros Jegy';
+        return 'Paired Ticket';
       default:
-        return 'Belépőjegy';
+        return 'Entry Ticket';
     }
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin w-8 h-8 border-4 border-slate-800 border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-slate-600">Jegy betöltése...</p>
-        </div>
-      </div>
-    );
+    return <SkeletonTicket />;
   }
 
   if (error && !data) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-6">
+      <div className="min-h-screen flex items-center justify-center p-6 pwa-bg-base">
         <div className="text-center">
-          <p className="text-red-600 mb-4">{error}</p>
-          <Link
-            href="/pwa/dashboard"
-            className="text-slate-600 underline"
-          >
-            Vissza a főoldalra
+          <p style={{ color: 'var(--color-error)' }} className="mb-4">
+            {error}
+          </p>
+          <Link href="/pwa/dashboard" className="pwa-text-secondary underline">
+            Back to dashboard
           </Link>
         </div>
       </div>
@@ -181,77 +186,91 @@ export default function PWATicketPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-20">
+    <div className="min-h-screen pwa-bg-base pb-20">
       {/* Header */}
-      <header className="bg-slate-800 text-white px-4 py-4">
+      <header className="pwa-bg-header pwa-text-inverse px-4 py-4">
         <div className="flex items-center gap-4">
-          <Link href="/pwa/dashboard" className="text-slate-300 hover:text-white">
-            ← Vissza
+          <Link
+            href="/pwa/dashboard"
+            className="pwa-text-inverse opacity-70 hover:opacity-100 transition-opacity flex items-center gap-1"
+          >
+            <ArrowLeft size={18} />
+            Back
           </Link>
-          <h1 className="font-playfair text-xl">Digitális Jegy</h1>
+          <h1 className="font-display text-xl">Digital Ticket</h1>
         </div>
       </header>
 
       {/* Offline indicator */}
       {isOffline && (
-        <div className="bg-amber-100 text-amber-800 text-center py-2 text-sm">
-          📡 Offline mód - Mentett jegy megjelenítése
+        <div
+          className="flex items-center justify-center gap-2 py-2 text-sm"
+          style={{ background: 'var(--color-warning-bg)', color: 'var(--color-warning)' }}
+        >
+          <WifiSlash size={16} weight="bold" />
+          Offline mode - Displaying saved ticket
         </div>
       )}
 
       {/* Ticket content */}
       <div className="p-4">
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden max-w-sm mx-auto">
+        <div className="card-static overflow-hidden max-w-sm mx-auto">
           {/* Ticket header */}
-          <div className="bg-slate-800 text-white p-4 text-center">
-            <h2 className="font-playfair text-2xl mb-1">{EVENT_CONFIG.name}</h2>
-            <p className="text-slate-300 text-sm">{formatEventDate()} • {EVENT_CONFIG.startTime}</p>
+          <div className="pwa-bg-header pwa-text-inverse p-4 text-center">
+            <h2 className="font-display text-2xl mb-1">{EVENT_CONFIG.name}</h2>
+            <p className="opacity-80 text-sm">
+              {formatEventDate()} - {EVENT_CONFIG.startTime}
+            </p>
           </div>
 
-          {/* QR Code section */}
-          <div className="p-6 text-center">
+          {/* QR Code section with shimmer */}
+          <div className="p-6 text-center" style={{ background: 'var(--color-bg-card)' }}>
             {qrDataUrl ? (
               <>
-                <div className="bg-white p-4 rounded-xl inline-block shadow-inner border-2 border-slate-100">
+                <div className="qr-container qr-glow qr-shimmer inline-block">
                   <img
                     src={qrDataUrl}
                     alt="QR Ticket"
-                    className="w-64 h-64 mx-auto"
+                    className="w-64 h-64 mx-auto block"
                   />
                 </div>
-                <p className="mt-4 text-slate-600 text-sm">
-                  Mutasd fel ezt a QR kódot a belépéskor
+                <p className="mt-4 pwa-text-secondary text-sm">
+                  Show this QR code at entry
                 </p>
               </>
             ) : (
-              <div className="bg-slate-100 rounded-xl p-8">
-                <p className="text-slate-500">
-                  QR kód generálása folyamatban...
-                </p>
-                <p className="text-slate-400 text-sm mt-2">
-                  A jegyed email-ben is megérkezik
+              <div
+                className="p-8"
+                style={{ background: 'var(--color-bg-elevated)' }}
+              >
+                <p className="pwa-text-tertiary">QR code generation in progress...</p>
+                <p className="pwa-text-tertiary text-sm mt-2 opacity-70">
+                  Your ticket will also arrive via email
                 </p>
               </div>
             )}
           </div>
 
           {/* Ticket details */}
-          <div className="border-t border-dashed border-slate-200 p-4">
+          <div
+            className="p-4 border-t border-dashed"
+            style={{ borderColor: 'var(--color-border-subtle)' }}
+          >
             <div className="flex justify-between items-center mb-3">
-              <span className="text-slate-500 text-sm">Vendég</span>
-              <span className="font-medium text-slate-800">{data?.guest.name}</span>
+              <span className="pwa-text-tertiary text-sm">Guest</span>
+              <span className="font-medium pwa-text-primary">{data?.guest.name}</span>
             </div>
             <div className="flex justify-between items-center mb-3">
-              <span className="text-slate-500 text-sm">Jegy típus</span>
-              <span className="font-medium text-slate-800">
+              <span className="pwa-text-tertiary text-sm">Ticket Type</span>
+              <span className="font-medium pwa-text-primary">
                 {data?.registration?.ticket_type
                   ? getTicketTypeName(data.registration.ticket_type)
                   : 'N/A'}
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-slate-500 text-sm">Regisztráció</span>
-              <span className="font-mono text-xs text-slate-600">
+              <span className="pwa-text-tertiary text-sm">Registration</span>
+              <span className="font-mono text-xs pwa-text-secondary">
                 #{data?.registration?.id?.toString().padStart(6, '0')}
               </span>
             </div>
@@ -259,24 +278,27 @@ export default function PWATicketPage() {
 
           {/* Download button */}
           {qrDataUrl && (
-            <div className="p-4 bg-slate-50">
-              <button
+            <div className="p-4" style={{ background: 'var(--color-bg-elevated)' }}>
+              <Button3D
                 onClick={handleDownload}
-                className="w-full bg-slate-800 text-white py-3 rounded-xl font-medium hover:bg-slate-700 transition-colors flex items-center justify-center gap-2"
+                fullWidth
+                icon={<DownloadSimple size={20} weight="bold" />}
               >
-                <span>📥</span>
-                Jegy letöltése
-              </button>
+                Download Ticket
+              </Button3D>
             </div>
           )}
         </div>
 
         {/* Instructions */}
-        <div className="mt-6 text-center text-slate-500 text-sm max-w-sm mx-auto">
-          <p className="mb-2">💡 Tipp: A jegy offline is elérhető!</p>
-          <p>
-            Látogasd meg ezt az oldalt internet kapcsolattal,
-            és a QR kód automatikusan mentésre kerül.
+        <div className="mt-6 text-center pwa-text-tertiary text-sm max-w-sm mx-auto">
+          <p className="mb-2">
+            <span className="inline-block mr-1">💡</span>
+            Tip: The ticket is also available offline!
+          </p>
+          <p className="opacity-80">
+            Visit this page with an internet connection, and the QR code will be
+            automatically saved.
           </p>
         </div>
       </div>

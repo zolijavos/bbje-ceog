@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/auth-options';
+import { requireAuth, parseIdParam, type RouteContext } from '@/lib/api';
 import { prisma } from '@/lib/db/prisma';
 import { generateMagicLinkHash } from '@/lib/auth/magic-link';
 import { sendEmail } from '@/lib/services/email';
+import { renderTemplate } from '@/lib/services/email-templates';
 import { logInfo, logError } from '@/lib/utils/logger';
 
 /**
@@ -13,23 +13,14 @@ import { logInfo, logError } from '@/lib/utils/logger';
  * Changes guest_type from 'applicant' to 'paying_single' and status to 'invited'.
  */
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(request: NextRequest, context: RouteContext) {
   try {
-    // Check admin authentication
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = await requireAuth();
+    if (!auth.success) return auth.response;
 
-    const { id } = await params;
-    const guestId = parseInt(id, 10);
-
-    if (isNaN(guestId)) {
-      return NextResponse.json({ error: 'Invalid applicant ID' }, { status: 400 });
-    }
+    const idResult = await parseIdParam(context);
+    if (!idResult.success) return idResult.response;
+    const guestId = idResult.id;
 
     // Find the applicant
     const applicant = await prisma.guest.findUnique({
@@ -68,32 +59,20 @@ export async function POST(
       },
     });
 
-    // Send approval email with magic link
+    // Send approval email with magic link using customizable template
     try {
       const magicLinkUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/register?code=${hash}&email=${encodeURIComponent(applicant.email)}`;
 
+      const rendered = await renderTemplate('applicant_approval', {
+        guestName: applicant.name,
+        magicLinkUrl,
+      });
+
       await sendEmail({
         to: applicant.email,
-        subject: 'Your CEO Gala 2026 Application Has Been Approved!',
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h1 style="color: #d97706;">Great News!</h1>
-            <p>Dear ${applicant.name},</p>
-            <p>We are pleased to inform you that your application to attend the <strong>CEO Gala 2026</strong> has been approved!</p>
-            <p>Please complete your registration by clicking the link below:</p>
-            <p style="margin: 30px 0;">
-              <a href="${magicLinkUrl}" style="background-color: #d97706; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
-                Complete Registration
-              </a>
-            </p>
-            <p style="color: #666; font-size: 14px;">
-              This link will expire in 72 hours. If you did not apply for this event, please ignore this email.
-            </p>
-            <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
-            <p style="color: #999; font-size: 12px;">CEO Gala 2026 Registration System</p>
-          </div>
-        `,
-        text: `Dear ${applicant.name},\n\nYour application to attend the CEO Gala 2026 has been approved!\n\nPlease complete your registration at: ${magicLinkUrl}\n\nThis link will expire in 72 hours.`,
+        subject: rendered.subject,
+        html: rendered.html,
+        text: rendered.text,
       });
 
       // Log the email
@@ -102,7 +81,7 @@ export async function POST(
           guest_id: guestId,
           email_type: 'application_approved',
           recipient: applicant.email,
-          subject: 'Your CEO Gala 2026 Application Has Been Approved!',
+          subject: rendered.subject,
           status: 'sent',
         },
       });
@@ -114,7 +93,7 @@ export async function POST(
           guest_id: guestId,
           email_type: 'application_approved',
           recipient: applicant.email,
-          subject: 'Your CEO Gala 2026 Application Has Been Approved!',
+          subject: 'CEO Gala 2026 - Application Approved',
           status: 'failed',
           error_message: emailError instanceof Error ? emailError.message : 'Unknown error',
         },

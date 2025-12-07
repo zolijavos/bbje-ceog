@@ -71,6 +71,10 @@
     .dark .screenshot-placeholder { background:linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%); border-color:rgba(255,255,255,0.2); }
     .screenshot-placeholder-icon { font-size:2rem; margin-bottom:0.5rem; opacity:0.5; }
     .screenshot-placeholder-text { font-size:0.75rem; color:var(--warm-gray); }
+    .screenshot-container { margin:1rem 0 1rem 2.25rem; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+    .screenshot-container img { width:100%; height:auto; display:block; }
+    .screenshot-caption { font-size:0.7rem; color:var(--warm-gray); text-align:center; padding:0.5rem; background:var(--cream); }
+    .dark .screenshot-caption { background:var(--navy); }
     .test-credentials { background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.3); border-radius:6px; padding:1rem; margin-bottom:1rem; }
     .dark .test-credentials { background:rgba(59,130,246,0.15); }
     .credentials-label { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--info); margin-bottom:0.5rem; }
@@ -239,9 +243,9 @@
                 <li><span class="checklist-check">&#10003;</span> <span x-text="lang === 'hu' ? 'Login gomb lathato' : 'Login button visible'"></span></li>
               </ul>
             </div>
-            <div class="screenshot-placeholder">
-              <div class="screenshot-placeholder-icon">&#128247;</div>
-              <div class="screenshot-placeholder-text" x-text="lang === 'hu' ? 'Kepernymentes: Admin bejelentkezesi oldal' : 'Screenshot: Admin login page'"></div>
+            <div class="screenshot-container">
+              <img src="screenshots/admin-login.png" alt="Admin login page">
+              <div class="screenshot-caption" x-text="lang === 'hu' ? 'Admin bejelentkezési oldal' : 'Admin login page'"></div>
             </div>
           </div>
 
@@ -267,9 +271,9 @@
                 <li><span class="checklist-check">&#10003;</span> <span x-text="lang === 'hu' ? 'Navigacios menu lathato' : 'Navigation menu visible'"></span></li>
               </ul>
             </div>
-            <div class="screenshot-placeholder">
-              <div class="screenshot-placeholder-icon">&#128247;</div>
-              <div class="screenshot-placeholder-text" x-text="lang === 'hu' ? 'Kepernymentes: Admin dashboard' : 'Screenshot: Admin dashboard'"></div>
+            <div class="screenshot-container">
+              <img src="screenshots/seating-map.png" alt="Admin dashboard - Seating view">
+              <div class="screenshot-caption" x-text="lang === 'hu' ? 'Admin vezérlőpult (ültetési nézet)' : 'Admin dashboard (seating view)'"></div>
             </div>
           </div>
 
@@ -351,9 +355,9 @@
                 <li><span class="checklist-check">&#10003;</span> <span x-text="lang === 'hu' ? 'Lapozas vezerlo az oldal aljan' : 'Pagination controls at bottom'"></span></li>
               </ul>
             </div>
-            <div class="screenshot-placeholder">
-              <div class="screenshot-placeholder-icon">&#128247;</div>
-              <div class="screenshot-placeholder-text" x-text="lang === 'hu' ? 'Kepernymentes: Vendeg lista tablazat' : 'Screenshot: Guest list table'"></div>
+            <div class="screenshot-container">
+              <img src="screenshots/tables.png" alt="Table management (similar to guest list)">
+              <div class="screenshot-caption" x-text="lang === 'hu' ? 'Asztal lista (vendég lista hasonló kinézetű)' : 'Table list (guest list has similar layout)'"></div>
             </div>
           </div>
 
@@ -386,9 +390,9 @@
                 <li><span class="checklist-check">&#10003;</span> <span x-text="lang === 'hu' ? 'Az uj vendeg megjelenik a listaban' : 'New guest appears in list'"></span></li>
               </ul>
             </div>
-            <div class="screenshot-placeholder">
-              <div class="screenshot-placeholder-icon">&#128247;</div>
-              <div class="screenshot-placeholder-text" x-text="lang === 'hu' ? 'Kepernymentes: Vendeg urlap modal' : 'Screenshot: Guest form modal'"></div>
+            <div class="screenshot-container">
+              <img src="screenshots/tables.png" alt="Tables management">
+              <div class="screenshot-caption" x-text="lang === 'hu' ? 'Asztalkezelés oldal (hasonló űrlap stílus)' : 'Tables management page (similar form style)'"></div>
             </div>
           </div>
 
@@ -506,9 +510,9 @@
                 <li><span class="checklist-check">&#10003;</span> <span x-text="lang === 'hu' ? 'Visszaigazolasi email erkezik' : 'Confirmation email received'"></span></li>
               </ul>
             </div>
-            <div class="screenshot-placeholder">
-              <div class="screenshot-placeholder-icon">&#128247;</div>
-              <div class="screenshot-placeholder-text" x-text="lang === 'hu' ? 'Kepernymentes: Jelentkezesi urlap' : 'Screenshot: Application form'"></div>
+            <div class="screenshot-container">
+              <img src="screenshots/apply-form.png" alt="Application form">
+              <div class="screenshot-caption" x-text="lang === 'hu' ? 'Jelentkezési űrlap' : 'Application form'"></div>
             </div>
           </div>
 
@@ -542,9 +546,9 @@
                 <li><span class="checklist-check">&#10003;</span> <span x-text="lang === 'hu' ? '72 oras lejarat beallitasa' : '72-hour expiry set'"></span></li>
               </ul>
             </div>
-            <div class="screenshot-placeholder">
-              <div class="screenshot-placeholder-icon">&#128247;</div>
-              <div class="screenshot-placeholder-text" x-text="lang === 'hu' ? 'Kepernymentes: Jelentkezo kartya Approve gombbal' : 'Screenshot: Applicant card with Approve button'"></div>
+            <div class="screenshot-container">
+              <img src="screenshots/applicants.png" alt="Applicants list">
+              <div class="screenshot-caption" x-text="lang === 'hu' ? 'Jelentkezők lista Approve gombokkal' : 'Applicants list with Approve buttons'"></div>
             </div>
           </div>
 
@@ -644,9 +648,9 @@
                 <li><span class="checklist-check">&#10003;</span> <span x-text="lang === 'hu' ? 'Jegy email kuldese' : 'Ticket email sent'"></span></li>
               </ul>
             </div>
-            <div class="screenshot-placeholder">
-              <div class="screenshot-placeholder-icon">&#128247;</div>
-              <div class="screenshot-placeholder-text" x-text="lang === 'hu' ? 'Kepernymentes: VIP megerosites kepernyo' : 'Screenshot: VIP confirmation screen'"></div>
+            <div class="screenshot-container">
+              <img src="screenshots/register-page.png" alt="Registration page">
+              <div class="screenshot-caption" x-text="lang === 'hu' ? 'Regisztrációs oldal' : 'Registration page'"></div>
             </div>
           </div>
 
@@ -679,9 +683,9 @@
                 <li><span class="checklist-check">&#10003;</span> <span x-text="lang === 'hu' ? 'Atutalas: Bankszamla adatok megjelenitese' : 'Transfer: Bank account details shown'"></span></li>
               </ul>
             </div>
-            <div class="screenshot-placeholder">
-              <div class="screenshot-placeholder-icon">&#128247;</div>
-              <div class="screenshot-placeholder-text" x-text="lang === 'hu' ? 'Kepernymentes: Fizetos regisztracios urlap' : 'Screenshot: Paid registration form'"></div>
+            <div class="screenshot-container">
+              <img src="screenshots/request-link.png" alt="Request link page">
+              <div class="screenshot-caption" x-text="lang === 'hu' ? 'Link kérése oldal (fizetős regisztráció hasonló)' : 'Request link page (paid registration similar)'"></div>
             </div>
           </div>
         </div>
@@ -733,9 +737,9 @@
                 <li><span class="checklist-check">&#10003;</span> <span x-text="lang === 'hu' ? 'Vendeg neve megjelenik' : 'Guest name displayed'"></span></li>
               </ul>
             </div>
-            <div class="screenshot-placeholder">
-              <div class="screenshot-placeholder-icon">&#128247;</div>
-              <div class="screenshot-placeholder-text" x-text="lang === 'hu' ? 'Kepernymentes: PWA bejelentkezesi kepernyo' : 'Screenshot: PWA login screen'"></div>
+            <div class="screenshot-container">
+              <img src="screenshots/apply-form.png" alt="PWA style login (similar to apply form)">
+              <div class="screenshot-caption" x-text="lang === 'hu' ? 'Mobil nézet (hasonló a PWA login-hoz)' : 'Mobile view (similar to PWA login)'"></div>
             </div>
           </div>
 
@@ -759,7 +763,7 @@
             </div>
             <div class="screenshot-placeholder">
               <div class="screenshot-placeholder-icon">&#128247;</div>
-              <div class="screenshot-placeholder-text" x-text="lang === 'hu' ? 'Kepernymentes: PWA QR jegy' : 'Screenshot: PWA QR ticket'"></div>
+              <div class="screenshot-placeholder-text" x-text="lang === 'hu' ? 'QR jegy a PWA-ban (bejelentkezés után látható)' : 'QR ticket in PWA (visible after login)'"></div>
             </div>
           </div>
 
@@ -857,9 +861,9 @@
                 <li><span class="checklist-check">&#10003;</span> <span x-text="lang === 'hu' ? 'Egyedi nev validacio mukodik' : 'Unique name validation works'"></span></li>
               </ul>
             </div>
-            <div class="screenshot-placeholder">
-              <div class="screenshot-placeholder-icon">&#128247;</div>
-              <div class="screenshot-placeholder-text" x-text="lang === 'hu' ? 'Kepernymentes: Asztal urlap' : 'Screenshot: Table form'"></div>
+            <div class="screenshot-container">
+              <img src="screenshots/tables.png" alt="Tables management">
+              <div class="screenshot-caption" x-text="lang === 'hu' ? 'Asztalkezelés oldal' : 'Table management page'"></div>
             </div>
           </div>
 
@@ -884,9 +888,9 @@
                 <li><span class="checklist-check">&#10003;</span> <span x-text="lang === 'hu' ? 'Kapacitas tullepes megakadalyozva' : 'Over-capacity prevented'"></span></li>
               </ul>
             </div>
-            <div class="screenshot-placeholder">
-              <div class="screenshot-placeholder-icon">&#128247;</div>
-              <div class="screenshot-placeholder-text" x-text="lang === 'hu' ? 'Kepernymentes: Drag-and-drop ultetes terkep' : 'Screenshot: Drag-and-drop seating map'"></span>
+            <div class="screenshot-container">
+              <img src="screenshots/seating-map.png" alt="Seating map">
+              <div class="screenshot-caption" x-text="lang === 'hu' ? 'Drag-and-drop ültetési térkép' : 'Drag-and-drop seating map'"></div>
             </div>
           </div>
 
@@ -966,9 +970,9 @@
                 <li><span class="checklist-check">&#10003;</span> <span x-text="lang === 'hu' ? 'Check In gomb lathato' : 'Check In button visible'"></span></li>
               </ul>
             </div>
-            <div class="screenshot-placeholder">
-              <div class="screenshot-placeholder-icon">&#128247;</div>
-              <div class="screenshot-placeholder-text" x-text="lang === 'hu' ? 'Kepernymentes: Zold ervenyes jegy kartya' : 'Screenshot: Green valid ticket card'"></div>
+            <div class="screenshot-container">
+              <img src="screenshots/checkin-scanner.png" alt="Check-in scanner">
+              <div class="screenshot-caption" x-text="lang === 'hu' ? 'Check-in szkenner oldal' : 'Check-in scanner page'"></div>
             </div>
           </div>
 
@@ -992,7 +996,7 @@
             </div>
             <div class="screenshot-placeholder">
               <div class="screenshot-placeholder-icon">&#128247;</div>
-              <div class="screenshot-placeholder-text" x-text="lang === 'hu' ? 'Kepernymentes: Sarga duplikalt check-in kartya' : 'Screenshot: Yellow duplicate check-in card'"></div>
+              <div class="screenshot-placeholder-text" x-text="lang === 'hu' ? 'Sárga duplikált check-in kártya (teszteléskor látható)' : 'Yellow duplicate check-in card (visible during testing)'"></div>
             </div>
           </div>
 
@@ -1016,7 +1020,7 @@
             </div>
             <div class="screenshot-placeholder">
               <div class="screenshot-placeholder-icon">&#128247;</div>
-              <div class="screenshot-placeholder-text" x-text="lang === 'hu' ? 'Kepernymentes: Piros ervenytelen jegy kartya' : 'Screenshot: Red invalid ticket card'"></div>
+              <div class="screenshot-placeholder-text" x-text="lang === 'hu' ? 'Piros érvénytelen jegy (érvénytelen QR szkenneléskor látható)' : 'Red invalid ticket (visible when scanning invalid QR)'"></div>
             </div>
           </div>
 

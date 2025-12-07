@@ -29,27 +29,27 @@ export interface StatusInfo {
 export const REGISTRATION_STATUS_INFO: Record<RegistrationStatus, StatusInfo> = {
   invited: {
     label: 'Invited',
-    color: 'bg-yellow-100 text-yellow-800',
+    color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300',
   },
   registered: {
     label: 'Registered',
-    color: 'bg-blue-100 text-blue-800',
+    color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300',
   },
   approved: {
     label: 'Approved',
-    color: 'bg-green-100 text-green-800',
+    color: 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300',
   },
   declined: {
     label: 'Declined',
-    color: 'bg-red-100 text-red-800',
+    color: 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300',
   },
   pending_approval: {
     label: 'Pending Review',
-    color: 'bg-amber-100 text-amber-800',
+    color: 'bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300',
   },
   rejected: {
     label: 'Rejected',
-    color: 'bg-red-100 text-red-800',
+    color: 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300',
   },
 } as const;
 
@@ -60,26 +60,26 @@ export const REGISTRATION_STATUS_INFO: Record<RegistrationStatus, StatusInfo> = 
 export const PAYMENT_STATUS_INFO: Record<PaymentStatus, StatusInfo> = {
   pending: {
     label: 'Awaiting Transfer',
-    color: 'bg-orange-100 text-orange-800',
+    color: 'bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300',
   },
   paid: {
     label: 'Paid',
-    color: 'bg-green-100 text-green-800',
+    color: 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300',
   },
   failed: {
     label: 'Failed',
-    color: 'bg-red-100 text-red-800',
+    color: 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300',
   },
   refunded: {
     label: 'Refunded',
-    color: 'bg-purple-100 text-purple-800',
+    color: 'bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300',
   },
 } as const;
 
 // VIP special payment status (for display purposes)
 export const VIP_PAYMENT_STATUS_INFO: StatusInfo = {
   label: 'VIP',
-  color: 'bg-purple-100 text-purple-800',
+  color: 'bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300',
 } as const;
 
 // ========================================
@@ -138,7 +138,7 @@ export function getGuestTypeLabel(type: GuestType): string {
 export function getRegistrationStatusInfo(status: RegistrationStatus): StatusInfo {
   return REGISTRATION_STATUS_INFO[status] || {
     label: status,
-    color: 'bg-gray-100 text-gray-800',
+    color: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300',
   };
 }
 
@@ -157,13 +157,13 @@ export function getPaymentStatusInfo(
   if (!paymentStatus) {
     return {
       label: 'None',
-      color: 'bg-gray-100 text-gray-500',
+      color: 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400',
     };
   }
 
   return PAYMENT_STATUS_INFO[paymentStatus] || {
     label: paymentStatus,
-    color: 'bg-gray-100 text-gray-800',
+    color: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300',
   };
 }
 

@@ -3,6 +3,21 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import {
+  ArrowLeft,
+  User,
+  Phone,
+  Buildings,
+  Briefcase,
+  ForkKnife,
+  UsersThree,
+  CheckCircle,
+  WarningCircle,
+} from '@phosphor-icons/react';
+import Card from '../components/ui/Card';
+import Button3D from '../components/ui/Button3D';
+import Skeleton, { SkeletonCard } from '../components/ui/Skeleton';
+import { useHaptic } from '../hooks/useHaptic';
 
 interface ProfileData {
   guest: {
@@ -18,8 +33,66 @@ interface ProfileData {
   seating_preferences: string | null;
 }
 
+function SkeletonProfile() {
+  return (
+    <div className="min-h-screen pwa-bg-base pb-20">
+      {/* Header skeleton */}
+      <header className="pwa-bg-header px-4 py-4">
+        <div className="flex items-center gap-4">
+          <div
+            className="w-16 h-5 skeleton-shimmer"
+            style={{ background: 'rgba(255,255,255,0.2)' }}
+          />
+          <div
+            className="w-32 h-6 skeleton-shimmer"
+            style={{ background: 'rgba(255,255,255,0.2)' }}
+          />
+        </div>
+      </header>
+
+      <div className="p-4 space-y-4 max-w-md mx-auto">
+        {/* Basic Info Card */}
+        <div className="card-static p-4 space-y-3">
+          <Skeleton variant="title" width="50%" />
+          <div className="space-y-2">
+            <Skeleton variant="text" width="30%" />
+            <Skeleton variant="text" width="60%" />
+          </div>
+          <div className="space-y-2">
+            <Skeleton variant="text" width="25%" />
+            <Skeleton variant="text" width="70%" />
+          </div>
+        </div>
+
+        {/* Contact Card */}
+        <div className="card-static p-4 space-y-3">
+          <Skeleton variant="title" width="40%" />
+          <div className="space-y-3">
+            <Skeleton variant="text" height={48} />
+            <Skeleton variant="text" height={48} />
+            <Skeleton variant="text" height={48} />
+          </div>
+        </div>
+
+        {/* Preferences Card */}
+        <div className="card-static p-4 space-y-3">
+          <Skeleton variant="title" width="55%" />
+          <div className="space-y-3">
+            <Skeleton variant="text" height={80} />
+            <Skeleton variant="text" height={80} />
+          </div>
+        </div>
+
+        {/* Button */}
+        <Skeleton variant="custom" height={56} />
+      </div>
+    </div>
+  );
+}
+
 export default function PWAProfilePage() {
   const router = useRouter();
+  const { patterns } = useHaptic();
   const [data, setData] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -56,8 +129,8 @@ export default function PWAProfilePage() {
         setPosition(json.guest.position || '');
         setDietaryRequirements(json.dietary_requirements || '');
         setSeatingPreferences(json.seating_preferences || '');
-      } catch (err) {
-        setError('Nem sikerült betölteni az adatokat');
+      } catch {
+        setError('Failed to load data');
       } finally {
         setLoading(false);
       }
@@ -71,6 +144,7 @@ export default function PWAProfilePage() {
     setSaving(true);
     setError('');
     setSuccess('');
+    patterns.medium();
 
     try {
       const res = await fetch('/api/pwa/profile', {
@@ -89,7 +163,8 @@ export default function PWAProfilePage() {
         throw new Error('Failed to save');
       }
 
-      setSuccess('Adatok sikeresen mentve!');
+      patterns.success();
+      setSuccess('Data saved successfully!');
 
       // Update local data
       if (data) {
@@ -108,31 +183,27 @@ export default function PWAProfilePage() {
 
       // Clear success message after 3 seconds
       setTimeout(() => setSuccess(''), 3000);
-    } catch (err) {
-      setError('Nem sikerült menteni az adatokat');
+    } catch {
+      patterns.error();
+      setError('Failed to save data');
     } finally {
       setSaving(false);
     }
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin w-8 h-8 border-4 border-slate-800 border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-slate-600">Betöltés...</p>
-        </div>
-      </div>
-    );
+    return <SkeletonProfile />;
   }
 
   if (!data) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-6">
+      <div className="min-h-screen flex items-center justify-center p-6 pwa-bg-base">
         <div className="text-center">
-          <p className="text-red-600 mb-4">{error || 'Hiba történt'}</p>
-          <Link href="/pwa/dashboard" className="text-slate-600 underline">
-            Vissza a főoldalra
+          <p style={{ color: 'var(--color-error)' }} className="mb-4">
+            {error || 'An error occurred'}
+          </p>
+          <Link href="/pwa/dashboard" className="pwa-text-secondary underline">
+            Back to dashboard
           </Link>
         </div>
       </div>
@@ -140,138 +211,191 @@ export default function PWAProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-20">
+    <div className="min-h-screen pwa-bg-base pb-20">
       {/* Header */}
-      <header className="bg-slate-800 text-white px-4 py-4">
+      <header className="pwa-bg-header pwa-text-inverse px-4 py-4">
         <div className="flex items-center gap-4">
-          <Link href="/pwa/dashboard" className="text-slate-300 hover:text-white">
-            ← Vissza
+          <Link
+            href="/pwa/dashboard"
+            className="pwa-text-inverse opacity-70 hover:opacity-100 transition-opacity flex items-center gap-1"
+          >
+            <ArrowLeft size={18} />
+            Back
           </Link>
-          <h1 className="font-playfair text-xl">Profil Szerkesztése</h1>
+          <h1 className="font-display text-xl">Edit Profile</h1>
         </div>
       </header>
 
       {/* Form */}
       <div className="p-4">
-        <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-6">
+        <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-4">
           {/* Success message */}
           {success && (
-            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
-              ✓ {success}
+            <div
+              className="flex items-center gap-2 px-4 py-3 text-sm border"
+              style={{
+                background: 'var(--color-success-bg)',
+                color: 'var(--color-success)',
+                borderColor: 'var(--color-success)',
+              }}
+            >
+              <CheckCircle size={18} weight="fill" />
+              {success}
             </div>
           )}
 
           {/* Error message */}
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+            <div
+              className="flex items-center gap-2 px-4 py-3 text-sm border"
+              style={{
+                background: 'var(--color-error-bg)',
+                color: 'var(--color-error)',
+                borderColor: 'var(--color-error)',
+              }}
+            >
+              <WarningCircle size={18} weight="fill" />
               {error}
             </div>
           )}
 
           {/* Read-only fields */}
-          <div className="bg-white rounded-xl shadow-sm p-4">
-            <h2 className="font-semibold text-slate-800 mb-4">Alapadatok</h2>
+          <Card variant="static">
+            <div className="flex items-center gap-2 mb-4">
+              <User size={20} weight="fill" style={{ color: 'var(--color-accent)' }} />
+              <h2 className="font-semibold pwa-text-primary">Basic Information</h2>
+            </div>
 
             <div className="space-y-3">
               <div>
-                <label className="block text-sm text-slate-500 mb-1">Név</label>
-                <p className="text-slate-800 font-medium">{data.guest.name}</p>
+                <label className="block text-sm pwa-text-tertiary mb-1">Name</label>
+                <p className="pwa-text-primary font-medium">{data.guest.name}</p>
               </div>
 
               <div>
-                <label className="block text-sm text-slate-500 mb-1">Email</label>
-                <p className="text-slate-800">{data.guest.email}</p>
+                <label className="block text-sm pwa-text-tertiary mb-1">Email</label>
+                <p className="pwa-text-primary">{data.guest.email}</p>
               </div>
             </div>
-          </div>
+          </Card>
 
           {/* Editable fields */}
-          <div className="bg-white rounded-xl shadow-sm p-4">
-            <h2 className="font-semibold text-slate-800 mb-4">Kapcsolat</h2>
+          <Card variant="static">
+            <div className="flex items-center gap-2 mb-4">
+              <Phone size={20} weight="fill" style={{ color: 'var(--color-accent)' }} />
+              <h2 className="font-semibold pwa-text-primary">Contact</h2>
+            </div>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Telefonszám
+                <label className="block text-sm font-medium pwa-text-primary mb-1">
+                  Phone Number
                 </label>
                 <input
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="+36 30 123 4567"
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-800 focus:border-transparent"
+                  className="w-full px-4 py-3 transition-colors"
+                  style={{
+                    background: 'var(--color-bg-elevated)',
+                    color: 'var(--color-text-primary)',
+                    border: '1px solid var(--color-border-subtle)',
+                  }}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Cég
+                <label className="flex items-center gap-1 text-sm font-medium pwa-text-primary mb-1">
+                  <Buildings size={16} />
+                  Company
                 </label>
                 <input
                   type="text"
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
-                  placeholder="Cégnév"
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-800 focus:border-transparent"
+                  placeholder="Company name"
+                  className="w-full px-4 py-3 transition-colors"
+                  style={{
+                    background: 'var(--color-bg-elevated)',
+                    color: 'var(--color-text-primary)',
+                    border: '1px solid var(--color-border-subtle)',
+                  }}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Beosztás
+                <label className="flex items-center gap-1 text-sm font-medium pwa-text-primary mb-1">
+                  <Briefcase size={16} />
+                  Position
                 </label>
                 <input
                   type="text"
                   value={position}
                   onChange={(e) => setPosition(e.target.value)}
-                  placeholder="Pl. Ügyvezető"
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-800 focus:border-transparent"
+                  placeholder="e.g. CEO"
+                  className="w-full px-4 py-3 transition-colors"
+                  style={{
+                    background: 'var(--color-bg-elevated)',
+                    color: 'var(--color-text-primary)',
+                    border: '1px solid var(--color-border-subtle)',
+                  }}
                 />
               </div>
             </div>
-          </div>
+          </Card>
 
           {/* Event preferences */}
-          <div className="bg-white rounded-xl shadow-sm p-4">
-            <h2 className="font-semibold text-slate-800 mb-4">Esemény Preferenciák</h2>
+          <Card variant="static">
+            <div className="flex items-center gap-2 mb-4">
+              <ForkKnife size={20} weight="fill" style={{ color: 'var(--color-accent)' }} />
+              <h2 className="font-semibold pwa-text-primary">Event Preferences</h2>
+            </div>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Diétás igények / Allergia
+                <label className="block text-sm font-medium pwa-text-primary mb-1">
+                  Dietary Requirements / Allergies
                 </label>
                 <textarea
                   value={dietaryRequirements}
                   onChange={(e) => setDietaryRequirements(e.target.value)}
-                  placeholder="Pl. Gluténmentes, laktózmentes, vegetáriánus..."
+                  placeholder="e.g. Gluten-free, lactose-free, vegetarian..."
                   rows={3}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-800 focus:border-transparent resize-none"
+                  className="w-full px-4 py-3 resize-none transition-colors"
+                  style={{
+                    background: 'var(--color-bg-elevated)',
+                    color: 'var(--color-text-primary)',
+                    border: '1px solid var(--color-border-subtle)',
+                  }}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Ültetési preferencia
+                <label className="flex items-center gap-1 text-sm font-medium pwa-text-primary mb-1">
+                  <UsersThree size={16} />
+                  Seating Preference
                 </label>
                 <textarea
                   value={seatingPreferences}
                   onChange={(e) => setSeatingPreferences(e.target.value)}
-                  placeholder="Kivel szeretne egy asztalhoz kerülni? (Név, cég)"
+                  placeholder="Who would you like to sit with? (Name, company)"
                   rows={3}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-800 focus:border-transparent resize-none"
+                  className="w-full px-4 py-3 resize-none transition-colors"
+                  style={{
+                    background: 'var(--color-bg-elevated)',
+                    color: 'var(--color-text-primary)',
+                    border: '1px solid var(--color-border-subtle)',
+                  }}
                 />
               </div>
             </div>
-          </div>
+          </Card>
 
           {/* Submit button */}
-          <button
-            type="submit"
-            disabled={saving}
-            className="w-full bg-slate-800 text-white py-4 rounded-xl font-medium hover:bg-slate-700 transition-colors disabled:bg-slate-400 disabled:cursor-not-allowed"
-          >
-            {saving ? 'Mentés...' : 'Mentés'}
-          </button>
+          <Button3D type="submit" disabled={saving} loading={saving} fullWidth>
+            {saving ? 'Saving...' : 'Save Changes'}
+          </Button3D>
         </form>
       </div>
     </div>

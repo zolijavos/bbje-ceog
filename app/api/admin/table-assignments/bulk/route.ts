@@ -7,20 +7,13 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/auth-options';
+import { requireAuth } from '@/lib/api';
 import { bulkAssignFromCsv } from '@/lib/services/seating';
 
 export async function POST(request: NextRequest) {
   try {
-    // Verify admin authentication
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
+    const auth = await requireAuth();
+    if (!auth.success) return auth.response;
 
     // Get CSV content from form data or JSON
     const contentType = request.headers.get('content-type') || '';
@@ -52,7 +45,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Process CSV
-    const result = await bulkAssignFromCsv(csvContent, session.user.id);
+    const result = await bulkAssignFromCsv(csvContent, auth.session.user.id);
 
     return NextResponse.json(result);
   } catch (error) {

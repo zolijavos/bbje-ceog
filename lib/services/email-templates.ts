@@ -94,6 +94,476 @@ If you have any questions, please contact us.
 Best regards,
 CEO Gala Organizing Committee`,
   },
+  applicant_approval: {
+    slug: 'applicant_approval',
+    name: 'Applicant Approval',
+    subject: 'CEO Gala 2026 - Application Approved',
+    variables: ['guestName', 'magicLinkUrl'],
+    html_body: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CEO Gala - Application Approved</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .card { background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); padding: 40px; }
+    .header { text-align: center; margin-bottom: 30px; }
+    .header h1 { color: #1a1a2e; font-size: 28px; margin: 0; }
+    .success-badge { display: inline-block; background-color: #10b981; color: #ffffff; font-size: 14px; font-weight: 600; padding: 8px 20px; border-radius: 20px; margin-top: 15px; }
+    .content { margin-bottom: 30px; }
+    .greeting { font-size: 18px; margin-bottom: 20px; }
+    .cta-container { text-align: center; margin: 30px 0; }
+    .cta-button { display: inline-block; background-color: #2563eb; color: #ffffff !important; text-decoration: none; padding: 14px 32px; border-radius: 6px; font-size: 16px; font-weight: 600; }
+    .expiry-note { font-size: 14px; color: #6b7280; text-align: center; margin-top: 15px; }
+    .footer { text-align: center; padding-top: 30px; border-top: 1px solid #e5e7eb; margin-top: 30px; }
+    .footer p { font-size: 14px; color: #6b7280; margin: 5px 0; }
+    .link-fallback { font-size: 12px; color: #9ca3af; word-break: break-all; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <h1>CEO Gala</h1>
+        <span class="success-badge">✓ Application Approved</span>
+      </div>
+      <div class="content">
+        <p class="greeting">Dear {{guestName}},</p>
+        <p>Great news! Your application to attend the CEO Gala 2026 has been <strong>approved</strong>.</p>
+        <p>You can now complete your registration by clicking the button below:</p>
+        <div class="cta-container">
+          <a href="{{magicLinkUrl}}" class="cta-button">Complete Registration</a>
+        </div>
+        <p class="expiry-note">This link is valid for 72 hours.</p>
+      </div>
+      <div class="footer">
+        <p>If you have any questions, please contact us.</p>
+        <p>Best regards,<br>CEO Gala Organizing Committee</p>
+      </div>
+      <p class="link-fallback">
+        If the button doesn't work, copy this link into your browser:<br>
+        {{magicLinkUrl}}
+      </p>
+    </div>
+  </div>
+</body>
+</html>`,
+    text_body: `CEO Gala - Application Approved
+
+Dear {{guestName}},
+
+Great news! Your application to attend the CEO Gala 2026 has been APPROVED.
+
+You can now complete your registration by clicking the link below:
+{{magicLinkUrl}}
+
+This link is valid for 72 hours.
+
+If you have any questions, please contact us.
+
+Best regards,
+CEO Gala Organizing Committee`,
+  },
+  applicant_rejection: {
+    slug: 'applicant_rejection',
+    name: 'Applicant Rejection',
+    subject: 'CEO Gala 2026 - Application Status',
+    variables: ['guestName', 'rejectionReason'],
+    html_body: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CEO Gala - Application Status</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .card { background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); padding: 40px; }
+    .header { text-align: center; margin-bottom: 30px; }
+    .header h1 { color: #1a1a2e; font-size: 28px; margin: 0; }
+    .content { margin-bottom: 30px; }
+    .greeting { font-size: 18px; margin-bottom: 20px; }
+    .reason-box { background-color: #f8f9fa; border-left: 4px solid #6b7280; padding: 15px 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+    .footer { text-align: center; padding-top: 30px; border-top: 1px solid #e5e7eb; margin-top: 30px; }
+    .footer p { font-size: 14px; color: #6b7280; margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <h1>CEO Gala</h1>
+      </div>
+      <div class="content">
+        <p class="greeting">Dear {{guestName}},</p>
+        <p>Thank you for your interest in attending the CEO Gala 2026.</p>
+        <p>After careful consideration, we regret to inform you that we are unable to accommodate your application at this time.</p>
+        {{#if rejectionReason}}
+        <div class="reason-box">
+          <p><strong>Note:</strong> {{rejectionReason}}</p>
+        </div>
+        {{/if}}
+        <p>We appreciate your understanding and hope to welcome you at future events.</p>
+      </div>
+      <div class="footer">
+        <p>If you have any questions, please contact us.</p>
+        <p>Best regards,<br>CEO Gala Organizing Committee</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`,
+    text_body: `CEO Gala - Application Status
+
+Dear {{guestName}},
+
+Thank you for your interest in attending the CEO Gala 2026.
+
+After careful consideration, we regret to inform you that we are unable to accommodate your application at this time.
+
+{{#if rejectionReason}}Note: {{rejectionReason}}{{/if}}
+
+We appreciate your understanding and hope to welcome you at future events.
+
+If you have any questions, please contact us.
+
+Best regards,
+CEO Gala Organizing Committee`,
+  },
+  payment_reminder: {
+    slug: 'payment_reminder',
+    name: 'Payment Reminder',
+    subject: 'CEO Gala 2026 - Payment Reminder',
+    variables: ['guestName', 'ticketType', 'amount', 'paymentUrl', 'dueDate'],
+    html_body: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CEO Gala - Payment Reminder</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .card { background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); padding: 40px; }
+    .header { text-align: center; margin-bottom: 30px; }
+    .header h1 { color: #1a1a2e; font-size: 28px; margin: 0; }
+    .reminder-badge { display: inline-block; background-color: #f59e0b; color: #ffffff; font-size: 14px; font-weight: 600; padding: 8px 20px; border-radius: 20px; margin-top: 15px; }
+    .content { margin-bottom: 30px; }
+    .greeting { font-size: 18px; margin-bottom: 20px; }
+    .payment-info { background-color: #fffbeb; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 20px 0; }
+    .payment-info h3 { margin: 0 0 15px 0; color: #b45309; }
+    .payment-info p { margin: 8px 0; }
+    .cta-container { text-align: center; margin: 30px 0; }
+    .cta-button { display: inline-block; background-color: #2563eb; color: #ffffff !important; text-decoration: none; padding: 14px 32px; border-radius: 6px; font-size: 16px; font-weight: 600; }
+    .footer { text-align: center; padding-top: 30px; border-top: 1px solid #e5e7eb; margin-top: 30px; }
+    .footer p { font-size: 14px; color: #6b7280; margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <h1>CEO Gala</h1>
+        <span class="reminder-badge">⏰ Payment Reminder</span>
+      </div>
+      <div class="content">
+        <p class="greeting">Dear {{guestName}},</p>
+        <p>This is a friendly reminder that your registration payment for CEO Gala 2026 is still pending.</p>
+        <div class="payment-info">
+          <h3>Payment Details</h3>
+          <p><strong>Ticket Type:</strong> {{ticketType}}</p>
+          <p><strong>Amount Due:</strong> {{amount}}</p>
+          {{#if dueDate}}<p><strong>Due Date:</strong> {{dueDate}}</p>{{/if}}
+        </div>
+        <p>Please complete your payment to secure your spot at the event:</p>
+        <div class="cta-container">
+          <a href="{{paymentUrl}}" class="cta-button">Complete Payment</a>
+        </div>
+      </div>
+      <div class="footer">
+        <p>If you have already completed the payment, please disregard this email.</p>
+        <p>Best regards,<br>CEO Gala Organizing Committee</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`,
+    text_body: `CEO Gala - Payment Reminder
+
+Dear {{guestName}},
+
+This is a friendly reminder that your registration payment for CEO Gala 2026 is still pending.
+
+PAYMENT DETAILS
+---------------
+Ticket Type: {{ticketType}}
+Amount Due: {{amount}}
+{{#if dueDate}}Due Date: {{dueDate}}{{/if}}
+
+Please complete your payment to secure your spot at the event:
+{{paymentUrl}}
+
+If you have already completed the payment, please disregard this email.
+
+Best regards,
+CEO Gala Organizing Committee`,
+  },
+  payment_confirmation: {
+    slug: 'payment_confirmation',
+    name: 'Payment Confirmation',
+    subject: 'CEO Gala 2026 - Payment Confirmed',
+    variables: ['guestName', 'ticketType', 'amount', 'paymentDate', 'transactionId'],
+    html_body: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CEO Gala - Payment Confirmed</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .card { background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); padding: 40px; }
+    .header { text-align: center; margin-bottom: 30px; }
+    .header h1 { color: #1a1a2e; font-size: 28px; margin: 0; }
+    .success-badge { display: inline-block; background-color: #10b981; color: #ffffff; font-size: 14px; font-weight: 600; padding: 8px 20px; border-radius: 20px; margin-top: 15px; }
+    .content { margin-bottom: 30px; }
+    .greeting { font-size: 18px; margin-bottom: 20px; }
+    .payment-info { background-color: #f0fdf4; border: 1px solid #10b981; border-radius: 8px; padding: 20px; margin: 20px 0; }
+    .payment-info h3 { margin: 0 0 15px 0; color: #166534; }
+    .payment-info p { margin: 8px 0; color: #15803d; }
+    .next-steps { background-color: #f8f9fa; border-left: 4px solid #2563eb; padding: 15px 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+    .footer { text-align: center; padding-top: 30px; border-top: 1px solid #e5e7eb; margin-top: 30px; }
+    .footer p { font-size: 14px; color: #6b7280; margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <h1>CEO Gala</h1>
+        <span class="success-badge">✓ Payment Confirmed</span>
+      </div>
+      <div class="content">
+        <p class="greeting">Dear {{guestName}},</p>
+        <p>Thank you! Your payment for CEO Gala 2026 has been successfully processed.</p>
+        <div class="payment-info">
+          <h3>Payment Receipt</h3>
+          <p><strong>Ticket Type:</strong> {{ticketType}}</p>
+          <p><strong>Amount Paid:</strong> {{amount}}</p>
+          <p><strong>Payment Date:</strong> {{paymentDate}}</p>
+          {{#if transactionId}}<p><strong>Transaction ID:</strong> {{transactionId}}</p>{{/if}}
+        </div>
+        <div class="next-steps">
+          <p><strong>What's next?</strong></p>
+          <p>Your e-ticket with QR code will be sent to you in a separate email shortly.</p>
+        </div>
+      </div>
+      <div class="footer">
+        <p>Please keep this email for your records.</p>
+        <p>Best regards,<br>CEO Gala Organizing Committee</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`,
+    text_body: `CEO Gala - Payment Confirmed
+
+Dear {{guestName}},
+
+Thank you! Your payment for CEO Gala 2026 has been successfully processed.
+
+PAYMENT RECEIPT
+---------------
+Ticket Type: {{ticketType}}
+Amount Paid: {{amount}}
+Payment Date: {{paymentDate}}
+{{#if transactionId}}Transaction ID: {{transactionId}}{{/if}}
+
+WHAT'S NEXT?
+Your e-ticket with QR code will be sent to you in a separate email shortly.
+
+Please keep this email for your records.
+
+Best regards,
+CEO Gala Organizing Committee`,
+  },
+  table_assignment: {
+    slug: 'table_assignment',
+    name: 'Table Assignment Notification',
+    subject: 'CEO Gala 2026 - Your Table Assignment',
+    variables: ['guestName', 'tableName', 'seatNumber', 'tablemates'],
+    html_body: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CEO Gala - Table Assignment</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .card { background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); padding: 40px; }
+    .header { text-align: center; margin-bottom: 30px; }
+    .header h1 { color: #1a1a2e; font-size: 28px; margin: 0; }
+    .table-badge { display: inline-block; background-color: #8b5cf6; color: #ffffff; font-size: 14px; font-weight: 600; padding: 8px 20px; border-radius: 20px; margin-top: 15px; }
+    .content { margin-bottom: 30px; }
+    .greeting { font-size: 18px; margin-bottom: 20px; }
+    .table-info { background-color: #f5f3ff; border: 2px solid #8b5cf6; border-radius: 12px; padding: 25px; margin: 20px 0; text-align: center; }
+    .table-info .table-name { font-size: 32px; font-weight: 700; color: #5b21b6; margin: 0; }
+    .table-info .seat-number { font-size: 18px; color: #7c3aed; margin-top: 10px; }
+    .tablemates { background-color: #f8f9fa; border-radius: 8px; padding: 15px 20px; margin: 20px 0; }
+    .tablemates h4 { margin: 0 0 10px 0; color: #374151; }
+    .tablemates p { margin: 5px 0; color: #6b7280; }
+    .footer { text-align: center; padding-top: 30px; border-top: 1px solid #e5e7eb; margin-top: 30px; }
+    .footer p { font-size: 14px; color: #6b7280; margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <h1>CEO Gala</h1>
+        <span class="table-badge">🪑 Table Assignment</span>
+      </div>
+      <div class="content">
+        <p class="greeting">Dear {{guestName}},</p>
+        <p>Your table assignment for CEO Gala 2026 has been confirmed!</p>
+        <div class="table-info">
+          <p class="table-name">{{tableName}}</p>
+          {{#if seatNumber}}<p class="seat-number">Seat {{seatNumber}}</p>{{/if}}
+        </div>
+        {{#if tablemates}}
+        <div class="tablemates">
+          <h4>Your Tablemates</h4>
+          <p>{{tablemates}}</p>
+        </div>
+        {{/if}}
+        <p>We look forward to seeing you at the event!</p>
+      </div>
+      <div class="footer">
+        <p>If you have any questions about your seating, please contact us.</p>
+        <p>Best regards,<br>CEO Gala Organizing Committee</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`,
+    text_body: `CEO Gala - Table Assignment
+
+Dear {{guestName}},
+
+Your table assignment for CEO Gala 2026 has been confirmed!
+
+TABLE: {{tableName}}
+{{#if seatNumber}}SEAT: {{seatNumber}}{{/if}}
+
+{{#if tablemates}}YOUR TABLEMATES:
+{{tablemates}}{{/if}}
+
+We look forward to seeing you at the event!
+
+If you have any questions about your seating, please contact us.
+
+Best regards,
+CEO Gala Organizing Committee`,
+  },
+  event_reminder: {
+    slug: 'event_reminder',
+    name: 'Event Reminder',
+    subject: 'CEO Gala 2026 - Event Tomorrow!',
+    variables: ['guestName', 'eventDate', 'eventTime', 'eventVenue', 'eventAddress', 'tableName'],
+    html_body: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CEO Gala - Event Reminder</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .card { background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); padding: 40px; }
+    .header { text-align: center; margin-bottom: 30px; }
+    .header h1 { color: #1a1a2e; font-size: 28px; margin: 0; }
+    .reminder-badge { display: inline-block; background-color: #ef4444; color: #ffffff; font-size: 14px; font-weight: 600; padding: 8px 20px; border-radius: 20px; margin-top: 15px; }
+    .content { margin-bottom: 30px; }
+    .greeting { font-size: 18px; margin-bottom: 20px; }
+    .event-details { background-color: #fef2f2; border: 2px solid #ef4444; border-radius: 12px; padding: 25px; margin: 20px 0; }
+    .event-details h3 { margin: 0 0 15px 0; color: #dc2626; text-align: center; }
+    .event-details p { margin: 10px 0; }
+    .checklist { background-color: #f8f9fa; border-radius: 8px; padding: 20px; margin: 20px 0; }
+    .checklist h4 { margin: 0 0 15px 0; color: #374151; }
+    .checklist ul { margin: 0; padding-left: 20px; }
+    .checklist li { margin: 8px 0; color: #4b5563; }
+    .footer { text-align: center; padding-top: 30px; border-top: 1px solid #e5e7eb; margin-top: 30px; }
+    .footer p { font-size: 14px; color: #6b7280; margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <h1>CEO Gala</h1>
+        <span class="reminder-badge">🎉 Tomorrow!</span>
+      </div>
+      <div class="content">
+        <p class="greeting">Dear {{guestName}},</p>
+        <p>We're excited to remind you that CEO Gala 2026 is <strong>tomorrow</strong>!</p>
+        <div class="event-details">
+          <h3>Event Details</h3>
+          <p>📅 <strong>Date:</strong> {{eventDate}}</p>
+          <p>🕕 <strong>Time:</strong> {{eventTime}}</p>
+          <p>📍 <strong>Venue:</strong> {{eventVenue}}</p>
+          {{#if eventAddress}}<p>🗺️ <strong>Address:</strong> {{eventAddress}}</p>{{/if}}
+          {{#if tableName}}<p>🪑 <strong>Your Table:</strong> {{tableName}}</p>{{/if}}
+        </div>
+        <div class="checklist">
+          <h4>Before You Arrive</h4>
+          <ul>
+            <li>Have your QR code ready (check your email or the CEO Gala app)</li>
+            <li>Bring a valid photo ID</li>
+            <li>Arrive by 5:30 PM for smooth registration</li>
+            <li>Dress code: Business formal</li>
+          </ul>
+        </div>
+        <p>We look forward to welcoming you!</p>
+      </div>
+      <div class="footer">
+        <p>If you have any last-minute questions, please contact us.</p>
+        <p>Best regards,<br>CEO Gala Organizing Committee</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`,
+    text_body: `CEO Gala - Event Tomorrow!
+
+Dear {{guestName}},
+
+We're excited to remind you that CEO Gala 2026 is TOMORROW!
+
+EVENT DETAILS
+-------------
+Date: {{eventDate}}
+Time: {{eventTime}}
+Venue: {{eventVenue}}
+{{#if eventAddress}}Address: {{eventAddress}}{{/if}}
+{{#if tableName}}Your Table: {{tableName}}{{/if}}
+
+BEFORE YOU ARRIVE
+-----------------
+- Have your QR code ready (check your email or the CEO Gala app)
+- Bring a valid photo ID
+- Arrive by 5:30 PM for smooth registration
+- Dress code: Business formal
+
+We look forward to welcoming you!
+
+If you have any last-minute questions, please contact us.
+
+Best regards,
+CEO Gala Organizing Committee`,
+  },
   ticket_delivery: {
     slug: 'ticket_delivery',
     name: 'E-Ticket Delivery',

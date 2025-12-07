@@ -1,6 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/auth-options';
+import { NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/api';
 import { prisma } from '@/lib/db/prisma';
 import { logError } from '@/lib/utils/logger';
 
@@ -8,13 +7,10 @@ import { logError } from '@/lib/utils/logger';
  * GET /api/admin/statistics
  * Returns comprehensive statistics for the admin dashboard
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    // Check authentication
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = await requireAuth();
+    if (!auth.success) return auth.response;
 
     // 1. Registration Overview
     const guestStats = await prisma.guest.groupBy({

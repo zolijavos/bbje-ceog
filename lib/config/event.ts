@@ -33,14 +33,14 @@ export const EVENT_CONFIG = {
  * Format event date for display (Hungarian)
  */
 export function formatEventDate(): string {
-  return '2026. április 26., vasárnap';
+  return 'Sunday, April 26, 2026';
 }
 
 /**
  * Format event time for display
  */
 export function formatEventTime(): string {
-  return `${EVENT_CONFIG.startTime} - Kapunyitás`;
+  return `${EVENT_CONFIG.startTime} - Doors open`;
 }
 
 /**

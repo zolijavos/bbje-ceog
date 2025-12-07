@@ -526,10 +526,10 @@ function FloorPlanCanvas({
                         </div>
                         <span className={`text-xs px-1.5 py-0.5 rounded flex-shrink-0 ${
                           assignment.guest.guest_type === 'vip'
-                            ? 'bg-amber-100 text-amber-700'
+                            ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300'
                             : assignment.guest.guest_type === 'paying_paired'
-                              ? 'bg-purple-100 text-purple-700'
-                              : 'bg-blue-100 text-blue-700'
+                              ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300'
+                              : 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300'
                         }`}>
                           {GUEST_TYPE_LABELS[assignment.guest.guest_type] || assignment.guest.guest_type}
                         </span>

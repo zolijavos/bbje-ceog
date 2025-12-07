@@ -99,15 +99,7 @@ export function createSuccessResponse<T>(data?: T): SuccessResponse<T> {
   };
 }
 
-/**
- * Logs error with context (development only)
- */
-export function logError(context: string, error: unknown): void {
-  const isDev = process.env.NODE_ENV === 'development';
-  if (isDev) {
-    console.error(`[${context}] Error:`, error);
-  }
-}
+// NOTE: logError was removed - use logError from '@/lib/utils/logger' instead
 
 /**
  * Type guard to check if response is error

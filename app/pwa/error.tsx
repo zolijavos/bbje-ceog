@@ -25,12 +25,12 @@ export default function PWAError({ error, reset }: ErrorProps) {
         </div>
 
         <h1 className="font-playfair text-2xl text-slate-800 mb-3">
-          Hiba történt
+          An Error Occurred
         </h1>
 
         <p className="text-slate-600 mb-6">
-          Sajnáljuk, valami hiba történt az oldal betöltése közben.
-          Kérjük, próbáld újra.
+          Sorry, something went wrong while loading the page.
+          Please try again.
         </p>
 
         {/* Error details (only in development) */}
@@ -47,7 +47,7 @@ export default function PWAError({ error, reset }: ErrorProps) {
           onClick={reset}
           className="w-full bg-slate-800 text-white py-3 rounded-xl font-medium hover:bg-slate-700 transition-colors mb-4"
         >
-          Újrapróbálás
+          Try Again
         </button>
 
         {/* Home link */}
@@ -55,7 +55,7 @@ export default function PWAError({ error, reset }: ErrorProps) {
           href="/pwa"
           className="text-slate-600 underline text-sm"
         >
-          Vissza a főoldalra
+          Back to home
         </Link>
       </div>
     </div>

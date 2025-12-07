@@ -20,6 +20,7 @@ import {
   Envelope,
   SpinnerGap,
 } from '@phosphor-icons/react';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 interface BillingInfo {
   billing_name: string;
@@ -84,6 +85,7 @@ interface GuestListProps {
 
 export default function GuestList({ guests: initialGuests }: GuestListProps) {
   const router = useRouter();
+  const { t } = useLanguage();
 
   // State for filtering and pagination
   const [search, setSearch] = useState('');
@@ -447,14 +449,14 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
 
       {/* Action bar with Add button */}
       <div className="mb-4 flex justify-between items-center">
-        <h2 className="text-lg font-medium text-gray-900">Guest List</h2>
+        <h2 className="text-lg font-medium text-gray-900">{t('guestList')}</h2>
         <button
           onClick={() => setShowAddModal(true)}
           className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium text-white bg-neutral-800 hover:bg-neutral-800/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-800"
           data-testid="add-guest-button"
         >
           <Plus size={18} weight="duotone" className="mr-2" />
-          New Guest
+          {t('newGuest')}
         </button>
       </div>
 
@@ -468,7 +470,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
           <input
             id="search"
             type="text"
-            placeholder="Search by name or email..."
+            placeholder={t('searchByNameOrEmail')}
             value={search}
             onChange={e => setSearch(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -488,7 +490,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             data-testid="type-filter"
           >
-            <option value="all">All Types</option>
+            <option value="all">{t('allTypes')}</option>
             <option value="vip">VIP</option>
             <option value="paying_single">Paying (Single)</option>
             <option value="paying_paired">Paying (Paired)</option>
@@ -507,7 +509,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             data-testid="status-filter"
           >
-            <option value="all">All Statuses</option>
+            <option value="all">{t('allStatuses')}</option>
             <option value="invited">Invited</option>
             <option value="registered">Registered</option>
             <option value="approved">Approved</option>
@@ -518,16 +520,16 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
 
       {/* Results summary */}
       <div className="mb-4 text-sm text-gray-600">
-        {filteredGuests.length} guests{' '}
+        {filteredGuests.length} {t('guests')}{' '}
         {filteredGuests.length !== initialGuests.length &&
-          `(total ${initialGuests.length})`}
+          `(${t('total')} ${initialGuests.length})`}
       </div>
 
       {/* Bulk action bar */}
       {selectedIds.size > 0 && (
         <div className="mb-4 p-4 bg-blue-50 rounded-lg flex items-center justify-between">
           <span className="text-blue-800">
-            {selectedIds.size} guests selected
+            {selectedIds.size} {t('guestsSelected')}
           </span>
           <button
             onClick={() => setShowConfirmDialog(true)}
@@ -535,7 +537,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
             disabled={sending.size > 0}
             data-testid="bulk-send-button"
           >
-            Send Invitations
+            {t('sendInvitations')}
           </button>
         </div>
       )}
@@ -545,24 +547,24 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Send Invitations
+              {t('sendInvitations')}
             </h3>
             <p className="text-gray-600 mb-6">
-              Are you sure you want to send invitations to {selectedIds.size} guests?
+              {t('confirmSendInvitations')} {selectedIds.size} {t('guests')}?
             </p>
             <div className="flex justify-end gap-4">
               <button
                 onClick={() => setShowConfirmDialog(false)}
                 className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
               >
-                Cancel
+                {t('cancel')}
               </button>
               <button
                 onClick={openBulkEmailPreview}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 data-testid="confirm-send-button"
               >
-                Send
+                {t('send')}
               </button>
             </div>
           </div>
@@ -585,16 +587,16 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                   />
                 </th>
                 <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                  Guest
+                  {t('guest').toUpperCase()}
                 </th>
                 <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase hidden md:table-cell">
-                  Type
+                  {t('type').toUpperCase()}
                 </th>
                 <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                  Status
+                  {t('status').toUpperCase()}
                 </th>
                 <th className="px-2 py-2 text-right text-xs font-medium text-gray-500 uppercase">
-                  Actions
+                  {t('actions').toUpperCase()}
                 </th>
               </tr>
             </thead>
@@ -603,8 +605,8 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                 <tr>
                   <td colSpan={5} className="px-4 py-8 text-center text-gray-500">
                     {filteredGuests.length === 0 && initialGuests.length > 0
-                      ? 'No results matching the filter criteria.'
-                      : 'No guests yet. Import guests from CSV file or add a new one.'}
+                      ? t('noFilterResults')
+                      : t('noGuestsYet')}
                   </td>
                 </tr>
               ) : (
@@ -637,14 +639,14 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                               {guest.title ? `${guest.title} ` : ''}{guest.name}
                               {/* Partner badge */}
                               {guest.isPartner && (
-                                <span className="ml-2 inline-flex px-1.5 py-0.5 text-xs bg-purple-100 text-purple-700 rounded" title={`Partner: ${guest.pairedWith?.name}`}>
-                                  Partner
+                                <span className="ml-2 inline-flex px-1.5 py-0.5 text-xs bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300 rounded" title={`${t('partner')}: ${guest.pairedWith?.name}`}>
+                                  {t('partner')}
                                 </span>
                               )}
                               {/* Has partner badge */}
                               {guest.partnerGuest && (
-                                <span className="ml-2 inline-flex px-1.5 py-0.5 text-xs bg-pink-100 text-pink-700 rounded" title={`Partner: ${guest.partnerGuest.name}`}>
-                                  👫 Paired
+                                <span className="ml-2 inline-flex px-1.5 py-0.5 text-xs bg-pink-100 text-pink-700 dark:bg-pink-900/50 dark:text-pink-300 rounded" title={`${t('partner')}: ${guest.partnerGuest.name}`}>
+                                  👫 {t('paired')}
                                 </span>
                               )}
                             </div>
@@ -693,7 +695,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                             onClick={() => openEditModal(guest)}
                             className="p-1.5 text-neutral-800 hover:bg-neutral-800/10"
                             data-testid={`edit-guest-${guest.id}`}
-                            title="Edit"
+                            title={t('edit')}
                           >
                             <PencilSimple size={18} weight="duotone" />
                           </button>
@@ -703,7 +705,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                             onClick={() => openDeleteModal(guest)}
                             className="p-1.5 text-red-700 hover:bg-red-100"
                             data-testid={`delete-guest-${guest.id}`}
-                            title="Delete"
+                            title={t('delete')}
                           >
                             <Trash size={18} weight="duotone" />
                           </button>
@@ -719,7 +721,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                                   : 'text-emerald-700 hover:bg-emerald-100'
                               }`}
                               data-testid={`approve-payment-${guest.id}`}
-                              title="Approve Payment"
+                              title={t('approvePayment')}
                             >
                               {approving.has(guest.id) ? (
                                 <SpinnerGap size={18} weight="duotone" className="animate-spin" />
@@ -739,7 +741,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                                 : 'text-accent-teal hover:bg-accent-teal/10'
                             }`}
                             data-testid={`send-invitation-${guest.id}`}
-                            title="Send Invitation"
+                            title={t('sendInvitation')}
                           >
                             {isSending ? (
                               <SpinnerGap size={18} weight="duotone" className="animate-spin" />
@@ -761,7 +763,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
         {totalPages > 1 && (
           <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-700">Page size:</span>
+              <span className="text-sm text-gray-700">{t('pageSize')}</span>
               <select
                 value={pageSize}
                 onChange={e => {
@@ -788,7 +790,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                 className="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                 data-testid="prev-page-button"
               >
-                Previous
+                {t('previous')}
               </button>
               <span className="text-sm text-gray-700">
                 {currentPage} / {totalPages}
@@ -799,7 +801,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                 className="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                 data-testid="next-page-button"
               >
-                Next
+                {t('next')}
               </button>
             </div>
           </div>

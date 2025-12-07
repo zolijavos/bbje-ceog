@@ -630,7 +630,7 @@ async function updateTableStatus(tableId: number) {
 export async function getUnassignedGuests() {
   return prisma.guest.findMany({
     where: {
-      registration_status: 'approved',
+      registration_status: { in: ['registered', 'approved'] },
       table_assignment: null,
       // Only show "main" guests - partners (with paired_with_id) are shown via partner_of relation
       paired_with_id: null,

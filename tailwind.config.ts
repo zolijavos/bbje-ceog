@@ -6,6 +6,7 @@ const config: Config = {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  darkMode: 'class',
   theme: {
     // Set all border-radius to 0 by default (square corners)
     borderRadius: {

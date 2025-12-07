@@ -1,8 +1,8 @@
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/auth-options';
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
 import ImportForm from './ImportForm';
+import PageHeader from '../../components/PageHeader';
 
 export default async function ImportPage() {
   const session = await getServerSession(authOptions);
@@ -13,23 +13,13 @@ export default async function ImportPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <Link
-                href="/admin/guests"
-                className="text-gray-500 hover:text-gray-700"
-              >
-                &larr; Back to guest list
-              </Link>
-              <h1 className="ml-4 text-xl font-bold text-gray-900">
-                CSV Import
-              </h1>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <PageHeader
+        title="CSV Import"
+        description="Import guests from CSV file"
+        backHref="/admin/guests"
+        backLabel="Guest List"
+        currentPath="/admin/guests/import"
+      />
 
       <div className="max-w-3xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="bg-white shadow rounded-lg p-6">

@@ -19,9 +19,9 @@ interface GuestChipProps {
 export const GuestChip = forwardRef<HTMLDivElement, GuestChipProps & React.HTMLAttributes<HTMLDivElement>>(
   ({ guest, isDragging, isOverlay, style, ...props }, ref) => {
     const guestTypeColors: Record<string, string> = {
-      vip: 'bg-purple-100 text-purple-800',
-      paying_single: 'bg-gray-100 text-gray-800',
-      paying_paired: 'bg-blue-100 text-blue-800',
+      vip: 'bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300',
+      paying_single: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300',
+      paying_paired: 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300',
     };
 
     return (
@@ -43,7 +43,7 @@ export const GuestChip = forwardRef<HTMLDivElement, GuestChipProps & React.HTMLA
         <p className="text-xs text-gray-500 truncate">{guest.email}</p>
         <span className={`
           inline-block mt-1 text-xs px-2 py-0.5 rounded
-          ${guestTypeColors[guest.guestType] || 'bg-gray-100 text-gray-800'}
+          ${guestTypeColors[guest.guestType] || 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'}
         `}>
           {GUEST_TYPE_LABELS[guest.guestType] || guest.guestType}
         </span>

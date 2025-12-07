@@ -10,6 +10,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { logError } from '@/lib/utils/logger';
 import { Plus, PencilSimple, Trash, X } from '@phosphor-icons/react';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 // Types
 interface TableData {
@@ -41,19 +42,8 @@ interface FormData {
   type: string;
 }
 
-const TYPE_LABELS: Record<string, string> = {
-  standard: 'Standard',
-  vip: 'VIP',
-  reserved: 'Reserved',
-};
-
-const STATUS_LABELS: Record<string, string> = {
-  available: 'Available',
-  full: 'Full',
-  reserved: 'Reserved',
-};
-
 export default function TablesDashboard() {
+  const { t } = useLanguage();
   const [tables, setTables] = useState<TableData[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -65,6 +55,19 @@ export default function TablesDashboard() {
   });
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  // Dynamic labels using translations
+  const TYPE_LABELS: Record<string, string> = {
+    standard: t('standard'),
+    vip: t('vip'),
+    reserved: t('reserved'),
+  };
+
+  const STATUS_LABELS: Record<string, string> = {
+    available: t('available'),
+    full: t('full'),
+    reserved: t('reserved'),
+  };
 
   // Fetch tables
   const fetchTables = useCallback(async () => {
@@ -123,7 +126,7 @@ export default function TablesDashboard() {
 
   // Handle delete
   const handleDelete = async (table: TableData) => {
-    if (!confirm(`Are you sure you want to delete table "${table.name}"?`)) {
+    if (!confirm(`${t('confirmDeleteTable')} "${table.name}"?`)) {
       return;
     }
 
@@ -205,7 +208,7 @@ export default function TablesDashboard() {
           data-testid="add-table-button"
         >
           <Plus size={18} weight="duotone" className="mr-2" />
-          New Table
+          {t('addTable')}
         </button>
       </div>
 
@@ -214,13 +217,13 @@ export default function TablesDashboard() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
             <h3 className="text-lg font-medium text-gray-900 mb-4">
-              {editingTable ? 'Edit Table' : 'Create New Table'}
+              {editingTable ? t('editTable') : t('createTable')}
             </h3>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                  Table Name *
+                  {t('tableName')} *
                 </label>
                 <input
                   type="text"
@@ -235,7 +238,7 @@ export default function TablesDashboard() {
 
               <div>
                 <label htmlFor="capacity" className="block text-sm font-medium text-gray-700">
-                  Capacity (persons) *
+                  {t('capacity')} ({t('persons')}) *
                 </label>
                 <input
                   type="number"
@@ -251,7 +254,7 @@ export default function TablesDashboard() {
 
               <div>
                 <label htmlFor="type" className="block text-sm font-medium text-gray-700">
-                  Type
+                  {t('type')}
                 </label>
                 <select
                   id="type"
@@ -259,9 +262,9 @@ export default function TablesDashboard() {
                   onChange={(e) => setFormData({ ...formData, type: e.target.value })}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                 >
-                  <option value="standard">Standard</option>
-                  <option value="vip">VIP</option>
-                  <option value="reserved">Reserved</option>
+                  <option value="standard">{t('standard')}</option>
+                  <option value="vip">{t('vip')}</option>
+                  <option value="reserved">{t('reserved')}</option>
                 </select>
               </div>
 
@@ -275,14 +278,14 @@ export default function TablesDashboard() {
                   onClick={resetForm}
                   className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
                 >
-                  Cancel
+                  {t('cancel')}
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
                 >
-                  {submitting ? 'Saving...' : editingTable ? 'Save' : 'Create'}
+                  {submitting ? t('submitting') : editingTable ? t('save') : t('add')}
                 </button>
               </div>
             </form>
@@ -296,22 +299,22 @@ export default function TablesDashboard() {
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Table
+                {t('tableName')}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Type
+                {t('type')}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Capacity
+                {t('capacity')}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Occupancy
+                {t('occupancy')}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
+                {t('status')}
               </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
+                {t('actions')}
               </th>
             </tr>
           </thead>
@@ -319,13 +322,13 @@ export default function TablesDashboard() {
             {loading ? (
               <tr>
                 <td colSpan={6} className="px-6 py-10 text-center text-gray-500">
-                  Loading...
+                  {t('loading')}
                 </td>
               </tr>
             ) : tables.length === 0 ? (
               <tr>
                 <td colSpan={6} className="px-6 py-10 text-center text-gray-500">
-                  No tables created yet.
+                  {t('noTablesYet')}
                 </td>
               </tr>
             ) : (
@@ -338,17 +341,17 @@ export default function TablesDashboard() {
                     <span
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                         table.type === 'vip'
-                          ? 'bg-purple-100 text-purple-800'
+                          ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300'
                           : table.type === 'reserved'
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-gray-100 text-gray-800'
+                          ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300'
+                          : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'
                       }`}
                     >
                       {TYPE_LABELS[table.type] || table.type}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {table.capacity} persons
+                    {table.capacity} {t('persons')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
@@ -375,10 +378,10 @@ export default function TablesDashboard() {
                     <span
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                         table.status === 'full'
-                          ? 'bg-red-100 text-red-800'
+                          ? 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300'
                           : table.status === 'reserved'
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-green-100 text-green-800'
+                          ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300'
+                          : 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300'
                       }`}
                     >
                       {STATUS_LABELS[table.status] || table.status}
@@ -389,7 +392,7 @@ export default function TablesDashboard() {
                       onClick={() => startEdit(table)}
                       className="p-1.5 text-blue-600 hover:bg-blue-100 rounded mr-2"
                       data-testid={`edit-table-${table.id}`}
-                      title="Edit"
+                      title={t('edit')}
                     >
                       <PencilSimple size={18} weight="duotone" />
                     </button>
@@ -398,7 +401,7 @@ export default function TablesDashboard() {
                       className="p-1.5 text-red-600 hover:bg-red-100 rounded disabled:opacity-50 disabled:cursor-not-allowed"
                       disabled={table._count.assignments > 0}
                       data-testid={`delete-table-${table.id}`}
-                      title={table._count.assignments > 0 ? 'Cannot delete table with guests' : 'Delete'}
+                      title={t('delete')}
                     >
                       <Trash size={18} weight="duotone" />
                     </button>

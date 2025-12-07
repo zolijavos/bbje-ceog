@@ -9,8 +9,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/auth-options';
+import { requireAuth, validateBody, parseIdParam, errorResponse, type RouteContext } from '@/lib/api';
 import { getTable, updateTable, deleteTable } from '@/lib/services/seating';
 import { z } from 'zod';
 
@@ -22,40 +21,21 @@ const updateTableSchema = z.object({
   status: z.enum(['available', 'full', 'reserved']).optional(),
 });
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, context: RouteContext) {
   try {
-    // Verify admin authentication
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
+    const auth = await requireAuth();
+    if (!auth.success) return auth.response;
 
-    const { id } = await params;
-    const tableId = parseInt(id, 10);
+    const idResult = await parseIdParam(context);
+    if (!idResult.success) return idResult.response;
 
-    if (isNaN(tableId)) {
-      return NextResponse.json(
-        { error: 'Invalid table ID' },
-        { status: 400 }
-      );
-    }
-
-    const table = await getTable(tableId);
+    const table = await getTable(idResult.id);
 
     if (!table) {
-      return NextResponse.json(
-        { error: 'TABLE_NOT_FOUND', message: 'Asztal nem található' },
-        { status: 404 }
-      );
+      return errorResponse('TABLE_NOT_FOUND', 'Asztal nem található');
     }
 
-    return NextResponse.json({ table });
+    return NextResponse.json({ success: true, table });
   } catch (error) {
     console.error('Get table API error:', error);
     return NextResponse.json(
@@ -65,62 +45,29 @@ export async function GET(
   }
 }
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(request: NextRequest, context: RouteContext) {
   try {
-    // Verify admin authentication
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
+    const auth = await requireAuth();
+    if (!auth.success) return auth.response;
 
-    const { id } = await params;
-    const tableId = parseInt(id, 10);
+    const idResult = await parseIdParam(context);
+    if (!idResult.success) return idResult.response;
 
-    if (isNaN(tableId)) {
-      return NextResponse.json(
-        { error: 'Invalid table ID' },
-        { status: 400 }
-      );
-    }
+    const validation = await validateBody(request, updateTableSchema);
+    if (!validation.success) return validation.response;
 
-    // Parse and validate request body
-    const body = await request.json();
-    const validationResult = updateTableSchema.safeParse(body);
+    const table = await updateTable(idResult.id, validation.data);
 
-    if (!validationResult.success) {
-      return NextResponse.json(
-        {
-          error: 'VALIDATION_ERROR',
-          details: validationResult.error.flatten().fieldErrors,
-        },
-        { status: 400 }
-      );
-    }
-
-    const table = await updateTable(tableId, validationResult.data);
-
-    return NextResponse.json({ table });
+    return NextResponse.json({ success: true, table });
   } catch (error) {
     console.error('Update table API error:', error);
 
     if (error instanceof Error) {
       if (error.message === 'TABLE_NOT_FOUND') {
-        return NextResponse.json(
-          { error: 'TABLE_NOT_FOUND', message: 'Asztal nem található' },
-          { status: 404 }
-        );
+        return errorResponse('TABLE_NOT_FOUND', 'Asztal nem található');
       }
       if (error.message === 'TABLE_NAME_EXISTS') {
-        return NextResponse.json(
-          { error: 'TABLE_NAME_EXISTS', message: 'Ilyen nevű asztal már létezik' },
-          { status: 400 }
-        );
+        return errorResponse('TABLE_NAME_EXISTS', 'Ilyen nevű asztal már létezik');
       }
     }
 
@@ -131,31 +78,15 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(request: NextRequest, context: RouteContext) {
   try {
-    // Verify admin authentication
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
+    const auth = await requireAuth();
+    if (!auth.success) return auth.response;
 
-    const { id } = await params;
-    const tableId = parseInt(id, 10);
+    const idResult = await parseIdParam(context);
+    if (!idResult.success) return idResult.response;
 
-    if (isNaN(tableId)) {
-      return NextResponse.json(
-        { error: 'Invalid table ID' },
-        { status: 400 }
-      );
-    }
-
-    await deleteTable(tableId);
+    await deleteTable(idResult.id);
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -163,16 +94,10 @@ export async function DELETE(
 
     if (error instanceof Error) {
       if (error.message === 'TABLE_NOT_FOUND') {
-        return NextResponse.json(
-          { error: 'TABLE_NOT_FOUND', message: 'Asztal nem található' },
-          { status: 404 }
-        );
+        return errorResponse('TABLE_NOT_FOUND', 'Asztal nem található');
       }
       if (error.message === 'TABLE_NOT_EMPTY') {
-        return NextResponse.json(
-          { error: 'TABLE_NOT_EMPTY', message: 'Asztal nem törölhető, vendégek vannak hozzárendelve' },
-          { status: 400 }
-        );
+        return errorResponse('TABLE_NOT_EMPTY', 'Asztal nem törölhető, vendégek vannak hozzárendelve');
       }
     }
 

@@ -5,9 +5,8 @@
  * POST /api/admin/email-templates/init - Initialize default templates
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/auth-options';
+import { NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/api';
 import {
   getAllTemplates,
   initializeDefaultTemplates,
@@ -15,12 +14,10 @@ import {
 } from '@/lib/services/email-templates';
 import { logError } from '@/lib/utils/logger';
 
-export async function GET(_request: NextRequest) {
+export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = await requireAuth();
+    if (!auth.success) return auth.response;
 
     // Initialize defaults if needed
     await initializeDefaultTemplates();

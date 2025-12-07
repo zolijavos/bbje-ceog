@@ -110,7 +110,7 @@ export async function logEmailDelivery(params: {
   subject: string;
   success: boolean;
   errorMessage?: string;
-  emailType?: 'magic_link' | 'ticket_delivery';
+  emailType?: string;
 }): Promise<void> {
   await prisma.emailLog.create({
     data: {
@@ -455,5 +455,225 @@ export async function generateAndSendTicket(registrationId: number): Promise<Ema
       guestId: 0,
       error: errorMessage,
     };
+  }
+}
+
+/**
+ * Send payment confirmation email to a guest
+ */
+export async function sendPaymentConfirmationEmail(params: {
+  guestId: number;
+  guestName: string;
+  guestEmail: string;
+  ticketType: string;
+  amount: string;
+  paymentDate: string;
+  transactionId?: string;
+}): Promise<EmailResult> {
+  try {
+    const rendered = await renderTemplate('payment_confirmation', {
+      guestName: params.guestName,
+      ticketType: params.ticketType,
+      amount: params.amount,
+      paymentDate: params.paymentDate,
+      transactionId: params.transactionId,
+    });
+
+    const result = await sendEmail({
+      to: params.guestEmail,
+      subject: rendered.subject,
+      html: rendered.html,
+      text: rendered.text,
+    });
+
+    await logEmailDelivery({
+      guestId: params.guestId,
+      recipient: params.guestEmail,
+      subject: rendered.subject,
+      success: result.success,
+      errorMessage: result.error,
+      emailType: 'magic_link', // Using existing type for logging
+    });
+
+    if (result.success) {
+      logInfo(`[PAYMENT_CONFIRMATION] Email sent to ${params.guestEmail}`);
+    } else {
+      logError(`[PAYMENT_CONFIRMATION] Failed to send email to ${params.guestEmail}: ${result.error}`);
+    }
+
+    return {
+      success: result.success,
+      guestId: params.guestId,
+      error: result.error,
+    };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    logError(`[PAYMENT_CONFIRMATION] Error sending email:`, errorMessage);
+    return { success: false, guestId: params.guestId, error: errorMessage };
+  }
+}
+
+/**
+ * Send payment reminder email to a guest
+ */
+export async function sendPaymentReminderEmail(params: {
+  guestId: number;
+  guestName: string;
+  guestEmail: string;
+  ticketType: string;
+  amount: string;
+  paymentUrl: string;
+  dueDate?: string;
+}): Promise<EmailResult> {
+  try {
+    const rendered = await renderTemplate('payment_reminder', {
+      guestName: params.guestName,
+      ticketType: params.ticketType,
+      amount: params.amount,
+      paymentUrl: params.paymentUrl,
+      dueDate: params.dueDate,
+    });
+
+    const result = await sendEmail({
+      to: params.guestEmail,
+      subject: rendered.subject,
+      html: rendered.html,
+      text: rendered.text,
+    });
+
+    await logEmailDelivery({
+      guestId: params.guestId,
+      recipient: params.guestEmail,
+      subject: rendered.subject,
+      success: result.success,
+      errorMessage: result.error,
+      emailType: 'magic_link',
+    });
+
+    if (result.success) {
+      logInfo(`[PAYMENT_REMINDER] Email sent to ${params.guestEmail}`);
+    } else {
+      logError(`[PAYMENT_REMINDER] Failed to send email to ${params.guestEmail}: ${result.error}`);
+    }
+
+    return {
+      success: result.success,
+      guestId: params.guestId,
+      error: result.error,
+    };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    logError(`[PAYMENT_REMINDER] Error sending email:`, errorMessage);
+    return { success: false, guestId: params.guestId, error: errorMessage };
+  }
+}
+
+/**
+ * Send table assignment notification email to a guest
+ */
+export async function sendTableAssignmentEmail(params: {
+  guestId: number;
+  guestName: string;
+  guestEmail: string;
+  tableName: string;
+  seatNumber?: string;
+  tablemates?: string;
+}): Promise<EmailResult> {
+  try {
+    const rendered = await renderTemplate('table_assignment', {
+      guestName: params.guestName,
+      tableName: params.tableName,
+      seatNumber: params.seatNumber,
+      tablemates: params.tablemates,
+    });
+
+    const result = await sendEmail({
+      to: params.guestEmail,
+      subject: rendered.subject,
+      html: rendered.html,
+      text: rendered.text,
+    });
+
+    await logEmailDelivery({
+      guestId: params.guestId,
+      recipient: params.guestEmail,
+      subject: rendered.subject,
+      success: result.success,
+      errorMessage: result.error,
+      emailType: 'magic_link',
+    });
+
+    if (result.success) {
+      logInfo(`[TABLE_ASSIGNMENT] Email sent to ${params.guestEmail}`);
+    } else {
+      logError(`[TABLE_ASSIGNMENT] Failed to send email to ${params.guestEmail}: ${result.error}`);
+    }
+
+    return {
+      success: result.success,
+      guestId: params.guestId,
+      error: result.error,
+    };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    logError(`[TABLE_ASSIGNMENT] Error sending email:`, errorMessage);
+    return { success: false, guestId: params.guestId, error: errorMessage };
+  }
+}
+
+/**
+ * Send event reminder email to a guest (typically 1 day before event)
+ */
+export async function sendEventReminderEmail(params: {
+  guestId: number;
+  guestName: string;
+  guestEmail: string;
+  eventDate: string;
+  eventTime: string;
+  eventVenue: string;
+  eventAddress?: string;
+  tableName?: string;
+}): Promise<EmailResult> {
+  try {
+    const rendered = await renderTemplate('event_reminder', {
+      guestName: params.guestName,
+      eventDate: params.eventDate,
+      eventTime: params.eventTime,
+      eventVenue: params.eventVenue,
+      eventAddress: params.eventAddress,
+      tableName: params.tableName,
+    });
+
+    const result = await sendEmail({
+      to: params.guestEmail,
+      subject: rendered.subject,
+      html: rendered.html,
+      text: rendered.text,
+    });
+
+    await logEmailDelivery({
+      guestId: params.guestId,
+      recipient: params.guestEmail,
+      subject: rendered.subject,
+      success: result.success,
+      errorMessage: result.error,
+      emailType: 'magic_link',
+    });
+
+    if (result.success) {
+      logInfo(`[EVENT_REMINDER] Email sent to ${params.guestEmail}`);
+    } else {
+      logError(`[EVENT_REMINDER] Failed to send email to ${params.guestEmail}: ${result.error}`);
+    }
+
+    return {
+      success: result.success,
+      guestId: params.guestId,
+      error: result.error,
+    };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    logError(`[EVENT_REMINDER] Error sending email:`, errorMessage);
+    return { success: false, guestId: params.guestId, error: errorMessage };
   }
 }

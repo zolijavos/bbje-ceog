@@ -1,15 +1,22 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { WifiSlash, DownloadSimple, X } from '@phosphor-icons/react';
+import { ThemeProvider } from './providers/ThemeProvider';
+import { useThemeInit } from './hooks/useTheme';
+import { useToast } from './hooks/useToast';
+import ToastContainer from './components/ui/Toast';
+import Button3D from './components/ui/Button3D';
 
-export default function PWALayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+// Inner layout component that uses hooks
+function PWALayoutInner({ children }: { children: React.ReactNode }) {
   const [isOnline, setIsOnline] = useState(true);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<Event | null>(null);
+  const { toasts, dismiss } = useToast();
+
+  // Initialize theme immediately to prevent flash
+  useThemeInit();
 
   useEffect(() => {
     // Register service worker
@@ -63,51 +70,85 @@ export default function PWALayout({
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen">
+    <div className="pwa-bg-base min-h-screen transition-colors duration-300">
+      {/* Toast notifications */}
+      <ToastContainer toasts={toasts} onDismiss={dismiss} />
+
       {/* Offline banner */}
       {!isOnline && (
-        <div className="bg-amber-500 text-white text-center py-2 text-sm font-medium">
-          Offline mód - Egyes funkciók nem elérhetők
+        <div
+          className="flex items-center justify-center gap-2 py-2 text-sm font-medium"
+          style={{
+            background: 'var(--color-warning-bg)',
+            color: 'var(--color-warning)',
+          }}
+        >
+          <WifiSlash size={16} weight="bold" />
+          <span>Offline mode - Some features are unavailable</span>
         </div>
       )}
 
       {/* Install prompt banner */}
       {showInstallPrompt && (
-        <div className="bg-slate-800 text-white px-4 py-3 flex items-center justify-between">
-          <span className="text-sm">Telepítsd az appot a gyors eléréshez!</span>
-          <div className="flex gap-2">
+        <div className="pwa-bg-header px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-2 pwa-text-inverse">
+            <DownloadSimple size={18} weight="bold" />
+            <span className="text-sm">Install the app for quick access!</span>
+          </div>
+          <div className="flex items-center gap-2">
             <button
               onClick={handleInstallClick}
-              className="bg-white text-slate-800 px-3 py-1 rounded text-sm font-medium"
+              className="px-3 py-1.5 text-sm font-medium transition-colors"
+              style={{
+                background: 'var(--color-btn-primary-bg)',
+                color: 'var(--color-btn-primary-text)',
+              }}
             >
-              Telepítés
+              Install
             </button>
             <button
               onClick={() => setShowInstallPrompt(false)}
-              className="text-slate-300 px-2"
+              className="p-1 pwa-text-inverse opacity-60 hover:opacity-100 transition-opacity"
+              aria-label="Dismiss"
             >
-              x
+              <X size={18} />
             </button>
           </div>
         </div>
       )}
 
       {/* Main content */}
-      <main className="min-h-screen pb-12">
-        {children}
-      </main>
+      <main className="min-h-screen pb-14">{children}</main>
 
       {/* Footer branding */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 py-2 text-center">
-        <a
-          href="https://myforgelabs.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-xs text-slate-400 hover:text-slate-600"
-        >
-          Powered by MyForge Labs
-        </a>
+      <footer
+        className="fixed bottom-0 left-0 right-0 py-2 text-center border-t transition-colors duration-300"
+        style={{
+          background: 'var(--color-bg-card)',
+          borderColor: 'var(--color-border-subtle)',
+        }}
+      >
+        <span className="text-xs pwa-text-tertiary">
+          Built By{' '}
+          <a
+            href="https://www.myforgelabs.com/#kapcsolat"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="pwa-text-secondary hover:pwa-text-primary transition-colors underline"
+          >
+            MyForge Labs
+          </a>
+        </span>
       </footer>
     </div>
+  );
+}
+
+// Main layout with ThemeProvider wrapper
+export default function PWALayout({ children }: { children: React.ReactNode }) {
+  return (
+    <ThemeProvider>
+      <PWALayoutInner>{children}</PWALayoutInner>
+    </ThemeProvider>
   );
 }

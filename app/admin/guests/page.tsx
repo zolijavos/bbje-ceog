@@ -4,7 +4,8 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { prisma } from '@/lib/db/prisma';
 import GuestList from './GuestList';
-import { ArrowLeft, ClipboardText, UploadSimple } from '@phosphor-icons/react/dist/ssr';
+import { ClipboardText, UploadSimple } from '@phosphor-icons/react/dist/ssr';
+import PageHeader from '../components/PageHeader';
 
 export default async function GuestsPage() {
   const session = await getServerSession(authOptions);
@@ -152,44 +153,38 @@ export default async function GuestsPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <Link href="/admin" className="inline-flex items-center text-gray-500 hover:text-gray-700">
-                <ArrowLeft size={18} weight="duotone" className="mr-1" />
-                Back
-              </Link>
-              <h1 className="ml-4 text-xl font-bold text-gray-900">
-                Guest List
-              </h1>
-            </div>
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-500" data-testid="guest-count">
-                {guestData.length} guests
-              </span>
-              <Link
-                href="/admin/checkin-log"
-                className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                <ClipboardText size={18} weight="duotone" className="mr-2" />
-                Check-in Log
-              </Link>
-              <Link
-                href="/admin/guests/import"
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-              >
-                <UploadSimple size={18} weight="duotone" className="mr-2" />
-                CSV Import
-              </Link>
-            </div>
+      <PageHeader
+        title="Guest List"
+        description="Manage guests and send invitations"
+        currentPath="/admin/guests"
+      />
+
+      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        {/* Action bar */}
+        <div className="flex items-center justify-between mb-6">
+          <span className="text-sm text-gray-500" data-testid="guest-count">
+            {guestData.length} guests
+          </span>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/admin/checkin-log"
+              className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              <ClipboardText size={18} weight="duotone" className="mr-2" />
+              Check-in Log
+            </Link>
+            <Link
+              href="/admin/guests/import"
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            >
+              <UploadSimple size={18} weight="duotone" className="mr-2" />
+              CSV Import
+            </Link>
           </div>
         </div>
-      </nav>
 
-      <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <GuestList guests={guestData} />
-      </div>
+      </main>
     </div>
   );
 }

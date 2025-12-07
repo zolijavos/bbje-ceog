@@ -6,8 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/auth-options';
+import { requireAdmin } from '@/lib/api';
 import { importGuestsFromCSV } from '@/lib/services/csv';
 
 // Maximum file size: 5MB
@@ -15,22 +14,8 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 export async function POST(request: NextRequest) {
   try {
-    // Check authentication
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized - Authentication required' },
-        { status: 401 }
-      );
-    }
-
-    // Check admin role
-    if (session.user.role !== 'admin') {
-      return NextResponse.json(
-        { success: false, error: 'Forbidden - Admin privileges required' },
-        { status: 403 }
-      );
-    }
+    const auth = await requireAdmin();
+    if (!auth.success) return auth.response;
 
     // Get form data
     const formData = await request.formData();

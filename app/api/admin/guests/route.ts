@@ -6,9 +6,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/auth-options';
+import { requireAuth, validateBody, errorResponse } from '@/lib/api';
 import { getGuestList, getGuestStats, createGuest } from '@/lib/services/guest';
+import { logError } from '@/lib/utils/logger';
 import { GuestType, RegistrationStatus } from '@prisma/client';
 import { z } from 'zod';
 
@@ -16,18 +16,15 @@ import { z } from 'zod';
 const createGuestSchema = z.object({
   email: z.string().email('Ervenytelen email cim'),
   name: z.string().min(1, 'A nev megadasa kotelezo'),
-  guest_type: z.enum(['vip', 'paying_single', 'paying_paired']),
+  guest_type: z.enum(['vip', 'paying_single', 'paying_paired', 'applicant']),
 });
 
 export async function GET(request: NextRequest) {
   try {
     // Check authentication
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+    const auth = await requireAuth();
+    if (!auth.success) {
+      return auth.response;
     }
 
     // Parse query parameters
@@ -76,7 +73,7 @@ export async function GET(request: NextRequest) {
       stats,
     });
   } catch (error) {
-    console.error('Guest list error:', error);
+    logError('Guest list error:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to fetch guest list' },
       { status: 500 }
@@ -87,34 +84,22 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     // Check authentication
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
+    const auth = await requireAuth();
+    if (!auth.success) {
+      return auth.response;
     }
 
     // Parse and validate request body
-    const body = await request.json();
-    const validationResult = createGuestSchema.safeParse(body);
-
-    if (!validationResult.success) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Validation failed',
-          details: validationResult.error.flatten().fieldErrors,
-        },
-        { status: 400 }
-      );
+    const validation = await validateBody(request, createGuestSchema);
+    if (!validation.success) {
+      return validation.response;
     }
 
-    // Create guest - data is validated, so we can safely cast
+    // Create guest - data is validated
     const guest = await createGuest({
-      email: validationResult.data.email,
-      name: validationResult.data.name,
-      guest_type: validationResult.data.guest_type,
+      email: validation.data.email,
+      name: validation.data.name,
+      guest_type: validation.data.guest_type,
     });
 
     return NextResponse.json(
@@ -126,14 +111,11 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error('Create guest error:', error);
+    logError('Create guest error:', error);
 
     // Handle specific errors
     if (error instanceof Error && error.message === 'EMAIL_EXISTS') {
-      return NextResponse.json(
-        { success: false, error: 'Ez az email cim mar letezik' },
-        { status: 409 }
-      );
+      return errorResponse('EMAIL_EXISTS', 'Ez az email cim mar letezik');
     }
 
     return NextResponse.json(

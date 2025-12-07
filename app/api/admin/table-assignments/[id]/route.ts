@@ -8,48 +8,35 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/auth-options';
+import { requireAuth, validateBody, parseIdParam, errorResponse, type RouteContext } from '@/lib/api';
 import { removeGuestFromTable, moveGuestToTable } from '@/lib/services/seating';
+import { z } from 'zod';
+
+// Move validation schema
+const moveSchema = z.object({
+  tableId: z.number().int().positive(),
+});
 
 /**
  * PATCH - Move guest to a different table
  */
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(request: NextRequest, context: RouteContext) {
   try {
-    // Verify admin authentication
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
+    const auth = await requireAuth();
+    if (!auth.success) return auth.response;
 
-    const { id } = await params;
-    const assignmentId = parseInt(id, 10);
+    const idResult = await parseIdParam(context);
+    if (!idResult.success) return idResult.response;
 
-    if (isNaN(assignmentId)) {
-      return NextResponse.json(
-        { error: 'Invalid assignment ID' },
-        { status: 400 }
-      );
-    }
+    const validation = await validateBody(request, moveSchema);
+    if (!validation.success) return validation.response;
 
-    const body = await request.json();
-    const { tableId } = body;
-
-    if (!tableId || typeof tableId !== 'number') {
-      return NextResponse.json(
-        { error: 'tableId is required and must be a number' },
-        { status: 400 }
-      );
-    }
-
-    const result = await moveGuestToTable(assignmentId, tableId);
+    const result = await moveGuestToTable(
+      idResult.id,
+      validation.data.tableId,
+      undefined, // seatNumber - auto-assign
+      auth.session.user.id // Track who made the move
+    );
 
     return NextResponse.json({
       success: true,
@@ -59,23 +46,14 @@ export async function PATCH(
     console.error('Move assignment API error:', error);
 
     if (error instanceof Error) {
-      if (error.message === 'ASSIGNMENT_NOT_FOUND') {
-        return NextResponse.json(
-          { error: 'ASSIGNMENT_NOT_FOUND', message: 'Hozzárendelés nem található' },
-          { status: 404 }
-        );
-      }
-      if (error.message === 'TABLE_NOT_FOUND') {
-        return NextResponse.json(
-          { error: 'TABLE_NOT_FOUND', message: 'Asztal nem található' },
-          { status: 404 }
-        );
-      }
-      if (error.message === 'TABLE_FULL') {
-        return NextResponse.json(
-          { error: 'TABLE_FULL', message: 'Az asztal megtelt' },
-          { status: 400 }
-        );
+      const errorMessages: Record<string, string> = {
+        ASSIGNMENT_NOT_FOUND: 'Hozzárendelés nem található',
+        TABLE_NOT_FOUND: 'Asztal nem található',
+        TABLE_FULL: 'Az asztal megtelt',
+      };
+
+      if (errorMessages[error.message]) {
+        return errorResponse(error.message, errorMessages[error.message]);
       }
     }
 
@@ -89,43 +67,22 @@ export async function PATCH(
 /**
  * DELETE - Remove guest from table
  */
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(request: NextRequest, context: RouteContext) {
   try {
-    // Verify admin authentication
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
+    const auth = await requireAuth();
+    if (!auth.success) return auth.response;
 
-    const { id } = await params;
-    const assignmentId = parseInt(id, 10);
+    const idResult = await parseIdParam(context);
+    if (!idResult.success) return idResult.response;
 
-    if (isNaN(assignmentId)) {
-      return NextResponse.json(
-        { error: 'Invalid assignment ID' },
-        { status: 400 }
-      );
-    }
-
-    await removeGuestFromTable(assignmentId);
+    await removeGuestFromTable(idResult.id);
 
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Delete assignment API error:', error);
 
-    if (error instanceof Error) {
-      if (error.message === 'ASSIGNMENT_NOT_FOUND') {
-        return NextResponse.json(
-          { error: 'ASSIGNMENT_NOT_FOUND', message: 'Hozzárendelés nem található' },
-          { status: 404 }
-        );
-      }
+    if (error instanceof Error && error.message === 'ASSIGNMENT_NOT_FOUND') {
+      return errorResponse('ASSIGNMENT_NOT_FOUND', 'Hozzárendelés nem található');
     }
 
     return NextResponse.json(

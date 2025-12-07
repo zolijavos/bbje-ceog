@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Playfair_Display, Open_Sans } from 'next/font/google';
 import './globals.css';
 import { validateEnv } from '@/lib/utils/env';
+import Footer from './components/Footer';
+import GlobalProviders from './components/GlobalProviders';
 
 // Validate environment variables at startup
 validateEnv();
@@ -22,8 +24,8 @@ const openSans = Open_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'CEO Gála 2026 - Regisztrációs Rendszer',
-  description: 'CEO Gála 2026 esemény regisztráció és beléptetés',
+  title: 'CEO Gala 2026 - Registration System',
+  description: 'CEO Gala 2026 event registration and check-in system',
   manifest: '/manifest.json',
   themeColor: '#1e293b',
   appleWebApp: {
@@ -45,8 +47,31 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="hu" className={`${playfair.variable} ${openSans.variable}`}>
-      <body className="font-sans">{children}</body>
+    <html lang="hu" className={`${playfair.variable} ${openSans.variable}`} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme') || 'system';
+                  var resolved = theme;
+                  if (theme === 'system') {
+                    resolved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                  }
+                  document.documentElement.classList.add(resolved);
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
+      <body className="font-sans pb-10">
+        <GlobalProviders>
+          {children}
+          <Footer />
+        </GlobalProviders>
+      </body>
     </html>
   );
 }

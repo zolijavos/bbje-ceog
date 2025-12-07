@@ -8,23 +8,16 @@
  */
 
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/auth-options';
+import { requireAuth } from '@/lib/api';
 import { getCheckinStats } from '@/lib/services/checkin';
 
 export async function GET() {
   try {
-    // Verify admin authentication
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
+    const auth = await requireAuth();
+    if (!auth.success) return auth.response;
 
     const stats = await getCheckinStats();
-    return NextResponse.json(stats);
+    return NextResponse.json({ success: true, ...stats });
   } catch (error) {
     console.error('Check-in stats API error:', error);
     return NextResponse.json(

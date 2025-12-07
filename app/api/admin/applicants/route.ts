@@ -1,22 +1,21 @@
-import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/auth-options';
-import { prisma } from '@/lib/db/prisma';
-import { logError } from '@/lib/utils/logger';
-
 /**
+ * Admin Applicants API
+ *
  * GET /api/admin/applicants
  *
  * List all applicants (guests with guest_type = 'applicant').
  * Supports optional status filter via query parameter.
  */
+
+import { NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/api';
+import { prisma } from '@/lib/db/prisma';
+import { logError } from '@/lib/utils/logger';
+
 export async function GET(request: Request) {
   try {
-    // Check admin authentication
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = await requireAuth();
+    if (!auth.success) return auth.response;
 
     // Parse query parameters
     const { searchParams } = new URL(request.url);

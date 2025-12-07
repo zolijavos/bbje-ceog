@@ -63,7 +63,7 @@ export const PairedGuestChip = forwardRef<HTMLDivElement, PairedGuestChipProps &
         </div>
 
         {/* 2 Seats Badge */}
-        <span className="px-1.5 py-0.5 bg-purple-100 text-purple-700 text-xs rounded flex-shrink-0 font-medium">
+        <span className="px-1.5 py-0.5 bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300 text-xs rounded flex-shrink-0 font-medium">
           2
         </span>
       </div>

@@ -18,6 +18,7 @@ import {
   Code,
   TextT,
 } from '@phosphor-icons/react';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 interface EmailTemplate {
   id: number;
@@ -58,6 +59,7 @@ interface PreviewResponse {
 type EditorTab = 'html' | 'text';
 
 export default function EmailTemplatesDashboard() {
+  const { t } = useLanguage();
   const [templates, setTemplates] = useState<EmailTemplate[]>([]);
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const [templateData, setTemplateData] = useState<TemplateResponse | null>(null);
@@ -83,11 +85,11 @@ export default function EmailTemplatesDashboard() {
         }
       }
     } catch {
-      setMessage({ type: 'error', text: 'Failed to fetch templates' });
+      setMessage({ type: 'error', text: t('templatesLoadFailed') });
     } finally {
       setLoading(false);
     }
-  }, [selectedSlug]);
+  }, [selectedSlug, t]);
 
   // Fetch single template details
   const fetchTemplate = useCallback(async (slug: string) => {
@@ -104,9 +106,9 @@ export default function EmailTemplatesDashboard() {
       });
       setHasChanges(false);
     } catch {
-      setMessage({ type: 'error', text: 'Failed to fetch template details' });
+      setMessage({ type: 'error', text: t('templatesLoadFailed') });
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     fetchTemplates();
@@ -139,16 +141,16 @@ export default function EmailTemplatesDashboard() {
       });
 
       if (res.ok) {
-        setMessage({ type: 'success', text: 'Template saved successfully' });
+        setMessage({ type: 'success', text: t('templateSaved') });
         setHasChanges(false);
         fetchTemplates();
         fetchTemplate(selectedSlug);
       } else {
         const error = await res.json();
-        setMessage({ type: 'error', text: error.error || 'Failed to save template' });
+        setMessage({ type: 'error', text: error.error || t('templateSaveFailed') });
       }
     } catch {
-      setMessage({ type: 'error', text: 'Failed to save template' });
+      setMessage({ type: 'error', text: t('templateSaveFailed') });
     } finally {
       setSaving(false);
     }
@@ -165,14 +167,14 @@ export default function EmailTemplatesDashboard() {
       });
 
       if (res.ok) {
-        setMessage({ type: 'success', text: 'Template reset to default' });
+        setMessage({ type: 'success', text: t('templateSaved') });
         fetchTemplate(selectedSlug);
         fetchTemplates();
       } else {
-        setMessage({ type: 'error', text: 'Failed to reset template' });
+        setMessage({ type: 'error', text: t('templateSaveFailed') });
       }
     } catch {
-      setMessage({ type: 'error', text: 'Failed to reset template' });
+      setMessage({ type: 'error', text: t('templateSaveFailed') });
     } finally {
       setSaving(false);
     }
@@ -199,7 +201,7 @@ export default function EmailTemplatesDashboard() {
         setShowPreview(true);
       }
     } catch {
-      setMessage({ type: 'error', text: 'Failed to generate preview' });
+      setMessage({ type: 'error', text: t('templateSaveFailed') });
     }
   };
 
@@ -226,8 +228,8 @@ export default function EmailTemplatesDashboard() {
         <div
           className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 ${
             message.type === 'success'
-              ? 'bg-green-100 text-green-800 border border-green-200'
-              : 'bg-red-100 text-red-800 border border-red-200'
+              ? 'bg-green-100 text-green-800 border border-green-200 dark:bg-green-900/50 dark:text-green-300 dark:border-green-800'
+              : 'bg-red-100 text-red-800 border border-red-200 dark:bg-red-900/50 dark:text-red-300 dark:border-red-800'
           }`}
         >
           {message.type === 'success' ? (
@@ -244,7 +246,7 @@ export default function EmailTemplatesDashboard() {
         <div className="lg:col-span-1">
           <div className="bg-white rounded-lg shadow">
             <div className="px-4 py-3 border-b border-gray-200">
-              <h3 className="text-sm font-medium text-gray-700">Templates</h3>
+              <h3 className="text-sm font-medium text-gray-700">{t('emailTemplates')}</h3>
             </div>
             <div className="divide-y divide-gray-100">
               {templates.map((template) => (
@@ -288,7 +290,7 @@ export default function EmailTemplatesDashboard() {
           {templateData && (
             <div className="mt-4 bg-white rounded-lg shadow">
               <div className="px-4 py-3 border-b border-gray-200">
-                <h3 className="text-sm font-medium text-gray-700">Available Variables</h3>
+                <h3 className="text-sm font-medium text-gray-700">{t('availableVariables')}</h3>
               </div>
               <div className="p-4 space-y-2">
                 {templateData.availableVariables.map((variable) => (
@@ -321,7 +323,7 @@ export default function EmailTemplatesDashboard() {
                     className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
                   >
                     <Eye size={18} />
-                    Preview
+                    {t('preview')}
                   </button>
                   <button
                     onClick={handleReset}
@@ -338,7 +340,7 @@ export default function EmailTemplatesDashboard() {
                   className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <FloppyDisk size={18} />
-                  {saving ? 'Saving...' : 'Save Changes'}
+                  {saving ? t('saving') : t('save')}
                 </button>
               </div>
 
@@ -371,7 +373,7 @@ export default function EmailTemplatesDashboard() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Email Subject
+                    {t('subject')}
                   </label>
                   <input
                     type="text"
@@ -396,7 +398,7 @@ export default function EmailTemplatesDashboard() {
                       }`}
                     >
                       <Code size={18} />
-                      HTML Content
+                      {t('htmlBody')}
                     </button>
                     <button
                       onClick={() => setActiveTab('text')}
@@ -407,7 +409,7 @@ export default function EmailTemplatesDashboard() {
                       }`}
                     >
                       <TextT size={18} />
-                      Plain Text
+                      {t('textBody')}
                     </button>
                   </div>
                 </div>
@@ -437,8 +439,8 @@ export default function EmailTemplatesDashboard() {
                   <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
                     <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-900">Email Preview</h3>
-                        <p className="text-sm text-gray-500">Subject: {preview.preview.subject}</p>
+                        <h3 className="text-lg font-semibold text-gray-900">{t('preview')}</h3>
+                        <p className="text-sm text-gray-500">{t('subject')}: {preview.preview.subject}</p>
                       </div>
                       <button
                         onClick={() => setShowPreview(false)}

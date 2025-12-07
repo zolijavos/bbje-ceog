@@ -148,10 +148,14 @@ export async function POST(request: NextRequest) {
     );
 
     // Set session cookie
+    // Only use Secure flag if actually on HTTPS (check X-Forwarded-Proto header)
+    const isHttps = request.headers.get('x-forwarded-proto') === 'https' ||
+                    request.url.startsWith('https://');
+
     const cookieStore = await cookies();
     cookieStore.set('pwa_session', sessionToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isHttps,
       sameSite: 'lax',
       maxAge: PWA_SESSION_EXPIRY,
       path: '/',

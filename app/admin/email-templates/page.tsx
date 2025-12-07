@@ -7,8 +7,8 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/auth-options';
-import Link from 'next/link';
 import EmailTemplatesDashboard from './EmailTemplatesDashboard';
+import PageHeader from '../components/PageHeader';
 
 export default async function EmailTemplatesPage() {
   const session = await getServerSession(authOptions);
@@ -19,26 +19,11 @@ export default async function EmailTemplatesPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">
-                Email Templates
-              </h1>
-              <p className="mt-1 text-sm text-gray-500">
-                Customize email content sent to guests
-              </p>
-            </div>
-            <Link
-              href="/admin"
-              className="text-sm text-blue-600 hover:text-blue-800"
-            >
-              Back to Dashboard
-            </Link>
-          </div>
-        </div>
-      </header>
+      <PageHeader
+        title="Email Templates"
+        description="Customize email content sent to guests"
+        currentPath="/admin/email-templates"
+      />
 
       <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <EmailTemplatesDashboard />

@@ -8,8 +8,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/auth-options';
+import { requireAuth, validateBody, errorResponse } from '@/lib/api';
 import { getAllAssignments, assignGuestToTable, getUnassignedGuests } from '@/lib/services/seating';
 import { z } from 'zod';
 
@@ -22,25 +21,19 @@ const assignmentSchema = z.object({
 
 export async function GET(request: NextRequest) {
   try {
-    // Verify admin authentication
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
+    const auth = await requireAuth();
+    if (!auth.success) return auth.response;
 
     const { searchParams } = new URL(request.url);
     const unassignedOnly = searchParams.get('unassigned') === 'true';
 
     if (unassignedOnly) {
       const guests = await getUnassignedGuests();
-      return NextResponse.json({ guests });
+      return NextResponse.json({ success: true, guests });
     }
 
     const assignments = await getAllAssignments();
-    return NextResponse.json({ assignments });
+    return NextResponse.json({ success: true, assignments });
   } catch (error) {
     console.error('Table assignments list API error:', error);
     return NextResponse.json(
@@ -52,57 +45,36 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    // Verify admin authentication
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
+    const auth = await requireAuth();
+    if (!auth.success) return auth.response;
 
-    // Parse and validate request body
-    const body = await request.json();
-    const validationResult = assignmentSchema.safeParse(body);
+    const validation = await validateBody(request, assignmentSchema);
+    if (!validation.success) return validation.response;
 
-    if (!validationResult.success) {
-      return NextResponse.json(
-        {
-          error: 'VALIDATION_ERROR',
-          details: validationResult.error.flatten().fieldErrors,
-        },
-        { status: 400 }
-      );
-    }
-
-    const { guestId, tableId, seatNumber } = validationResult.data;
+    const { guestId, tableId, seatNumber } = validation.data;
     const assignment = await assignGuestToTable(
       guestId,
       tableId,
       seatNumber,
-      session.user.id
+      auth.session.user.id
     );
 
-    return NextResponse.json({ assignment }, { status: 201 });
+    return NextResponse.json({ success: true, assignment }, { status: 201 });
   } catch (error) {
     console.error('Create assignment API error:', error);
 
     if (error instanceof Error) {
-      const errorMessages: Record<string, { message: string; status: number }> = {
-        GUEST_NOT_FOUND: { message: 'Vendég nem található', status: 404 },
-        TABLE_NOT_FOUND: { message: 'Asztal nem található', status: 404 },
-        GUEST_ALREADY_ASSIGNED: { message: 'Vendég már másik asztalhoz van rendelve', status: 400 },
-        TABLE_FULL: { message: 'Asztal megtelt', status: 400 },
-        SEAT_TAKEN: { message: 'Ez a szék már foglalt', status: 400 },
-        INVALID_SEAT_NUMBER: { message: 'Érvénytelen székszám', status: 400 },
+      const errorMessages: Record<string, string> = {
+        GUEST_NOT_FOUND: 'Vendég nem található',
+        TABLE_NOT_FOUND: 'Asztal nem található',
+        GUEST_ALREADY_ASSIGNED: 'Vendég már másik asztalhoz van rendelve',
+        TABLE_FULL: 'Asztal megtelt',
+        SEAT_TAKEN: 'Ez a szék már foglalt',
+        INVALID_SEAT_NUMBER: 'Érvénytelen székszám',
       };
 
-      const errorInfo = errorMessages[error.message];
-      if (errorInfo) {
-        return NextResponse.json(
-          { error: error.message, message: errorInfo.message },
-          { status: errorInfo.status }
-        );
+      if (errorMessages[error.message]) {
+        return errorResponse(error.message, errorMessages[error.message]);
       }
     }
 

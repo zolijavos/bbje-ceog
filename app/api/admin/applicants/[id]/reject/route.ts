@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/auth-options';
+import { requireAuth, parseIdParam, type RouteContext } from '@/lib/api';
 import { prisma } from '@/lib/db/prisma';
 import { sendEmail } from '@/lib/services/email';
+import { renderTemplate } from '@/lib/services/email-templates';
 import { logInfo, logError } from '@/lib/utils/logger';
 
 /**
@@ -11,23 +11,14 @@ import { logInfo, logError } from '@/lib/utils/logger';
  * Reject an applicant's application and optionally send them a notification email.
  */
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(request: NextRequest, context: RouteContext) {
   try {
-    // Check admin authentication
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = await requireAuth();
+    if (!auth.success) return auth.response;
 
-    const { id } = await params;
-    const guestId = parseInt(id, 10);
-
-    if (isNaN(guestId)) {
-      return NextResponse.json({ error: 'Invalid applicant ID' }, { status: 400 });
-    }
+    const idResult = await parseIdParam(context);
+    if (!idResult.success) return idResult.response;
+    const guestId = idResult.id;
 
     // Parse request body for optional rejection reason
     let reason: string | null = null;
@@ -70,24 +61,18 @@ export async function POST(
       },
     });
 
-    // Send rejection email
+    // Send rejection email using customizable template
     try {
+      const rendered = await renderTemplate('applicant_rejection', {
+        guestName: applicant.name,
+        rejectionReason: reason || undefined,
+      });
+
       await sendEmail({
         to: applicant.email,
-        subject: 'CEO Gala 2026 - Application Status Update',
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h1 style="color: #4b5563;">Application Status Update</h1>
-            <p>Dear ${applicant.name},</p>
-            <p>Thank you for your interest in the <strong>CEO Gala 2026</strong>.</p>
-            <p>After careful consideration, we regret to inform you that we are unable to accommodate your attendance request at this time due to limited capacity.</p>
-            <p>We appreciate your understanding and hope to welcome you to future events.</p>
-            <p>Best regards,<br>The CEO Gala Team</p>
-            <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
-            <p style="color: #999; font-size: 12px;">CEO Gala 2026 Registration System</p>
-          </div>
-        `,
-        text: `Dear ${applicant.name},\n\nThank you for your interest in the CEO Gala 2026.\n\nAfter careful consideration, we regret to inform you that we are unable to accommodate your attendance request at this time due to limited capacity.\n\nWe appreciate your understanding and hope to welcome you to future events.\n\nBest regards,\nThe CEO Gala Team`,
+        subject: rendered.subject,
+        html: rendered.html,
+        text: rendered.text,
       });
 
       // Log the email
@@ -96,7 +81,7 @@ export async function POST(
           guest_id: guestId,
           email_type: 'application_rejected',
           recipient: applicant.email,
-          subject: 'CEO Gala 2026 - Application Status Update',
+          subject: rendered.subject,
           status: 'sent',
         },
       });
@@ -108,7 +93,7 @@ export async function POST(
           guest_id: guestId,
           email_type: 'application_rejected',
           recipient: applicant.email,
-          subject: 'CEO Gala 2026 - Application Status Update',
+          subject: 'CEO Gala 2026 - Application Status',
           status: 'failed',
           error_message: emailError instanceof Error ? emailError.message : 'Unknown error',
         },

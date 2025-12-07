@@ -5,36 +5,19 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/auth-options';
+import { requireAuth, parseIdParam, type RouteContext } from '@/lib/api';
 import { prisma } from '@/lib/db/prisma';
 import { approveManualPayment } from '@/lib/services/payment';
 import { generateAndSendTicket } from '@/lib/services/email';
 
-interface RouteContext {
-  params: Promise<{ id: string }>;
-}
-
 export async function PATCH(request: NextRequest, context: RouteContext) {
   try {
-    // Check authentication
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
+    const auth = await requireAuth();
+    if (!auth.success) return auth.response;
 
-    const params = await context.params;
-    const guestId = parseInt(params.id, 10);
-
-    if (isNaN(guestId)) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid guest ID' },
-        { status: 400 }
-      );
-    }
+    const idResult = await parseIdParam(context);
+    if (!idResult.success) return idResult.response;
+    const guestId = idResult.id;
 
     // Find guest's registration
     const guest = await prisma.guest.findUnique({
