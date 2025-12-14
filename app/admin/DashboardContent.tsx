@@ -111,12 +111,12 @@ function DashboardCard({
 }) {
   const content = (
     <div
-      className={`panel panel-hover overflow-hidden ${
+      className={`panel panel-hover overflow-hidden h-full flex flex-col ${
         disabled ? 'opacity-50 cursor-not-allowed' : ''
       }`}
     >
-      <div className="p-6">
-        <div className="flex items-center">
+      <div className="p-6 flex-1">
+        <div className="flex items-center h-full">
           <div className="flex-shrink-0 w-14 h-14 bg-gray-100 dark:bg-neutral-700 rounded-lg flex items-center justify-center">
             <Icon size={32} weight="duotone" className="text-gray-500 dark:text-neutral-300" />
           </div>

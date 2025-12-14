@@ -175,6 +175,7 @@ const dbFixture = base.extend<{
 });
 
 // API fixture - for making API requests with automatic JSON handling
+// Initializes page context first to ensure cookies are available
 const apiFixture = base.extend<{
   apiRequest: (options: {
     method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -183,18 +184,30 @@ const apiFixture = base.extend<{
     headers?: Record<string, string>;
   }) => Promise<{ status: number; body: unknown }>;
 }>({
-  apiRequest: async ({ request }, use) => {
+  apiRequest: async ({ page, baseURL }, use) => {
+    // Navigate to admin page first to initialize context with cookies
+    await page.goto('/admin');
+    await page.waitForLoadState('networkidle');
+
     const apiRequest = async (options: {
       method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
       url: string;
       data?: unknown;
       headers?: Record<string, string>;
     }) => {
-      const response = await request.fetch(options.url, {
+      // Construct full URL if not absolute
+      const fullUrl = options.url.startsWith('http')
+        ? options.url
+        : `${baseURL}${options.url}`;
+
+      // Use page.request to inherit cookies from the page context
+      // Include Origin header for CSRF protection on mutating requests
+      const response = await page.request.fetch(fullUrl, {
         method: options.method,
         data: options.data,
         headers: {
           'Content-Type': 'application/json',
+          'Origin': baseURL || 'http://localhost:3000',
           ...options.headers,
         },
       });

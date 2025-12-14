@@ -14,10 +14,12 @@ interface PairedGuestChipProps {
   isDragging?: boolean;
   isOverlay?: boolean;
   style?: React.CSSProperties;
+  mainGuestLabel?: string;
+  partnerLabel?: string;
 }
 
 export const PairedGuestChip = forwardRef<HTMLDivElement, PairedGuestChipProps & React.HTMLAttributes<HTMLDivElement>>(
-  ({ guest, isDragging, isOverlay, style, ...props }, ref) => {
+  ({ guest, isDragging, isOverlay, style, mainGuestLabel = 'Main guest', partnerLabel = 'Partner', ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -36,7 +38,7 @@ export const PairedGuestChip = forwardRef<HTMLDivElement, PairedGuestChipProps &
         {/* Primary Guest */}
         <div className="flex-1 bg-white border-l-4 border-gray-700 rounded px-2 py-1.5 min-w-0">
           <p className="font-semibold text-xs text-gray-900 truncate">{guest.name}</p>
-          <p className="text-xs text-gray-500">Fő vendég</p>
+          <p className="text-xs text-gray-500">{mainGuestLabel}</p>
         </div>
 
         {/* Connector Icon */}
@@ -57,9 +59,9 @@ export const PairedGuestChip = forwardRef<HTMLDivElement, PairedGuestChipProps &
         {/* Partner */}
         <div className="flex-1 bg-white border-l-4 border-gray-400 rounded px-2 py-1.5 min-w-0">
           <p className="font-semibold text-xs text-gray-900 truncate">
-            {guest.partner?.name || 'Partner'}
+            {guest.partner?.name || partnerLabel}
           </p>
-          <p className="text-xs text-gray-500">Partner</p>
+          <p className="text-xs text-gray-500">{partnerLabel}</p>
         </div>
 
         {/* 2 Seats Badge */}

@@ -17,6 +17,12 @@ const createGuestSchema = z.object({
   email: z.string().email('Ervenytelen email cim'),
   name: z.string().min(1, 'A nev megadasa kotelezo'),
   guest_type: z.enum(['vip', 'paying_single', 'paying_paired', 'applicant']),
+  title: z.string().nullable().optional(),
+  phone: z.string().nullable().optional(),
+  company: z.string().nullable().optional(),
+  position: z.string().nullable().optional(),
+  dietary_requirements: z.string().nullable().optional(),
+  seating_preferences: z.string().nullable().optional(),
 });
 
 export async function GET(request: NextRequest) {
@@ -100,6 +106,12 @@ export async function POST(request: NextRequest) {
       email: validation.data.email,
       name: validation.data.name,
       guest_type: validation.data.guest_type,
+      title: validation.data.title || null,
+      phone: validation.data.phone || null,
+      company: validation.data.company || null,
+      position: validation.data.position || null,
+      dietary_requirements: validation.data.dietary_requirements || null,
+      seating_preferences: validation.data.seating_preferences || null,
     });
 
     return NextResponse.json(

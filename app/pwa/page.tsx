@@ -314,6 +314,8 @@ export default function PWALoginPage() {
                   </label>
                   <input
                     type="text"
+                    name="code"
+                    data-testid="auth-code-input"
                     value={code}
                     onChange={(e) => setCode(e.target.value.toUpperCase())}
                     placeholder="CEOG-XXXXXX"

@@ -16,8 +16,9 @@ import {
   EnvelopeSimple,
   Clock,
   CurrencyDollar,
-  UserPlus,
-  UploadSimple,
+  Gear,
+  UserCircle,
+  Envelope,
 } from '@phosphor-icons/react';
 import AdminThemeToggle from './components/AdminThemeToggle';
 import LanguageToggle from './components/LanguageToggle';
@@ -40,11 +41,19 @@ const dropdownMenus = {
       { href: '/admin/payments', label: 'Payment History', icon: CurrencyDollar },
     ],
   },
+  system: {
+    label: 'System',
+    items: [
+      { href: '/admin/users', label: 'Users', icon: UserCircle },
+      { href: '/admin/email-logs', label: 'Email Logs', icon: Envelope },
+    ],
+  },
 };
 
 // Paths that belong to each dropdown (for highlighting)
 const eventPaths = ['/admin/seating', '/admin/checkin-log', '/admin/statistics'];
 const commsPaths = ['/admin/email-templates', '/admin/scheduled-emails', '/admin/payments'];
+const systemPaths = ['/admin/users', '/admin/email-logs'];
 
 export default function AdminHeader() {
   const pathname = usePathname();
@@ -188,6 +197,52 @@ export default function AdminHeader() {
                 {openDropdown === 'comms' && (
                   <div className="absolute top-full left-0 mt-1 w-48 bg-neutral-700 rounded-lg shadow-lg py-1 z-50">
                     {dropdownMenus.comms.items.map((item) => {
+                      const Icon = item.icon;
+                      const active = isActive(item.href);
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => setOpenDropdown(null)}
+                          className={`
+                            flex items-center gap-2 px-4 py-2 text-sm transition-colors
+                            ${active
+                              ? 'bg-white/10 text-white'
+                              : 'text-white/80 hover:bg-white/5 hover:text-white'
+                            }
+                          `}
+                        >
+                          <Icon size={16} weight={active ? 'fill' : 'regular'} />
+                          {item.label}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* System Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => toggleDropdown('system')}
+                  className={`
+                    flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium transition-colors
+                    ${isDropdownActive(systemPaths)
+                      ? 'bg-white/10 text-white'
+                      : 'text-white/70 hover:text-white hover:bg-white/5'
+                    }
+                  `}
+                >
+                  <Gear size={18} weight={isDropdownActive(systemPaths) ? 'fill' : 'regular'} />
+                  System
+                  <CaretDown
+                    size={14}
+                    className={`transition-transform ${openDropdown === 'system' ? 'rotate-180' : ''}`}
+                  />
+                </button>
+                {openDropdown === 'system' && (
+                  <div className="absolute top-full left-0 mt-1 w-48 bg-neutral-700 rounded-lg shadow-lg py-1 z-50">
+                    {dropdownMenus.system.items.map((item) => {
                       const Icon = item.icon;
                       const active = isActive(item.href);
                       return (

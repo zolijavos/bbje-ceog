@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { DraggableGuest } from './DraggableGuest';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 import type { DraggableGuest as DraggableGuestType } from '../types';
 
 interface UnassignedPanelProps {
@@ -18,6 +19,7 @@ interface UnassignedPanelProps {
 }
 
 export function UnassignedPanel({ guests, isReceiving }: UnassignedPanelProps) {
+  const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
 
   const { isOver, setNodeRef } = useDroppable({
@@ -34,6 +36,9 @@ export function UnassignedPanel({ guests, isReceiving }: UnassignedPanelProps) {
     g.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Count actual guests (not cards) - paired guests count as 2
+  const totalGuestCount = filteredGuests.reduce((sum, g) => sum + g.seatsRequired, 0);
+
   return (
     <div
       ref={setNodeRef}
@@ -46,7 +51,7 @@ export function UnassignedPanel({ guests, isReceiving }: UnassignedPanelProps) {
       `}
     >
       <h3 className="text-lg font-medium mb-4">
-        Ültetésre váró vendégek ({filteredGuests.length})
+        {t('unassignedGuestsPanel')} ({totalGuestCount})
       </h3>
 
       {/* Search */}
@@ -54,7 +59,7 @@ export function UnassignedPanel({ guests, isReceiving }: UnassignedPanelProps) {
         type="text"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        placeholder="Keresés..."
+        placeholder={t('searchGuests')}
         className="w-full mb-4 px-3 py-2 border border-gray-300 rounded-lg
                  focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
       />
@@ -69,9 +74,9 @@ export function UnassignedPanel({ guests, isReceiving }: UnassignedPanelProps) {
           {filteredGuests.length === 0 ? (
             <div className="text-center py-8">
               {guests.length === 0 ? (
-                <p className="text-gray-500 text-sm">Nincs ültetésre váró vendég</p>
+                <p className="text-gray-500 text-sm">{t('noUnassignedGuests')}</p>
               ) : (
-                <p className="text-gray-500 text-sm">Nincs találat a keresésre</p>
+                <p className="text-gray-500 text-sm">{t('noSearchResults')}</p>
               )}
             </div>
           ) : (
@@ -90,7 +95,7 @@ export function UnassignedPanel({ guests, isReceiving }: UnassignedPanelProps) {
       {isOver && (
         <div className="mt-4 p-3 bg-blue-100 rounded-lg text-center">
           <p className="text-blue-700 text-sm font-medium">
-            Ejtsd ide az eltávolításhoz
+            {t('dropToRemove')}
           </p>
         </div>
       )}

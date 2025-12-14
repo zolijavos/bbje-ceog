@@ -289,6 +289,9 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
           email: data.email,
           name: data.name,
           guest_type: data.guest_type,
+          title: data.title,
+          dietary_requirements: data.dietary_requirements,
+          seating_preferences: data.seating_preferences,
         }),
       });
 

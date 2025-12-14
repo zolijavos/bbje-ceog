@@ -320,7 +320,7 @@ async function main() {
       data: {
         registration_id: mainRegistration.id,
         stripe_session_id: pairedData.paymentMethod === 'card' ? `cs_paired_${mainGuest.id}` : undefined,
-        amount: 180000, // 180,000 HUF (paired ticket)
+        amount: 150000, // 150,000 HUF (paired ticket)
         currency: 'HUF',
         payment_status: pairedData.paymentStatus,
         payment_method: pairedData.paymentMethod,

@@ -287,7 +287,7 @@ export default function SeatingDashboard() {
 
         {/* Stats Bar */}
         {stats && (
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <div className="panel p-4">
               <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">{t('totalTables')}</p>
               <p className="text-2xl font-bold text-neutral-800">{stats.totalTables}</p>
@@ -309,12 +309,6 @@ export default function SeatingDashboard() {
             <div className="panel p-4">
               <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">{t('guests')}</p>
               <p className="text-2xl font-bold text-neutral-800">{stats.totalGuests}</p>
-            </div>
-            <div className="panel p-4 border-l-4 border-amber-500">
-              <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">{t('unassignedGuests')}</p>
-              <p className="text-2xl font-bold text-amber-600">
-                {stats.unassignedGuests}
-              </p>
             </div>
           </div>
         )}
@@ -498,7 +492,7 @@ export default function SeatingDashboard() {
       <DragOverlay>
         {activeGuest ? (
           activeGuest.type === 'paired' ? (
-            <PairedGuestChip guest={activeGuest} isOverlay />
+            <PairedGuestChip guest={activeGuest} isOverlay mainGuestLabel={t('mainGuest')} partnerLabel={t('partner')} />
           ) : (
             <GuestChip guest={activeGuest} isOverlay />
           )

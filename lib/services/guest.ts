@@ -177,6 +177,12 @@ export interface CreateGuestInput {
   email: string;
   name: string;
   guest_type: GuestType;
+  title?: string | null;
+  phone?: string | null;
+  company?: string | null;
+  position?: string | null;
+  dietary_requirements?: string | null;
+  seating_preferences?: string | null;
 }
 
 /**
@@ -213,6 +219,12 @@ export async function createGuest(data: CreateGuestInput) {
       name: data.name,
       guest_type: data.guest_type,
       registration_status: 'invited',
+      title: data.title || null,
+      phone: data.phone || null,
+      company: data.company || null,
+      position: data.position || null,
+      dietary_requirements: data.dietary_requirements || null,
+      seating_preferences: data.seating_preferences || null,
     },
   });
 }

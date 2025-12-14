@@ -111,6 +111,8 @@ export async function logEmailDelivery(params: {
   success: boolean;
   errorMessage?: string;
   emailType?: string;
+  htmlBody?: string;
+  textBody?: string;
 }): Promise<void> {
   await prisma.emailLog.create({
     data: {
@@ -118,6 +120,8 @@ export async function logEmailDelivery(params: {
       email_type: params.emailType || 'magic_link',
       recipient: params.recipient,
       subject: params.subject,
+      html_body: params.htmlBody || null,
+      text_body: params.textBody || null,
       status: params.success ? 'sent' : 'failed',
       error_message: params.errorMessage || null,
     },
@@ -231,6 +235,8 @@ export async function sendMagicLinkEmail(
       subject,
       success: result.success,
       errorMessage: result.error,
+      htmlBody: html,
+      textBody: text,
     });
 
     return {
@@ -394,6 +400,8 @@ export async function sendTicketEmail(
       success: result.success,
       errorMessage: result.error,
       emailType: 'ticket_delivery',
+      htmlBody: html,
+      textBody: text,
     });
 
     if (!result.success) {
@@ -492,7 +500,9 @@ export async function sendPaymentConfirmationEmail(params: {
       subject: rendered.subject,
       success: result.success,
       errorMessage: result.error,
-      emailType: 'magic_link', // Using existing type for logging
+      emailType: 'payment_confirmation',
+      htmlBody: rendered.html,
+      textBody: rendered.text,
     });
 
     if (result.success) {
@@ -547,7 +557,9 @@ export async function sendPaymentReminderEmail(params: {
       subject: rendered.subject,
       success: result.success,
       errorMessage: result.error,
-      emailType: 'magic_link',
+      emailType: 'payment_reminder',
+      htmlBody: rendered.html,
+      textBody: rendered.text,
     });
 
     if (result.success) {
@@ -600,7 +612,9 @@ export async function sendTableAssignmentEmail(params: {
       subject: rendered.subject,
       success: result.success,
       errorMessage: result.error,
-      emailType: 'magic_link',
+      emailType: 'table_assignment',
+      htmlBody: rendered.html,
+      textBody: rendered.text,
     });
 
     if (result.success) {
@@ -657,7 +671,9 @@ export async function sendEventReminderEmail(params: {
       subject: rendered.subject,
       success: result.success,
       errorMessage: result.error,
-      emailType: 'magic_link',
+      emailType: 'event_reminder',
+      htmlBody: rendered.html,
+      textBody: rendered.text,
     });
 
     if (result.success) {

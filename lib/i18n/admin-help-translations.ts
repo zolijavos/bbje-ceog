@@ -53,6 +53,8 @@ export const adminHelpTranslations = {
       'Email Templates': 'Email Templates',
       'Scheduled Emails': 'Scheduled Emails',
       'Statistics': 'Statistics',
+      'Email Logs': 'Email Logs',
+      'User Management': 'User Management',
       'System & Technical': 'System & Technical',
     },
   },
@@ -97,6 +99,8 @@ export const adminHelpTranslations = {
       'Email Templates': 'Email sablonok',
       'Scheduled Emails': 'Ütemezett emailek',
       'Statistics': 'Statisztikák',
+      'Email Logs': 'Email napló',
+      'User Management': 'Felhasználó kezelés',
       'System & Technical': 'Rendszer és technikai',
     },
   },
@@ -619,14 +623,14 @@ If there are assigned guests:
     id: 'checkin-manual',
     category: 'Check-in',
     question: 'What if the QR code does not work?',
-    answer: `If scanning fails:
+    answer: `If scanning fails, use manual search:
 
-1. Click the **"Manual Search"** tab
-2. Enter the guest's **name or email**
-3. Select from the results
-4. Click the **"Check In"** button
-5. Select the **"Manual Override"** option
-6. Enter the reason (e.g., "Phone battery dead")
+• Click the **"Manual Search"** tab
+• Enter the guest's **name or email**
+• Select from the results
+• Click the **"Check In"** button
+• Select the **"Manual Override"** option
+• Enter the reason (e.g., "Phone battery dead")
 
 Manual check-in is also recorded in the log.`,
     keywords: ['manual', 'search', 'override', 'backup'],
@@ -736,20 +740,53 @@ The **"Clear"** button clears all filters.`,
     id: 'pay-refund',
     category: 'Payment History',
     question: 'How do I issue a refund?',
-    answer: `Refunds are done **manually**:
+    answer: `Refunds can now be issued **directly from the admin interface**:
 
-**For Stripe card payments**:
-1. Open the [Stripe Dashboard](https://dashboard.stripe.com)
-2. Payments → Find the payment
-3. Click the "Refund" button
-4. Enter the amount (full or partial)
+**In-app refund (recommended)**:
+1. Go to **Payment History** page
+2. Find the payment (must be "Paid" status)
+3. Click the **"Refund"** button
+4. Confirm the refund
 
-**For bank transfers**:
-1. Process the transfer manually
-2. Update the guest status in Guest List
+**What happens**:
+• For **Stripe card payments**: Automatic refund via Stripe API
+• For **bank transfers**: Status marked as refunded (manual transfer needed)
+• Payment status changes to "Refunded"
+• Guest's ticket remains valid (cancel separately if needed)
 
-Refunded payments appear with "Refunded" status.`,
+**Alternative - Stripe Dashboard**:
+For partial refunds, use the [Stripe Dashboard](https://dashboard.stripe.com) directly.
+
+Refunded payments appear with gray "Refunded" badge.`,
     keywords: ['refund', 'return', 'cancel', 'money back'],
+  },
+  {
+    id: 'pay-view',
+    category: 'Payment History',
+    question: 'How do I view payment details?',
+    answer: `1. Find the payment in the list
+2. Click the **"View"** button
+3. A detailed modal appears showing:
+
+**Payment Info**:
+• Amount and currency
+• Status and payment method
+• Ticket type
+• Payment timestamps
+• Stripe Payment Intent ID (for card payments)
+
+**Guest Info**:
+• Name, email, phone
+• Guest type
+• Company (if provided)
+
+**Billing Info** (for paying guests):
+• Billing name
+• Company name and tax number
+• Full billing address
+
+This is useful for customer support and accounting purposes.`,
+    keywords: ['view', 'details', 'billing', 'invoice'],
   },
 
   // ==========================================
@@ -1079,6 +1116,196 @@ Each category shows **the number of guests**.
 
 This is especially useful for **catering planning** - send the numbers to your provider!`,
     keywords: ['dietary', 'allergy', 'vegetarian', 'catering'],
+  },
+
+  // ==========================================
+  // EMAIL LOGS
+  // ==========================================
+  {
+    id: 'elog-overview',
+    category: 'Email Logs',
+    question: 'How does the Email Logs page work?',
+    answer: `Email Logs provides a complete overview of all sent emails.
+
+**Statistics cards**:
+• Total Sent: Successfully delivered emails
+• Total Failed: Failed deliveries
+• Sent Today: Today's successful sends
+• Email Types: Number of different email types
+
+**For each email you see**:
+• Status (Sent, Failed, Pending)
+• Recipient name and email
+• Subject line
+• Email type (magic_link, ticket, etc.)
+• Sent timestamp`,
+    keywords: ['email', 'log', 'history', 'sent', 'overview'],
+  },
+  {
+    id: 'elog-filter',
+    category: 'Email Logs',
+    question: 'How do I filter email logs?',
+    answer: `**Available filters**:
+
+1. **Search**: By recipient name or email address
+2. **Status**:
+   • Sent - Successfully delivered
+   • Failed - Delivery failed
+   • Pending - Waiting to send
+3. **Type**: Filter by email type (magic_link, ticket, payment_confirmation, etc.)
+
+The filters combine - you can search for failed magic_link emails for a specific recipient.`,
+    keywords: ['filter', 'search', 'status', 'type'],
+  },
+  {
+    id: 'elog-view',
+    category: 'Email Logs',
+    question: 'How do I view email content?',
+    answer: `1. Find the email in the list
+2. Click the **eye icon** to view details
+3. A modal appears showing:
+   • Status and type
+   • Recipient info
+   • Subject line
+   • Sent timestamp
+   • **Error message** (if failed)
+   • **Full email content** (HTML or plain text)
+
+This is useful for debugging delivery issues or verifying email content.`,
+    keywords: ['view', 'content', 'preview', 'details'],
+  },
+  {
+    id: 'elog-delete',
+    category: 'Email Logs',
+    question: 'Can I delete email logs?',
+    answer: `Yes, you can delete individual email logs:
+
+1. Find the email in the list
+2. Click the **trash icon**
+3. Confirm the deletion
+
+**Note**: Deletion is permanent and cannot be undone. Consider keeping failed emails for debugging purposes.
+
+Logs are useful for:
+• Audit trail
+• Debugging delivery issues
+• Tracking communication history`,
+    keywords: ['delete', 'remove', 'clear'],
+  },
+  {
+    id: 'elog-errors',
+    category: 'Email Logs',
+    question: 'What do I do if emails are failing?',
+    answer: `If you see failed emails:
+
+1. Click the **eye icon** to view the error message
+2. Common errors:
+   • **Invalid email address**: Guest email is malformed
+   • **SMTP connection failed**: Email server issue
+   • **Rate limit exceeded**: Too many emails sent
+   • **Recipient rejected**: Email bounced
+
+**Troubleshooting**:
+• Check the guest's email address is correct
+• Contact system administrator for SMTP issues
+• Wait and retry for rate limit errors
+• For bounced emails, contact the guest for updated address`,
+    keywords: ['error', 'failed', 'troubleshoot', 'debug'],
+  },
+
+  // ==========================================
+  // USER MANAGEMENT
+  // ==========================================
+  {
+    id: 'user-overview',
+    category: 'User Management',
+    question: 'How does user management work?',
+    answer: `The User Management page allows admins to manage system users.
+
+**User list shows**:
+• User name and email
+• Role (Admin or Staff)
+• Check-in count (how many guests they've checked in)
+• Created date
+
+**Available operations**:
+• Create new user
+• Edit existing user
+• Delete user
+
+**Note**: Only Admin users can access user management.`,
+    keywords: ['user', 'management', 'admin', 'staff', 'overview'],
+  },
+  {
+    id: 'user-create',
+    category: 'User Management',
+    question: 'How do I create a new user?',
+    answer: `1. Click the **"+ Add User"** button
+2. Fill out the form:
+   • **Name**: Display name
+   • **Email**: Login email (must be unique)
+   • **Password**: Minimum 8 characters
+   • **Role**: Admin or Staff
+3. Click **"Save"**
+
+**Role differences**:
+• **Admin**: Full access to all features
+• **Staff**: Check-in only (QR scanning)`,
+    keywords: ['create', 'add', 'new', 'user'],
+  },
+  {
+    id: 'user-edit',
+    category: 'User Management',
+    question: 'How do I edit a user?',
+    answer: `1. Find the user in the list
+2. Click the **pencil icon**
+3. Modify fields:
+   • Name
+   • Email
+   • Password (leave blank to keep current)
+   • Role
+4. Click **"Save"**
+
+**Password update**: Leave the password field empty to keep the existing password. Only fill it in if you want to change it.`,
+    keywords: ['edit', 'modify', 'update', 'password', 'role'],
+  },
+  {
+    id: 'user-delete',
+    category: 'User Management',
+    question: 'How do I delete a user?',
+    answer: `1. Find the user in the list
+2. Click the **trash icon**
+3. Confirm the deletion
+
+**Warning**: Deletion is permanent!
+
+**Important notes**:
+• You cannot delete your own account
+• Check-in history is preserved (for audit purposes)
+• Consider changing the password instead of deleting if you want to revoke access`,
+    keywords: ['delete', 'remove', 'user'],
+  },
+  {
+    id: 'user-roles',
+    category: 'User Management',
+    question: 'What are the differences between Admin and Staff roles?',
+    answer: `**Admin role** has full access:
+• Guest management (add, edit, delete)
+• Payment management and approval
+• Seating arrangement
+• Email sending and templates
+• Statistics and reports
+• User management
+• Check-in with override capability
+
+**Staff role** is limited to:
+• Check-in function only
+• QR code scanning
+• Manual guest search
+• **No** override for duplicate check-ins
+
+Choose Staff for event day volunteers who only need to scan tickets.`,
+    keywords: ['role', 'admin', 'staff', 'permission', 'access'],
   },
 
   // ==========================================
@@ -1704,14 +1931,14 @@ Ha vannak hozzárendelt vendégek:
     id: 'checkin-manual',
     category: 'Check-in',
     question: 'Mit tegyek ha a QR kód nem működik?',
-    answer: `Ha a szkennelés nem sikerül:
+    answer: `Ha a szkennelés nem sikerül, használd a manuális keresést:
 
-1. Kattints a **"Manual Search"** fülre
-2. Írd be a vendég **nevét vagy email címét**
-3. Válaszd ki a találatok közül
-4. Kattints a **"Check In"** gombra
-5. Válaszd a **"Manual Override"** opciót
-6. Írd be az okot (pl. "Telefon kimerült")
+• Kattints a **"Manual Search"** fülre
+• Írd be a vendég **nevét vagy email címét**
+• Válaszd ki a találatok közül
+• Kattints a **"Check In"** gombra
+• Válaszd a **"Manual Override"** opciót
+• Írd be az okot (pl. "Telefon kimerült")
 
 A manuális check-in is rögzítődik a naplóban.`,
     keywords: ['manuális', 'manual', 'keresés', 'search', 'override'],
@@ -1821,20 +2048,53 @@ A **"Clear"** gomb törli az összes szűrőt.`,
     id: 'pay-refund',
     category: 'Payment History',
     question: 'Hogyan végezhetek visszatérítést?',
-    answer: `A visszatérítés **manuálisan** történik:
+    answer: `A visszatérítés mostantól **közvetlenül az admin felületen** indítható:
 
-**Stripe kártyás fizetésnél**:
-1. Nyisd meg a [Stripe Dashboard](https://dashboard.stripe.com)-ot
-2. Payments → Find the payment
-3. Kattints a "Refund" gombra
-4. Add meg az összeget (teljes vagy részleges)
+**In-app visszatérítés (ajánlott)**:
+1. Menj a **Payment History** oldalra
+2. Keresd meg a fizetést (csak "Paid" státuszú)
+3. Kattints a **"Refund"** gombra
+4. Erősítsd meg a visszatérítést
 
-**Banki átutalásnál**:
-1. Végezd el az átutalást manuálisan
-2. Frissítsd a vendég státuszát a Guest List-en
+**Mi történik**:
+• **Stripe kártyás fizetésnél**: Automatikus visszatérítés a Stripe API-n keresztül
+• **Banki átutalásnál**: Státusz "refunded" lesz (manuális utalás szükséges)
+• A fizetés státusza "Refunded" lesz
+• A vendég jegye érvényes marad (külön kell törölni ha szükséges)
 
-A visszatérített fizetések "Refunded" státusszal jelennek meg.`,
+**Alternatíva - Stripe Dashboard**:
+Részleges visszatérítéshez használd a [Stripe Dashboard](https://dashboard.stripe.com)-ot közvetlenül.
+
+A visszatérített fizetések szürke "Refunded" badge-dzsel jelennek meg.`,
     keywords: ['visszatérítés', 'refund', 'visszautalás', 'cancel'],
+  },
+  {
+    id: 'pay-view',
+    category: 'Payment History',
+    question: 'Hogyan nézhetem meg a fizetés részleteit?',
+    answer: `1. Keresd meg a fizetést a listában
+2. Kattints a **"View"** gombra
+3. Részletes ablak jelenik meg:
+
+**Fizetési adatok**:
+• Összeg és pénznem
+• Státusz és fizetési mód
+• Jegy típus
+• Fizetés időpontjai
+• Stripe Payment Intent ID (kártyás fizetésnél)
+
+**Vendég adatok**:
+• Név, email, telefon
+• Vendég típus
+• Cég (ha megadva)
+
+**Számlázási adatok** (fizető vendégeknél):
+• Számlázási név
+• Cégnév és adószám
+• Teljes számlázási cím
+
+Ez hasznos ügyfélszolgálathoz és könyvelési célokra.`,
+    keywords: ['megtekintés', 'részletek', 'számlázás', 'számla'],
   },
 
   // ==========================================
@@ -2164,6 +2424,196 @@ Minden kategóriánál **látod a vendégek számát**.
 
 Ez különösen hasznos a **catering tervezéshez** - küldd el a számokat a szolgáltatónak!`,
     keywords: ['étrend', 'dietary', 'allergia', 'vegetáriánus', 'catering'],
+  },
+
+  // ==========================================
+  // EMAIL LOGS
+  // ==========================================
+  {
+    id: 'elog-overview',
+    category: 'Email Logs',
+    question: 'Hogyan működik az Email napló oldal?',
+    answer: `Az Email napló átfogó képet ad minden elküldött emailről.
+
+**Statisztika kártyák**:
+• Összes elküldött: Sikeresen kézbesített emailek
+• Sikertelen: Hibás kézbesítések
+• Ma küldött: Mai sikeres küldések
+• Email típusok: Különböző email típusok száma
+
+**Minden emailnél látható**:
+• Státusz (Sent, Failed, Pending)
+• Címzett neve és email címe
+• Tárgy
+• Email típus (magic_link, ticket, stb.)
+• Küldés időpontja`,
+    keywords: ['email', 'napló', 'log', 'küldött', 'áttekintés'],
+  },
+  {
+    id: 'elog-filter',
+    category: 'Email Logs',
+    question: 'Hogyan szűrhetem az email naplót?',
+    answer: `**Elérhető szűrők**:
+
+1. **Keresés**: Címzett neve vagy email címe alapján
+2. **Státusz**:
+   • Sent - Sikeresen kézbesítve
+   • Failed - Sikertelen kézbesítés
+   • Pending - Küldésre vár
+3. **Típus**: Email típus szerint (magic_link, ticket, payment_confirmation, stb.)
+
+A szűrők kombinálhatók - kereshetsz sikertelen magic_link emaileket egy adott címzettnél.`,
+    keywords: ['szűrés', 'filter', 'keresés', 'státusz', 'típus'],
+  },
+  {
+    id: 'elog-view',
+    category: 'Email Logs',
+    question: 'Hogyan nézhetem meg az email tartalmát?',
+    answer: `1. Keresd meg az emailt a listában
+2. Kattints a **szem ikonra** a részletek megtekintéséhez
+3. Megjelenik egy ablak:
+   • Státusz és típus
+   • Címzett adatai
+   • Tárgy
+   • Küldés időpontja
+   • **Hibaüzenet** (sikertelen esetén)
+   • **Teljes email tartalom** (HTML vagy sima szöveg)
+
+Ez hasznos kézbesítési problémák hibakereséséhez vagy az email tartalom ellenőrzéséhez.`,
+    keywords: ['megtekintés', 'tartalom', 'előnézet', 'részletek'],
+  },
+  {
+    id: 'elog-delete',
+    category: 'Email Logs',
+    question: 'Törölhetem az email naplókat?',
+    answer: `Igen, törölheted az egyes email naplókat:
+
+1. Keresd meg az emailt a listában
+2. Kattints a **kuka ikonra**
+3. Erősítsd meg a törlést
+
+**Figyelem**: A törlés végleges és nem visszavonható. Érdemes megtartani a sikertelen emaileket hibakeresési célból.
+
+A naplók hasznosak:
+• Audit nyomkövetéshez
+• Kézbesítési problémák hibakereséséhez
+• Kommunikációs előzmények követéséhez`,
+    keywords: ['törlés', 'eltávolítás', 'delete'],
+  },
+  {
+    id: 'elog-errors',
+    category: 'Email Logs',
+    question: 'Mit tegyek ha az emailek sikertelenek?',
+    answer: `Ha sikertelen emaileket látsz:
+
+1. Kattints a **szem ikonra** a hibaüzenet megtekintéséhez
+2. Gyakori hibák:
+   • **Invalid email address**: Hibás email cím formátum
+   • **SMTP connection failed**: Email szerver probléma
+   • **Rate limit exceeded**: Túl sok email küldve
+   • **Recipient rejected**: Az email visszapattant
+
+**Hibaelhárítás**:
+• Ellenőrizd, hogy a vendég email címe helyes
+• SMTP problémáknál keresd a rendszergazdát
+• Rate limit hibánál várj és próbáld újra
+• Visszapattant emaileknél kérd a vendégtől a frissített címet`,
+    keywords: ['hiba', 'sikertelen', 'hibaelhárítás', 'debug'],
+  },
+
+  // ==========================================
+  // USER MANAGEMENT
+  // ==========================================
+  {
+    id: 'user-overview',
+    category: 'User Management',
+    question: 'Hogyan működik a felhasználó kezelés?',
+    answer: `A Felhasználó kezelés oldalon az adminok kezelhetik a rendszer felhasználóit.
+
+**A lista mutatja**:
+• Felhasználó neve és email címe
+• Szerepkör (Admin vagy Staff)
+• Check-in szám (hány vendéget léptetett be)
+• Létrehozás dátuma
+
+**Elérhető műveletek**:
+• Új felhasználó létrehozása
+• Meglévő felhasználó szerkesztése
+• Felhasználó törlése
+
+**Megjegyzés**: Csak Admin felhasználók érhetik el a felhasználó kezelést.`,
+    keywords: ['felhasználó', 'kezelés', 'admin', 'staff', 'áttekintés'],
+  },
+  {
+    id: 'user-create',
+    category: 'User Management',
+    question: 'Hogyan hozhatok létre új felhasználót?',
+    answer: `1. Kattints a **"+ Add User"** gombra
+2. Töltsd ki az űrlapot:
+   • **Name**: Megjelenítendő név
+   • **Email**: Bejelentkezési email (egyedinek kell lennie)
+   • **Password**: Minimum 8 karakter
+   • **Role**: Admin vagy Staff
+3. Kattints a **"Save"** gombra
+
+**Szerepkör különbségek**:
+• **Admin**: Teljes hozzáférés minden funkcióhoz
+• **Staff**: Csak check-in (QR szkennelés)`,
+    keywords: ['létrehozás', 'hozzáadás', 'új', 'felhasználó'],
+  },
+  {
+    id: 'user-edit',
+    category: 'User Management',
+    question: 'Hogyan szerkeszthetek egy felhasználót?',
+    answer: `1. Keresd meg a felhasználót a listában
+2. Kattints a **ceruza ikonra**
+3. Módosítsd a mezőket:
+   • Név
+   • Email
+   • Jelszó (hagyd üresen a meglévő megtartásához)
+   • Szerepkör
+4. Kattints a **"Save"** gombra
+
+**Jelszó frissítés**: Hagyd üresen a jelszó mezőt ha meg akarod tartani a meglévőt. Csak akkor töltsd ki, ha változtatni szeretnéd.`,
+    keywords: ['szerkesztés', 'módosítás', 'frissítés', 'jelszó', 'szerepkör'],
+  },
+  {
+    id: 'user-delete',
+    category: 'User Management',
+    question: 'Hogyan törölhetek felhasználót?',
+    answer: `1. Keresd meg a felhasználót a listában
+2. Kattints a **kuka ikonra**
+3. Erősítsd meg a törlést
+
+**Figyelem**: A törlés végleges!
+
+**Fontos tudnivalók**:
+• Nem törölheted a saját fiókodat
+• A check-in előzmények megmaradnak (audit célokból)
+• Fontold meg a jelszó megváltoztatását törlés helyett, ha csak a hozzáférést akarod visszavonni`,
+    keywords: ['törlés', 'eltávolítás', 'felhasználó'],
+  },
+  {
+    id: 'user-roles',
+    category: 'User Management',
+    question: 'Mi a különbség az Admin és Staff szerepkörök között?',
+    answer: `**Admin szerepkör** teljes hozzáféréssel:
+• Vendégkezelés (hozzáadás, szerkesztés, törlés)
+• Fizetés kezelés és jóváhagyás
+• Ültetési rend
+• Email küldés és sablonok
+• Statisztikák és riportok
+• Felhasználó kezelés
+• Check-in override lehetőséggel
+
+**Staff szerepkör** korlátozott:
+• Csak check-in funkció
+• QR kód szkennelés
+• Manuális vendég keresés
+• **Nincs** override duplikált check-innél
+
+Válaszd a Staff-ot az esemény napi önkénteseknek, akiknek csak jegyeket kell szkennelniük.`,
+    keywords: ['szerepkör', 'admin', 'staff', 'jogosultság', 'hozzáférés'],
   },
 
   // ==========================================

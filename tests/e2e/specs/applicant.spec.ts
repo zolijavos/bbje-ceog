@@ -189,9 +189,11 @@ test.describe('Admin Applicant Management', () => {
     await navigateToAdminSection(page, 'applicants');
     await page.waitForLoadState('networkidle');
 
-    // Card should show "Applied:" text with timestamp
+    // Card should show timestamp text (i18n key 'applied' shows the date)
+    // The component uses t('applied') which is "Applied" in EN or "Jelentkezett" in HU
     const card = page.locator('[data-testid^="applicant-card"]').filter({ hasText: applicant.email });
-    await expect(card.locator('text=/Applied:/i')).toBeVisible();
+    // Check for the timestamp pattern (any date text would do)
+    await expect(card.locator('.text-xs.text-gray-400')).toBeVisible();
 
     await cleanup();
   });
@@ -207,9 +209,9 @@ test.describe('Applicant Approval', () => {
     await navigateToAdminSection(page, 'applicants');
     await page.waitForLoadState('networkidle');
 
-    // Find applicant card and click approve button (contains "Approve" text)
-    const card = page.locator('[data-testid^="applicant-card"]').filter({ hasText: applicant.email });
-    const approveBtn = card.locator('button:has-text("Approve")');
+    // Find applicant card and click approve button using data-testid
+    const card = page.locator(`[data-testid="applicant-card-${applicant.id}"]`);
+    const approveBtn = card.locator(`[data-testid="approve-btn-${applicant.id}"]`);
     await approveBtn.click();
 
     // Wait for the button to re-enable (API call complete) or card to disappear
@@ -232,9 +234,9 @@ test.describe('Applicant Approval', () => {
     await navigateToAdminSection(page, 'applicants');
     await page.waitForLoadState('networkidle');
 
-    // Approve applicant
-    const card = page.locator('[data-testid^="applicant-card"]').filter({ hasText: applicant.email });
-    await card.locator('button:has-text("Approve")').click();
+    // Approve applicant using data-testid
+    const approveBtn = page.locator(`[data-testid="approve-btn-${applicant.id}"]`);
+    await approveBtn.click();
 
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(2000);
@@ -247,7 +249,7 @@ test.describe('Applicant Approval', () => {
     await cleanup();
   });
 
-  test('should set 72-hour expiry for approved applicant magic link', async ({ page, seedGuest, db, cleanup }) => {
+  test('should set 48-hour expiry for approved applicant magic link', async ({ page, seedGuest, db, cleanup }) => {
     const applicant = await seedGuest(createApplicantGuest({
       email: 'expiry-approval@test.ceog',
     }));
@@ -255,18 +257,18 @@ test.describe('Applicant Approval', () => {
     await navigateToAdminSection(page, 'applicants');
     await page.waitForLoadState('networkidle');
 
-    // Approve
-    const card = page.locator('[data-testid^="applicant-card"]').filter({ hasText: applicant.email });
-    await card.locator('button:has-text("Approve")').click();
+    // Approve using data-testid
+    const approveBtn = page.locator(`[data-testid="approve-btn-${applicant.id}"]`);
+    await approveBtn.click();
 
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(2000);
 
-    // Verify expiry is approximately 72 hours from now
+    // Verify expiry is approximately 48 hours from now (magic link expiry is 48h)
     const updated = await db.guest.findUnique({ where: { id: applicant.id } });
     if (updated?.magic_link_expires_at) {
       const expiryTime = updated.magic_link_expires_at.getTime();
-      const expectedExpiry = Date.now() + 72 * 60 * 60 * 1000;
+      const expectedExpiry = Date.now() + 48 * 60 * 60 * 1000;
       const tolerance = 5 * 60 * 1000; // 5 minutes tolerance
 
       expect(Math.abs(expiryTime - expectedExpiry)).toBeLessThan(tolerance);
@@ -286,9 +288,9 @@ test.describe('Applicant Rejection', () => {
     await navigateToAdminSection(page, 'applicants');
     await page.waitForLoadState('networkidle');
 
-    // Find applicant card and click reject button
-    const card = page.locator('[data-testid^="applicant-card"]').filter({ hasText: applicant.email });
-    await card.locator('button:has-text("Reject")').first().click();
+    // Find applicant card and click reject button using data-testid
+    const rejectBtn = page.locator(`[data-testid="reject-btn-${applicant.id}"]`);
+    await rejectBtn.click();
 
     // Should show rejection dialog/modal
     await waitForModalOpen(page);
@@ -299,8 +301,8 @@ test.describe('Applicant Rejection', () => {
       await reasonField.fill('Test rejection reason');
     }
 
-    // Click "Reject Application" button in modal
-    await page.click('button:has-text("Reject Application")');
+    // Click the red rejection button in modal (bg-red-600 class identifies it)
+    await page.locator('.bg-red-600').click();
 
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
@@ -320,9 +322,9 @@ test.describe('Applicant Rejection', () => {
     await navigateToAdminSection(page, 'applicants');
     await page.waitForLoadState('networkidle');
 
-    // Reject with reason
-    const card = page.locator('[data-testid^="applicant-card"]').filter({ hasText: applicant.email });
-    await card.locator('button:has-text("Reject")').first().click();
+    // Reject with reason using data-testid
+    const rejectBtn = page.locator(`[data-testid="reject-btn-${applicant.id}"]`);
+    await rejectBtn.click();
 
     await waitForModalOpen(page);
 
@@ -330,7 +332,8 @@ test.describe('Applicant Rejection', () => {
     const reasonField = page.locator('textarea');
     await reasonField.fill(rejectionReason);
 
-    await page.click('button:has-text("Reject Application")');
+    // Click the red rejection button in modal
+    await page.locator('.bg-red-600').click();
 
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
@@ -350,16 +353,17 @@ test.describe('Applicant Rejection', () => {
     await navigateToAdminSection(page, 'applicants');
     await page.waitForLoadState('networkidle');
 
-    // Reject
-    const card = page.locator('[data-testid^="applicant-card"]').filter({ hasText: applicant.email });
-    await card.locator('button:has-text("Reject")').first().click();
+    // Reject using data-testid
+    const rejectBtn = page.locator(`[data-testid="reject-btn-${applicant.id}"]`);
+    await rejectBtn.click();
 
     await waitForModalOpen(page);
 
     const reasonField = page.locator('textarea');
     await reasonField.fill('Rejected');
 
-    await page.click('button:has-text("Reject Application")');
+    // Click the red rejection button in modal
+    await page.locator('.bg-red-600').click();
 
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);

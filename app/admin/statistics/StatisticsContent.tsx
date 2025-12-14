@@ -160,7 +160,7 @@ export default function StatisticsContent() {
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Guests */}
-        <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-300/20 dark:border-neutral-700 p-6">
+        <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-300/20 dark:border-neutral-700 p-6 h-full">
           <div className="flex items-center justify-between mb-2">
             <Users weight="light" size={24} className="text-blue-600 dark:text-blue-400" />
             <span className="text-xs font-sans text-neutral-500 dark:text-neutral-400 uppercase tracking-wide">
@@ -176,14 +176,14 @@ export default function StatisticsContent() {
         </div>
 
         {/* Total Revenue */}
-        <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-300/20 dark:border-neutral-700 p-6">
+        <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-300/20 dark:border-neutral-700 p-6 h-full">
           <div className="flex items-center justify-between mb-2">
             <CurrencyDollar weight="light" size={24} className="text-green-600 dark:text-green-400" />
             <span className="text-xs font-sans text-neutral-500 dark:text-neutral-400 uppercase tracking-wide">
               {t('totalRevenue')}
             </span>
           </div>
-          <div className="font-display text-3xl font-semibold text-neutral-800 dark:text-neutral-100 mb-1">
+          <div className="font-display text-4xl font-semibold text-neutral-800 dark:text-neutral-100 mb-1">
             {formatCurrency(stats.payments.paidRevenue)}
           </div>
           <div className="text-sm font-sans text-neutral-500 dark:text-neutral-400">
@@ -192,7 +192,7 @@ export default function StatisticsContent() {
         </div>
 
         {/* Occupancy Rate */}
-        <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-300/20 dark:border-neutral-700 p-6">
+        <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-300/20 dark:border-neutral-700 p-6 h-full">
           <div className="flex items-center justify-between mb-2">
             <Armchair weight="light" size={24} className="text-amber-600 dark:text-amber-400" />
             <span className="text-xs font-sans text-neutral-500 dark:text-neutral-400 uppercase tracking-wide">
@@ -208,7 +208,7 @@ export default function StatisticsContent() {
         </div>
 
         {/* Check-in Rate */}
-        <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-300/20 dark:border-neutral-700 p-6">
+        <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-300/20 dark:border-neutral-700 p-6 h-full">
           <div className="flex items-center justify-between mb-2">
             <UserCheck weight="light" size={24} className="text-purple-600 dark:text-purple-400" />
             <span className="text-xs font-sans text-neutral-500 dark:text-neutral-400 uppercase tracking-wide">

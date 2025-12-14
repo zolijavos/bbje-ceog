@@ -9,6 +9,7 @@
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { TABLE_TYPE_COLORS } from '@/lib/constants';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { DraggableGuest } from './DraggableGuest';
 import type { DraggableGuest as DraggableGuestType, TableData } from '../types';
 
@@ -25,6 +26,7 @@ function calculateOccupancy(guests: DraggableGuestType[]): number {
 }
 
 export function DroppableTable({ table, guests, activeGuest, onRemoveGuest }: DroppableTableProps) {
+  const { t } = useLanguage();
   const containerId = `table-${table.id}`;
   const currentOccupancy = calculateOccupancy(guests);
   const isFull = currentOccupancy >= table.capacity;
@@ -66,8 +68,8 @@ export function DroppableTable({ table, guests, activeGuest, onRemoveGuest }: Dr
         <div className="absolute inset-0 flex items-center justify-center bg-red-100/90 rounded-lg z-10">
           <p className="text-red-600 font-medium text-sm text-center px-2">
             {activeGuest?.type === 'paired'
-              ? `Páros vendég: 2 hely kell, csak ${table.capacity - currentOccupancy} van`
-              : 'Az asztal megtelt'
+              ? t('pairedGuestNeedsSeats').replace('{available}', String(table.capacity - currentOccupancy))
+              : t('tableFull')
             }
           </p>
         </div>
@@ -85,7 +87,7 @@ export function DroppableTable({ table, guests, activeGuest, onRemoveGuest }: Dr
       <div className="flex items-center justify-between text-sm text-gray-600 mb-3">
         <span className={isFull ? 'text-red-600 font-medium' : ''}>
           <span data-testid="table-occupied">{currentOccupancy}</span>/<span data-testid="table-capacity">{table.capacity}</span>
-          {isFull && ' TELE'}
+          {isFull && ` ${t('full')}`}
         </span>
         <div className="flex-1 mx-2 bg-gray-200 rounded-full h-2">
           <div
@@ -106,9 +108,9 @@ export function DroppableTable({ table, guests, activeGuest, onRemoveGuest }: Dr
         <div className="space-y-2">
           {guests.length === 0 ? (
             <div className="text-center py-6 border-2 border-dashed border-gray-200 rounded-lg">
-              <p className="text-sm text-gray-400">Húzd ide a vendégeket</p>
+              <p className="text-sm text-gray-400">{t('dragGuestsHere')}</p>
               <p className="text-xs text-gray-300 mt-1">
-                ({table.capacity} hely szabad)
+                ({table.capacity} {t('seats')})
               </p>
             </div>
           ) : (
@@ -125,7 +127,7 @@ export function DroppableTable({ table, guests, activeGuest, onRemoveGuest }: Dr
                     className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full
                              opacity-0 group-hover:opacity-100 transition-opacity
                              flex items-center justify-center text-xs hover:bg-red-600"
-                    title="Eltávolítás"
+                    title={t('removeFromTable')}
                   >
                     ×
                   </button>

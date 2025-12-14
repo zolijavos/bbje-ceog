@@ -20,7 +20,7 @@ const stripe = new Stripe(STRIPE_SECRET_KEY);
 // 1 HUF = 100 fillér
 const TICKET_PRICES_FILLER: Record<TicketType, number> = {
   paid_single: 10000000, // 100,000 Ft = 10,000,000 fillér
-  paid_paired: 18000000, // 180,000 Ft = 18,000,000 fillér
+  paid_paired: 15000000, // 150,000 Ft = 15,000,000 fillér
   vip_free: 0,
 };
 

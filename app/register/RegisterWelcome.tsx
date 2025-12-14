@@ -12,7 +12,15 @@ interface Guest {
 
 interface RegisterWelcomeProps {
   guest: Guest;
-  code: string;
+  code?: string; // Optional, kept for backwards compatibility
+}
+
+// Determine next step URL based on guest type - using guest_id for proper routing
+function getRegistrationUrl(guestId: number, guestType: string): string {
+  if (guestType === 'vip') {
+    return `/register/vip?guest_id=${guestId}`;
+  }
+  return `/register/paid?guest_id=${guestId}`;
 }
 
 // Format guest type for display
@@ -28,18 +36,10 @@ function formatGuestType(type: string): { label: string; color: string } {
   return types[type] || { label: type, color: 'bg-neutral-300/10 text-neutral-500' };
 }
 
-// Determine next step URL based on guest type
-function getNextStepUrl(guestType: string, code: string, email: string): string {
-  const params = new URLSearchParams({ code, email });
-  if (guestType === 'vip') {
-    return `/register/vip?${params.toString()}`;
-  }
-  return `/register/paid?${params.toString()}`;
-}
 
-export default function RegisterWelcome({ guest, code }: RegisterWelcomeProps) {
+export default function RegisterWelcome({ guest }: RegisterWelcomeProps) {
   const guestTypeInfo = formatGuestType(guest.guestType);
-  const nextStepUrl = getNextStepUrl(guest.guestType, code, guest.email);
+  const nextStepUrl = getRegistrationUrl(guest.id, guest.guestType);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-neutral-800 to-neutral-700 flex items-center justify-center p-4">

@@ -23,11 +23,24 @@ import { fillGuestForm, fillBillingForm } from '../helpers';
 test.describe('Magic Link Validation', () => {
   test.use({ storageState: { cookies: [], origins: [] } }); // No auth needed
 
-  test('should show error for invalid magic link code', async ({ page }) => {
-    await page.goto('/register?email=test@test.com&code=invalid-hash-code');
+  test('should show error for invalid magic link code', async ({ page, seedGuest, cleanup }) => {
+    // Create a guest with a valid hash so we can test with wrong code
+    const hash = generateMagicLinkHash('invalid-test@test.ceog');
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
-    // Should show error message about invalid link
-    await expect(page.locator('.error, .text-red-500, [role="alert"]').filter({ hasText: /érvénytelen|invalid|lejárt|expired/i })).toBeVisible();
+    const guest = await seedGuest(createGuestWithMagicLink({
+      email: 'invalid-test@test.ceog',
+      magic_link_hash: hash,
+      magic_link_expires_at: expiresAt,
+    }));
+
+    // Go with correct email but wrong code
+    await page.goto(`/register?email=${encodeURIComponent(guest.email)}&code=wrong-invalid-code`);
+
+    // RegisterError shows "Invalid Link" in h2 title (English from component)
+    await expect(page.getByText('Invalid Link')).toBeVisible();
+
+    await cleanup();
   });
 
   test('should show error for expired magic link', async ({ page, seedGuest, cleanup }) => {
@@ -43,17 +56,30 @@ test.describe('Magic Link Validation', () => {
 
     await page.goto(generateValidMagicLinkUrl(guest.email, hash));
 
-    // Should show expiration error
-    await expect(page.locator('.error, .text-red-500, [role="alert"]').filter({ hasText: /lejárt|expired/i })).toBeVisible();
+    // RegisterError shows "Link Expired" in h2 title
+    await expect(page.getByText('Link Expired')).toBeVisible();
 
     await cleanup();
   });
 
-  test('should show request new link option on invalid link', async ({ page }) => {
-    await page.goto('/register?email=test@test.com&code=invalid');
+  test('should show request new link option on invalid link', async ({ page, seedGuest, cleanup }) => {
+    // Create guest to test with
+    const hash = generateMagicLinkHash('resend-test@test.ceog');
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
-    // Should show option to request new link
-    await expect(page.locator('a, button').filter({ hasText: /új link|new link|újraküldés|resend/i })).toBeVisible();
+    const guest = await seedGuest(createGuestWithMagicLink({
+      email: 'resend-test@test.ceog',
+      magic_link_hash: hash,
+      magic_link_expires_at: expiresAt,
+    }));
+
+    // Go with correct email but wrong code to trigger error page
+    await page.goto(`/register?email=${encodeURIComponent(guest.email)}&code=invalid`);
+
+    // RegisterError shows "Request New Link" button
+    await expect(page.getByRole('link', { name: 'Request New Link' })).toBeVisible();
+
+    await cleanup();
   });
 
   test('should navigate to request link page', async ({ page }) => {
@@ -110,11 +136,12 @@ test.describe('VIP Guest Registration', () => {
       magic_link_expires_at: expiresAt,
     }));
 
-    await page.goto(`/register/vip?email=${encodeURIComponent(guest.email)}&code=${hash}`);
+    // Navigate to VIP registration page with guest_id (correct URL format)
+    await page.goto(`/register/vip?guest_id=${guest.id}`);
 
-    // Should show Yes/No buttons for attendance confirmation
-    await expect(page.locator('button').filter({ hasText: /igen|yes|részt veszek|confirm/i })).toBeVisible();
-    await expect(page.locator('button').filter({ hasText: /nem|no|lemondás|decline/i })).toBeVisible();
+    // Should show Yes/No buttons for attendance confirmation (using specific data-testid)
+    await expect(page.locator('[data-testid="confirm-attendance-button"]')).toBeVisible();
+    await expect(page.locator('[data-testid="decline-attendance-button"]')).toBeVisible();
 
     await cleanup();
   });
@@ -129,13 +156,13 @@ test.describe('VIP Guest Registration', () => {
       magic_link_expires_at: expiresAt,
     }));
 
-    await page.goto(`/register/vip?email=${encodeURIComponent(guest.email)}&code=${hash}`);
+    await page.goto(`/register/vip?guest_id=${guest.id}`);
 
-    // Click confirm attendance
-    await page.click('button:has-text("Igen"), button:has-text("Yes"), button:has-text("Részt veszek")');
+    // Click confirm attendance using data-testid
+    await page.click('[data-testid="confirm-attendance-button"]');
 
-    // Should show success/thank you message or profile fields
-    await expect(page.locator('text=/köszönjük|thank you|sikeres|success|profil|profile/i').or(page.locator('form'))).toBeVisible({ timeout: 5000 });
+    // Should show registration form with profile fields
+    await expect(page.locator('form').or(page.locator('text=/Personal Information|Személyes adatok/i'))).toBeVisible({ timeout: 5000 });
 
     await cleanup();
   });
@@ -150,13 +177,13 @@ test.describe('VIP Guest Registration', () => {
       magic_link_expires_at: expiresAt,
     }));
 
-    await page.goto(`/register/vip?email=${encodeURIComponent(guest.email)}&code=${hash}`);
+    await page.goto(`/register/vip?guest_id=${guest.id}`);
 
-    // Click decline
-    await page.click('button:has-text("Nem"), button:has-text("No"), button:has-text("Lemondás"), button:has-text("Decline")');
+    // Click decline using data-testid
+    await page.click('[data-testid="decline-attendance-button"]');
 
     // Should show confirmation of decline or redirect
-    await expect(page).toHaveURL(/declined|cancel/);
+    await expect(page).toHaveURL(/declined/, { timeout: 5000 });
 
     await cleanup();
   });
@@ -171,25 +198,16 @@ test.describe('VIP Guest Registration', () => {
       magic_link_expires_at: expiresAt,
     }));
 
-    await page.goto(`/register/vip?email=${encodeURIComponent(guest.email)}&code=${hash}`);
+    await page.goto(`/register/vip?guest_id=${guest.id}`);
 
-    // Confirm attendance first
-    await page.click('button:has-text("Igen"), button:has-text("Yes"), button:has-text("Részt veszek")');
+    // Confirm attendance first using data-testid
+    await page.click('[data-testid="confirm-attendance-button"]');
 
-    // Wait for profile form or success
-    await page.waitForTimeout(1000);
+    // Wait for profile form to appear - VIPConfirmation shows "Personal Information" heading
+    await expect(page.getByText('Personal Information')).toBeVisible({ timeout: 5000 });
 
-    // If profile form is shown, fill it
-    const profileForm = page.locator('form').filter({ has: page.locator('[name="phone"], [name="dietary_requirements"]') });
-    if (await profileForm.isVisible()) {
-      await fillGuestForm(page, {
-        phone: '+36201234567',
-        dietary_requirements: 'Vegetáriánus',
-        seating_preferences: 'Ablak mellé',
-      });
-
-      await page.click('button[type="submit"]');
-    }
+    // Profile form should be visible with phone field using data-testid
+    await expect(page.locator('[data-testid="phone-input"]')).toBeVisible();
 
     await cleanup();
   });
@@ -199,137 +217,106 @@ test.describe('Paid Guest Registration - Form Only', () => {
   test.use({ storageState: { cookies: [], origins: [] } });
 
   test('should display paid registration page', async ({ page, seedGuest, cleanup }) => {
-    const hash = generateMagicLinkHash('paid-display@test.ceog');
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
-
     const guest = await seedGuest(createPayingSingleGuest({
       email: 'paid-display@test.ceog',
-      magic_link_hash: hash,
-      magic_link_expires_at: expiresAt,
     }));
 
-    await page.goto(`/register/paid?email=${encodeURIComponent(guest.email)}&code=${hash}`);
+    await page.goto(`/register/paid?guest_id=${guest.id}`);
 
-    // Should show billing form
-    await expect(page.locator('form')).toBeVisible();
+    // For paying_single, starts at Step 2 (Profile) - look for profile fields or registration header
+    await expect(page.getByText('Registration').first()).toBeVisible();
+    // Should show step progress indicator
+    await expect(page.getByText(/Personal Information|Billing/)).toBeVisible();
 
     await cleanup();
   });
 
-  test('should show billing form fields', async ({ page, seedGuest, cleanup }) => {
-    const hash = generateMagicLinkHash('paid-billing@test.ceog');
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
-
+  test('should show profile form fields on step 2', async ({ page, seedGuest, cleanup }) => {
     const guest = await seedGuest(createPayingSingleGuest({
       email: 'paid-billing@test.ceog',
-      magic_link_hash: hash,
-      magic_link_expires_at: expiresAt,
     }));
 
-    await page.goto(`/register/paid?email=${encodeURIComponent(guest.email)}&code=${hash}`);
+    await page.goto(`/register/paid?guest_id=${guest.id}`);
 
-    // Check billing form fields exist
-    await expect(page.locator('[name="billing_name"], [data-testid="billing-name-input"]')).toBeVisible();
-    await expect(page.locator('[name="city"], [data-testid="city-input"]')).toBeVisible();
-    await expect(page.locator('[name="postal_code"], [data-testid="postal-code-input"]')).toBeVisible();
+    // paying_single starts at Step 2: Profile - check profile fields first
+    await expect(page.locator('[data-testid="phone-input"]')).toBeVisible();
 
     await cleanup();
   });
 
-  test('should fill and validate billing form', async ({ page, seedGuest, cleanup }) => {
-    const hash = generateMagicLinkHash('paid-validate@test.ceog');
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
-
+  test('should navigate to billing form step', async ({ page, seedGuest, cleanup }) => {
     const guest = await seedGuest(createPayingSingleGuest({
       email: 'paid-validate@test.ceog',
-      magic_link_hash: hash,
-      magic_link_expires_at: expiresAt,
     }));
 
-    await page.goto(`/register/paid?email=${encodeURIComponent(guest.email)}&code=${hash}`);
+    await page.goto(`/register/paid?guest_id=${guest.id}`);
 
-    // Fill billing form
-    await fillBillingForm(page, {
-      billing_name: 'Test Billing Name',
-      company_name: 'Test Company Kft.',
-      tax_number: '12345678-1-42',
-      address_line1: 'Test Street 123',
-      city: 'Budapest',
-      postal_code: '1111',
-    });
+    // First, fill profile step (Step 2) required fields using data-testid
+    await page.locator('[data-testid="phone-input"]').fill('+36201234567');
+    await page.locator('[data-testid="company-input"]').fill('Test Company');
+    await page.locator('[data-testid="position-input"]').fill('CEO');
 
-    // Also fill profile fields if visible
-    await fillGuestForm(page, {
-      phone: '+36201234567',
-    });
+    // Click Next to go to Step 3 (Billing)
+    await page.click('[data-testid="next-button"]');
 
-    // Check GDPR consent
-    const gdprCheckbox = page.locator('[name="gdpr_consent"], [data-testid="gdpr-checkbox"], input[type="checkbox"]').first();
-    if (await gdprCheckbox.isVisible()) {
-      await gdprCheckbox.check();
-    }
-
-    // Check cancellation policy
-    const cancelCheckbox = page.locator('[name="cancellation_accepted"], [data-testid="cancel-checkbox"], input[type="checkbox"]').last();
-    if (await cancelCheckbox.isVisible()) {
-      await cancelCheckbox.check();
-    }
+    // Now billing form should be visible - use getByRole for heading
+    await expect(page.getByRole('heading', { name: 'Billing Information' })).toBeVisible();
+    await expect(page.locator('[data-testid="billing-name-input"]')).toBeVisible();
 
     await cleanup();
   });
 
-  test('should show payment method options', async ({ page, seedGuest, cleanup }) => {
-    const hash = generateMagicLinkHash('paid-methods@test.ceog');
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
-
+  test('should show consent checkboxes on last step', async ({ page, seedGuest, cleanup }) => {
     const guest = await seedGuest(createPayingSingleGuest({
       email: 'paid-methods@test.ceog',
-      magic_link_hash: hash,
-      magic_link_expires_at: expiresAt,
     }));
 
-    await page.goto(`/register/paid?email=${encodeURIComponent(guest.email)}&code=${hash}`);
+    await page.goto(`/register/paid?guest_id=${guest.id}`);
 
-    // Should show payment method selection (card and/or bank transfer)
-    const paymentMethods = page.locator('[name="payment_method"], [data-testid="payment-method"]');
-    await expect(paymentMethods.or(page.locator('text=/bankkártya|card|átutalás|transfer/i'))).toBeVisible();
+    // Step 2: Profile - fill required fields using data-testid
+    await page.locator('[data-testid="phone-input"]').fill('+36201234567');
+    await page.locator('[data-testid="company-input"]').fill('Test Company');
+    await page.locator('[data-testid="position-input"]').fill('CEO');
+    await page.click('[data-testid="next-button"]');
+
+    // Step 3: Billing
+    await page.locator('[data-testid="billing-name-input"]').fill('Test Billing Name');
+    await page.locator('[data-testid="address-line1-input"]').fill('Test Street 123');
+    await page.locator('[data-testid="city-input"]').fill('Budapest');
+    await page.locator('[data-testid="postal-code-input"]').fill('1111');
+    await page.click('[data-testid="next-button"]');
+
+    // Step 4: Consent - should show GDPR and cancellation checkboxes - use getByRole for heading
+    await expect(page.getByRole('heading', { name: 'Consents' })).toBeVisible();
+    await expect(page.locator('[data-testid="gdpr-checkbox"]')).toBeVisible();
+    await expect(page.locator('[data-testid="cancellation-checkbox"]')).toBeVisible();
 
     await cleanup();
   });
 
   test('should display paired ticket option for paying_paired guest', async ({ page, seedGuest, cleanup }) => {
-    const hash = generateMagicLinkHash('paid-paired@test.ceog');
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
-
     const guest = await seedGuest(createPayingPairedGuest({
       email: 'paid-paired@test.ceog',
-      magic_link_hash: hash,
-      magic_link_expires_at: expiresAt,
     }));
 
-    await page.goto(`/register/paid?email=${encodeURIComponent(guest.email)}&code=${hash}`);
+    await page.goto(`/register/paid?guest_id=${guest.id}`);
 
-    // Should show partner fields or ticket type selection
-    await expect(page.locator('[name="partner_name"], [data-testid="partner-name"]').or(page.locator('text=/partner|páros|paired/i'))).toBeVisible();
+    // Should show partner fields for paired ticket guest
+    await expect(page.locator('[name="partnerName"], [name="partner_name"]').or(page.locator('text=/partner/i').first())).toBeVisible();
 
     await cleanup();
   });
 
   test('should fill partner details for paired ticket', async ({ page, seedGuest, cleanup }) => {
-    const hash = generateMagicLinkHash('paid-partner@test.ceog');
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
-
     const guest = await seedGuest(createPayingPairedGuest({
       email: 'paid-partner@test.ceog',
-      magic_link_hash: hash,
-      magic_link_expires_at: expiresAt,
     }));
 
-    await page.goto(`/register/paid?email=${encodeURIComponent(guest.email)}&code=${hash}`);
+    await page.goto(`/register/paid?guest_id=${guest.id}`);
 
     // Fill partner fields if visible
-    const partnerNameField = page.locator('[name="partner_name"], [data-testid="partner-name-input"]');
-    const partnerEmailField = page.locator('[name="partner_email"], [data-testid="partner-email-input"]');
+    const partnerNameField = page.locator('[name="partnerName"], [name="partner_name"]').first();
+    const partnerEmailField = page.locator('[name="partnerEmail"], [name="partner_email"]').first();
 
     if (await partnerNameField.isVisible()) {
       await partnerNameField.fill('Partner Name');
@@ -341,23 +328,18 @@ test.describe('Paid Guest Registration - Form Only', () => {
     await cleanup();
   });
 
-  test('should validate required billing fields', async ({ page, seedGuest, cleanup }) => {
-    const hash = generateMagicLinkHash('paid-required@test.ceog');
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
-
+  test('should validate required profile fields', async ({ page, seedGuest, cleanup }) => {
     const guest = await seedGuest(createPayingSingleGuest({
       email: 'paid-required@test.ceog',
-      magic_link_hash: hash,
-      magic_link_expires_at: expiresAt,
     }));
 
-    await page.goto(`/register/paid?email=${encodeURIComponent(guest.email)}&code=${hash}`);
+    await page.goto(`/register/paid?guest_id=${guest.id}`);
 
-    // Try to submit without filling required fields
-    await page.click('button[type="submit"]');
+    // Try to click Next without filling required profile fields (Step 2)
+    await page.click('[data-testid="next-button"]');
 
-    // Should show validation errors
-    await expect(page.locator('.error, .text-red-500, [aria-invalid="true"]')).toBeVisible();
+    // Should show validation errors for required profile fields - use specific text
+    await expect(page.getByText('Phone number is required')).toBeVisible();
 
     await cleanup();
   });
@@ -398,48 +380,59 @@ test.describe('GDPR and Consent', () => {
   test.use({ storageState: { cookies: [], origins: [] } });
 
   test('should require GDPR consent checkbox', async ({ page, seedGuest, cleanup }) => {
-    const hash = generateMagicLinkHash('gdpr-test@test.ceog');
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
-
     const guest = await seedGuest(createPayingSingleGuest({
       email: 'gdpr-test@test.ceog',
-      magic_link_hash: hash,
-      magic_link_expires_at: expiresAt,
     }));
 
-    await page.goto(`/register/paid?email=${encodeURIComponent(guest.email)}&code=${hash}`);
+    await page.goto(`/register/paid?guest_id=${guest.id}`);
 
-    // Fill required fields but don't check GDPR
-    await fillBillingForm(page, {
-      billing_name: 'Test Name',
-      address_line1: 'Test Street',
-      city: 'Budapest',
-      postal_code: '1111',
-    });
+    // Navigate through multi-step form to consent step
+    // Step 2: Profile - use data-testid selectors
+    await page.locator('[data-testid="phone-input"]').fill('+36201234567');
+    await page.locator('[data-testid="company-input"]').fill('Test Company');
+    await page.locator('[data-testid="position-input"]').fill('CEO');
+    await page.click('[data-testid="next-button"]');
 
+    // Step 3: Billing
+    await page.locator('[data-testid="billing-name-input"]').fill('Test Name');
+    await page.locator('[data-testid="address-line1-input"]').fill('Test Street 123');
+    await page.locator('[data-testid="city-input"]').fill('Budapest');
+    await page.locator('[data-testid="postal-code-input"]').fill('1111');
+    await page.click('[data-testid="next-button"]');
+
+    // Step 4: Consent - Now we can test GDPR requirement
     // Try submit without GDPR consent
-    await page.click('button[type="submit"]');
+    await page.click('[data-testid="submit-button"]');
 
-    // Should show GDPR validation error or prevent submission
-    await expect(page.locator('form')).toBeVisible(); // Still on form
+    // Should show GDPR validation error - use .first() to avoid strict mode
+    await expect(page.getByText('GDPR consent is required')).toBeVisible();
 
     await cleanup();
   });
 
   test('should show cancellation policy terms', async ({ page, seedGuest, cleanup }) => {
-    const hash = generateMagicLinkHash('cancel-terms@test.ceog');
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
-
     const guest = await seedGuest(createPayingSingleGuest({
       email: 'cancel-terms@test.ceog',
-      magic_link_hash: hash,
-      magic_link_expires_at: expiresAt,
     }));
 
-    await page.goto(`/register/paid?email=${encodeURIComponent(guest.email)}&code=${hash}`);
+    await page.goto(`/register/paid?guest_id=${guest.id}`);
 
-    // Should have cancellation policy checkbox or text
-    await expect(page.locator('text=/lemondás|cancellation|feltétel|terms/i')).toBeVisible();
+    // Navigate to consent step
+    // Step 2: Profile - use data-testid selectors
+    await page.locator('[data-testid="phone-input"]').fill('+36201234567');
+    await page.locator('[data-testid="company-input"]').fill('Test Company');
+    await page.locator('[data-testid="position-input"]').fill('CEO');
+    await page.click('[data-testid="next-button"]');
+
+    // Step 3: Billing
+    await page.locator('[data-testid="billing-name-input"]').fill('Test Name');
+    await page.locator('[data-testid="address-line1-input"]').fill('Test Street 123');
+    await page.locator('[data-testid="city-input"]').fill('Budapest');
+    await page.locator('[data-testid="postal-code-input"]').fill('1111');
+    await page.click('[data-testid="next-button"]');
+
+    // Should have cancellation policy checkbox
+    await expect(page.locator('[data-testid="cancellation-checkbox"]')).toBeVisible();
 
     await cleanup();
   });

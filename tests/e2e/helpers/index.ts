@@ -271,6 +271,16 @@ export async function removeGuestFromTable(page: Page, guestName: string) {
 
 export async function loginToPWA(page: Page, authCode: string) {
   await page.goto('/pwa');
+
+  // PWA starts in "select" mode - we need to click "Enter Code" button first
+  // The button contains "Enter Code" or a Key icon
+  const enterCodeBtn = page.locator('button:has-text("Enter Code"), button:has-text("Kód megadása")');
+  if (await enterCodeBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await enterCodeBtn.click();
+  }
+
+  // Now we should see the code input
+  await page.waitForSelector('[name="code"], [data-testid="auth-code-input"]', { state: 'visible' });
   await page.fill('[name="code"], [data-testid="auth-code-input"]', authCode);
   await page.click('button[type="submit"]');
   await page.waitForURL('/pwa/dashboard');

@@ -33,11 +33,12 @@ function formatText(text: string): string {
     // Code blocks: ```...``` → <pre>...</pre>
     .replace(/```\n?([\s\S]*?)```/g, '<pre class="bg-neutral-100 dark:bg-neutral-700 p-3 rounded-lg text-sm font-mono overflow-x-auto my-2 text-neutral-800 dark:text-neutral-200">$1</pre>')
     // Bullet points: • or - at start of line
-    .replace(/^[•\-]\s+(.+)$/gm, '<li class="ml-4 list-disc list-inside">$1</li>')
-    // Numbered lists: 1. 2. etc
-    .replace(/^(\d+)\.\s+(.+)$/gm, '<li class="ml-4 list-decimal list-inside"><span class="font-medium">$1.</span> $2</li>')
-    // Line breaks
-    .replace(/\n\n/g, '</p><p class="mt-3">')
+    .replace(/^[•\-]\s+(.+)$/gm, '<li class="ml-4 list-disc list-inside text-sm leading-relaxed">$1</li>')
+    // Numbered lists: 1. 2. etc - remove the number as CSS will add it
+    .replace(/^(\d+)\.\s+(.+)$/gm, '<li class="ml-4 text-sm leading-relaxed" style="list-style-type: decimal; list-style-position: inside;">$2</li>')
+    // Double line breaks = new paragraph
+    .replace(/\n\n/g, '</p><p class="mt-2">')
+    // Single line breaks
     .replace(/\n/g, '<br/>');
 }
 
@@ -53,6 +54,8 @@ const anchorToCategory: Record<string, string> = {
   'email-templates': 'Email Templates',
   'scheduled-emails': 'Scheduled Emails',
   'payments': 'Payment History',
+  'email-logs': 'Email Logs',
+  'users': 'User Management',
 };
 
 // Category to anchor mapping (reverse)
@@ -68,6 +71,8 @@ const categoryToAnchor: Record<string, string> = {
   'Scheduled Emails': 'scheduled-emails',
   'Payment History': 'payments',
   'Payment Management': 'payments',
+  'Email Logs': 'email-logs',
+  'User Management': 'users',
   'System & Technical': 'system',
 };
 
@@ -82,6 +87,8 @@ const categoryIcons: Record<string, typeof Users> = {
   'Email Templates': EnvelopeSimple,
   'Scheduled Emails': Clock,
   'Statistics': ChartBar,
+  'Email Logs': Envelope,
+  'User Management': ShieldCheck,
   'System & Technical': Gear,
 };
 
@@ -322,9 +329,9 @@ export default function AdminHelpPage() {
                     >
                       <button
                         onClick={() => toggleGuide(guide.id)}
-                        className="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-accent-teal/5 dark:hover:bg-accent-teal/10 transition-colors"
+                        className="w-full px-5 py-4 flex items-center justify-between text-left bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 transition-colors"
                       >
-                        <p className="font-sans font-semibold text-neutral-900 dark:text-white pr-4">
+                        <p className="font-sans font-bold text-neutral-900 dark:text-white pr-4">
                           {guide.question}
                         </p>
                         <div className="flex-shrink-0">

@@ -203,6 +203,8 @@ model EmailLog {
   email_type    String    @db.VarChar(100) // magic_link, ticket_delivery, confirmation
   recipient     String    @db.VarChar(255)
   subject       String    @db.VarChar(500)
+  html_body     String?   @db.LongText     // Full HTML content of the email
+  text_body     String?   @db.Text         // Plain text content of the email
   status        String    @default("sent") @db.VarChar(50) // sent, failed, bounced
   error_message String?   @db.Text
   sent_at       DateTime  @default(now())

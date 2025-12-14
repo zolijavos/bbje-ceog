@@ -7,6 +7,7 @@
 
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { GuestChip } from './GuestChip';
 import { PairedGuestChip } from './PairedGuestChip';
 import type { DraggableGuest as DraggableGuestType } from '../types';
@@ -17,6 +18,7 @@ interface DraggableGuestProps {
 }
 
 export function DraggableGuest({ guest, containerId }: DraggableGuestProps) {
+  const { t } = useLanguage();
   const {
     attributes,
     listeners,
@@ -45,6 +47,8 @@ export function DraggableGuest({ guest, containerId }: DraggableGuestProps) {
         style={style}
         guest={guest}
         isDragging={isDragging}
+        mainGuestLabel={t('mainGuest')}
+        partnerLabel={t('partner')}
         {...attributes}
         {...listeners}
       />

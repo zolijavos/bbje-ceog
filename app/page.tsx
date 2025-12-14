@@ -28,9 +28,9 @@ export default function HomePage() {
           <div className="grid md:grid-cols-2 gap-4">
             <Link
               href="/register/request-link"
-              className="block p-6 bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl border-2 border-amber-200 hover:border-amber-400 transition-all hover:shadow-lg group"
+              className="block h-full p-6 bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl border-2 border-amber-200 hover:border-amber-400 transition-all hover:shadow-lg group"
             >
-              <div className="text-center">
+              <div className="text-center h-full flex flex-col justify-center">
                 <div className="flex justify-center mb-3">
                   <Ticket weight="light" size={40} className="text-amber-600 group-hover:text-amber-700 transition-colors" />
                 </div>
@@ -45,9 +45,9 @@ export default function HomePage() {
 
             <Link
               href="/admin/login"
-              className="block p-6 bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-xl border-2 border-neutral-200 hover:border-neutral-400 transition-all hover:shadow-lg group"
+              className="block h-full p-6 bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-xl border-2 border-neutral-200 hover:border-neutral-400 transition-all hover:shadow-lg group"
             >
-              <div className="text-center">
+              <div className="text-center h-full flex flex-col justify-center">
                 <div className="flex justify-center mb-3">
                   <ShieldCheck weight="light" size={40} className="text-neutral-700 group-hover:text-neutral-800 transition-colors" />
                 </div>

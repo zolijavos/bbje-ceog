@@ -12,18 +12,26 @@ setup('authenticate as admin', async ({ page }) => {
   // Navigate to admin login page
   await page.goto('/admin/login');
 
-  // Wait for the login form to be visible
-  await expect(page.locator('form')).toBeVisible();
+  // Wait for React hydration - the form is inside a Suspense boundary
+  // The spinner disappears when useSearchParams() is resolved
+  await page.waitForSelector('.spinner', { state: 'hidden', timeout: 20000 }).catch(() => {
+    // Spinner might already be hidden
+  });
+
+  // Wait for the email input to be visible and enabled (confirms hydration complete)
+  const emailInput = page.locator('[name="email"], #email');
+  await expect(emailInput).toBeVisible({ timeout: 15000 });
+  await expect(emailInput).toBeEnabled({ timeout: 5000 });
 
   // Fill in credentials (from seed data)
-  await page.fill('[name="email"]', 'admin@ceogala.test');
-  await page.fill('[name="password"]', 'Admin123!');
+  await emailInput.fill('admin@ceogala.test');
+  await page.fill('[name="password"], #password', 'Admin123!');
 
   // Submit the form
   await page.click('button[type="submit"]');
 
   // Wait for successful redirect to admin dashboard
-  await page.waitForURL('/admin**');
+  await page.waitForURL('/admin**', { timeout: 30000 });
 
   // Verify we're logged in
   await expect(page.locator('[data-testid="admin-header"], header, nav').first()).toBeVisible();

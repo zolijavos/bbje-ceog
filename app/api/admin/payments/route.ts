@@ -75,8 +75,11 @@ export async function GET(request: NextRequest) {
                   name: true,
                   email: true,
                   guest_type: true,
+                  phone: true,
+                  company: true,
                 },
               },
+              billing_info: true,
             },
           },
         },
@@ -139,6 +142,7 @@ export async function GET(request: NextRequest) {
       created_at: p.created_at,
       guest: p.registration?.guest || null,
       ticket_type: p.registration?.ticket_type || null,
+      billing_info: p.registration?.billing_info || null,
     }));
 
     return NextResponse.json({

@@ -238,13 +238,13 @@ export default function ScheduledEmailsDashboard() {
       });
 
       if (res.ok) {
-        setMessage({ type: 'success', text: 'Email cancelled' });
+        setMessage({ type: 'success', text: t('emailCancelled') });
         fetchEmails();
       } else {
-        setMessage({ type: 'error', text: 'Failed to cancel email' });
+        setMessage({ type: 'error', text: t('failedToCancelEmail') });
       }
     } catch {
-      setMessage({ type: 'error', text: 'Failed to cancel email' });
+      setMessage({ type: 'error', text: t('failedToCancelEmail') });
     }
   };
 
@@ -387,13 +387,13 @@ export default function ScheduledEmailsDashboard() {
       });
 
       if (res.ok) {
-        setMessage({ type: 'success', text: 'Rule updated' });
+        setMessage({ type: 'success', text: t('ruleUpdated') });
         setShowConfigModal(false);
         setEditingConfig(null);
         fetchConfigs();
       }
     } catch {
-      setMessage({ type: 'error', text: 'Failed to update rule' });
+      setMessage({ type: 'error', text: t('failedToUpdateRule') });
     }
   };
 

@@ -315,19 +315,20 @@ export default function PWADashboardPage() {
           {data.table ? (
             <div className="flex items-center gap-4">
               <div
-                className="w-16 h-16 flex items-center justify-center text-2xl font-bold"
+                className="w-16 h-16 flex items-center justify-center text-2xl font-bold rounded-lg"
                 style={{
                   background: 'var(--color-btn-primary-bg)',
                   color: 'var(--color-btn-primary-text)',
                 }}
               >
-                {data.table.name.replace('Table ', '').replace('VIP-', '')}
+                {/* Extract just the number from table name */}
+                {data.table.name.match(/\d+/)?.[0] || '#'}
               </div>
               <div>
                 <p className="font-medium text-lg pwa-text-primary">{data.table.name}</p>
                 <p className="text-sm pwa-text-secondary">
                   {data.table.table_type === 'vip' ? 'VIP table' : 'Standard table'}
-                  {data.table.seat_number && ` • Seat: ${data.table.seat_number}`}
+                  {data.table.seat_number && ` • Seat ${data.table.seat_number}`}
                 </p>
               </div>
             </div>

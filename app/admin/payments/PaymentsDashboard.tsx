@@ -20,8 +20,28 @@ import {
   CaretLeft,
   CaretRight,
   CalendarBlank,
+  ArrowCounterClockwise,
+  Eye,
+  X,
+  User,
+  Receipt,
+  Buildings,
+  Phone,
+  EnvelopeSimple,
 } from '@phosphor-icons/react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+
+interface BillingInfo {
+  id: number;
+  billing_name: string;
+  company_name: string | null;
+  tax_number: string | null;
+  address_line1: string;
+  address_line2: string | null;
+  city: string;
+  postal_code: string;
+  country: string;
+}
 
 interface Payment {
   id: number;
@@ -39,8 +59,11 @@ interface Payment {
     name: string;
     email: string;
     guest_type: string;
+    phone: string | null;
+    company: string | null;
   } | null;
   ticket_type: string | null;
+  billing_info: BillingInfo | null;
 }
 
 interface Stats {
@@ -67,6 +90,9 @@ export default function PaymentsDashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState(0);
+  const [refunding, setRefunding] = useState<number | null>(null);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
 
   // Filters
   const [status, setStatus] = useState('');
@@ -106,6 +132,42 @@ export default function PaymentsDashboard() {
   useEffect(() => {
     fetchPayments();
   }, [fetchPayments]);
+
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => setMessage(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
+  const handleRefund = async (paymentId: number) => {
+    if (!confirm(t('confirmRefund'))) return;
+
+    setRefunding(paymentId);
+    try {
+      const res = await fetch(`/api/admin/payments/${paymentId}/refund`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setMessage({
+          type: 'success',
+          text: data.stripeRefunded ? t('refundSuccess') : `${t('refundSuccess')} ${t('refundNote')}`
+        });
+        fetchPayments();
+      } else {
+        setMessage({ type: 'error', text: data.error || t('refundFailed') });
+      }
+    } catch {
+      setMessage({ type: 'error', text: t('refundFailed') });
+    } finally {
+      setRefunding(null);
+    }
+  };
 
   const formatCurrency = (amount: number, currency: string = 'HUF') => {
     return new Intl.NumberFormat('hu-HU', {
@@ -222,6 +284,19 @@ export default function PaymentsDashboard() {
 
   return (
     <div className="space-y-6">
+      {/* Message Alert */}
+      {message && (
+        <div
+          className={`p-4 rounded-lg ${
+            message.type === 'success'
+              ? 'bg-green-50 text-green-800 border border-green-200'
+              : 'bg-red-50 text-red-800 border border-red-200'
+          }`}
+        >
+          {message.text}
+        </div>
+      )}
+
       {/* Stats Cards */}
       {stats && (
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -255,7 +330,7 @@ export default function PaymentsDashboard() {
           <div className="bg-white rounded-lg shadow p-4">
             <div className="flex items-center gap-2 text-blue-600 mb-1">
               <CalendarBlank size={20} weight="fill" />
-              <span className="text-sm font-medium">Today</span>
+              <span className="text-sm font-medium">{t('today')}</span>
             </div>
             <p className="text-2xl font-bold text-gray-900">
               {stats.paid_today}
@@ -273,7 +348,7 @@ export default function PaymentsDashboard() {
           <div className="bg-white rounded-lg shadow p-4">
             <div className="flex items-center gap-2 text-teal-600 mb-1">
               <CurrencyDollar size={20} weight="fill" />
-              <span className="text-sm font-medium">Today Revenue</span>
+              <span className="text-sm font-medium">{t('todayRevenue')}</span>
             </div>
             <p className="text-xl font-bold text-gray-900">
               {formatCurrency(stats.revenue_today)}
@@ -286,7 +361,7 @@ export default function PaymentsDashboard() {
       {stats && Object.keys(stats.by_method).length > 0 && (
         <div className="bg-white rounded-lg shadow p-4">
           <h3 className="text-sm font-medium text-gray-700 mb-3">
-            By Payment Method
+            {t('byPaymentMethod')}
           </h3>
           <div className="flex flex-wrap gap-6">
             {Object.entries(stats.by_method).map(([method, data]) => (
@@ -298,7 +373,7 @@ export default function PaymentsDashboard() {
                 )}
                 <div>
                   <p className="text-sm font-medium text-gray-900 capitalize">
-                    {method === 'bank_transfer' ? 'Bank Transfer' : 'Card'}
+                    {method === 'bank_transfer' ? t('bankTransfer') : t('card')}
                   </p>
                   <p className="text-xs text-gray-500">
                     {data.count} payments • {formatCurrency(data.amount)}
@@ -314,7 +389,7 @@ export default function PaymentsDashboard() {
       <div className="bg-white rounded-lg shadow p-4">
         <div className="flex items-center gap-2 mb-4">
           <Funnel size={20} className="text-gray-500" />
-          <span className="font-medium text-gray-700">Filters</span>
+          <span className="font-medium text-gray-700">{t('filters')}</span>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
           <div className="relative">
@@ -410,27 +485,30 @@ export default function PaymentsDashboard() {
                   {t('status')}
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  {t('date')}
+                  {t('paidAt')}
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  {t('date')}
+                  {t('createdAt')}
+                </th>
+                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  {t('actions')}
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {loading ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-8 text-center">
+                  <td colSpan={8} className="px-4 py-8 text-center">
                     <div className="flex items-center justify-center gap-2 text-gray-500">
                       <ArrowClockwise size={20} className="animate-spin" />
-                      Loading...
+                      {t('loading')}
                     </div>
                   </td>
                 </tr>
               ) : payments.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={7}
+                    colSpan={8}
                     className="px-4 py-8 text-center text-gray-500"
                   >
                     {t('noPaymentsFound')}
@@ -450,7 +528,7 @@ export default function PaymentsDashboard() {
                           </div>
                         </div>
                       ) : (
-                        <span className="text-gray-400 italic">Unknown</span>
+                        <span className="text-gray-400 italic">{t('unknown')}</span>
                       )}
                     </td>
                     <td className="px-4 py-3">
@@ -475,6 +553,34 @@ export default function PaymentsDashboard() {
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-600">
                       {formatDate(payment.created_at)}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => setSelectedPayment(payment)}
+                          className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+                          title={t('view')}
+                        >
+                          <Eye size={16} />
+                          {t('view')}
+                        </button>
+                        {payment.payment_status === 'paid' && (
+                          <button
+                            onClick={() => handleRefund(payment.id)}
+                            disabled={refunding === payment.id}
+                            className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors disabled:opacity-50"
+                            title={t('refund')}
+                          >
+                            <ArrowCounterClockwise size={16} className={refunding === payment.id ? 'animate-spin' : ''} />
+                            {t('refund')}
+                          </button>
+                        )}
+                        {payment.payment_status === 'refunded' && (
+                          <span className="text-sm text-gray-400 italic">
+                            {t('alreadyRefunded')}
+                          </span>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -512,6 +618,183 @@ export default function PaymentsDashboard() {
           </div>
         )}
       </div>
+
+      {/* Payment Details Modal */}
+      {selectedPayment && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-neutral-700">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <Receipt size={24} weight="duotone" />
+                {t('paymentDetails')}
+              </h2>
+              <button
+                onClick={() => setSelectedPayment(null)}
+                className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 space-y-6">
+              {/* Payment Info */}
+              <div className="bg-gray-50 dark:bg-neutral-900 rounded-lg p-4">
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3 flex items-center gap-2">
+                  <CurrencyDollar size={18} />
+                  {t('paymentInfo')}
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{t('amount')}</p>
+                    <p className="text-lg font-bold text-gray-900 dark:text-white">
+                      {formatCurrency(selectedPayment.amount, selectedPayment.currency)}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{t('status')}</p>
+                    <div className="mt-1">{getStatusBadge(selectedPayment.payment_status)}</div>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{t('paymentMethod')}</p>
+                    <div className="mt-1">{getMethodBadge(selectedPayment.payment_method)}</div>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{t('ticketType')}</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      {selectedPayment.ticket_type || '-'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{t('paidAt')}</p>
+                    <p className="text-sm text-gray-900 dark:text-white">
+                      {formatDate(selectedPayment.paid_at)}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{t('createdAt')}</p>
+                    <p className="text-sm text-gray-900 dark:text-white">
+                      {formatDate(selectedPayment.created_at)}
+                    </p>
+                  </div>
+                </div>
+                {selectedPayment.stripe_payment_intent_id && (
+                  <div className="mt-4 pt-4 border-t border-gray-200 dark:border-neutral-700">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Stripe Payment Intent</p>
+                    <p className="text-sm font-mono text-gray-700 dark:text-gray-300 break-all">
+                      {selectedPayment.stripe_payment_intent_id}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Guest Info */}
+              {selectedPayment.guest && (
+                <div className="bg-gray-50 dark:bg-neutral-900 rounded-lg p-4">
+                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3 flex items-center gap-2">
+                    <User size={18} />
+                    {t('guestInfo')}
+                  </h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{t('name')}</p>
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                        {selectedPayment.guest.name}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{t('type')}</p>
+                      <div className="mt-1">{getGuestTypeBadge(selectedPayment.guest.guest_type)}</div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <EnvelopeSimple size={14} className="text-gray-400" />
+                      <p className="text-sm text-gray-700 dark:text-gray-300">{selectedPayment.guest.email}</p>
+                    </div>
+                    {selectedPayment.guest.phone && (
+                      <div className="flex items-center gap-2">
+                        <Phone size={14} className="text-gray-400" />
+                        <p className="text-sm text-gray-700 dark:text-gray-300">{selectedPayment.guest.phone}</p>
+                      </div>
+                    )}
+                    {selectedPayment.guest.company && (
+                      <div className="flex items-center gap-2 col-span-2">
+                        <Buildings size={14} className="text-gray-400" />
+                        <p className="text-sm text-gray-700 dark:text-gray-300">{selectedPayment.guest.company}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Billing Info */}
+              {selectedPayment.billing_info && (
+                <div className="bg-gray-50 dark:bg-neutral-900 rounded-lg p-4">
+                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3 flex items-center gap-2">
+                    <Receipt size={18} />
+                    {t('billingInfo')}
+                  </h3>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{t('billingName')}</p>
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                        {selectedPayment.billing_info.billing_name}
+                      </p>
+                    </div>
+                    {selectedPayment.billing_info.company_name && (
+                      <div>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{t('company')}</p>
+                        <p className="text-sm text-gray-700 dark:text-gray-300">
+                          {selectedPayment.billing_info.company_name}
+                        </p>
+                      </div>
+                    )}
+                    {selectedPayment.billing_info.tax_number && (
+                      <div>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{t('taxNumber')}</p>
+                        <p className="text-sm text-gray-700 dark:text-gray-300">
+                          {selectedPayment.billing_info.tax_number}
+                        </p>
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{t('address')}</p>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                        {selectedPayment.billing_info.address_line1}
+                        {selectedPayment.billing_info.address_line2 && <><br />{selectedPayment.billing_info.address_line2}</>}<br />
+                        {selectedPayment.billing_info.postal_code} {selectedPayment.billing_info.city}<br />
+                        {selectedPayment.billing_info.country}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="flex justify-end gap-3 p-6 border-t border-gray-200 dark:border-neutral-700">
+              {selectedPayment.payment_status === 'paid' && (
+                <button
+                  onClick={() => {
+                    handleRefund(selectedPayment.id);
+                    setSelectedPayment(null);
+                  }}
+                  className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors"
+                >
+                  <ArrowCounterClockwise size={18} />
+                  {t('refund')}
+                </button>
+              )}
+              <button
+                onClick={() => setSelectedPayment(null)}
+                className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-neutral-700 hover:bg-gray-200 dark:hover:bg-neutral-600 rounded-lg transition-colors"
+              >
+                {t('close')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

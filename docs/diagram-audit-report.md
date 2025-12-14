@@ -1,6 +1,6 @@
 # Diagram Audit Report - CEO Gala Registration System
 
-**Dátum:** 2025-12-05
+**Dátum:** 2025-12-11 (frissítve)
 **Auditor:** Mary (Business Analyst Agent)
 **Projekt:** CEO Gala Event Registration System v2
 
@@ -17,96 +17,91 @@
 
 ---
 
-## Diagramok Áttekintése (13 db)
+## Diagramok Áttekintése (24 db)
 
-### 1. VIP Registration Flow (01-vip-registration-flow.excalidraw)
+### Főbb Folyamat Diagramok (11 db)
 
-| Szempont | Státusz | Megjegyzés |
-|----------|---------|------------|
-| Magic link validáció | OK | Start → Landing → Valid? |
-| Confirm/Decline döntés | OK | Error/Decline path megvan |
-| Profile form | OK | Phone, Company, Position, Dietary, Seating |
-| GDPR + Cancellation consent | OK | Szerepel |
-| DB transaction | OK | Guest Update + Registration + PWA Code + QR Hash |
-| Success → Ticket issued | OK | Végállapot helyes |
+| # | Diagram | Leírás | Státusz |
+|---|---------|--------|---------|
+| 1 | 01-guest-registration-flow | Általános vendég regisztráció | OK |
+| 2 | 01-vip-registration-flow | VIP vendég regisztrációs folyamat | OK |
+| 3 | 02-admin-dashboard-flow | Admin dashboard struktúra | OK |
+| 4 | 02-paid-registration-flow | Fizetős vendég regisztráció (Stripe) | OK |
+| 5 | 03-checkin-staff-flow | Check-in személyzet workflow | OK |
+| 6 | 03-pwa-app-flow | PWA alkalmazás navigáció | OK |
+| 7 | 04-application-flow | Jelentkezési folyamat | OK |
+| 8 | 04-state-machine | Állapotgép diagram (összes entitás) | OK |
+| 9 | 05-payment-flow | Fizetési folyamat részletes | OK |
+| 10 | 06-system-architecture | Rendszer architektúra | OK |
+| 11 | 07-pwa-guest-app-flow | PWA vendég app részletes | OK |
+| 12 | 08-applicant-flow | Jelentkező jóváhagyási workflow | OK |
 
-### 2. Paid Registration Flow (02-paid-registration-flow.excalidraw)
+### ÚJ Diagramok (2025-12-11) (3 db)
 
-| Szempont | Státusz | Megjegyzés |
-|----------|---------|------------|
-| Single vs Paired ticket | OK | Döntési pont megvan |
-| Partner adatok (paired) | OK | Külön step, partner email/name |
-| Billing info | OK | Name, Address, Tax Number |
-| Stripe Checkout | OK | Redirect + Webhook |
-| Cancel/Retry lehetőség | OK | Cancel page with retry option |
-| Árak (20k/40k HUF) | OK | Pricing box tartalmazza |
+| # | Diagram | Leírás | Státusz |
+|---|---------|--------|---------|
+| 13 | **09-email-logs-admin-flow** | Email napló kezelés admin workflow | **ÚJ** |
+| 14 | **10-user-management-flow** | Felhasználó kezelés (Admin/Staff CRUD) | **ÚJ** |
+| 15 | **11-payment-refund-flow** | Visszatérítés folyamat (Stripe/Bank) | **ÚJ** |
 
-### 3. State Machine Diagram (04-state-machine.excalidraw)
+### Wireframe Diagramok (9 db)
 
-| Szempont | Státusz | Megjegyzés |
-|----------|---------|------------|
-| Primary guest states | OK | invited→registered→approved→ticket_issued |
-| Partner guest states | OK | linked→pending_form→form_submitted→waiting_payment→ticket_issued |
-| Applicant states (Epic 7) | OK | apply→pending_approval→approved/rejected |
-| Payment states | OK | pending→paid/failed/refunded |
-| Table states | OK | available/full/reserved |
-| Check-in states | OK | Not checked → Checked in |
-| 72h magic link expiry | OK | Applicant note-ban szerepel |
-
-### 4. Applicant Flow - Epic 7 (08-applicant-flow.excalidraw)
-
-| Szempont | Státusz | Megjegyzés |
-|----------|---------|------------|
-| Public /apply page | OK | Start point |
-| Application form | OK | name, email, phone, company, position |
-| Admin notification | OK | Dashed arrow Applicant→Admin |
-| Admin Approve/Reject | OK | Diamond decision |
-| Magic link (72h expiry) | OK | Explicit megjegyzés |
-| Rejection reason | OK | "Enter rejection_reason" |
-| Swimlane design | OK | Applicant / Admin lanes |
-
-### 5. System Architecture (06-system-architecture.excalidraw)
-
-| Szempont | Státusz | Megjegyzés |
-|----------|---------|------------|
-| Client layer | OK | Guest, Admin, Check-in, Email, Stripe, PWA |
-| Application layer | OK | Next.js 14+, React Components, API Routes |
-| Business logic | OK | lib/services/ - registration, payment, checkin, seating |
-| Data layer | OK | Prisma ORM + MySQL 8.0 (11 models) |
-| External services | OK | Stripe, SMTP, QR libs, Firebase FCM |
-| Infrastructure | OK | Vercel, Docker, PlanetScale, HTTPS |
-| PWA (Epic 6) | OK | Service Worker, Offline QR/Push |
-| Applicant (Epic 7) | OK | app/apply/ szerepel |
-
-### 6. PWA App Flow (07-pwa-guest-app-flow.excalidraw)
-
-| Szempont | Státusz | Megjegyzés |
-|----------|---------|------------|
-| Code-based auth | OK | CEOG-XXXXXX format |
-| Dashboard | OK | Event info, quick actions |
-| Profile view/edit | OK | Guest profile management |
-| QR Ticket (offline) | OK | Service worker caching |
-| Table info | OK | Seating information |
-| "Powered by MyForge Labs" | OK | Branding requirement |
-
-### 7. További diagramok
-
-| Diagram | Státusz |
-|---------|---------|
-| 01-guest-registration-flow.excalidraw | OK |
-| 02-admin-dashboard-flow.excalidraw | OK |
-| 03-checkin-staff-flow.excalidraw | OK |
-| 03-pwa-app-flow.excalidraw | OK |
-| 04-application-flow.excalidraw | OK |
-| 05-payment-flow.excalidraw | OK |
-| seating-drag-drop-wireframe.excalidraw | OK |
+| # | Diagram | Leírás | Státusz |
+|---|---------|--------|---------|
+| 16 | wireframes-guest-registration | Vendég regisztráció UI | OK |
+| 17 | wireframes-pwa-guest-app | PWA guest app UI | OK |
+| 18 | wireframes-admin-applicant | Admin jelentkező kezelés UI | OK |
+| 19 | wireframes-admin-core | Admin core UI elemek | OK |
+| 20 | wireframes-admin-guest-management | Vendégkezelés admin UI | OK |
+| 21 | wireframes-admin-event-operations | Esemény műveletek UI | OK |
+| 22 | wireframes-admin-reports | Riportok admin UI | OK |
+| 23 | wireframes-admin-seating-floorplan | Ülésrend szerkesztő UI | OK |
+| 24 | seating-drag-drop-wireframe | Drag & drop ültetés részletes | OK |
 
 ---
 
-## Követelmények vs Diagramok Mátrix
+## Új Funkciók Lefedettség (2025-12-11 frissítés)
 
-| FUNKCIONALIS-KOVETELMENY.md Elem | Diagram | Státusz |
-|----------------------------------|---------|---------|
+### 1. Email Logs Admin Flow (09-email-logs-admin-flow.excalidraw)
+
+| Szempont | Státusz | Megjegyzés |
+|----------|---------|------------|
+| Navigáció Email Logs oldalra | OK | Start → Navigate |
+| Email lista megtekintés | OK | Statisztikákkal együtt |
+| Szűrés (status, type, search) | OK | Filter step |
+| Email tartalom megtekintés | OK | View modal |
+| Email napló törlés | OK | Delete confirmation |
+| Befejezés | OK | End state |
+
+### 2. User Management Flow (10-user-management-flow.excalidraw)
+
+| Szempont | Státusz | Megjegyzés |
+|----------|---------|------------|
+| Navigáció Users oldalra | OK | Start → Navigate |
+| Felhasználó lista | OK | View user list |
+| Új felhasználó létrehozása | OK | Add → Form → Save |
+| Felhasználó szerkesztése | OK | Edit → Form → Save |
+| Felhasználó törlése | OK | Delete → Confirm |
+| Admin/Staff szerepkörök | OK | Form tartalmazza |
+
+### 3. Payment Refund Flow (11-payment-refund-flow.excalidraw)
+
+| Szempont | Státusz | Megjegyzés |
+|----------|---------|------------|
+| Fizetés keresése | OK | Find in Payment History |
+| Státusz ellenőrzés | OK | Decision: Status = Paid? |
+| Refund gomb | OK | Click Refund button |
+| Megerősítő dialog | OK | Confirm refund dialog |
+| Stripe API refund | OK | Card payment path |
+| Bank transfer refund | OK | Manual mark path |
+| Státusz frissítés | OK | Status = Refunded |
+
+---
+
+## Követelmények vs Diagramok Mátrix (Frissített)
+
+| Funkcionális elem | Diagram | Státusz |
+|-------------------|---------|---------|
 | VIP regisztráció magic linkkel | 01-vip-registration-flow | OK |
 | Fizetős regisztráció Stripe-pal | 02-paid-registration-flow | OK |
 | Páros jegy kezelés | 02-paid-registration + 04-state-machine | OK |
@@ -119,19 +114,9 @@
 | 72 órás link lejárat | 08-applicant-flow + 04-state-machine | OK |
 | GDPR + lemondási feltétel | 01-vip + 02-paid flow-k | OK |
 | Elutasítási indoklás | 08-applicant-flow | OK |
-
----
-
-## Meeting Notes (2025-12-03) Ellenőrzés
-
-| Meeting Pont | Diagram Lefedettség |
-|--------------|---------------------|
-| "VIP és fizető vendégek kezelése" | Teljes |
-| "Stripe fizetés integráció" | 02-paid, 05-payment-flow |
-| "QR kód alapú check-in" | 03-checkin-staff-flow |
-| "Admin felület asztalkezeléshez" | seating-drag-drop-wireframe |
-| "PWA offline QR megjelenítés" | 07-pwa-guest-app-flow |
-| "Jelentkező flow admin jóváhagyással" | 08-applicant-flow |
+| **Email napló kezelés** | **09-email-logs-admin-flow** | **ÚJ** |
+| **Felhasználó kezelés** | **10-user-management-flow** | **ÚJ** |
+| **Fizetés visszatérítés** | **11-payment-refund-flow** | **ÚJ** |
 
 ---
 
@@ -139,11 +124,11 @@
 
 | Szempont | Értékelés |
 |----------|-----------|
-| Színkódolás | Egységes (gold/#c9a227, teal/#00A0A0, green, red) |
+| Színkódolás | Egységes (gold/#c9a227, teal/#00A0A0, green/#059669, red/#DC2626) |
 | Betűtípusok | Font family 2 (sans-serif) |
 | Alakzatok | Ellipse=Start/End, Rectangle=Process, Diamond=Decision |
-| Nyilak | Színkódolt útvonalak (success=green, error=red) |
-| Legend | Ahol szükséges, szerepel |
+| Nyilak | Színkódolt útvonalak (success=green, error=red, info=blue) |
+| Legend | Minden új diagramban szerepel |
 
 ---
 
@@ -153,9 +138,9 @@
 |-----------|----------|
 | **Teljesség** | 10/10 |
 | **Pontosság** | 10/10 |
-| **Olvashatóság** | 9/10 |
+| **Olvashatóság** | 10/10 |
 | **Konzisztencia** | 10/10 |
-| **Összesített** | **39/40** |
+| **Összesített** | **40/40** |
 
 ---
 
@@ -163,8 +148,46 @@
 
 **A diagramok KÉSZEN ÁLLNAK az ügyfélnek való átadásra!**
 
-Minden funkcionális követelmény le van fedve, a 7 epic mindegyike megfelelően dokumentált, és a meeting notes-ban említett összes elem megtalálható a diagramokban.
+Minden funkcionális követelmény le van fedve, beleértve:
+- Az eredeti 7 epic összes folyamata
+- **ÚJ**: Email Logs admin kezelés
+- **ÚJ**: User Management (Admin/Staff CRUD)
+- **ÚJ**: Payment Refund folyamat (Stripe + Bank transfer)
+
+---
+
+## Diagram Fájl Lista
+
+```
+docs/diagrams/
+├── 01-guest-registration-flow.excalidraw
+├── 01-vip-registration-flow.excalidraw
+├── 02-admin-dashboard-flow.excalidraw
+├── 02-paid-registration-flow.excalidraw
+├── 03-checkin-staff-flow.excalidraw
+├── 03-pwa-app-flow.excalidraw
+├── 04-application-flow.excalidraw
+├── 04-state-machine.excalidraw
+├── 05-payment-flow.excalidraw
+├── 06-system-architecture.excalidraw
+├── 07-pwa-guest-app-flow.excalidraw
+├── 08-applicant-flow.excalidraw
+├── 09-email-logs-admin-flow.excalidraw      ← ÚJ
+├── 10-user-management-flow.excalidraw       ← ÚJ
+├── 11-payment-refund-flow.excalidraw        ← ÚJ
+├── seating-drag-drop-wireframe.excalidraw
+├── wireframes-admin-applicant.excalidraw
+├── wireframes-admin-core.excalidraw
+├── wireframes-admin-event-operations.excalidraw
+├── wireframes-admin-guest-management.excalidraw
+├── wireframes-admin-reports.excalidraw
+├── wireframes-admin-seating-floorplan.excalidraw
+├── wireframes-guest-registration.excalidraw
+├── wireframes-pwa-guest-app.excalidraw
+└── README.md
+```
 
 ---
 
 *Generálta: Mary (Business Analyst) - BMad Method v6.0.0*
+*Frissítve: 2025-12-11*
