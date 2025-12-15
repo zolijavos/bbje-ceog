@@ -1,6 +1,6 @@
 # Diagram Audit Report - CEO Gala Registration System
 
-**Dátum:** 2025-12-11 (frissítve)
+**Dátum:** 2025-12-15 (frissítve)
 **Auditor:** Mary (Business Analyst Agent)
 **Projekt:** CEO Gala Event Registration System v2
 
@@ -189,5 +189,17 @@ docs/diagrams/
 
 ---
 
+## HTML Dashboard-ok
+
+| Fájl | Tartalom | Frissítve |
+|------|----------|-----------|
+| `diagram-dashboard.html` | **24 diagram** (15 flow + 9 wireframe) | 2025-12-15 |
+| `system-overview.html` | 9 fő rendszer diagram | 2025-12-14 |
+| `wireframe-dashboard.html` | 9 wireframe (archivált) | 2025-12-05 |
+
+**Megjegyzés:** A `diagram-dashboard.html` most tartalmazza az összes diagramot kétnyelvű leírásokkal (EN/HU), sötét módban, jegyzet funkcióval és CSV export/import támogatással.
+
+---
+
 *Generálta: Mary (Business Analyst) - BMad Method v6.0.0*
-*Frissítve: 2025-12-11*
+*Frissítve: 2025-12-15*

@@ -14,58 +14,246 @@ const OUTPUT_FILE = path.join(DIAGRAMS_DIR, 'diagram-dashboard.html');
 
 // Diagram metadata with bilingual descriptions
 const DIAGRAM_CONFIG = [
+  // === FLOW DIAGRAMS ===
   {
     file: '01-guest-registration-flow.excalidraw',
     id: 'guest-registration',
     title: { en: 'Guest Registration Flow', hu: 'Vendég Regisztrációs Folyamat' },
+    category: 'flow',
     description: {
-      en: `This diagram illustrates the complete guest registration journey from the moment they receive their magic link invitation to the final ticket issuance. The flow differentiates between VIP guests (complimentary attendance) and paying guests, handling both single and paired ticket scenarios. For paying guests, the system supports both immediate card payment via Stripe and manual bank transfer approval by administrators. Upon successful registration and payment confirmation, the system automatically generates a unique QR code ticket and delivers it via email.`,
-      hu: `Ez a diagram a teljes vendég regisztrációs folyamatot mutatja be a magic link meghívó fogadásától a jegy kiállításáig. A folyamat megkülönbözteti a VIP vendégeket (ingyenes részvétel) és a fizető vendégeket, kezelve az egyéni és páros jegy forgatókönyveket is. Fizető vendégek számára a rendszer támogatja mind az azonnali kártyás fizetést Stripe-on keresztül, mind a banki átutalás adminisztrátor általi manuális jóváhagyását. Sikeres regisztráció és fizetés megerősítése után a rendszer automatikusan generál egy egyedi QR kódos jegyet és e-mailben kézbesíti.`
+      en: `This diagram illustrates the complete guest registration journey from the moment they receive their magic link invitation to the final ticket issuance. The flow differentiates between VIP guests (complimentary attendance) and paying guests, handling both single and paired ticket scenarios.`,
+      hu: `Ez a diagram a teljes vendég regisztrációs folyamatot mutatja be a magic link meghívó fogadásától a jegy kiállításáig. A folyamat megkülönbözteti a VIP vendégeket (ingyenes részvétel) és a fizető vendégeket.`
+    }
+  },
+  {
+    file: '01-vip-registration-flow.excalidraw',
+    id: 'vip-registration',
+    title: { en: 'VIP Registration Flow', hu: 'VIP Regisztrációs Folyamat' },
+    category: 'flow',
+    description: {
+      en: `Detailed VIP guest registration flow - from magic link click through instant ticket generation. VIP guests receive complimentary attendance and skip the payment process entirely.`,
+      hu: `Részletes VIP vendég regisztrációs folyamat - magic link kattintástól az azonnali jegygenerálásig. A VIP vendégek ingyenes részvételt kapnak és kihagyják a fizetési folyamatot.`
     }
   },
   {
     file: '02-admin-dashboard-flow.excalidraw',
     id: 'admin-dashboard',
     title: { en: 'Admin Dashboard Flow', hu: 'Admin Dashboard Folyamat' },
+    category: 'flow',
     description: {
-      en: `This diagram maps the administrator's workflow through the dashboard interface. Administrators authenticate using secure credentials (bcrypt-hashed passwords) and gain access to comprehensive guest management tools. Key capabilities include importing guest lists via CSV, managing individual guest records, manually approving bank transfer payments, configuring seating arrangements through an interactive drag-and-drop interface, and monitoring real-time check-in statistics. The dashboard also provides visibility into email delivery logs for troubleshooting communication issues.`,
-      hu: `Ez a diagram az adminisztrátor munkamenetét mutatja be a dashboard felületen. Az adminisztrátorok biztonságos hitelesítő adatokkal (bcrypt-hashelt jelszavak) jelentkeznek be, és átfogó vendégkezelési eszközökhöz férnek hozzá. A fő funkciók közé tartozik a vendéglista CSV importálása, egyéni vendégadatok kezelése, banki átutalások manuális jóváhagyása, ültetési rend konfigurálása interaktív drag-and-drop felületen, valamint valós idejű check-in statisztikák monitorozása. A dashboard betekintést nyújt az e-mail kézbesítési naplókba is a kommunikációs problémák elhárításához.`
+      en: `Administrator workflow through the dashboard interface. Key capabilities include CSV import, guest management, payment approval, seating arrangements, and check-in statistics monitoring.`,
+      hu: `Az adminisztrátor munkamenete a dashboard felületen. Fő funkciók: CSV importálás, vendégkezelés, fizetés jóváhagyás, ültetési rend és check-in statisztikák.`
+    }
+  },
+  {
+    file: '02-paid-registration-flow.excalidraw',
+    id: 'paid-registration',
+    title: { en: 'Paid Registration Flow', hu: 'Fizetős Regisztrációs Folyamat' },
+    category: 'flow',
+    description: {
+      en: `Complete flow for paying guests including single and paired tickets. Supports Stripe card payment and bank transfer with manual approval. Single: 25,000 HUF, Paired: 45,000 HUF.`,
+      hu: `Teljes folyamat fizető vendégeknek egyéni és páros jegyekkel. Támogatja a Stripe kártyás fizetést és banki átutalást manuális jóváhagyással. Egyéni: 25 000 Ft, Páros: 45 000 Ft.`
     }
   },
   {
     file: '03-checkin-staff-flow.excalidraw',
     id: 'checkin-staff',
     title: { en: 'Check-in Staff Flow', hu: 'Check-in Staff Folyamat' },
+    category: 'flow',
     description: {
-      en: `This diagram details the mobile check-in application workflow used by event staff on the day of the gala. When scanning a guest's QR code, the system validates the JWT token and displays color-coded result cards: green indicates a valid ticket ready for check-in, yellow warns of a duplicate scan (showing original check-in time and staff member), and red signals an invalid or expired code. The system prevents duplicate check-ins through database constraints while providing authorized administrators with override capabilities for exceptional situations.`,
-      hu: `Ez a diagram a mobil check-in alkalmazás munkafolyamatát részletezi, amelyet az esemény személyzete használ a gála napján. A vendég QR kódjának beolvasásakor a rendszer validálja a JWT tokent és színkódolt eredménykártyákat jelenít meg: a zöld érvényes, check-in-re kész jegyet jelöl, a sárga duplikált beolvasásra figyelmeztet (az eredeti check-in időpontját és a személyzet nevét mutatva), a piros pedig érvénytelen vagy lejárt kódot jelez. A rendszer adatbázis megszorításokkal akadályozza meg a duplikált check-in-eket, miközben jogosult adminisztrátoroknak felülbírálási lehetőséget biztosít kivételes helyzetekben.`
+      en: `Mobile check-in application workflow for event staff. QR code scanning with color-coded results: green (valid), yellow (duplicate), red (invalid). Admin override capability included.`,
+      hu: `Mobil check-in alkalmazás munkafolyamata a személyzet számára. QR kód beolvasás színkódolt eredményekkel: zöld (érvényes), sárga (duplikált), piros (érvénytelen).`
+    }
+  },
+  {
+    file: '03-pwa-app-flow.excalidraw',
+    id: 'pwa-app',
+    title: { en: 'PWA App Flow', hu: 'PWA Alkalmazás Folyamat' },
+    category: 'flow',
+    description: {
+      en: `Progressive Web App navigation flow for guests. Features include QR ticket display, profile management, table information, and offline support.`,
+      hu: `Progresszív webalkalmazás navigációs folyamat vendégeknek. Funkciók: QR jegy megjelenítés, profil kezelés, asztalinformáció, offline támogatás.`
+    }
+  },
+  {
+    file: '04-application-flow.excalidraw',
+    id: 'application',
+    title: { en: 'Application Flow', hu: 'Jelentkezési Folyamat' },
+    category: 'flow',
+    description: {
+      en: `Public application flow for non-invited guests. Submit application, admin review, approve/reject decision, magic link generation for approved applicants.`,
+      hu: `Nyilvános jelentkezési folyamat nem meghívott vendégeknek. Jelentkezés beküldés, admin áttekintés, jóváhagyás/elutasítás, magic link generálás.`
     }
   },
   {
     file: '04-state-machine.excalidraw',
     id: 'state-machine',
     title: { en: 'State Machine Diagram', hu: 'Állapotgép Diagram' },
+    category: 'flow',
     description: {
-      en: `This diagram provides a comprehensive view of all entity state transitions within the system. Guest status progresses from invited through registered, awaiting payment, paid, ticket issued, and finally checked in. Partner guests follow a similar but simplified path. Payment states track the transaction lifecycle including pending, processing, completed, failed, and refunded outcomes. Table assignments transition between available, partially filled, and full capacity. This state machine ensures data consistency and enables accurate reporting throughout the event lifecycle.`,
-      hu: `Ez a diagram átfogó képet nyújt a rendszeren belüli összes entitás állapotátmenetéről. A vendég státusza a meghívottól a regisztrálton, fizetésre vár, fizetett, jegy kiállítva állapotokon át halad a bejelentkezett állapotig. A partner vendégek hasonló, de egyszerűsített utat követnek. A fizetési állapotok nyomon követik a tranzakció életciklusát, beleértve a függőben lévő, feldolgozás alatt, befejezett, sikertelen és visszatérített kimeneteleket. Az asztal hozzárendelések az elérhető, részben feltöltött és teli kapacitás között váltanak. Ez az állapotgép biztosítja az adatkonzisztenciát és pontos jelentéskészítést tesz lehetővé az esemény teljes életciklusa során.`
+      en: `Comprehensive view of all entity state transitions. Guest status, payment states, and table assignment transitions throughout the event lifecycle.`,
+      hu: `Átfogó kép az összes entitás állapotátmenetéről. Vendég státusz, fizetési állapotok és asztal hozzárendelések az esemény életciklusa során.`
     }
   },
   {
     file: '05-payment-flow.excalidraw',
     id: 'payment-flow',
     title: { en: 'Payment Flow', hu: 'Fizetési Folyamat' },
+    category: 'flow',
     description: {
-      en: `This diagram outlines the dual payment processing paths available to guests. The primary path utilizes Stripe Checkout Sessions for immediate card payments, with webhook handlers validating transaction signatures and updating guest status in real-time. The secondary path accommodates bank transfers, displaying account details to guests and requiring manual administrator approval once funds are received. Both paths converge at ticket generation, where the system creates JWT-encoded QR codes and triggers automated email delivery. Single tickets are priced at 25,000 HUF while paired tickets cost 45,000 HUF.`,
-      hu: `Ez a diagram a vendégek számára elérhető kettős fizetési feldolgozási útvonalakat vázolja fel. Az elsődleges útvonal Stripe Checkout Session-öket használ azonnali kártyás fizetésekhez, webhook kezelőkkel validálva a tranzakciós aláírásokat és valós időben frissítve a vendég státuszát. A másodlagos útvonal banki átutalásokat kezel, megjelenítve a számlainformációkat a vendégeknek és adminisztrátori manuális jóváhagyást igényelve az összeg beérkezése után. Mindkét útvonal a jegygenerálásnál találkozik, ahol a rendszer JWT-kódolt QR kódokat hoz létre és automatikus e-mail kézbesítést indít. Az egyéni jegyek ára 25 000 Ft, míg a páros jegyek 45 000 Ft-ba kerülnek.`
+      en: `Dual payment processing paths: Stripe Checkout for card payments, bank transfer with manual approval. Both paths converge at JWT QR code ticket generation.`,
+      hu: `Kettős fizetési útvonal: Stripe Checkout kártyás fizetéshez, banki átutalás manuális jóváhagyással. Mindkét útvonal a JWT QR kód jegygenerálásnál találkozik.`
     }
   },
   {
     file: '06-system-architecture.excalidraw',
     id: 'system-architecture',
     title: { en: 'System Architecture', hu: 'Rendszer Architektúra' },
+    category: 'flow',
     description: {
-      en: `This diagram presents the technical architecture across four distinct layers. The client layer comprises the guest-facing registration website, the administrator dashboard (server-side rendered via Next.js), and the progressive web app for mobile check-in. The application layer centers on Next.js 14+ with App Router, exposing REST API endpoints through route handlers and managing data access via Prisma ORM. The data layer utilizes MySQL 8.0 (or PostgreSQL 14+) with eight core tables covering guests, registrations, payments, check-ins, tables, assignments, users, and email logs. External integrations include Stripe for payment processing, SMTP services for email delivery, and JWT for secure QR code generation.`,
-      hu: `Ez a diagram a technikai architektúrát mutatja be négy különálló rétegben. A kliens réteg magában foglalja a vendégoldali regisztrációs weboldalt, az adminisztrátori dashboard-ot (Next.js szerveroldali renderelés), és a progresszív webalkalmazást mobil check-in-hez. Az alkalmazás réteg középpontjában a Next.js 14+ áll App Router-rel, REST API végpontokat szolgáltatva route handler-eken keresztül és Prisma ORM-mel kezelve az adathozzáférést. Az adatréteg MySQL 8.0-t (vagy PostgreSQL 14+-t) használ nyolc alaptáblával: vendégek, regisztrációk, fizetések, check-in-ek, asztalok, hozzárendelések, felhasználók és e-mail naplók. A külső integrációk közé tartozik a Stripe fizetésfeldolgozáshoz, SMTP szolgáltatások e-mail kézbesítéshez, és JWT a biztonságos QR kód generáláshoz.`
+      en: `Technical architecture across four layers: Client (registration, admin, PWA), Application (Next.js 14+, Prisma), Data (MySQL/PostgreSQL), External (Stripe, SMTP, JWT).`,
+      hu: `Technikai architektúra négy rétegben: Kliens (regisztráció, admin, PWA), Alkalmazás (Next.js 14+, Prisma), Adat (MySQL/PostgreSQL), Külső (Stripe, SMTP, JWT).`
+    }
+  },
+  {
+    file: '07-pwa-guest-app-flow.excalidraw',
+    id: 'pwa-guest-app',
+    title: { en: 'PWA Guest App Flow', hu: 'PWA Vendég App Folyamat' },
+    category: 'flow',
+    description: {
+      en: `Detailed PWA guest application flow including authentication, dashboard, ticket display, profile editing, and table information screens.`,
+      hu: `Részletes PWA vendég alkalmazás folyamat: hitelesítés, dashboard, jegy megjelenítés, profil szerkesztés és asztal információ képernyők.`
+    }
+  },
+  {
+    file: '08-applicant-flow.excalidraw',
+    id: 'applicant',
+    title: { en: 'Applicant Flow', hu: 'Jelentkező Folyamat' },
+    category: 'flow',
+    description: {
+      en: `Applicant approval workflow for administrators. Review pending applications, approve with magic link generation, or reject with reason tracking.`,
+      hu: `Jelentkező jóváhagyási munkafolyamat adminisztrátoroknak. Függő jelentkezések áttekintése, jóváhagyás magic link generálással, vagy elutasítás indoklással.`
+    }
+  },
+  {
+    file: '09-email-logs-admin-flow.excalidraw',
+    id: 'email-logs',
+    title: { en: 'Email Logs Admin Flow', hu: 'Email Napló Admin Folyamat' },
+    category: 'flow',
+    description: {
+      en: `Email log management workflow. View email statistics, filter by status/type, view email content details, and manage email delivery logs.`,
+      hu: `Email napló kezelési munkafolyamat. Email statisztikák megtekintése, szűrés státusz/típus szerint, email tartalom részletek és kézbesítési naplók kezelése.`
+    }
+  },
+  {
+    file: '10-user-management-flow.excalidraw',
+    id: 'user-management',
+    title: { en: 'User Management Flow', hu: 'Felhasználó Kezelés Folyamat' },
+    category: 'flow',
+    description: {
+      en: `Admin and staff user management. Create, edit, delete users with role-based access (admin/staff). Password management with bcrypt hashing.`,
+      hu: `Admin és staff felhasználó kezelés. Felhasználók létrehozása, szerkesztése, törlése szerepkör alapú hozzáféréssel (admin/staff). Jelszó kezelés bcrypt hash-eléssel.`
+    }
+  },
+  {
+    file: '11-payment-refund-flow.excalidraw',
+    id: 'payment-refund',
+    title: { en: 'Payment Refund Flow', hu: 'Visszatérítési Folyamat' },
+    category: 'flow',
+    description: {
+      en: `Payment refund workflow for both Stripe and bank transfer payments. Search payment, verify status, process refund via Stripe API or manual bank transfer marking.`,
+      hu: `Visszatérítési munkafolyamat Stripe és banki átutalás fizetésekhez. Fizetés keresés, státusz ellenőrzés, visszatérítés Stripe API-n vagy manuális banki jelöléssel.`
+    }
+  },
+  // === WIREFRAMES ===
+  {
+    file: 'wireframes-guest-registration.excalidraw',
+    id: 'wf-guest-registration',
+    title: { en: 'Guest Registration UI', hu: 'Vendég Regisztráció UI' },
+    category: 'wireframe',
+    description: {
+      en: `UI wireframes for guest registration screens including magic link landing, VIP confirmation, paid registration form, and billing details.`,
+      hu: `UI wireframe-ek vendég regisztrációs képernyőkhöz: magic link landing, VIP megerősítés, fizetős regisztráció form és számlázási adatok.`
+    }
+  },
+  {
+    file: 'wireframes-pwa-guest-app.excalidraw',
+    id: 'wf-pwa-guest-app',
+    title: { en: 'PWA Guest App UI', hu: 'PWA Vendég App UI' },
+    category: 'wireframe',
+    description: {
+      en: `PWA guest application wireframes: login screen, dashboard, QR ticket display, profile view/edit, and table information screens.`,
+      hu: `PWA vendég alkalmazás wireframe-ek: bejelentkezés, dashboard, QR jegy megjelenítés, profil nézet/szerkesztés és asztal információ.`
+    }
+  },
+  {
+    file: 'wireframes-admin-applicant.excalidraw',
+    id: 'wf-admin-applicant',
+    title: { en: 'Admin Applicant UI', hu: 'Admin Jelentkező UI' },
+    category: 'wireframe',
+    description: {
+      en: `Admin interface wireframes for applicant management: pending list, applicant details, approve/reject modals, and rejection reason input.`,
+      hu: `Admin felület wireframe-ek jelentkező kezeléshez: függő lista, jelentkező részletek, jóváhagyás/elutasítás modálok és elutasítási indok.`
+    }
+  },
+  {
+    file: 'wireframes-admin-core.excalidraw',
+    id: 'wf-admin-core',
+    title: { en: 'Admin Core UI', hu: 'Admin Core UI' },
+    category: 'wireframe',
+    description: {
+      en: `Core admin UI elements: login page, navigation sidebar, dashboard overview, and common UI patterns used throughout the admin interface.`,
+      hu: `Core admin UI elemek: bejelentkezési oldal, navigációs oldalsáv, dashboard áttekintés és közös UI minták az admin felületen.`
+    }
+  },
+  {
+    file: 'wireframes-admin-guest-management.excalidraw',
+    id: 'wf-admin-guest-mgmt',
+    title: { en: 'Admin Guest Management UI', hu: 'Admin Vendégkezelés UI' },
+    category: 'wireframe',
+    description: {
+      en: `Guest management wireframes: guest list with filters, guest details modal, CSV import dialog, and bulk action interfaces.`,
+      hu: `Vendégkezelés wireframe-ek: vendéglista szűrőkkel, vendég részletek modál, CSV import dialógus és tömeges műveletek.`
+    }
+  },
+  {
+    file: 'wireframes-admin-event-operations.excalidraw',
+    id: 'wf-admin-event-ops',
+    title: { en: 'Admin Event Operations UI', hu: 'Admin Esemény Műveletek UI' },
+    category: 'wireframe',
+    description: {
+      en: `Event operations wireframes: check-in dashboard, QR scanner interface, check-in log viewer, and real-time statistics display.`,
+      hu: `Esemény műveletek wireframe-ek: check-in dashboard, QR szkenner felület, check-in napló nézet és valós idejű statisztikák.`
+    }
+  },
+  {
+    file: 'wireframes-admin-reports.excalidraw',
+    id: 'wf-admin-reports',
+    title: { en: 'Admin Reports UI', hu: 'Admin Riportok UI' },
+    category: 'wireframe',
+    description: {
+      en: `Reporting wireframes: statistics dashboard, payment reports, check-in analytics, and export functionality interfaces.`,
+      hu: `Riport wireframe-ek: statisztika dashboard, fizetési riportok, check-in analitika és export funkció felületek.`
+    }
+  },
+  {
+    file: 'wireframes-admin-seating-floorplan.excalidraw',
+    id: 'wf-admin-seating',
+    title: { en: 'Admin Seating Floorplan UI', hu: 'Admin Ülésrend Szerkesztő UI' },
+    category: 'wireframe',
+    description: {
+      en: `Seating management wireframes: drag-and-drop floor plan editor, table configuration, guest assignment panel, and seating export options.`,
+      hu: `Ültetési rend wireframe-ek: drag-and-drop alaprajz szerkesztő, asztal konfiguráció, vendég hozzárendelés panel és export opciók.`
+    }
+  },
+  {
+    file: 'seating-drag-drop-wireframe.excalidraw',
+    id: 'wf-seating-dragdrop',
+    title: { en: 'Seating Drag & Drop Detail', hu: 'Ültetés Drag & Drop Részletek' },
+    category: 'wireframe',
+    description: {
+      en: `Detailed drag-and-drop seating interface wireframe. Shows interaction states, table cards, unassigned guest panel, and assignment feedback.`,
+      hu: `Részletes drag-and-drop ültetési felület wireframe. Interakció állapotok, asztal kártyák, hozzárendeletlen vendég panel és visszajelzések.`
     }
   }
 ];
