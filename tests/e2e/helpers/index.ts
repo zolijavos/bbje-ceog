@@ -128,14 +128,44 @@ export async function fillTableForm(page: Page, data: {
   capacity?: number;
   type?: string;
 }) {
+  // Wait for form to be interactive
+  await page.waitForTimeout(500);
+
   if (data.name) {
-    await page.fill('[name="name"], [data-testid="table-name-input"]', data.name);
+    // For React controlled inputs, we need to trigger the React onChange event
+    // Use evaluate to set value and dispatch input event
+    await page.evaluate((name) => {
+      const input = document.querySelector('#name') as HTMLInputElement;
+      if (input) {
+        // Set native value setter to bypass React
+        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+        if (nativeInputValueSetter) {
+          nativeInputValueSetter.call(input, name);
+        }
+        // Dispatch input event to trigger React onChange
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    }, data.name);
   }
   if (data.capacity) {
-    await page.fill('[name="capacity"], [data-testid="capacity-input"]', data.capacity.toString());
+    await page.evaluate((capacity) => {
+      const input = document.querySelector('#capacity') as HTMLInputElement;
+      if (input) {
+        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+        if (nativeInputValueSetter) {
+          nativeInputValueSetter.call(input, capacity);
+        }
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    }, data.capacity.toString());
   }
   if (data.type) {
-    await page.selectOption('[name="type"], [data-testid="table-type-select"]', data.type);
+    const typeMap: Record<string, string> = {
+      'standard': 'standard',
+      'vip': 'vip',
+      'reserved': 'reserved',
+    };
+    await page.locator('#type').selectOption(typeMap[data.type] || data.type);
   }
 }
 

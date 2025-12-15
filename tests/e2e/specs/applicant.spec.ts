@@ -249,7 +249,7 @@ test.describe('Applicant Approval', () => {
     await cleanup();
   });
 
-  test('should set 48-hour expiry for approved applicant magic link', async ({ page, seedGuest, db, cleanup }) => {
+  test('should set 24-hour expiry for approved applicant magic link', async ({ page, seedGuest, db, cleanup }) => {
     const applicant = await seedGuest(createApplicantGuest({
       email: 'expiry-approval@test.ceog',
     }));
@@ -264,11 +264,11 @@ test.describe('Applicant Approval', () => {
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(2000);
 
-    // Verify expiry is approximately 48 hours from now (magic link expiry is 48h)
+    // Verify expiry is approximately 24 hours from now (magic link expiry is 24h)
     const updated = await db.guest.findUnique({ where: { id: applicant.id } });
     if (updated?.magic_link_expires_at) {
       const expiryTime = updated.magic_link_expires_at.getTime();
-      const expectedExpiry = Date.now() + 48 * 60 * 60 * 1000;
+      const expectedExpiry = Date.now() + 24 * 60 * 60 * 1000;
       const tolerance = 5 * 60 * 1000; // 5 minutes tolerance
 
       expect(Math.abs(expiryTime - expectedExpiry)).toBeLessThan(tolerance);

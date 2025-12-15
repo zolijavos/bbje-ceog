@@ -10,46 +10,106 @@ import { generateMagicLinkHash } from '@/lib/auth/magic-link';
 import { getMagicLinkEmailTemplate } from '@/lib/email-templates/magic-link';
 import { getTicketDeliveryEmailTemplate } from '@/lib/email-templates/ticket-delivery';
 import { renderTemplate } from '@/lib/services/email-templates';
-import { generateTicket, getExistingTicket } from '@/lib/services/qr-ticket';
+import { generateTicket, getExistingTicket, tryAcquireTicketLock } from '@/lib/services/qr-ticket';
 import { logError, logInfo } from '@/lib/utils/logger';
 import type { TicketType } from '@prisma/client';
 
-// Singleton Nodemailer transport for connection pooling (thread-safe with Promise)
+// Singleton Nodemailer transport for connection pooling (thread-safe)
 let transporterPromise: Promise<Transporter> | null = null;
+let isInitializing = false;
+
+/**
+ * Validate required SMTP configuration
+ * Throws descriptive error if any required env vars are missing
+ */
+function validateSmtpConfig(): void {
+  const requiredEnvVars = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS'];
+  const missing = requiredEnvVars.filter(key => !process.env[key]);
+
+  if (missing.length > 0) {
+    throw new Error(
+      `Missing SMTP configuration: ${missing.join(', ')}. ` +
+      `Please set these environment variables.`
+    );
+  }
+}
+
+// Maximum time to wait for transporter initialization (10 seconds)
+const TRANSPORTER_INIT_TIMEOUT_MS = 10000;
 
 /**
  * Get or create the singleton Nodemailer transporter (async, thread-safe)
  *
- * Uses Promise-based lazy initialization to prevent race conditions in serverless environments.
+ * Uses mutex-like pattern to prevent race conditions in serverless environments.
+ * Validates SMTP configuration before creating transport.
+ * Includes timeout to prevent infinite wait if initialization hangs.
  */
 async function getTransporter(): Promise<Transporter> {
+  // Return existing transporter if available
   if (transporterPromise) {
     return transporterPromise;
   }
 
-  transporterPromise = Promise.resolve(
-    nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || '587', 10),
-      secure: false, // Use STARTTLS
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    })
-  );
+  // Wait if another request is already initializing (with timeout)
+  if (isInitializing) {
+    const startTime = Date.now();
+    while (isInitializing) {
+      // Timeout protection: prevent infinite loop if initialization hangs
+      if (Date.now() - startTime > TRANSPORTER_INIT_TIMEOUT_MS) {
+        logError('[EMAIL] Transporter initialization timeout - forcing new initialization');
+        isInitializing = false; // Force reset to allow new initialization
+        break;
+      }
+      await new Promise(resolve => setTimeout(resolve, 50));
+    }
+    if (transporterPromise) return transporterPromise;
+  }
 
-  return transporterPromise;
+  // Set initializing flag to prevent concurrent initialization
+  isInitializing = true;
+
+  try {
+    // Validate SMTP config before creating transport
+    validateSmtpConfig();
+
+    transporterPromise = Promise.resolve(
+      nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: parseInt(process.env.SMTP_PORT || '587', 10),
+        secure: false, // Use STARTTLS
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
+        },
+      })
+    );
+
+    return transporterPromise;
+  } finally {
+    isInitializing = false;
+  }
+}
+
+/**
+ * Email attachment interface for CID inline attachments
+ */
+export interface EmailAttachment {
+  filename: string;
+  content: Buffer | string;
+  contentType?: string;
+  cid?: string; // Content-ID for inline images
 }
 
 /**
  * Send email with retry logic (3 attempts with exponential backoff)
+ * Supports CID inline attachments for images
  */
 export async function sendEmail(options: {
   to: string;
   subject: string;
   html: string;
   text?: string;
+  attachments?: EmailAttachment[];
 }): Promise<{ success: boolean; error?: string }> {
   const transport = await getTransporter();
   const maxRetries = 3;
@@ -63,6 +123,7 @@ export async function sendEmail(options: {
         subject: options.subject,
         html: options.html,
         text: options.text,
+        attachments: options.attachments,
       });
       return { success: true };
     } catch (error) {
@@ -83,22 +144,57 @@ export async function sendEmail(options: {
   };
 }
 
+// Rate limit constants
+const RATE_LIMIT_PER_TYPE_PER_HOUR = 5;  // Max 5 emails of same type per hour
+const RATE_LIMIT_GLOBAL_PER_HOUR = 20;   // Max 20 emails total per hour per guest
+
 /**
  * Check rate limit for guest emails
- * Max 5 emails per guest per hour (database-backed via email_logs)
+ *
+ * Enforces two limits:
+ * - Per-type limit: Max 5 emails of the same type per hour (e.g., max 5 magic links)
+ * - Global limit: Max 20 emails total per hour per guest (prevents DoS via multiple types)
+ *
+ * @param guestId - Guest ID to check
+ * @param emailType - Optional email type for per-type limit (if not provided, only global limit applies)
+ * @returns true if within rate limit, false if exceeded
  */
-export async function checkRateLimit(guestId: number): Promise<boolean> {
+export async function checkRateLimit(
+  guestId: number,
+  emailType?: string
+): Promise<boolean> {
   const oneHourAgo = new Date(Date.now() - 3600000);
 
-  const recentEmails = await prisma.emailLog.count({
+  // Check global rate limit (all email types)
+  const globalCount = await prisma.emailLog.count({
     where: {
       guest_id: guestId,
-      email_type: 'magic_link',
       sent_at: { gte: oneHourAgo },
     },
   });
 
-  return recentEmails < 5;
+  if (globalCount >= RATE_LIMIT_GLOBAL_PER_HOUR) {
+    logInfo(`[RATE_LIMIT] Guest ${guestId} exceeded global rate limit (${globalCount}/${RATE_LIMIT_GLOBAL_PER_HOUR})`);
+    return false;
+  }
+
+  // Check per-type rate limit if email type provided
+  if (emailType) {
+    const typeCount = await prisma.emailLog.count({
+      where: {
+        guest_id: guestId,
+        email_type: emailType,
+        sent_at: { gte: oneHourAgo },
+      },
+    });
+
+    if (typeCount >= RATE_LIMIT_PER_TYPE_PER_HOUR) {
+      logInfo(`[RATE_LIMIT] Guest ${guestId} exceeded ${emailType} rate limit (${typeCount}/${RATE_LIMIT_PER_TYPE_PER_HOUR})`);
+      return false;
+    }
+  }
+
+  return true;
 }
 
 /**
@@ -171,12 +267,12 @@ export async function sendMagicLinkEmail(
 
     // 2. Check rate limit (unless bypassed)
     if (!options.bypassRateLimit) {
-      const withinLimit = await checkRateLimit(guestId);
+      const withinLimit = await checkRateLimit(guestId, 'magic_link');
       if (!withinLimit) {
         return {
           success: false,
           guestId,
-          error: 'Rate limit exceeded. Maximum 5 emails per hour.',
+          error: 'Rate limit exceeded. Please try again later.',
         };
       }
     }
@@ -300,12 +396,23 @@ export async function sendBulkMagicLinkEmails(guestIds: number[]): Promise<{
 }
 
 /**
+ * Convert base64 data URL to Buffer for email attachment
+ * @param dataUrl - Data URL like "data:image/png;base64,XXXX..."
+ * @returns Buffer containing the image data
+ */
+function dataUrlToBuffer(dataUrl: string): Buffer {
+  // Extract base64 portion after the comma
+  const base64Data = dataUrl.split(',')[1];
+  return Buffer.from(base64Data, 'base64');
+}
+
+/**
  * Send e-ticket email with QR code to a guest
  *
  * 1. Lookup registration with guest data
  * 2. Generate QR code (or use provided)
- * 3. Compose email with inline QR
- * 4. Send via Nodemailer
+ * 3. Compose email with inline QR using CID attachment
+ * 4. Send via Nodemailer with QR as inline attachment
  * 5. Log delivery attempt
  *
  * @param registrationId - Registration ID to send ticket for
@@ -357,6 +464,10 @@ export async function sendTicketEmail(
     };
     const ticketTypeLabel = ticketTypeLabels[registration.ticket_type] || registration.ticket_type;
 
+    // Use CID reference for inline image instead of data URL
+    const qrCodeCid = 'qrcode@ceogala.hu';
+    const qrCodeCidRef = `cid:${qrCodeCid}`;
+
     let subject: string;
     let html: string;
     let text: string;
@@ -365,7 +476,7 @@ export async function sendTicketEmail(
       const rendered = await renderTemplate('ticket_delivery', {
         guestName: registration.guest.name,
         ticketType: ticketTypeLabel,
-        qrCodeDataUrl: qrCode,
+        qrCodeDataUrl: qrCodeCidRef, // Use CID reference
         partnerName: registration.partner_name || undefined,
       });
       subject = rendered.subject;
@@ -376,7 +487,7 @@ export async function sendTicketEmail(
       const fallback = getTicketDeliveryEmailTemplate({
         guestName: registration.guest.name,
         ticketType: registration.ticket_type,
-        qrCodeDataUrl: qrCode,
+        qrCodeDataUrl: qrCodeCidRef, // Use CID reference
         partnerName: registration.partner_name || undefined,
       });
       subject = fallback.subject;
@@ -384,15 +495,27 @@ export async function sendTicketEmail(
       text = fallback.text;
     }
 
-    // 4. Send email
+    // 4. Prepare QR code as CID inline attachment
+    const qrCodeBuffer = dataUrlToBuffer(qrCode);
+    const attachments: EmailAttachment[] = [
+      {
+        filename: 'qrcode.png',
+        content: qrCodeBuffer,
+        contentType: 'image/png',
+        cid: qrCodeCid, // Content-ID for inline reference
+      },
+    ];
+
+    // 5. Send email with inline attachment
     const result = await sendEmail({
       to: registration.guest.email,
       subject,
       html,
       text,
+      attachments,
     });
 
-    // 5. Log delivery
+    // 6. Log delivery
     await logEmailDelivery({
       guestId,
       recipient: registration.guest.email,
@@ -431,25 +554,38 @@ export async function sendTicketEmail(
  * Generate QR ticket and send email for a registration
  * Combines QR generation (Story 2.3) and email delivery (Story 2.4)
  *
- * IDEMPOTENT: If ticket already exists, returns early without re-sending email.
- * This prevents duplicate emails from Stripe webhook retries.
+ * IDEMPOTENT: Uses atomic lock to prevent duplicate ticket generation.
+ * This prevents duplicate emails from Stripe webhook retries and concurrent requests.
  *
  * @param registrationId - Registration ID
  */
 export async function generateAndSendTicket(registrationId: number): Promise<EmailResult> {
   try {
-    // Check if ticket already exists (idempotency check)
-    const existingTicket = await getExistingTicket(registrationId);
-    if (existingTicket) {
-      logInfo(`[TICKET] Ticket already exists for registration ${registrationId} (idempotent)`);
+    // Atomic idempotency check - try to acquire lock for ticket generation
+    // Uses updateMany with WHERE qr_code_hash IS NULL to prevent TOCTOU race condition
+    const acquired = await tryAcquireTicketLock(registrationId);
+
+    if (!acquired) {
+      // Either ticket already exists or registration not found
+      const existingTicket = await getExistingTicket(registrationId);
+      if (existingTicket) {
+        logInfo(`[TICKET] Ticket already exists for registration ${registrationId} (idempotent)`);
+        return {
+          success: false,
+          guestId: 0,
+          error: 'TICKET_ALREADY_EXISTS',
+        };
+      }
+      // Registration not found
+      logError(`[TICKET] Failed to acquire lock for registration ${registrationId}`);
       return {
         success: false,
         guestId: 0,
-        error: 'TICKET_ALREADY_EXISTS',
+        error: 'REGISTRATION_NOT_FOUND',
       };
     }
 
-    // Generate new QR ticket
+    // We have the lock - now generate the ticket
     const ticket = await generateTicket(registrationId);
 
     // Send email with the QR code

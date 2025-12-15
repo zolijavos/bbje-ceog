@@ -39,10 +39,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Find guest by email
+    // Find guest by email with magic link expiry info for server-side verification
     const guest = await prisma.guest.findUnique({
       where: { email: email.toLowerCase() },
-      select: { id: true, name: true, email: true },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        magic_link_expires_at: true,
+      },
     });
 
     if (!guest) {
@@ -54,9 +59,17 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Send magic link with rate limit bypass if reason is 'expired'
+    // SECURITY FIX: Only bypass rate limit if the link is ACTUALLY expired
+    // Server-side verification prevents clients from faking 'expired' reason
+    const isActuallyExpired = guest.magic_link_expires_at
+      ? new Date() > guest.magic_link_expires_at
+      : false;
+
+    const shouldBypassRateLimit = reason === 'expired' && isActuallyExpired;
+
+    // Send magic link with verified rate limit bypass
     const result = await sendMagicLinkEmail(guest.id, {
-      bypassRateLimit: reason === 'expired',
+      bypassRateLimit: shouldBypassRateLimit,
     });
 
     if (!result.success) {

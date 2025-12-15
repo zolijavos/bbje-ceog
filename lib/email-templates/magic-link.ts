@@ -154,7 +154,7 @@ export function getMagicLinkEmailTemplate(params: MagicLinkEmailParams): {
           <a href="${escapeHtml(magicLinkUrl)}" class="cta-button">Start Registration</a>
         </div>
 
-        <p class="expiry-note">⏰ This link is valid for 5 minutes.</p>
+        <p class="expiry-note">This link is valid for 24 hours.</p>
       </div>
 
       <div class="footer">
@@ -187,7 +187,7 @@ Event details:
 Click the link below to start your registration:
 ${magicLinkUrl}
 
-⏰ This link is valid for 5 minutes.
+This link is valid for 24 hours.
 
 If you have any questions, please contact us.
 

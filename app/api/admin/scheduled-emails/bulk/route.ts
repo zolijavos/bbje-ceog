@@ -12,18 +12,24 @@ import { DEFAULT_TEMPLATES, type TemplateSlug } from '@/lib/services/email-templ
 import { logError, logInfo } from '@/lib/utils/logger';
 import { z } from 'zod';
 
+// Valid enum values for type-safe filtering
+const VALID_GUEST_TYPES = ['vip', 'paying_single', 'paying_paired', 'applicant'] as const;
+const VALID_REGISTRATION_STATUSES = ['invited', 'registered', 'approved', 'declined', 'pending_approval', 'rejected'] as const;
+const VALID_PAYMENT_STATUSES = ['pending', 'paid', 'failed', 'refunded'] as const;
+const MAX_BULK_RECIPIENTS = 1000;
+
 const bulkScheduleSchema = z.object({
-  // Filter options
+  // Filter options - with enum validation to prevent injection
   filter: z.object({
-    guest_types: z.array(z.string()).optional(),
-    registration_statuses: z.array(z.string()).optional(),
+    guest_types: z.array(z.enum(VALID_GUEST_TYPES)).optional(),
+    registration_statuses: z.array(z.enum(VALID_REGISTRATION_STATUSES)).optional(),
     has_ticket: z.boolean().optional(),
     has_table: z.boolean().optional(),
-    payment_status: z.string().optional(),
+    payment_status: z.enum(VALID_PAYMENT_STATUSES).optional(),
   }).optional(),
 
   // Or specific guest IDs
-  guest_ids: z.array(z.number()).optional(),
+  guest_ids: z.array(z.number().int().positive()).optional(),
 
   // Email details
   template_slug: z.string().refine(
@@ -105,6 +111,7 @@ export async function POST(request: NextRequest) {
       guests = await prisma.guest.findMany({
         where,
         select: { id: true, name: true, email: true },
+        take: MAX_BULK_RECIPIENTS + 1, // +1 to detect if limit exceeded
       });
     } else {
       return NextResponse.json(
@@ -116,6 +123,17 @@ export async function POST(request: NextRequest) {
     if (guests.length === 0) {
       return NextResponse.json(
         { error: 'No guests match the criteria' },
+        { status: 400 }
+      );
+    }
+
+    // Prevent unbounded queries - limit recipients per bulk operation
+    if (guests.length > MAX_BULK_RECIPIENTS) {
+      return NextResponse.json(
+        {
+          error: `Too many recipients. Maximum ${MAX_BULK_RECIPIENTS} per bulk operation. ` +
+            `Found ${guests.length}+ matching guests. Please use more specific filters.`,
+        },
         { status: 400 }
       );
     }

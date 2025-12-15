@@ -208,7 +208,7 @@ export const translations = {
 
     // Register error
     linkExpired: 'Link Expired',
-    linkExpiredDesc: 'The invitation link expires after 5 minutes. Request a new link using the button below.',
+    linkExpiredDesc: 'The invitation link expires after 24 hours. Request a new link using the button below.',
     emailNotFound: 'Email Address Not Found',
     emailNotFoundDesc: 'The provided email address is not on the guest list. Please check the email address.',
     noActiveInvitation: 'No Active Invitation',
@@ -679,7 +679,7 @@ export const translations = {
 
     // Register error
     linkExpired: 'Link lejárt',
-    linkExpiredDesc: 'A meghívó link 5 perc után lejár. Kérjen új linket az alábbi gombbal.',
+    linkExpiredDesc: 'A meghívó link 24 óra után lejár. Kérjen új linket az alábbi gombbal.',
     emailNotFound: 'Email cím nem található',
     emailNotFoundDesc: 'A megadott email cím nincs a vendéglistán. Kérjük, ellenőrizze az email címet.',
     noActiveInvitation: 'Nincs aktív meghívó',

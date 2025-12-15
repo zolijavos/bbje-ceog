@@ -5,15 +5,15 @@
 
 import crypto from 'crypto';
 
-// Reduced from 72h to 48h for security - shorter window for link interception
-const MAGIC_LINK_EXPIRY_HOURS = 48;
-const MAGIC_LINK_EXPIRY_MINUTES = MAGIC_LINK_EXPIRY_HOURS * 60; // 48 hours
+// Magic link validity period - 24 hours
+const MAGIC_LINK_EXPIRY_HOURS = 24;
+const MAGIC_LINK_EXPIRY_MINUTES = MAGIC_LINK_EXPIRY_HOURS * 60; // 24 hours
 
 /**
  * Generate a magic link hash and expiry timestamp
  *
  * Algorithm: SHA-256(email + APP_SECRET + timestamp)
- * Expiry: 72 hours from generation
+ * Expiry: 24 hours from generation
  *
  * @param email - Guest email address
  * @returns Object containing hash and expiry date
@@ -114,26 +114,28 @@ export async function validateMagicLink(
     return {
       valid: false,
       errorType: 'expired',
-      error: 'The invitation link has expired (invalid after 48 hours)',
+      error: 'The invitation link has expired (invalid after 24 hours)',
     };
   }
 
   // Compare hash (timing-safe comparison)
-  try {
-    const hashMatch = crypto.timingSafeEqual(
-      Buffer.from(hash),
-      Buffer.from(guest.magic_link_hash)
-    );
+  // SHA-256 hex hash is always 64 characters - check length first to avoid timing side-channel
+  const EXPECTED_HASH_LENGTH = 64;
+  if (hash.length !== EXPECTED_HASH_LENGTH || guest.magic_link_hash.length !== EXPECTED_HASH_LENGTH) {
+    return {
+      valid: false,
+      errorType: 'invalid',
+      error: 'Invalid invitation link',
+    };
+  }
 
-    if (!hashMatch) {
-      return {
-        valid: false,
-        errorType: 'invalid',
-        error: 'Invalid invitation link',
-      };
-    }
-  } catch {
-    // Buffer length mismatch means invalid hash
+  // Now both buffers are guaranteed to be same length for timing-safe comparison
+  const hashMatch = crypto.timingSafeEqual(
+    Buffer.from(hash, 'hex'),
+    Buffer.from(guest.magic_link_hash, 'hex')
+  );
+
+  if (!hashMatch) {
     return {
       valid: false,
       errorType: 'invalid',

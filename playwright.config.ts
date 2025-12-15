@@ -1,4 +1,18 @@
 import { defineConfig, devices } from '@playwright/test';
+import { existsSync, readFileSync } from 'fs';
+import { resolve } from 'path';
+
+// Load .env file for test environment variables (simple parser without dotenv dependency)
+const envPath = resolve(__dirname, '.env');
+if (existsSync(envPath)) {
+  const envContent = readFileSync(envPath, 'utf-8');
+  envContent.split('\n').forEach(line => {
+    const match = line.match(/^([^#=]+)=(.*)$/);
+    if (match && !process.env[match[1]]) {
+      process.env[match[1]] = match[2].trim();
+    }
+  });
+}
 
 /**
  * CEO Gala E2E Test Configuration

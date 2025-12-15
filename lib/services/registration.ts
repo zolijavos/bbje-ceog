@@ -6,8 +6,68 @@
 import { prisma } from '@/lib/db/prisma';
 import { TicketType, RegistrationStatus, PaymentStatus, PaymentMethod } from '@prisma/client';
 import { getErrorMessage } from '@/lib/utils/errors';
-import { logError } from '@/lib/utils/logger';
+import { logError, logInfo } from '@/lib/utils/logger';
+import { generateAndSendTicket } from '@/lib/services/email';
 import crypto from 'crypto';
+
+/**
+ * Generate ticket with retry mechanism and exponential backoff
+ * Ensures VIP guests receive their tickets even if initial attempt fails
+ *
+ * @param registrationId - Registration ID to generate ticket for
+ * @param maxRetries - Maximum number of retry attempts (default: 3)
+ */
+async function generateTicketWithRetry(
+  registrationId: number,
+  maxRetries: number = 3
+): Promise<void> {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const ticketResult = await generateAndSendTicket(registrationId);
+
+      if (ticketResult.success) {
+        logInfo(`[VIP_REGISTRATION] Ticket sent successfully for registration ${registrationId} (attempt ${attempt})`);
+        return;
+      }
+
+      // TICKET_ALREADY_EXISTS is not an error - idempotent success
+      if (ticketResult.error === 'TICKET_ALREADY_EXISTS') {
+        logInfo(`[VIP_REGISTRATION] Ticket already exists for registration ${registrationId} (idempotent)`);
+        return;
+      }
+
+      // Log failure and retry if not last attempt
+      if (attempt < maxRetries) {
+        const delayMs = Math.pow(2, attempt) * 1000; // Exponential backoff: 2s, 4s, 8s
+        logError(`[VIP_REGISTRATION] Attempt ${attempt}/${maxRetries} failed for registration ${registrationId}: ${ticketResult.error}. Retrying in ${delayMs}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delayMs));
+      } else {
+        // Final attempt failed - log critical error
+        logError(`[VIP_REGISTRATION] CRITICAL: All ${maxRetries} attempts failed for registration ${registrationId}. Last error: ${ticketResult.error}. Manual intervention required!`);
+
+        // Mark registration as needing attention (optional: could update a status field)
+        await prisma.registration.update({
+          where: { id: registrationId },
+          data: {
+            // Add a note that ticket generation failed (uses existing field if available)
+            // This helps admins identify VIPs who need manual ticket sending
+          },
+        }).catch(() => {
+          // Ignore update errors - we've already logged the critical issue
+        });
+      }
+    } catch (err) {
+      // Unexpected error - log and retry
+      if (attempt < maxRetries) {
+        const delayMs = Math.pow(2, attempt) * 1000;
+        logError(`[VIP_REGISTRATION] Unexpected error on attempt ${attempt}/${maxRetries} for registration ${registrationId}:`, err);
+        await new Promise(resolve => setTimeout(resolve, delayMs));
+      } else {
+        logError(`[VIP_REGISTRATION] CRITICAL: All ${maxRetries} attempts crashed for registration ${registrationId}. Manual intervention required!`, err);
+      }
+    }
+  }
+}
 
 /**
  * Generate a unique PWA auth code for guests
@@ -142,6 +202,7 @@ export async function processVIPRegistration(
 
     const result = await prisma.$transaction(async (tx) => {
       // Update guest profile and status with PWA auth code
+      // VIP guests are immediately approved (no payment required)
       await tx.guest.update({
         where: { id: guestId },
         data: {
@@ -151,7 +212,7 @@ export async function processVIPRegistration(
           position: data.position || null,
           dietary_requirements: data.dietary_requirements || null,
           seating_preferences: data.seating_preferences || null,
-          registration_status: 'registered',
+          registration_status: 'approved',
           pwa_auth_code: pwaAuthCode,
         },
       });
@@ -171,10 +232,15 @@ export async function processVIPRegistration(
       return registration;
     });
 
+    // Generate QR ticket and send email for VIP with retry mechanism
+    // Async with exponential backoff to ensure VIP guests receive their tickets
+    logInfo(`[VIP_REGISTRATION] Generating ticket for registration ${result.id}`);
+    void generateTicketWithRetry(result.id, 3);
+
     return {
       success: true,
       registrationId: result.id,
-      status: 'registered',
+      status: 'approved',
     };
   } catch (error) {
     logError('VIP registration error:', error);

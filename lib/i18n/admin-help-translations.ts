@@ -215,7 +215,7 @@ The **search box** filters by name or email.`,
 4. Click the **"Send to X recipients"** button
 
 **Important notes**:
-• The magic link is valid for 5 minutes after first click
+• The magic link is valid for 24 hours after first click
 • Multiple links can be sent to a guest (old one becomes invalid)
 • The number of sent emails is visible for each guest`,
     keywords: ['magic link', 'invitation', 'email', 'send'],
@@ -1364,7 +1364,7 @@ User management is the Super Admin's responsibility.`,
 **Data security**:
 • HTTPS encryption for all communication
 • Passwords hashed with bcrypt
-• Magic links expire after 5 minutes
+• Magic links expire after 24 hours
 
 **Payment security**:
 • Stripe handles card data (PCI-DSS compliant)

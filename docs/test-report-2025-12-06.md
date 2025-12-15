@@ -1,5 +1,7 @@
 # CEO Gala E2E Test Report
 
+> **ARCHIVÁLT** - Ez a jelentés elavult (58 teszt). Aktuális státusz: [testing/E2E-TEST-STATUS.md](testing/E2E-TEST-STATUS.md) (222 teszt: 201 passed, 21 skipped)
+
 **Date:** 2025-12-06
 **Test Framework:** Playwright
 **Browser:** Chromium

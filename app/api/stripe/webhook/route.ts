@@ -17,6 +17,8 @@ import {
   confirmPayment,
   cancelPayment,
 } from '@/lib/services/payment';
+import { prisma } from '@/lib/db/prisma';
+import { PaymentStatus } from '@prisma/client';
 import { generateAndSendTicket } from '@/lib/services/email';
 import { logError } from '@/lib/utils/logger';
 import Stripe from 'stripe';
@@ -170,10 +172,32 @@ export async function POST(request: NextRequest) {
         sessionId = paymentIntent.id;
         logWebhookEvent(event.type, sessionId, 'processing');
 
-        // Payment failed - we need to find the session by payment_intent_id
-        // For now, log it as the cancelPayment works by session_id
+        // HIGH-3 FIX: Update payment status in database when payment intent fails
+        // Find payment by stripe_payment_intent_id and mark as failed
         const failureMessage = paymentIntent.last_payment_error?.message || 'Unknown error';
-        logWebhookEvent(event.type, sessionId, 'success', `Payment failed: ${failureMessage}`);
+
+        try {
+          // Try to find and update the payment by payment_intent_id
+          const updatedPayment = await prisma.payment.updateMany({
+            where: {
+              stripe_payment_intent_id: paymentIntent.id,
+              payment_status: PaymentStatus.pending, // Only update if still pending
+            },
+            data: {
+              payment_status: PaymentStatus.failed,
+            },
+          });
+
+          if (updatedPayment.count > 0) {
+            logWebhookEvent(event.type, sessionId, 'success', `Payment marked as failed: ${failureMessage}`);
+          } else {
+            // Payment might not exist yet or already processed
+            logWebhookEvent(event.type, sessionId, 'success', `Payment failed (no pending record found): ${failureMessage}`);
+          }
+        } catch (dbError) {
+          // Log but don't fail the webhook - the payment status will be checked on next attempt
+          logWebhookEvent(event.type, sessionId, 'error', `Failed to update payment status: ${dbError}`);
+        }
         break;
       }
 
@@ -187,18 +211,51 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     logWebhookEvent(eventType, sessionId, 'error', errorMessage);
+    logError('[WEBHOOK] Processing failed:', error);
 
-    // Still return 200 for most errors to prevent infinite retries
-    // Only signature/parsing errors should return 400
-    if (errorMessage === 'PAYMENT_NOT_FOUND') {
-      // Payment not found is acceptable - might be a test event or already processed
-      return NextResponse.json({ received: true, warning: 'Payment not found' });
+    // HIGH-2 FIX: Improved error handling strategy
+    // - Return 200 for idempotent/expected errors (Stripe won't retry)
+    // - Return 500 for transient/critical errors (Stripe will retry)
+
+    // Errors that are safe to acknowledge (won't benefit from retry)
+    const safeErrors = [
+      'PAYMENT_NOT_FOUND',     // Test event or already processed
+      'ALREADY_PAID',         // Idempotent - payment already confirmed
+      'TICKET_ALREADY_EXISTS', // Idempotent - ticket already generated
+    ];
+
+    if (safeErrors.includes(errorMessage)) {
+      return NextResponse.json({
+        received: true,
+        warning: errorMessage,
+      });
     }
 
-    logError('[WEBHOOK] Processing failed:', error);
+    // Transient errors that should trigger Stripe retry
+    const transientErrors = [
+      'ECONNREFUSED',        // Database connection issue
+      'ETIMEDOUT',           // Network timeout
+      'REGISTRATION_NOT_FOUND', // Might be a race condition, retry could help
+    ];
+
+    const isTransient = transientErrors.some(e =>
+      errorMessage.includes(e)
+    );
+
+    if (isTransient) {
+      // Return 500 so Stripe will retry
+      return NextResponse.json(
+        { error: 'Transient error - please retry', details: errorMessage },
+        { status: 500 }
+      );
+    }
+
+    // Unknown errors - log as critical but acknowledge to prevent infinite retries
+    // This is a trade-off: we don't want Stripe hammering us, but we also don't want to lose events
+    logError(`[WEBHOOK] CRITICAL: Unknown error processing ${eventType}. Manual investigation required.`);
     return NextResponse.json(
-      { error: 'Webhook processing failed' },
-      { status: 500 }
+      { received: true, error: 'Processed with error', details: errorMessage },
+      { status: 200 }
     );
   }
 }

@@ -2,17 +2,27 @@
  * Stripe Checkout Session API
  *
  * POST /api/stripe/create-checkout - Create a Stripe Checkout Session
+ *
+ * SECURITY: Rate limited to prevent DoS attacks on Stripe session creation
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createCheckoutSession } from '@/lib/services/payment';
+import { checkRateLimit } from '@/lib/services/rate-limit';
 import { z } from 'zod';
-import { logError } from '@/lib/utils/logger';
+import { logError, logInfo } from '@/lib/utils/logger';
 
 // Request validation schema
 const createCheckoutSchema = z.object({
   registration_id: z.number().int().positive(),
 });
+
+// Rate limit: 5 checkout attempts per registration per 15 minutes
+// Prevents DoS attacks that could create unlimited Stripe sessions
+const CHECKOUT_RATE_LIMIT = {
+  maxAttempts: 5,
+  windowMs: 15 * 60 * 1000, // 15 minutes
+};
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,6 +42,21 @@ export async function POST(request: NextRequest) {
     }
 
     const { registration_id } = validationResult.data;
+
+    // SECURITY: Rate limit per registration to prevent Stripe session DoS
+    const rateLimitKey = `checkout:reg:${registration_id}`;
+    const rateLimitResult = await checkRateLimit(rateLimitKey, CHECKOUT_RATE_LIMIT);
+
+    if (!rateLimitResult.allowed) {
+      logInfo(`[STRIPE-CHECKOUT] Rate limit exceeded for registration ${registration_id}`);
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Túl sok fizetési próbálkozás. Kérjük, várjon néhány percet.',
+        },
+        { status: 429 }
+      );
+    }
 
     // Create checkout session
     const result = await createCheckoutSession(registration_id);

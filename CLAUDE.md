@@ -36,6 +36,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Tailwind CSS** - Utility-first styling
 - **React-Konva** or **React-DnD-Kit** - Interactive drag-and-drop seating maps
 - **html5-qrcode** - Mobile QR scanning
+- **i18n (Internationalization)** - Hungarian (default) & English, Context-based with localStorage persistence
 
 ### Hosting & Infrastructure
 - **Current Production**: Hetzner VPS (46.202.153.178) with PM2 + Nginx
@@ -104,6 +105,7 @@ lib/                      # Business logic & utilities
 ├── services/            # Core business logic
 ├── validations/         # Zod schemas
 ├── utils/               # Helper functions
+├── i18n/                # Internationalization (HU/EN translations)
 └── prisma.ts            # Prisma client singleton
 
 prisma/
@@ -168,6 +170,8 @@ npm run test:unit                           # Vitest unit tests
 npx playwright test                         # E2E tests (Playwright)
 npx playwright test --ui                    # E2E tests with interactive UI
 
+# E2E teszt státusz: docs/testing/E2E-TEST-STATUS.md (201 passed, 21 skipped)
+
 # Code Quality
 npm run lint                                # ESLint
 npx tsc --noEmit                            # TypeScript type checking
@@ -203,15 +207,30 @@ npm start                                   # Start production server
 - `POST /api/admin/table-assignments` - Assign guest to table
 - `GET /api/admin/seating-export` - Export seating arrangement as CSV
 - `GET /api/admin/checkin-log` - Check-in event log with filters
+- `GET /api/admin/applicants` - List pending applicants
+- `POST /api/admin/applicants/{id}/approve` - Approve applicant & send magic link
+- `POST /api/admin/applicants/{id}/reject` - Reject applicant with reason
+
+### Email Management (Admin)
+- `GET /api/admin/scheduled-emails` - List scheduled/sent emails
+- `POST /api/admin/scheduled-emails/bulk` - Bulk email sending (batch processing)
+- `DELETE /api/admin/scheduled-emails/{id}` - Cancel pending scheduled email
+
+### Email Service Features
+- **Retry Logic**: 3 attempts with exponential backoff (1s, 2s, 4s)
+- **Rate Limiting**: 5 per type/hour, 20 total/hour per guest
+- **Delivery Logging**: All emails logged to `EmailLog` table
+- **Template System**: DB templates with variable substitution + hardcoded fallbacks
+- **CID Attachments**: Inline images (QR codes) via Content-ID
 
 ## Security Requirements
 
 ### Authentication Methods
 1. **Magic Link (Guests)**
    - Hash: SHA-256 of `email + APP_SECRET + timestamp`
-   - Expiry: 5 minutes after first click
-   - Single-use only
-   - Rate limit: Max 5 resend requests per hour per email
+   - Expiry: **24 hours** from generation
+   - Single-use only (cleared after successful registration)
+   - Rate limit: Max 5 emails per type per hour, 20 total per hour per guest
 
 2. **Session-Based (Admins)**
    - Password hash: bcrypt with cost=12
@@ -306,7 +325,7 @@ NEXTAUTH_SECRET=generate_random_32_char_string
 ### Epic 7: Applicant Flow ✅
 - Public application form for non-invited guests
 - Admin applicant management (approve/reject)
-- 72-hour magic link expiry
+- 24-hour magic link expiry (all guest types)
 - Rejection reason tracking
 
 ## Guest Registration Flows
@@ -373,6 +392,12 @@ Use BMad workflows for complex tasks:
   - **Communication with user**: Hungarian (Javo prefers Hungarian)
   - **All documentation**: Hungarian (PRD, tech-spec, architecture, etc.)
   - **Code & comments**: English (industry best practice)
+- **i18n (Admin Dashboard)**:
+  - **Languages**: Hungarian (default), English
+  - **Implementation**: React Context (`LanguageContext`) with `useLanguage()` hook
+  - **Persistence**: localStorage key `admin-language`
+  - **Files**: `lib/i18n/translations.ts`, `lib/i18n/LanguageContext.tsx`
+  - **Usage**: `const { t, language, setLanguage } = useLanguage(); t('keyName')`
 - **BMad Method MANDATORY**: Always use BMad agents and workflows - this is critical!
 - **Mobile-First**: Tailwind CSS responsive design, min 44x44px touch targets, WCAG 2.1 AA contrast
 - **Performance**: Target < 2s LCP, < 100ms avg DB query, < 500ms API response (95th percentile)

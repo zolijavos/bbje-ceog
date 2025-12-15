@@ -68,8 +68,9 @@ A következő dokumentumok állnak rendelkezésre és be lettek töltve:
 - **jsonwebtoken** - JWT token creation/validation
 
 **Testing:**
-- **Vitest** VAGY **Jest** - Unit & integration testing
-- **Playwright** - E2E testing (opcionális)
+- **Vitest** - Unit & integration testing
+- **Playwright** - E2E testing (222 teszt: 201 passed, 21 skipped)
+- Részletes státusz: [E2E-TEST-STATUS.md](testing/E2E-TEST-STATUS.md)
 
 **Hosting (ajánlott):**
 - **Vercel** - Next.js hosting (free tier, automatic HTTPS, instant deploys)

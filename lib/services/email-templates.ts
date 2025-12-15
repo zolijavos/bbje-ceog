@@ -59,7 +59,7 @@ export const DEFAULT_TEMPLATES = {
         <div class="cta-container">
           <a href="{{magicLinkUrl}}" class="cta-button">Start Registration</a>
         </div>
-        <p class="expiry-note">This link is valid for 5 minutes.</p>
+        <p class="expiry-note">This link is valid for 24 hours.</p>
       </div>
       <div class="footer">
         <p>If you have any questions, please contact us.</p>
@@ -87,7 +87,7 @@ Event details:
 Click the link below to start your registration:
 {{magicLinkUrl}}
 
-This link is valid for 5 minutes.
+This link is valid for 24 hours.
 
 If you have any questions, please contact us.
 
@@ -127,7 +127,7 @@ CEO Gala Organizing Committee`,
     <div class="card">
       <div class="header">
         <h1>CEO Gala</h1>
-        <span class="success-badge">✓ Application Approved</span>
+        <span class="success-badge">- Application Approved</span>
       </div>
       <div class="content">
         <p class="greeting">Dear {{guestName}},</p>
@@ -266,7 +266,7 @@ CEO Gala Organizing Committee`,
     <div class="card">
       <div class="header">
         <h1>CEO Gala</h1>
-        <span class="reminder-badge">⏰ Payment Reminder</span>
+        <span class="reminder-badge">Payment Reminder</span>
       </div>
       <div class="content">
         <p class="greeting">Dear {{guestName}},</p>
@@ -343,7 +343,7 @@ CEO Gala Organizing Committee`,
     <div class="card">
       <div class="header">
         <h1>CEO Gala</h1>
-        <span class="success-badge">✓ Payment Confirmed</span>
+        <span class="success-badge">- Payment Confirmed</span>
       </div>
       <div class="content">
         <p class="greeting">Dear {{guestName}},</p>
@@ -424,7 +424,7 @@ CEO Gala Organizing Committee`,
     <div class="card">
       <div class="header">
         <h1>CEO Gala</h1>
-        <span class="table-badge">🪑 Table Assignment</span>
+        <span class="table-badge">Table Assignment</span>
       </div>
       <div class="content">
         <p class="greeting">Dear {{guestName}},</p>
@@ -504,18 +504,18 @@ CEO Gala Organizing Committee`,
     <div class="card">
       <div class="header">
         <h1>CEO Gala</h1>
-        <span class="reminder-badge">🎉 Tomorrow!</span>
+        <span class="reminder-badge">Tomorrow!</span>
       </div>
       <div class="content">
         <p class="greeting">Dear {{guestName}},</p>
         <p>We're excited to remind you that CEO Gala 2026 is <strong>tomorrow</strong>!</p>
         <div class="event-details">
           <h3>Event Details</h3>
-          <p>📅 <strong>Date:</strong> {{eventDate}}</p>
-          <p>🕕 <strong>Time:</strong> {{eventTime}}</p>
-          <p>📍 <strong>Venue:</strong> {{eventVenue}}</p>
-          {{#if eventAddress}}<p>🗺️ <strong>Address:</strong> {{eventAddress}}</p>{{/if}}
-          {{#if tableName}}<p>🪑 <strong>Your Table:</strong> {{tableName}}</p>{{/if}}
+          <p><strong>Date:</strong> {{eventDate}}</p>
+          <p><strong>Time:</strong> {{eventTime}}</p>
+          <p><strong>Venue:</strong> {{eventVenue}}</p>
+          {{#if eventAddress}}<p><strong>Address:</strong> {{eventAddress}}</p>{{/if}}
+          {{#if tableName}}<p><strong>Your Table:</strong> {{tableName}}</p>{{/if}}
         </div>
         <div class="checklist">
           <h4>Before You Arrive</h4>

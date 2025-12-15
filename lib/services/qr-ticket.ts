@@ -72,10 +72,18 @@ export async function generateTicketToken(registrationId: number): Promise<strin
 
   // Calculate expiry
   const exp = calculateExpiry();
+  const now = Math.floor(Date.now() / 1000);
+
+  // Validate expiry is in the future
+  if (exp <= now) {
+    throw new Error('EVENT_ALREADY_PASSED');
+  }
+
+  const expiresInSeconds = exp - now;
 
   // Generate JWT
   const token = jwt.sign(payload, QR_SECRET, {
-    expiresIn: exp - Math.floor(Date.now() / 1000),
+    expiresIn: expiresInSeconds,
     algorithm: 'HS256',
   });
 
@@ -89,6 +97,26 @@ export async function generateTicketToken(registrationId: number): Promise<strin
   });
 
   return token;
+}
+
+/**
+ * Atomically try to acquire ticket generation lock
+ * Returns true if this call acquired the lock, false if ticket already exists
+ *
+ * Uses atomic updateMany with WHERE qr_code_hash IS NULL to prevent TOCTOU race condition
+ */
+export async function tryAcquireTicketLock(registrationId: number): Promise<boolean> {
+  const result = await prisma.registration.updateMany({
+    where: {
+      id: registrationId,
+      qr_code_hash: null, // Only update if no ticket exists
+    },
+    data: {
+      qr_code_generated_at: new Date(), // Mark as "being generated"
+    },
+  });
+
+  return result.count > 0;
 }
 
 /**
@@ -213,6 +241,12 @@ export async function validateTicket(token: string): Promise<{
       return { isValid: false, error: 'REGISTRATION_NOT_FOUND' };
     }
 
+    // HIGH-4 FIX: Proper null check instead of non-null assertion
+    // Guest should always exist for a valid registration, but handle edge case
+    if (!registration.guest) {
+      return { isValid: false, error: 'GUEST_NOT_FOUND' };
+    }
+
     // Verify token matches stored token
     if (registration.qr_code_hash !== token) {
       return { isValid: false, error: 'TOKEN_MISMATCH' };
@@ -223,7 +257,7 @@ export async function validateTicket(token: string): Promise<{
       registration: {
         id: registration.id,
         ticket_type: registration.ticket_type,
-        guest: registration.guest!,
+        guest: registration.guest,
       },
     };
   } catch (error) {

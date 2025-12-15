@@ -41,8 +41,8 @@ test.describe('Scheduled Emails List', () => {
     // WHEN: On scheduled emails page
     await page.goto('/admin/scheduled-emails');
 
-    // THEN: Scheduled time column is visible
-    await expect(page.locator('th, [role="columnheader"]').filter({ hasText: /idő|time|ütemezés|scheduled/i })).toBeVisible();
+    // THEN: Scheduled time column is visible (Hungarian: "Ütemezve")
+    await expect(page.locator('th, [role="columnheader"]').filter({ hasText: /ütemezve|idő|time|ütemezés|scheduled/i })).toBeVisible();
   });
 });
 
@@ -51,59 +51,51 @@ test.describe('Create Scheduled Email', () => {
     // GIVEN: On scheduled emails page
     await page.goto('/admin/scheduled-emails');
 
-    // WHEN: Clicking create button
-    const createButton = page.locator('button').filter({ hasText: /új|new|létrehozás|create|schedule/i });
-    if (await createButton.isVisible()) {
-      await createButton.click();
+    // WHEN: Clicking "Schedule New" button/tab
+    const createButton = page.locator('button:has-text("Schedule New"), button:has-text("új"), button:has-text("létrehozás")');
+    await expect(createButton.first()).toBeVisible();
+    await createButton.first().click();
 
-      // THEN: Form opens
-      await waitForModalOpen(page);
-      await expect(page.locator('form')).toBeVisible();
-    }
+    // THEN: Form or new view opens (this is a tab, not a modal)
+    await page.waitForTimeout(500);
+    // Should show form elements after clicking
+    await expect(page.locator('form, select, input[type="datetime-local"]').first()).toBeVisible();
   });
 
   test('[P2] should have template selection', async ({ page }) => {
     // GIVEN: Create form is open
     await page.goto('/admin/scheduled-emails');
 
-    const createButton = page.locator('button').filter({ hasText: /új|new|létrehozás|create|schedule/i });
-    if (await createButton.isVisible()) {
-      await createButton.click();
-      await waitForModalOpen(page);
+    const createButton = page.locator('button:has-text("Schedule New"), button:has-text("új")');
+    await createButton.first().click();
+    await page.waitForTimeout(500);
 
-      // THEN: Template selector is available
-      await expect(page.locator('select, [data-testid="template-select"]').filter({ has: page.locator('option') })).toBeVisible();
-    }
+    // THEN: Template selector is available (select with options)
+    await expect(page.locator('select').first()).toBeVisible();
   });
 
   test('[P2] should have recipient selection', async ({ page }) => {
     // GIVEN: Create form is open
     await page.goto('/admin/scheduled-emails');
 
-    const createButton = page.locator('button').filter({ hasText: /új|new|létrehozás|create|schedule/i });
-    if (await createButton.isVisible()) {
-      await createButton.click();
-      await waitForModalOpen(page);
+    const createButton = page.locator('button:has-text("Schedule New"), button:has-text("új")');
+    await createButton.first().click();
+    await page.waitForTimeout(500);
 
-      // THEN: Recipient selection is available
-      await expect(page.locator('select, [data-testid="recipient-filter"]').or(
-        page.locator('text=/címzett|recipient|guest_type/i')
-      )).toBeVisible();
-    }
+    // THEN: Recipient/guest type selection is available
+    await expect(page.locator('select, label:has-text("guest_type"), label:has-text("címzett")').first()).toBeVisible();
   });
 
   test('[P2] should have datetime picker', async ({ page }) => {
     // GIVEN: Create form is open
     await page.goto('/admin/scheduled-emails');
 
-    const createButton = page.locator('button').filter({ hasText: /új|new|létrehozás|create|schedule/i });
-    if (await createButton.isVisible()) {
-      await createButton.click();
-      await waitForModalOpen(page);
+    const createButton = page.locator('button:has-text("Schedule New"), button:has-text("új")');
+    await createButton.first().click();
+    await page.waitForTimeout(500);
 
-      // THEN: DateTime picker is available
-      await expect(page.locator('input[type="datetime-local"], [data-testid="schedule-time"]')).toBeVisible();
-    }
+    // THEN: DateTime picker is available
+    await expect(page.locator('input[type="datetime-local"], input[type="date"]').first()).toBeVisible();
   });
 });
 
@@ -113,8 +105,8 @@ test.describe('Cancel Scheduled Email', () => {
     await page.goto('/admin/scheduled-emails');
     await waitForTableLoad(page).catch(() => {});
 
-    // THEN: Cancel button should be available for pending items
-    const cancelButton = page.locator('button').filter({ hasText: /törlés|cancel|visszavon/i }).first();
+    // THEN: Cancel button should be available for pending items (Hungarian: "Mégse")
+    const cancelButton = page.locator('button:has-text("Mégse"), button:has-text("törlés"), button:has-text("cancel")').first();
     // May or may not be visible depending on data
     if (await cancelButton.isVisible()) {
       await expect(cancelButton).toBeEnabled();
@@ -127,27 +119,26 @@ test.describe('Email Logs View', () => {
     // WHEN: On scheduled emails page or navigating to logs
     await page.goto('/admin/scheduled-emails');
 
-    // THEN: Logs tab or link should be available
-    const logsLink = page.locator('a, button').filter({ hasText: /log|napló|history|előzmény/i });
-    if (await logsLink.isVisible()) {
-      await logsLink.click();
+    // THEN: Logs tab or link should be available (Hungarian: "Email napló")
+    const logsLink = page.locator('button:has-text("Email napló"), button:has-text("napló"), a:has-text("log")');
+    await expect(logsLink.first()).toBeVisible();
+    await logsLink.first().click();
+    await page.waitForTimeout(500);
 
-      // AND: Logs table should be visible
-      await expect(page.locator('table')).toBeVisible();
-    }
+    // AND: Logs table should be visible
+    await expect(page.locator('table')).toBeVisible();
   });
 
   test('[P3] should show email delivery status in logs', async ({ page }) => {
     // WHEN: On email logs page
     await page.goto('/admin/scheduled-emails');
 
-    const logsLink = page.locator('a, button').filter({ hasText: /log|napló|history|előzmény/i });
-    if (await logsLink.isVisible()) {
-      await logsLink.click();
+    const logsLink = page.locator('button:has-text("Email napló"), button:has-text("napló")');
+    await logsLink.first().click();
+    await page.waitForTimeout(500);
 
-      // THEN: Delivery status column is visible
-      await expect(page.locator('th, [role="columnheader"]').filter({ hasText: /státusz|status|delivered|sent/i })).toBeVisible();
-    }
+    // THEN: Status column is visible
+    await expect(page.locator('th, [role="columnheader"]').filter({ hasText: /státusz|status|delivered|sent/i })).toBeVisible();
   });
 });
 

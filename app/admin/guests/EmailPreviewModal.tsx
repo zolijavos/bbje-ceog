@@ -32,7 +32,7 @@ Event details:
 Click the link below to start your registration:
 {magicLinkUrl}
 
-⏰ This link is valid for 5 minutes.
+This link is valid for 24 hours.
 
 If you have any questions, please contact us.
 
@@ -191,7 +191,7 @@ export default function EmailPreviewModal({
                 <div className="ml-3">
                   <p className="text-sm text-amber-700">
                     <strong>Megjegyzés:</strong> A magic link URL automatikusan generálódik minden vendéghez egyedileg.
-                    A link 5 percig érvényes. A küldés után a rendszer logolja az email küldést.
+                    A link 24 óráig érvényes. A küldés után a rendszer logolja az email küldést.
                   </p>
                 </div>
               </div>

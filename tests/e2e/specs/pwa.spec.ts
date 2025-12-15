@@ -509,10 +509,21 @@ test.describe('PWA Manifest and Service Worker', () => {
     await expect(manifestLink).toHaveCount(1);
   });
 
-  test('should load service worker', async ({ page }) => {
+  test('should load service worker', async ({ page, baseURL }) => {
     await page.goto('/pwa');
 
-    // Check if service worker is registered
+    // Service workers only work on HTTPS or localhost
+    // Skip actual registration check on HTTP (non-localhost)
+    const isSecureContext = baseURL?.startsWith('https://') || baseURL?.includes('localhost');
+
+    if (!isSecureContext) {
+      // On HTTP, just verify the service worker file exists
+      const swResponse = await page.request.get('/sw.js');
+      expect(swResponse.ok()).toBe(true);
+      return;
+    }
+
+    // Check if service worker is registered (only on HTTPS/localhost)
     const swRegistered = await page.evaluate(async () => {
       if ('serviceWorker' in navigator) {
         const registration = await navigator.serviceWorker.getRegistration();
