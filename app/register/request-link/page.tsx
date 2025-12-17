@@ -5,7 +5,10 @@
  * Story 1.5: Magic Link Validation & Registration Landing
  */
 
+import Link from 'next/link';
+import { Envelope } from '@phosphor-icons/react/dist/ssr';
 import RequestLinkForm from './RequestLinkForm';
+import RequestLinkWrapper from './RequestLinkWrapper';
 
 interface RequestLinkPageProps {
   searchParams: Promise<{
@@ -21,65 +24,70 @@ export default async function RequestLinkPage({
   const { email, reason } = params;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex items-center justify-center p-4">
+    <RequestLinkWrapper>
       <div className="max-w-md w-full">
-        {/* Logo/Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">CEO Gala 2026</h1>
-          <p className="text-gray-500 mt-2">Request New Invitation Link</p>
+        {/* Header */}
+        <div className="text-center mb-10">
+          <Link href="/" className="inline-block hover:opacity-80 transition-opacity">
+            <h1 className="font-display text-4xl md:text-5xl font-bold landing-text-heading tracking-tight mb-3">
+              CEO Gala
+            </h1>
+          </Link>
+          <p className="text-accent-teal dark:text-teal-400 uppercase tracking-widest text-sm font-sans">
+            Request Registration Link
+          </p>
         </div>
 
         {/* Request Form Card */}
-        <div className="bg-white shadow-lg rounded-xl p-8">
+        <div className="landing-card shadow-2xl rounded-2xl p-8 border">
           {/* Icon */}
           <div className="flex justify-center mb-6">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-              <svg
-                className="w-10 h-10 text-blue-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                />
-              </svg>
+            <div className="w-16 h-16 landing-icon-teal rounded-full flex items-center justify-center">
+              <Envelope weight="duotone" size={32} className="text-accent-teal dark:text-teal-400" />
             </div>
           </div>
 
           {/* Title */}
-          <h2 className="text-2xl font-bold text-center text-gray-900 mb-2">
-            Új link kérése
+          <h2 className="font-display text-2xl font-semibold text-center landing-text-heading mb-2">
+            Request New Link
           </h2>
 
           {/* Description */}
-          <p className="text-center text-gray-600 mb-6">
+          <p className="text-center landing-text-secondary font-sans mb-6">
             {reason === 'expired'
-              ? 'Az előző link lejárt. Adja meg email címét az új link küldéséhez.'
-              : 'Adja meg email címét, és küldünk egy új meghívó linket.'}
+              ? 'Your previous link has expired. Enter your email to receive a new one.'
+              : 'Enter your email address and we\'ll send you a new invitation link.'}
           </p>
 
           {/* Form */}
           <RequestLinkForm
             defaultEmail={email}
-            bypassRateLimit={reason === 'expired'}
+            reason={reason === 'expired' ? 'expired' : undefined}
           />
         </div>
 
         {/* Footer */}
-        <p className="text-center text-sm text-gray-500 mt-6">
-          Kérdés esetén:{' '}
+        <p className="text-center text-sm landing-footer font-sans mt-6">
+          <Link
+            href="/help"
+            className="text-accent-teal dark:text-teal-400 hover:underline"
+          >
+            Segítségre van szüksége?
+          </Link>
+        </p>
+        <p className="text-center text-sm landing-footer font-sans mt-2">
+          Questions?{' '}
           <a
             href="mailto:info@ceogala.hu"
-            className="text-blue-600 hover:underline"
+            className="text-accent-teal dark:text-teal-400 hover:underline"
           >
             info@ceogala.hu
           </a>
         </p>
+        <p className="text-center text-sm landing-footer font-sans mt-4">
+          © 2026 CEO Gala • Executive Excellence
+        </p>
       </div>
-    </div>
+    </RequestLinkWrapper>
   );
 }
