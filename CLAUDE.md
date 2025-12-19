@@ -359,6 +359,39 @@ Mobile check-in app displays:
 
 Duplicate check-in prevention: UNIQUE constraint on `checkins.registration_id`
 
+## Admin vs Staff Role Access
+
+### Role-Based Permission Matrix
+| Feature | Admin | Staff |
+|---------|-------|-------|
+| Guest List & CRUD | ✅ Full access | ❌ No access |
+| CSV Import | ✅ Bulk import | ❌ No access |
+| Applicant Approval | ✅ Approve/Reject | ❌ No access |
+| Payment Management | ✅ Manual approval | ❌ No access |
+| Table Management | ✅ CRUD + assign | ❌ No access |
+| Seating Map | ✅ Drag-and-drop | ❌ No access |
+| Email Sending | ✅ Bulk email | ❌ No access |
+| Check-in Log | ✅ View + export | ❌ No access |
+| QR Scanner | ✅ With override | ✅ Basic only |
+| Admin Override | ✅ Allow duplicate | ❌ Cannot override |
+
+### Navigation Structure
+- **Desktop Admin (AdminHeader.tsx)**: Full dropdown menu (Dashboard, Guests, Event, Comms, System)
+- **Mobile Admin (MobileTabBar.tsx)**: 5 primary tabs (Guests, Tables, Email, Check-in, Applicants)
+- **Staff View**: Only QR Scanner (`/checkin`) + Check-in Log
+
+### Staff Login Behavior
+```typescript
+// Staff users auto-redirect to /checkin
+if (session.user.role === 'staff') {
+  redirect('/checkin');
+}
+```
+
+### Check-in Override
+- **Admin**: Can override duplicate check-in (yellow card → "Admin Override" button)
+- **Staff**: Cannot override; must call admin for duplicates
+
 ## Important Context
 
 ### Primary Documentation
@@ -405,6 +438,35 @@ Use BMad workflows for complex tasks:
 - **Seating Map**: React-Konva canvas with drag-and-drop
 - **UI Icons**: Phosphor Icons (consistent across admin & PWA)
 - **PWA**: Service Worker + Web Push (Firebase FCM)
+
+## Recent UI/UX Improvements
+
+### MobileFooter Component
+- **Location**: `app/components/MobileFooter.tsx`
+- **Purpose**: Fixed footer on all mobile views with "Built By MyForge Labs" branding
+- **Features**: Semi-transparent with backdrop blur, configurable z-index for stacking
+- **Usage**:
+  ```tsx
+  <MobileFooter bottomOffset="3.5rem" zIndex={50} />
+  ```
+
+### Email Rate Limiting
+Enhanced rate limiting in `lib/services/rate-limit.ts`:
+- **Per-type limit**: Max 5 emails per type per hour per guest
+- **Global limit**: Max 20 emails per hour per guest
+- **Retry logic**: 3 attempts with exponential backoff (1s, 2s, 4s)
+- **Database**: `RateLimitEntry` model with auto-cleanup
+
+### Admin Dashboard Help
+- **Admin Guide**: `/admin/help` - Searchable FAQ with 50+ entries, 12 categories
+- **Public FAQ**: `/help` - Registration guide for guests
+- **i18n**: Full HU/EN translations in `lib/i18n/admin-help-translations.ts`
+
+### Diagram Dashboard
+- **Location**: `docs/diagrams/diagram-dashboard.html`
+- **Diagrams**: 28 SVG diagrams (architecture, flows, wireframes, test cases, dataflow)
+- **New in v2**: Admin vs Staff Roles, Check-in Override Flow, Email Rate Limiting, Component Architecture
+- **Features**: Dark mode, HU/EN toggle, notes with CSV export/import
 
 ## VPS Deployment (Production)
 

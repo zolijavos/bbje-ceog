@@ -3,6 +3,7 @@
 import { useState, FormEvent, Suspense } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { logError } from '@/lib/utils/logger';
 import { ShieldCheck, Envelope, LockKey } from '@phosphor-icons/react';
 
@@ -68,12 +69,14 @@ function LoginForm() {
           <div className="flex justify-center mb-4">
             <ShieldCheck weight="light" size={64} className="text-accent-teal" />
           </div>
-          <h1 className="font-display text-4xl font-semibold text-white tracking-tight">CEO Gala 2026</h1>
+          <Link href="/" className="inline-block hover:opacity-80 transition-opacity">
+            <h1 className="font-display text-4xl font-semibold text-white tracking-tight">CEO Gala 2026</h1>
+          </Link>
           <p className="text-accent-teal mt-2 font-sans uppercase tracking-widest text-sm">Admin</p>
         </div>
 
         {/* Login Card */}
-        <div className="bg-white rounded-lg shadow-2xl p-8">
+        <div className="bg-neutral-200 rounded-lg shadow-2xl p-8">
           <h2 className="font-display text-2xl font-semibold text-neutral-800 text-center mb-6">
             Login
           </h2>

@@ -15,12 +15,20 @@ import {
   UsersThree,
   CalendarCheck,
   Chats,
+  Question,
+  QrCode,
+  Table,
+  Envelope,
 } from '@phosphor-icons/react';
 import type { Icon } from '@phosphor-icons/react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
-export default function DashboardContent({ userName }: { userName?: string }) {
-  const { t } = useLanguage();
+// Paths that staff can access
+const staffAllowedPaths = ['/admin/checkin-log'];
+
+export default function DashboardContent({ userName, userRole }: { userName?: string; userRole?: string }) {
+  const { t, language } = useLanguage();
+  const isAdmin = userRole === 'admin';
 
   const cardGroups = [
     {
@@ -74,19 +82,52 @@ export default function DashboardContent({ userName }: { userName?: string }) {
                   {t(group.titleKey)}
                 </h2>
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {group.cards.map((card) => (
-                    <DashboardCard
-                      key={card.href}
-                      title={t(card.titleKey)}
-                      description={t(card.descriptionKey)}
-                      href={card.href}
-                      Icon={card.Icon}
-                      openLabel={t('open')}
-                    />
-                  ))}
+                  {group.cards.map((card) => {
+                    // Staff can only access certain pages
+                    const isDisabledForStaff = !isAdmin && !staffAllowedPaths.includes(card.href);
+                    return (
+                      <DashboardCard
+                        key={card.href}
+                        title={t(card.titleKey)}
+                        description={t(card.descriptionKey)}
+                        href={card.href}
+                        Icon={card.Icon}
+                        openLabel={t('open')}
+                        disabled={isDisabledForStaff}
+                      />
+                    );
+                  })}
                 </div>
               </section>
             ))}
+
+            {/* Help Quick Links */}
+            <section className="mt-8 pt-8 border-t border-neutral-200 dark:border-neutral-700">
+              <h2 className="flex items-center gap-2 text-lg font-semibold text-neutral-700 dark:text-neutral-200 mb-4">
+                <Question size={24} weight="duotone" className="text-accent-teal" />
+                {t('help')}
+              </h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                <HelpLink href="/admin/help#guest-list" icon={Users} label={language === 'hu' ? 'Vendégek' : 'Guests'} />
+                <HelpLink href="/admin/help#csv-import" icon={UploadSimple} label={language === 'hu' ? 'CSV Import' : 'CSV Import'} />
+                <HelpLink href="/admin/help#seating" icon={Chair} label={language === 'hu' ? 'Ültetés' : 'Seating'} />
+                <HelpLink href="/admin/help#tables" icon={Table} label={language === 'hu' ? 'Asztalok' : 'Tables'} />
+                <HelpLink href="/admin/help#checkin" icon={QrCode} label={language === 'hu' ? 'Check-in' : 'Check-in'} />
+                <HelpLink href="/admin/help#statistics" icon={ChartBar} label={language === 'hu' ? 'Statisztika' : 'Statistics'} />
+                <HelpLink href="/admin/help#email-templates" icon={EnvelopeSimple} label={language === 'hu' ? 'Email sablonok' : 'Email Templates'} />
+                <HelpLink href="/admin/help#scheduled-emails" icon={Clock} label={language === 'hu' ? 'Ütemezett' : 'Scheduled'} />
+                <HelpLink href="/admin/help#payments" icon={CurrencyDollar} label={language === 'hu' ? 'Fizetések' : 'Payments'} />
+                <HelpLink href="/admin/help#email-logs" icon={Envelope} label={language === 'hu' ? 'Email logok' : 'Email Logs'} />
+                <HelpLink href="/admin/help#applications" icon={UserPlus} label={language === 'hu' ? 'Jelentkezők' : 'Applicants'} />
+                <Link
+                  href="/admin/help"
+                  className="flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-accent-teal/10 text-accent-teal hover:bg-accent-teal/20 transition-colors font-medium text-sm"
+                >
+                  <Question size={18} weight="fill" />
+                  {language === 'hu' ? 'Összes' : 'All Topics'}
+                </Link>
+              </div>
+            </section>
           </div>
         </div>
       </main>
@@ -146,4 +187,16 @@ function DashboardCard({
   }
 
   return <Link href={href}>{content}</Link>;
+}
+
+function HelpLink({ href, icon: IconComponent, label }: { href: string; icon: Icon; label: string }) {
+  return (
+    <Link
+      href={href}
+      className="flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-neutral-100 dark:bg-neutral-700/50 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors font-medium text-sm"
+    >
+      <IconComponent size={18} weight="duotone" />
+      <span className="truncate">{label}</span>
+    </Link>
+  );
 }

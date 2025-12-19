@@ -105,6 +105,24 @@ export default function AdminHelpPage() {
 
   // Handle URL hash for deep linking
   useEffect(() => {
+    const scrollToSection = (hash: string) => {
+      // Wait for React to render, then scroll to the section
+      setTimeout(() => {
+        const element = document.getElementById(hash);
+        if (element) {
+          // Calculate position accounting for sticky header (approx 120px)
+          const headerOffset = 120;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+          window.scrollTo({
+            top: Math.max(0, offsetPosition),
+            behavior: 'smooth'
+          });
+        }
+      }, 150);
+    };
+
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
       if (hash && anchorToCategory[hash]) {
@@ -113,6 +131,8 @@ export default function AdminHelpPage() {
         // Expand all guides in the category
         const categoryGuides = adminGuides.filter(g => g.category === anchorToCategory[hash]);
         setExpandedGuides(new Set(categoryGuides.map(g => g.id)));
+        // Scroll to the section after state update
+        scrollToSection(hash);
       }
     };
 
@@ -311,7 +331,7 @@ export default function AdminHelpPage() {
           Object.entries(groupedGuides).map(([category, guides]) => {
             const Icon = categoryIcons[category] || BookOpen;
             return (
-              <div key={category} id={categoryToAnchor[category]}>
+              <div key={category} id={categoryToAnchor[category]} className="scroll-mt-32">
                 <div className="flex items-center gap-2 mb-3 pb-2 border-b border-neutral-200 dark:border-neutral-700">
                   <Icon weight="duotone" size={24} className="text-accent-teal" />
                   <h3 className="font-display text-lg font-semibold text-neutral-700 dark:text-neutral-200">
@@ -370,11 +390,13 @@ export default function AdminHelpPage() {
           {ui.contactAdmin}
         </p>
         <a
-          href="mailto:admin@ceogala.hu"
+          href="https://www.myforgelabs.com/#kapcsolat"
+          target="_blank"
+          rel="noopener noreferrer"
           className="inline-flex items-center gap-2 px-6 py-3 bg-accent-teal text-white rounded-lg hover:bg-accent-teal/90 transition-all font-sans font-medium"
         >
           <Envelope weight="fill" size={20} />
-          admin@ceogala.hu
+          MyForge Labs
         </a>
       </div>
     </div>

@@ -4,7 +4,7 @@ import { ButtonHTMLAttributes, forwardRef } from 'react';
 import { useHaptic } from '../../hooks/useHaptic';
 
 interface Button3DProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'accent';
   fullWidth?: boolean;
   loading?: boolean;
   icon?: React.ReactNode;
@@ -36,7 +36,12 @@ const Button3D = forwardRef<HTMLButtonElement, Button3DProps>(
       onClick?.(e);
     };
 
-    const baseClass = variant === 'primary' ? 'btn-3d' : 'btn-3d btn-3d-secondary';
+    const variantClasses: Record<string, string> = {
+      primary: 'btn-3d',
+      secondary: 'btn-3d btn-3d-secondary',
+      accent: 'btn-3d btn-3d-accent',
+    };
+    const baseClass = variantClasses[variant] || 'btn-3d';
     const widthClass = fullWidth ? 'w-full' : '';
 
     return (

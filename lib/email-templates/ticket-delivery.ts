@@ -1,6 +1,7 @@
 /**
  * E-Ticket Delivery Email Template
  * HTML and plain text templates for ticket delivery with QR code
+ * Branded with CEO Gala 2026 visual identity
  */
 
 import { TicketType } from '@prisma/client';
@@ -25,6 +26,18 @@ function getTicketTypeLabel(ticketType: TicketType): string {
 }
 
 /**
+ * Get ticket badge color based on type
+ */
+function getTicketBadgeColor(ticketType: TicketType): { bg: string; text: string } {
+  const colors: Record<TicketType, { bg: string; text: string }> = {
+    vip_free: { bg: '#FEF3C7', text: '#B45309' },
+    paid_single: { bg: '#DBEAFE', text: '#1D4ED8' },
+    paid_paired: { bg: '#F3E8FF', text: '#7C3AED' },
+  };
+  return colors[ticketType] || { bg: '#F3F4F6', text: '#374151' };
+}
+
+/**
  * Get ticket delivery email template (HTML and plain text)
  */
 export function getTicketDeliveryEmailTemplate(params: TicketEmailParams): {
@@ -34,8 +47,9 @@ export function getTicketDeliveryEmailTemplate(params: TicketEmailParams): {
 } {
   const { guestName, ticketType, qrCodeDataUrl, partnerName } = params;
   const ticketLabel = getTicketTypeLabel(ticketType);
+  const badgeColors = getTicketBadgeColor(ticketType);
 
-  const subject = `CEO Gala 2026 - E-ticket - ${guestName}`;
+  const subject = `CEO Gala 2026 - Your E-Ticket - ${guestName}`;
 
   const html = `
 <!DOCTYPE html>
@@ -43,156 +57,205 @@ export function getTicketDeliveryEmailTemplate(params: TicketEmailParams): {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CEO Gala - E-ticket</title>
+  <title>CEO Gala 2026 - E-Ticket</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
       line-height: 1.6;
-      color: #333;
+      color: #374151;
       margin: 0;
       padding: 0;
-      background-color: #f5f5f5;
+      background-color: #F3F4F6;
     }
     .container {
       max-width: 600px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 24px 16px;
     }
     .card {
       background-color: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
     }
     .header {
+      background: linear-gradient(135deg, #1F2937 0%, #374151 100%);
+      padding: 32px 40px;
       text-align: center;
-      margin-bottom: 30px;
     }
     .header h1 {
-      color: #1a1a2e;
+      color: #ffffff;
       font-size: 28px;
-      margin: 0 0 10px 0;
+      font-weight: 700;
+      margin: 0;
+      letter-spacing: 0.5px;
     }
     .header .subtitle {
-      color: #6b7280;
-      font-size: 16px;
-      margin: 0;
+      color: #D1D5DB;
+      font-size: 14px;
+      margin-top: 8px;
+      letter-spacing: 1px;
     }
     .ticket-badge {
       display: inline-block;
-      background-color: #10b981;
-      color: #ffffff;
-      font-size: 14px;
+      background-color: ${badgeColors.bg};
+      color: ${badgeColors.text};
+      font-size: 12px;
       font-weight: 600;
       padding: 6px 16px;
       border-radius: 20px;
-      margin-top: 15px;
+      margin-top: 16px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
     }
     .content {
-      margin-bottom: 30px;
+      padding: 40px;
     }
     .greeting {
       font-size: 18px;
+      color: #1F2937;
       margin-bottom: 20px;
     }
-    .event-info {
-      background-color: #f8f9fa;
-      border-left: 4px solid #2563eb;
-      padding: 15px 20px;
-      margin: 20px 0;
-      border-radius: 0 4px 4px 0;
+    .greeting strong {
+      color: #14B8A6;
     }
-    .event-info h3 {
-      margin: 0 0 10px 0;
-      color: #1a1a2e;
+    .intro-text {
+      color: #4B5563;
+      margin-bottom: 28px;
+    }
+    .event-info {
+      background-color: #F9FAFB;
+      border-left: 4px solid #14B8A6;
+      padding: 20px 24px;
+      margin: 28px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .event-info-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #14B8A6;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0 0 12px 0;
     }
     .event-info p {
-      margin: 5px 0;
+      margin: 8px 0;
+      color: #4B5563;
+    }
+    .event-info strong {
+      color: #1F2937;
     }
     .qr-container {
       text-align: center;
-      margin: 30px 0;
-      padding: 20px;
-      background-color: #ffffff;
-      border: 2px dashed #e5e7eb;
-      border-radius: 12px;
+      margin: 32px 0;
+      padding: 28px;
+      background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
+      border: 2px solid #E5E7EB;
+      border-radius: 16px;
     }
     .qr-container img {
-      max-width: 250px;
+      max-width: 220px;
       height: auto;
-      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
     .qr-instructions {
       font-size: 16px;
       font-weight: 600;
-      color: #1a1a2e;
-      margin: 10px 0;
+      color: #1F2937;
+      margin: 20px 0 8px;
     }
     .qr-note {
-      font-size: 14px;
-      color: #6b7280;
+      font-size: 13px;
+      color: #6B7280;
     }
     .guest-info {
-      background-color: #f0fdf4;
-      border: 1px solid #10b981;
-      border-radius: 8px;
-      padding: 15px 20px;
-      margin: 20px 0;
+      background-color: #ECFDF5;
+      border: 1px solid #A7F3D0;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin: 24px 0;
     }
-    .guest-info h4 {
-      margin: 0 0 10px 0;
-      color: #166534;
+    .guest-info-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #059669;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0 0 12px 0;
     }
     .guest-info p {
-      margin: 5px 0;
-      color: #15803d;
+      margin: 8px 0;
+      color: #065F46;
+    }
+    .guest-info strong {
+      color: #047857;
     }
     .tips {
-      background-color: #fffbeb;
-      border: 1px solid #f59e0b;
-      border-radius: 8px;
-      padding: 15px 20px;
-      margin: 20px 0;
+      background-color: #FFFBEB;
+      border: 1px solid #FCD34D;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin: 24px 0;
     }
-    .tips h4 {
-      margin: 0 0 10px 0;
-      color: #b45309;
+    .tips-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #B45309;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0 0 12px 0;
     }
     .tips ul {
       margin: 0;
       padding-left: 20px;
-      color: #92400e;
+      color: #92400E;
     }
     .tips li {
-      margin: 5px 0;
+      margin: 8px 0;
+    }
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #E5E7EB, transparent);
+      margin: 32px 0;
     }
     .footer {
       text-align: center;
-      padding-top: 30px;
-      border-top: 1px solid #e5e7eb;
-      margin-top: 30px;
+      padding: 0 40px 32px;
     }
     .footer p {
       font-size: 14px;
-      color: #6b7280;
-      margin: 5px 0;
+      color: #6B7280;
+      margin: 4px 0;
     }
     .footer a {
-      color: #2563eb;
+      color: #14B8A6;
       text-decoration: none;
+      font-weight: 500;
+    }
+    .footer .signature {
+      margin-top: 20px;
+      color: #1F2937;
+      font-weight: 500;
     }
     @media only screen and (max-width: 600px) {
       .container {
-        padding: 10px;
+        padding: 12px;
       }
-      .card {
-        padding: 20px;
+      .header {
+        padding: 24px 20px;
       }
       .header h1 {
         font-size: 24px;
       }
+      .content {
+        padding: 24px 20px;
+      }
+      .qr-container {
+        padding: 20px;
+      }
       .qr-container img {
-        max-width: 200px;
+        max-width: 180px;
       }
     }
   </style>
@@ -202,50 +265,52 @@ export function getTicketDeliveryEmailTemplate(params: TicketEmailParams): {
     <div class="card">
       <div class="header">
         <h1>CEO Gala 2026</h1>
-        <p class="subtitle">E-ticket / Entry Pass</p>
+        <p class="subtitle">E-TICKET / ENTRY PASS</p>
         <span class="ticket-badge">${escapeHtml(ticketLabel)}</span>
       </div>
 
       <div class="content">
-        <p class="greeting">Dear ${escapeHtml(guestName)},</p>
+        <p class="greeting">Dear <strong>${escapeHtml(guestName)}</strong>,</p>
 
-        <p>Thank you for registering! The QR code below is your entry pass to the CEO Gala event.</p>
+        <p class="intro-text">Thank you for your registration. Below you will find your QR code, which serves as your entry pass to the CEO Gala event.</p>
 
         <div class="event-info">
-          <h3>Event Details</h3>
+          <p class="event-info-title">Event Details</p>
           <p><strong>Event:</strong> CEO Gala 2026</p>
           <p><strong>Date:</strong> Friday, March 27, 2026, 6:00 PM</p>
           <p><strong>Venue:</strong> Budapest, Marriott Hotel</p>
         </div>
 
         <div class="qr-container">
-          <img src="${qrCodeDataUrl}" alt="QR code entry pass" />
-          <p class="qr-instructions">Show this QR code at the entrance!</p>
-          <p class="qr-note">You can display the QR code on your phone screen.</p>
+          <img src="${qrCodeDataUrl}" alt="QR Code Entry Pass" />
+          <p class="qr-instructions">Present this QR code at the entrance</p>
+          <p class="qr-note">You may display it on your phone or print this email.</p>
         </div>
 
         <div class="guest-info">
-          <h4>Ticket Details</h4>
+          <p class="guest-info-title">Ticket Information</p>
           <p><strong>Name:</strong> ${escapeHtml(guestName)}</p>
           <p><strong>Ticket Type:</strong> ${escapeHtml(ticketLabel)}</p>
           ${partnerName ? `<p><strong>Partner:</strong> ${escapeHtml(partnerName)}</p>` : ''}
         </div>
 
         <div class="tips">
-          <h4>Helpful Information</h4>
+          <p class="tips-title">Important Information</p>
           <ul>
-            <li>Arrive by 5:30 PM for smooth registration</li>
+            <li>Please arrive by 5:30 PM for smooth registration</li>
             <li>Save the QR code to your phone or print it out</li>
-            <li>Photo ID may be required</li>
-            ${ticketType === 'paid_paired' ? '<li>For paired tickets, both guests must arrive together</li>' : ''}
+            <li>A valid photo ID may be required at entry</li>
+            ${ticketType === 'paid_paired' ? '<li>Both guests with paired tickets should arrive together</li>' : ''}
           </ul>
         </div>
       </div>
 
+      <div class="divider"></div>
+
       <div class="footer">
-        <p>If you have any questions, please contact us:</p>
+        <p>For questions, please contact us at:</p>
         <p><a href="mailto:info@ceogala.hu">info@ceogala.hu</a></p>
-        <p style="margin-top: 20px;">Best regards,<br>CEO Gala Organizing Committee</p>
+        <p class="signature">Best regards,<br>CEO Gala Organizing Committee</p>
       </div>
     </div>
   </div>
@@ -254,34 +319,35 @@ export function getTicketDeliveryEmailTemplate(params: TicketEmailParams): {
   `.trim();
 
   const text = `
-CEO Gala 2026 - E-ticket
+CEO GALA 2026 - E-TICKET
+========================
 
 Dear ${guestName},
 
-Thank you for registering! This message contains your entry pass to the CEO Gala event.
+Thank you for your registration. This message contains your entry pass to the CEO Gala event.
 
 EVENT DETAILS
--------------------
+-------------
 Event: CEO Gala 2026
 Date: Friday, March 27, 2026, 6:00 PM
 Venue: Budapest, Marriott Hotel
 
-TICKET DETAILS
------------
+TICKET INFORMATION
+------------------
 Name: ${guestName}
 Ticket Type: ${ticketLabel}
 ${partnerName ? `Partner: ${partnerName}` : ''}
 
-IMPORTANT: To display the QR code, open this email in a modern email client (Gmail, Outlook, etc.), or download the attached image.
+IMPORTANT: To view the QR code, please open this email in a modern email client (Gmail, Outlook, etc.) or download the attached image.
 
-HELPFUL INFORMATION
-------------------
-- Arrive by 5:30 PM for smooth registration
+IMPORTANT INFORMATION
+---------------------
+- Please arrive by 5:30 PM for smooth registration
 - Save the QR code to your phone or print it out
-- Photo ID may be required
-${ticketType === 'paid_paired' ? '- For paired tickets, both guests must arrive together' : ''}
+- A valid photo ID may be required at entry
+${ticketType === 'paid_paired' ? '- Both guests with paired tickets should arrive together' : ''}
 
-If you have any questions, please contact us: info@ceogala.hu
+For questions, please contact us at: info@ceogala.hu
 
 Best regards,
 CEO Gala Organizing Committee

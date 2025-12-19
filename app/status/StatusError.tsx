@@ -6,6 +6,7 @@
  */
 
 import Link from 'next/link';
+import { Warning, ArrowLeft, Envelope } from '@phosphor-icons/react/dist/ssr';
 
 interface StatusErrorProps {
   errorType: 'not_found' | 'no_link' | 'invalid' | 'expired' | string;
@@ -50,46 +51,40 @@ export default function StatusError({ errorType, message, email }: StatusErrorPr
   const errorContent = getErrorContent();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-neutral-800 to-neutral-700 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">CEO Gala 2026</h1>
-          <p className="mt-2 text-lg text-gray-600">Status Query</p>
+        <div className="text-center mb-10">
+          <Link href="/" className="inline-block hover:opacity-80 transition-opacity">
+            <h1 className="font-display text-4xl md:text-5xl font-semibold text-white tracking-tight mb-3">
+              CEO Gala 2026
+            </h1>
+          </Link>
+          <p className="text-accent-teal uppercase tracking-widest text-sm font-sans">
+            Status Query
+          </p>
         </div>
 
         {/* Error Card */}
-        <div className="bg-white shadow rounded-lg overflow-hidden">
+        <div className="bg-neutral-200 shadow-2xl rounded-lg overflow-hidden">
           <div className="px-6 py-8 text-center">
             {/* Error Icon */}
             <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-4">
-              <svg
-                className="h-8 w-8 text-red-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                />
-              </svg>
+              <Warning weight="light" size={32} className="text-red-600" />
             </div>
 
             {/* Error Title */}
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">{errorContent.title}</h2>
+            <h2 className="font-display text-xl font-semibold text-neutral-800 mb-2">{errorContent.title}</h2>
 
             {/* Error Description */}
-            <p className="text-gray-600 mb-6">{errorContent.description}</p>
+            <p className="text-neutral-600 font-sans mb-6">{errorContent.description}</p>
 
             {/* Actions */}
             <div className="space-y-3">
               {errorContent.showRequestLink && (
                 <Link
                   href={`/register/request-link${email ? `?email=${encodeURIComponent(email)}` : ''}`}
-                  className="block w-full px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="block w-full px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-accent-teal hover:bg-accent-teal-dark transition-colors"
                 >
                   Request New Invitation Link
                 </Link>
@@ -97,22 +92,35 @@ export default function StatusError({ errorType, message, email }: StatusErrorPr
 
               <a
                 href="mailto:info@ceogala.hu"
-                className="block w-full px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="flex items-center justify-center gap-2 w-full px-4 py-2 border border-neutral-300 text-sm font-medium rounded-md text-neutral-700 bg-neutral-100 hover:bg-neutral-50 transition-colors"
               >
+                <Envelope weight="light" size={18} />
                 Contact Us
               </a>
             </div>
           </div>
         </div>
 
+        {/* Back Link */}
+        <div className="mt-8 text-center">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition-colors font-sans"
+          >
+            <ArrowLeft weight="regular" size={18} />
+            <span>Back to Home</span>
+          </Link>
+        </div>
+
         {/* Help Text */}
-        <div className="mt-6 text-center text-sm text-gray-500">
+        <div className="mt-6 text-center text-sm text-white/50 font-sans">
           <p>
             If you believe this is an error, please contact us at{' '}
-            <a href="mailto:info@ceogala.hu" className="text-blue-600 hover:text-blue-500">
+            <a href="mailto:info@ceogala.hu" className="text-accent-teal hover:text-accent-teal-light">
               info@ceogala.hu
-            </a>.
+            </a>
           </p>
+          <p className="mt-4">© 2026 CEO Gala - Registration System</p>
         </div>
       </div>
     </div>

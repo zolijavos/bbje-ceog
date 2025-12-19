@@ -20,6 +20,7 @@ import {
   GoogleLogo,
   AppleLogo,
   MicrosoftOutlookLogo,
+  Question,
 } from '@phosphor-icons/react';
 import {
   EVENT_CONFIG,
@@ -408,7 +409,7 @@ export default function PWADashboardPage() {
                 rel="noopener noreferrer"
                 className="flex-1"
               >
-                <Button3D variant="secondary" fullWidth icon={<MapPin size={18} />}>
+                <Button3D variant="accent" fullWidth icon={<MapPin size={18} />}>
                   Map
                 </Button3D>
               </a>
@@ -420,7 +421,7 @@ export default function PWADashboardPage() {
                 rel="noopener noreferrer"
                 className="flex-1"
               >
-                <Button3D variant="secondary" fullWidth icon={<NavigationArrow size={18} />}>
+                <Button3D variant="accent" fullWidth icon={<NavigationArrow size={18} />}>
                   Directions
                 </Button3D>
               </a>
@@ -500,6 +501,17 @@ export default function PWADashboardPage() {
 
         {/* Countdown */}
         <CountdownSection />
+
+        {/* Help Link */}
+        <Link href="/pwa/help" className="block mt-4">
+          <Card variant="float" className="text-center">
+            <div className="flex items-center justify-center gap-2 pwa-text-secondary">
+              <Question size={18} weight="fill" style={{ color: 'var(--color-accent)' }} />
+              <span className="text-sm font-medium">Need help? View FAQ</span>
+              <ArrowRight size={14} />
+            </div>
+          </Card>
+        </Link>
       </div>
     </div>
   );

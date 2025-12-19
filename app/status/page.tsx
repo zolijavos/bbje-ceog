@@ -7,6 +7,7 @@
  * Story 2.6: Payment Status Dashboard for Guests
  */
 
+import { redirect } from 'next/navigation';
 import { validateMagicLink } from '@/lib/auth/magic-link';
 import { getGuestStatus } from '@/lib/services/registration';
 import { generateTicket } from '@/lib/services/qr-ticket';
@@ -25,14 +26,9 @@ export default async function StatusPage({ searchParams }: StatusPageProps) {
   const params = await searchParams;
   const { code, email } = params;
 
-  // Missing parameters
+  // Missing parameters - redirect to PWA login
   if (!code || !email) {
-    return (
-      <StatusError
-        errorType="invalid"
-        message="Hiányzó paraméterek a linkben. Kérjük, használja a meghívóban kapott linket."
-      />
-    );
+    redirect('/pwa');
   }
 
   // Validate magic link

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Testing Hub | CEO Gala 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
+  <script>
+    const translations = {
+      hu: {
+        title: 'Testing Hub',
+        diagrams: 'Diagramok',
+        testCases: 'Tesztesetek',
+        testVideos: 'Videók',
+        diagramsDesc: 'Architektúra, folyamatok, wireframe-ek',
+        testCasesDesc: 'Funkcionális tesztesetek',
+        testVideosDesc: 'Journey felvételek',
+        backToDashboard: 'Vissza',
+        systemDiagrams: 'Rendszer Diagramok',
+        functionalTests: 'Funkcionális Tesztesetek',
+        journeyVideos: 'Journey Teszt Videók',
+        critical: 'KRITIKUS',
+        important: 'FONTOS',
+        totalTC: 'Összes',
+        criticalTests: 'KRITIKUS Tesztek',
+        importantTests: 'FONTOS Tesztek',
+        viewAll: 'Összes Teszteset',
+        testInfo: '6 kritikus teszt (mind kötelező) + 4 fontos teszt (3/4 kötelező)',
+        allDiagrams: 'Mind a 28 diagram',
+        openDashboard: 'Diagram Dashboard megnyitása'
+      },
+      en: {
+        title: 'Testing Hub',
+        diagrams: 'Diagrams',
+        testCases: 'Test Cases',
+        testVideos: 'Videos',
+        diagramsDesc: 'Architecture, flows, wireframes',
+        testCasesDesc: 'Functional test cases',
+        testVideosDesc: 'Journey recordings',
+        backToDashboard: 'Back',
+        systemDiagrams: 'System Diagrams',
+        functionalTests: 'Functional Test Cases',
+        journeyVideos: 'Journey Test Videos',
+        critical: 'CRITICAL',
+        important: 'IMPORTANT',
+        totalTC: 'Total',
+        criticalTests: 'CRITICAL Tests',
+        importantTests: 'IMPORTANT Tests',
+        viewAll: 'All Test Cases',
+        testInfo: '6 critical tests (all required) + 4 important tests (3/4 required)',
+        allDiagrams: 'All 28 diagrams',
+        openDashboard: 'Open Diagram Dashboard'
+      }
+    };
+
+    function hub() {
+      return {
+        activeSection: null,
+        darkMode: true,
+        lang: 'hu',
+        get t() { return translations[this.lang]; },
+        init() {
+          const self = this;
+
+          // Restore activeSection from sessionStorage (survives iframe reload)
+          const savedSection = sessionStorage.getItem('ceogala-testing-hub-section');
+          if (savedSection && savedSection !== 'null') {
+            this.activeSection = savedSection;
+          }
+
+          // Read theme and lang from localStorage
+          const readFromStorage = () => {
+            const savedTheme = localStorage.getItem('theme');
+            const newDarkMode = savedTheme ? savedTheme === 'dark' : true;
+            if (self.darkMode !== newDarkMode) self.darkMode = newDarkMode;
+
+            const savedLang = localStorage.getItem('admin-language') || 'hu';
+            if (self.lang !== savedLang) self.lang = savedLang;
+          };
+
+          // Initial read
+          readFromStorage();
+
+          // Listen for storage events from parent window
+          window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+              self.darkMode = e.newValue === 'dark';
+            }
+            if (e.key === 'admin-language') {
+              self.lang = e.newValue || 'hu';
+            }
+          });
+
+          // Poll as fallback (same-origin iframe may not receive storage events)
+          setInterval(readFromStorage, 500);
+
+          // Save activeSection changes to sessionStorage
+          this.$watch('activeSection', (val) => {
+            sessionStorage.setItem('ceogala-testing-hub-section', val || '');
+          });
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --teal: #00A0A0;
+      --teal-dark: #008585;
+      --teal-light: #33B3B3;
+      --neutral-50: #fafafa;
+      --neutral-100: #f5f5f5;
+      --neutral-200: #e5e5e5;
+      --neutral-300: #d4d4d4;
+      --neutral-400: #a3a3a3;
+      --neutral-500: #737373;
+      --neutral-600: #525252;
+      --neutral-700: #404040;
+      --neutral-800: #262626;
+      --neutral-900: #171717;
+    }
+    [x-cloak] { display: none !important; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Dark mode (default) */
+    body {
+      font-family: 'Open Sans', system-ui, sans-serif;
+      background: var(--neutral-900);
+      color: var(--neutral-200);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* Light mode */
+    body.light { background: var(--neutral-50); color: var(--neutral-800); }
+    body.light header { background: var(--neutral-800); }
+    body.light .dashboard-card { background: white; border-color: var(--neutral-200); }
+    body.light .dashboard-card:hover { border-color: var(--teal); }
+    body.light .card-title { color: var(--neutral-800); }
+    body.light .card-desc { color: var(--neutral-500); }
+    body.light .content-section { background: white; border-color: var(--neutral-200); }
+    body.light .section-title { color: var(--neutral-800); }
+    body.light .diagram-link { background: var(--neutral-50); border-color: var(--neutral-200); color: var(--neutral-800); }
+    body.light .diagram-link:hover { border-color: var(--teal); background: rgba(0,160,160,0.05); }
+    body.light .diagram-link h3 { color: var(--neutral-800); }
+    body.light .diagram-link p { color: var(--neutral-500); }
+    body.light .video-card { background: white; border-color: var(--neutral-200); }
+    body.light .video-title { color: var(--neutral-800); }
+    body.light .video-desc { color: var(--neutral-500); }
+    body.light .stat-box { background: var(--neutral-100); border-color: var(--neutral-200); }
+    body.light footer { background: var(--neutral-800); }
+    body.light .test-link { background: var(--neutral-50); }
+    body.light .test-link h3 { color: var(--neutral-800); }
+
+    /* Header */
+    header {
+      background: var(--neutral-800);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--teal);
+    }
+    .header-left { display: flex; align-items: center; gap: 1rem; }
+    .header-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.125rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .header-badge {
+      background: var(--teal);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .header-actions { display: flex; gap: 0.5rem; align-items: center; }
+    .btn {
+      padding: 0.4rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: 'Open Sans', sans-serif;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .btn-ghost { background: transparent; color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.2); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.1); color: white; }
+    .btn-teal { background: var(--teal); color: white; }
+    .btn-teal:hover { background: var(--teal-dark); }
+
+    /* Main Container */
+    .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+
+    /* Dashboard Cards */
+    .dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    @media (max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } }
+
+    .dashboard-card {
+      background: var(--neutral-800);
+      border: 1px solid var(--neutral-700);
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .dashboard-card:hover { border-color: var(--teal); transform: translateY(-2px); }
+    .dashboard-card.active { border-color: var(--teal); background: rgba(0,160,160,0.1); }
+    .card-icon { font-size: 2rem; margin-bottom: 0.75rem; filter: grayscale(100%); opacity: 0.8; }
+    .dashboard-card:hover .card-icon { filter: grayscale(0%); opacity: 1; }
+    .card-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 0.25rem;
+    }
+    .card-count { font-size: 2rem; font-weight: 700; color: var(--teal); margin-bottom: 0.25rem; }
+    .card-desc { font-size: 0.8rem; color: var(--neutral-400); }
+
+    /* Content Sections */
+    .content-section {
+      display: none;
+      background: var(--neutral-800);
+      border: 1px solid var(--neutral-700);
+      padding: 1.5rem;
+    }
+    .content-section.active { display: block; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem; }
+    .section-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: white;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: var(--teal);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      transition: opacity 0.15s;
+    }
+    .back-btn:hover { opacity: 0.8; }
+    .back-btn svg { width: 14px; height: 14px; }
+
+    /* Diagram Grid */
+    .diagram-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.75rem; }
+    .diagram-link {
+      display: block;
+      background: var(--neutral-700);
+      border: 1px solid var(--neutral-600);
+      padding: 1rem;
+      text-decoration: none;
+      color: white;
+      transition: all 0.15s;
+    }
+    .diagram-link:hover { border-color: var(--teal); background: rgba(0,160,160,0.1); }
+    .diagram-link h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .diagram-link p { font-size: 0.75rem; color: var(--neutral-400); }
+    .diagram-link.featured { border: 1px solid var(--teal); }
+
+    /* Video Grid */
+    .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; }
+    @media (max-width: 400px) { .video-grid { grid-template-columns: 1fr; } }
+    .video-card {
+      background: var(--neutral-700);
+      border: 1px solid var(--neutral-600);
+      overflow: hidden;
+      transition: all 0.15s;
+    }
+    .video-card:hover { border-color: var(--teal); }
+    .video-card video { width: 100%; display: block; background: #000; }
+    .video-info { padding: 0.75rem 1rem; }
+    .video-title { font-weight: 600; color: white; font-size: 0.9rem; margin-bottom: 0.15rem; }
+    .video-desc { font-size: 0.75rem; color: var(--neutral-400); }
+    .video-badge {
+      display: inline-block;
+      padding: 0.15rem 0.4rem;
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-top: 0.4rem;
+    }
+    .badge-journey { background: var(--teal); color: white; }
+    .badge-demo { background: var(--neutral-500); color: white; }
+
+    /* Test Cases */
+    .stats-row { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .stat-box {
+      background: var(--neutral-700);
+      border: 1px solid var(--neutral-600);
+      padding: 0.75rem 1rem;
+      flex: 1;
+      min-width: 100px;
+      text-align: center;
+    }
+    .stat-value { font-size: 1.5rem; font-weight: 700; }
+    .stat-value.critical { color: #059669; }
+    .stat-value.important { color: #D97706; }
+    .stat-label { font-size: 0.65rem; color: var(--neutral-400); text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .test-category { margin-bottom: 1.5rem; }
+    .category-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .category-title.critical { color: #059669; }
+    .category-title.important { color: #D97706; }
+    .test-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 0.75rem; }
+    .test-link {
+      display: block;
+      background: var(--neutral-700);
+      border: 1px solid var(--neutral-600);
+      border-left: 3px solid var(--neutral-500);
+      padding: 0.75rem 1rem;
+      text-decoration: none;
+      color: white;
+      transition: all 0.15s;
+    }
+    .test-link:hover { border-color: var(--teal); background: rgba(0,160,160,0.05); }
+    .test-link.critical { border-left-color: #059669; }
+    .test-link.important { border-left-color: #D97706; }
+    .test-link h3 { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .test-link p { font-size: 0.75rem; color: var(--neutral-400); }
+    .test-link .steps {
+      display: inline-block;
+      margin-top: 0.35rem;
+      padding: 0.1rem 0.35rem;
+      font-size: 0.6rem;
+      font-weight: 700;
+      background: var(--neutral-600);
+      color: var(--neutral-300);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--neutral-800);
+      color: var(--neutral-500);
+      padding: 0.75rem 1.5rem;
+      text-align: center;
+      font-size: 0.7rem;
+      border-top: 1px solid var(--neutral-700);
+      margin-top: 2rem;
+    }
+    footer a { color: var(--teal); text-decoration: none; }
+  </style>
+</head>
+<body x-data="hub()" x-init="init()" :class="{ 'light': !darkMode }">
+  <header>
+    <div class="header-left">
+      <span class="header-title">CEO Gala 2026</span>
+      <span class="header-badge" x-text="t.title"></span>
+    </div>
+    <div class="header-actions">
+      <a href="/admin" class="btn btn-ghost">Admin</a>
+      <a href="/diagrams/diagram-dashboard.html"  class="btn btn-teal" x-text="t.allDiagrams"></a>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Dashboard Cards -->
+    <div class="dashboard-grid" x-show="!activeSection" x-cloak>
+      <div class="dashboard-card" @click="activeSection = 'diagrams'">
+        <div class="card-icon">📊</div>
+        <div class="card-title" x-text="t.diagrams"></div>
+        <div class="card-count">28</div>
+        <div class="card-desc" x-text="t.diagramsDesc"></div>
+      </div>
+
+      <div class="dashboard-card" @click="activeSection = 'tests'">
+        <div class="card-icon">📋</div>
+        <div class="card-title" x-text="t.testCases"></div>
+        <div class="card-count">10</div>
+        <div class="card-desc" x-text="t.testCasesDesc"></div>
+      </div>
+
+      <div class="dashboard-card" @click="activeSection = 'videos'">
+        <div class="card-icon">🎬</div>
+        <div class="card-title" x-text="t.testVideos"></div>
+        <div class="card-count">11</div>
+        <div class="card-desc" x-text="t.testVideosDesc"></div>
+      </div>
+    </div>
+
+    <!-- Diagrams Section -->
+    <div class="content-section" :class="{ active: activeSection === 'diagrams' }">
+      <div class="section-header">
+        <h2 class="section-title" x-text="t.systemDiagrams"></h2>
+        <a href="#" class="back-btn" @click.prevent="activeSection = null">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"/></svg>
+          <span x-text="t.backToDashboard"></span>
+        </a>
+      </div>
+      <div class="diagram-grid">
+        <a href="/diagrams/diagram-dashboard.html#system-architecture" class="diagram-link" >
+          <h3>1. System Architecture</h3>
+          <p>High-level components & interactions</p>
+        </a>
+        <a href="/diagrams/diagram-dashboard.html#database-erd" class="diagram-link" >
+          <h3>2. Database ERD</h3>
+          <p>11 Prisma models & relationships</p>
+        </a>
+        <a href="/diagrams/diagram-dashboard.html#vip-registration" class="diagram-link" >
+          <h3>3. VIP Registration Flow</h3>
+          <p>Magic link → QR ticket</p>
+        </a>
+        <a href="/diagrams/diagram-dashboard.html#paid-registration" class="diagram-link" >
+          <h3>4. Paid Registration Flow</h3>
+          <p>Billing → Payment → Ticket</p>
+        </a>
+        <a href="/diagrams/diagram-dashboard.html#checkin-process" class="diagram-link" >
+          <h3>5. Check-in Process</h3>
+          <p>QR scan → Validation → Entry</p>
+        </a>
+        <a href="/diagrams/diagram-dashboard.html#applicant-flow" class="diagram-link" >
+          <h3>6. Applicant Approval</h3>
+          <p>Application → Review → Magic link</p>
+        </a>
+        <a href="/diagrams/diagram-dashboard.html"  class="diagram-link featured">
+          <h3 x-text="t.allDiagrams"></h3>
+          <p x-text="t.openDashboard"></p>
+        </a>
+      </div>
+    </div>
+
+    <!-- Test Cases Section -->
+    <div class="content-section" :class="{ active: activeSection === 'tests' }">
+      <div class="section-header">
+        <h2 class="section-title" x-text="t.functionalTests"></h2>
+        <a href="#" class="back-btn" @click.prevent="activeSection = null">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"/></svg>
+          <span x-text="t.backToDashboard"></span>
+        </a>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-value critical">6</div>
+          <div class="stat-label" x-text="t.critical"></div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value important">4</div>
+          <div class="stat-label" x-text="t.important"></div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" style="color:var(--teal);">10</div>
+          <div class="stat-label" x-text="t.totalTC"></div>
+        </div>
+      </div>
+
+      <p style="color:var(--neutral-400);margin-bottom:1.25rem;font-size:0.8rem;" x-text="t.testInfo"></p>
+
+      <div class="test-category">
+        <div class="category-title critical">
+          <span>●</span>
+          <span x-text="t.criticalTests"></span>
+        </div>
+        <div class="test-grid">
+          <a href="/diagrams/diagram-dashboard.html#tc-01-vip" class="test-link critical" >
+            <h3>TC-01: VIP Vendég Regisztráció</h3>
+            <p>Magic link → VIP badge → GDPR → QR jegy</p>
+            <span class="steps">7 lépés</span>
+          </a>
+          <a href="/diagrams/diagram-dashboard.html#tc-02-paying" class="test-link critical" >
+            <h3>TC-02: Fizető Vendég Regisztráció</h3>
+            <p>Jegy választás → Számlázás → Stripe</p>
+            <span class="steps">8 lépés</span>
+          </a>
+          <a href="/diagrams/diagram-dashboard.html#tc-03-paired" class="test-link critical" >
+            <h3>TC-03: Páros Jegy Regisztráció</h3>
+            <p>Partner adatok → 150,000 Ft</p>
+            <span class="steps">8 lépés</span>
+          </a>
+          <a href="/diagrams/diagram-dashboard.html#tc-06-pwa" class="test-link critical" >
+            <h3>TC-06: PWA Bejelentkezés</h3>
+            <p>CEOG-XXXXXX kód → Dashboard</p>
+            <span class="steps">6 lépés</span>
+          </a>
+          <a href="/diagrams/diagram-dashboard.html#tc-07-qr" class="test-link critical" >
+            <h3>TC-07: QR Jegy Megjelenítés</h3>
+            <p>QR kód → PNG letöltés → Offline</p>
+            <span class="steps">5 lépés</span>
+          </a>
+          <a href="/diagrams/diagram-dashboard.html#tc-08-checkin" class="test-link critical" >
+            <h3>TC-08: Check-in Folyamat</h3>
+            <p>QR scan → Zöld/Sárga/Piros kártya</p>
+            <span class="steps">7 lépés</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="test-category">
+        <div class="category-title important">
+          <span>●</span>
+          <span x-text="t.importantTests"></span>
+        </div>
+        <div class="test-grid">
+          <a href="/diagrams/diagram-dashboard.html#tc-04-applicant" class="test-link important" >
+            <h3>TC-04: Jelentkező Jóváhagyás</h3>
+            <p>/apply → Admin review → Approve/Reject</p>
+            <span class="steps">8 lépés</span>
+          </a>
+          <a href="/diagrams/diagram-dashboard.html#tc-05-bank" class="test-link important" >
+            <h3>TC-05: Banki Átutalás Jóváhagyás</h3>
+            <p>Átutalás → Admin manuális jóváhagyás</p>
+            <span class="steps">6 lépés</span>
+          </a>
+          <a href="/diagrams/diagram-dashboard.html#tc-09-seating" class="test-link important" >
+            <h3>TC-09: Ültetési Rend Kezelés</h3>
+            <p>Asztal → Drag-drop → CSV export</p>
+            <span class="steps">7 lépés</span>
+          </a>
+          <a href="/diagrams/diagram-dashboard.html#tc-10-email" class="test-link important" >
+            <h3>TC-10: Email Küldés</h3>
+            <p>Vendég → Template → Küldés → Log</p>
+            <span class="steps">5 lépés</span>
+          </a>
+        </div>
+      </div>
+
+      <div style="margin-top:1.5rem;">
+        <a href="/diagrams/diagram-dashboard.html#test-overview" class="btn btn-teal"  x-text="t.viewAll"></a>
+      </div>
+    </div>
+
+    <!-- Videos Section -->
+    <div class="content-section" :class="{ active: activeSection === 'videos' }">
+      <div class="section-header">
+        <h2 class="section-title" x-text="t.journeyVideos"></h2>
+        <a href="#" class="back-btn" @click.prevent="activeSection = null">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"/></svg>
+          <span x-text="t.backToDashboard"></span>
+        </a>
+      </div>
+
+      <div class="video-grid">
+        <div class="video-card">
+          <video controls preload="metadata">
+            <source src="/test-videos/01-vip-registration.webm" type="video/webm">
+          </video>
+          <div class="video-info">
+            <div class="video-title">01 - VIP Registration</div>
+            <div class="video-desc">Magic link → Registration → QR ticket → PWA</div>
+            <span class="video-badge badge-journey">Journey</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <video controls preload="metadata">
+            <source src="/test-videos/02-applicant-approval.webm" type="video/webm">
+          </video>
+          <div class="video-info">
+            <div class="video-title">02 - Applicant Approval</div>
+            <div class="video-desc">Application form → Admin review → Approval</div>
+            <span class="video-badge badge-journey">Journey</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <video controls preload="metadata">
+            <source src="/test-videos/03-admin-seating.webm" type="video/webm">
+          </video>
+          <div class="video-info">
+            <div class="video-title">03 - Admin Seating</div>
+            <div class="video-desc">Guest management → Table assignment</div>
+            <span class="video-badge badge-journey">Journey</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <video controls preload="metadata">
+            <source src="/test-videos/04-admin-email.webm" type="video/webm">
+          </video>
+          <div class="video-info">
+            <div class="video-title">04 - Admin Email</div>
+            <div class="video-desc">Email management → Bulk sending</div>
+            <span class="video-badge badge-journey">Journey</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <video controls preload="metadata">
+            <source src="/test-videos/05-staff-checkin.webm" type="video/webm">
+          </video>
+          <div class="video-info">
+            <div class="video-title">05 - Staff Check-in</div>
+            <div class="video-desc">Staff login → Check-in dashboard → Logs</div>
+            <span class="video-badge badge-journey">Journey</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <video controls preload="metadata">
+            <source src="/test-videos/06-paid-registration.webm" type="video/webm">
+          </video>
+          <div class="video-info">
+            <div class="video-title">06 - Paid Registration</div>
+            <div class="video-desc">Billing data → Bank transfer → Approval</div>
+            <span class="video-badge badge-journey">Journey</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <video controls preload="metadata">
+            <source src="/test-videos/07-pwa-guest.webm" type="video/webm">
+          </video>
+          <div class="video-info">
+            <div class="video-title">07 - PWA Guest Experience</div>
+            <div class="video-desc">Auth code → Dashboard → Ticket → Profile</div>
+            <span class="video-badge badge-journey">Journey</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <video controls preload="metadata">
+            <source src="/test-videos/08-admin-operations.webm" type="video/webm">
+          </video>
+          <div class="video-info">
+            <div class="video-title">08 - Admin Operations</div>
+            <div class="video-desc">Full admin workflow: guests, tables, payments</div>
+            <span class="video-badge badge-journey">Journey</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <video controls preload="metadata">
+            <source src="/test-videos/09-mobile-checkin.webm" type="video/webm">
+          </video>
+          <div class="video-info">
+            <div class="video-title">09 - Mobile Check-in</div>
+            <div class="video-desc">QR scanner → Check-in process → Override</div>
+            <span class="video-badge badge-journey">Journey</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <video controls preload="metadata">
+            <source src="/test-videos/full-payment-flow-demo-20251215-134928.webm" type="video/webm">
+          </video>
+          <div class="video-info">
+            <div class="video-title">Full Payment Flow Demo</div>
+            <div class="video-desc">Complete payment process demonstration</div>
+            <span class="video-badge badge-demo">Demo</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <video controls preload="metadata">
+            <source src="/test-videos/paired-payment-demo-20251215-133600.webm" type="video/webm">
+          </video>
+          <div class="video-info">
+            <div class="video-title">Paired Payment Demo</div>
+            <div class="video-desc">Paired ticket payment flow</div>
+            <span class="video-badge badge-demo">Demo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <a href="https://myforgelabs.com" >MyForge Labs</a> · CEO Gala 2026 Testing Hub
+  </footer>
+</body>
+</html>

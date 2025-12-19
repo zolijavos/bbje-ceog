@@ -13,6 +13,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import GuestProfileFields from '../components/GuestProfileFields';
 import BillingForm, { type BillingFormData } from '../components/BillingForm';
 import ConsentCheckboxes from '../components/ConsentCheckboxes';
@@ -569,8 +570,13 @@ export default function PaidRegistrationForm({
         {/* Event Info Footer */}
         <div className="mt-8 pt-6 border-t border-slate-200">
           <div className="text-center text-sm text-slate-500">
-            <p className="font-medium text-slate-700">CEO Gala 2026</p>
+            <Link href="/" className="font-medium text-slate-700 hover:text-amber-600 transition-colors">CEO Gala 2026</Link>
             <p>Friday, March 27, 2026 • 6:00 PM • Budapest, Marriott Hotel</p>
+            <p className="mt-3">
+              <Link href="/help" className="text-amber-600 hover:underline">
+                Segítségre van szüksége?
+              </Link>
+            </p>
           </div>
         </div>
       </div>

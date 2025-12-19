@@ -200,7 +200,7 @@ export default function PWAFeedbackPage() {
             <ArrowLeft size={18} />
             Back
           </Link>
-          <h1 className="font-display text-xl">Event Feedback</h1>
+          <h1 className="font-display text-xl pwa-text-inverse">Event Feedback</h1>
         </div>
       </header>
 
@@ -337,6 +337,13 @@ export default function PWAFeedbackPage() {
                   Please rate your overall experience to submit
                 </p>
               )}
+
+              {/* Help link */}
+              <p className="text-center pwa-text-tertiary text-sm mt-6">
+                <Link href="/pwa/help" className="pwa-text-accent hover:underline">
+                  Segítségre van szüksége?
+                </Link>
+              </p>
             </form>
           </>
         )}

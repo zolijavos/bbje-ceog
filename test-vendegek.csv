@@ -1,0 +1,4 @@
+email,name,guest_type
+teszt.vip@gmail.com,Teszt VIP Vendég,vip
+teszt.fizeto@gmail.com,Teszt Fizető Vendég,paying_single
+teszt.paros@gmail.com,Teszt Páros Vendég,paying_paired

@@ -8,6 +8,7 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import Link from 'next/link';
 import { Html5Qrcode } from 'html5-qrcode';
 import { TICKET_TYPE_LABELS } from '@/lib/constants';
 import { logError } from '@/lib/utils/logger';
@@ -191,7 +192,9 @@ export default function CheckinScanner() {
     <div className="min-h-screen flex flex-col">
       {/* Header */}
       <header className="bg-gray-800 px-4 py-3 flex items-center justify-between">
-        <h1 className="text-white text-lg font-semibold">CEO Gala Check-in</h1>
+        <Link href="/admin" className="text-white text-lg font-semibold hover:text-amber-400 transition-colors">
+          CEO Gala Check-in
+        </Link>
         {scanning && (
           <button
             onClick={stopScanner}
@@ -417,10 +420,27 @@ export default function CheckinScanner() {
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-800 px-4 py-2 text-center">
-        <p className="text-gray-400 text-sm">CEO Gala 2026 Check-in</p>
+      {/* Footer - Help link */}
+      <footer className="bg-gray-800 px-4 py-2 text-center pb-8">
+        <Link href="/help" className="text-amber-400 text-sm hover:underline">
+          Segítségre van szüksége?
+        </Link>
       </footer>
+
+      {/* MyForge Labs branding - blur effect */}
+      <div className="fixed bottom-0 left-0 right-0 py-1.5 text-center bg-gray-900/60 backdrop-blur-md border-t border-gray-700/30 z-50">
+        <span className="text-[10px] text-gray-400/80">
+          Built By{' '}
+          <a
+            href="https://www.myforgelabs.com/#kapcsolat"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-300/80 hover:text-white transition-colors underline"
+          >
+            MyForge Labs
+          </a>
+        </span>
+      </div>
     </div>
   );
 }

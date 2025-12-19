@@ -278,7 +278,7 @@ export default function PWAGalleryPage() {
             <ArrowLeft size={18} />
             Back
           </Link>
-          <h1 className="font-display text-xl">Event Gallery</h1>
+          <h1 className="font-display text-xl pwa-text-inverse">Event Gallery</h1>
         </div>
       </header>
 
@@ -348,6 +348,13 @@ export default function PWAGalleryPage() {
             </div>
           </>
         )}
+      </div>
+
+      {/* Help link */}
+      <div className="p-4 text-center">
+        <Link href="/pwa/help" className="pwa-text-tertiary text-sm hover:underline">
+          Segítségre van szüksége?
+        </Link>
       </div>
 
       {/* Lightbox */}

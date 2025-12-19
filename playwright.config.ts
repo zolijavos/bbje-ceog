@@ -9,7 +9,12 @@ if (existsSync(envPath)) {
   envContent.split('\n').forEach(line => {
     const match = line.match(/^([^#=]+)=(.*)$/);
     if (match && !process.env[match[1]]) {
-      process.env[match[1]] = match[2].trim();
+      let value = match[2].trim();
+      // Strip surrounding quotes (single or double)
+      if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+        value = value.slice(1, -1);
+      }
+      process.env[match[1]] = value;
     }
   });
 }
@@ -73,6 +78,23 @@ export default defineConfig({
         ...devices['Pixel 5'],
       },
       testMatch: /.*\.(pwa|checkin)\.spec\.ts/,
+    },
+
+    // Video Journey tests - ALWAYS record video, slower for visibility
+    {
+      name: 'video-journey',
+      use: {
+        ...devices['Desktop Chrome'],
+        video: 'on',
+        trace: 'on',
+        screenshot: 'on',
+        launchOptions: {
+          slowMo: 500, // Slower for better video visibility
+        },
+        viewport: { width: 1280, height: 720 },
+      },
+      testMatch: /.*\.journey\.spec\.ts/,
+      dependencies: ['setup'],
     },
   ],
 

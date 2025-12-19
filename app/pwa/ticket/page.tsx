@@ -197,7 +197,7 @@ export default function PWATicketPage() {
             <ArrowLeft size={18} />
             Back
           </Link>
-          <h1 className="font-display text-xl">Digital Ticket</h1>
+          <h1 className="font-display text-xl pwa-text-inverse">Digital Ticket</h1>
         </div>
       </header>
 
@@ -216,9 +216,9 @@ export default function PWATicketPage() {
       <div className="p-4">
         <div className="card-static overflow-hidden max-w-sm mx-auto">
           {/* Ticket header */}
-          <div className="pwa-bg-header pwa-text-inverse p-4 text-center">
-            <h2 className="font-display text-2xl mb-1">{EVENT_CONFIG.name}</h2>
-            <p className="opacity-80 text-sm">
+          <div className="pwa-bg-header p-4 text-center">
+            <h2 className="font-display text-2xl mb-1 text-white">{EVENT_CONFIG.name}</h2>
+            <p className="opacity-80 text-sm text-white">
               {formatEventDate()} - {EVENT_CONFIG.startTime}
             </p>
           </div>
@@ -299,6 +299,11 @@ export default function PWATicketPage() {
           <p className="opacity-80">
             Visit this page with an internet connection, and the QR code will be
             automatically saved.
+          </p>
+          <p className="mt-4">
+            <Link href="/pwa/help" className="pwa-text-accent hover:underline">
+              Segítségre van szüksége?
+            </Link>
           </p>
         </div>
       </div>

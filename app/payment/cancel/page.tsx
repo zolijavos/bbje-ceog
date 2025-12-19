@@ -78,6 +78,11 @@ export default async function PaymentCancelPage({
 
         {/* Contact Info */}
         <p className="text-sm text-neutral-500 mt-6 font-sans">
+          <Link href="/help" className="text-accent-teal hover:underline">
+            Segítségre van szüksége?
+          </Link>
+        </p>
+        <p className="text-sm text-neutral-500 mt-2 font-sans">
           Having problems? Contact us:{' '}
           <a
             href="mailto:info@ceogala.hu"

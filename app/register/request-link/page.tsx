@@ -78,10 +78,10 @@ export default async function RequestLinkPage({
         <p className="text-center text-sm landing-footer font-sans mt-2">
           Questions?{' '}
           <a
-            href="mailto:info@ceogala.hu"
+            href="mailto:11.11@myforgelabs.com"
             className="text-accent-teal dark:text-teal-400 hover:underline"
           >
-            info@ceogala.hu
+            11.11@myforgelabs.com
           </a>
         </p>
         <p className="text-center text-sm landing-footer font-sans mt-4">

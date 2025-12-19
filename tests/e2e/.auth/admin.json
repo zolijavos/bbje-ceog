@@ -1,33 +1,33 @@
 {
   "cookies": [
     {
-      "name": "next-auth.csrf-token",
-      "value": "e0230c65ee2eb5266a32d2a93da1d9a55b48b48b47b6e238ab31cbb76ad21da8%7C22c2a10dc3b2dc8945b72ac3c109fc87f56552c0856cf72ae53f0706847ab8df",
+      "name": "__Host-next-auth.csrf-token",
+      "value": "2e7044f27039992f8559db74453fe78f78b2658a97bc28fedc048ac13b730128%7C554fdf3fa6f2b7b072b3f24314944ed160baf89d2cf3ccfb7427c5f7b022da7a",
       "domain": "localhost",
       "path": "/",
       "expires": -1,
       "httpOnly": true,
-      "secure": false,
+      "secure": true,
       "sameSite": "Lax"
     },
     {
-      "name": "next-auth.callback-url",
-      "value": "http%3A%2F%2F46.202.153.178",
+      "name": "__Secure-next-auth.callback-url",
+      "value": "https%3A%2F%2Fceogala.mflevents.space",
       "domain": "localhost",
       "path": "/",
       "expires": -1,
       "httpOnly": true,
-      "secure": false,
+      "secure": true,
       "sameSite": "Lax"
     },
     {
-      "name": "next-auth.session-token",
-      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..8tFWStoBTiiopa1j.4hJYP9rG_HB0lrwzuAcTCUprsdQgxxqpy4LqbwdHNpeNfAPRjzcdXu5tax7HCapK3ZvlL08HOrngAAYJcZXkgwmnoKX2w-2N0ULLJSpXyj4_xPrvd1x9c7cY3sCcHViBW2oW9zXzwSXsr9f9q-jsj5ilDrb8l4g5v0P8kC7jkrex0Dnh_xp0riudchka0CaKb-fN3CBRG09C50-IyjczXStT5mdx96Oz.cOUieuQVjZaAfIuJkBcV7w",
+      "name": "__Secure-next-auth.session-token",
+      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..vUlxuAuGOFkJCGoJ.IQMeMX5aXo8zBoDeYP6g3m0Qf4_T15z0uiDj_jhOd-ZRylQD-qtnbBX_hfC9ZjVpqLyLFOzL7510gv4-jIZE9abmqUmhVOOZ0Nto6VG3sKNhtJ-l7kRUevlVZxe1pKU63BNruIvxfBsQbrVrnOD4rnumtI39dkqymWuDxrsmjEDdv17cdETKpOTqJet6Vyi9P9ayLZ_sRYDKvUjGszzGrzGYQa2jTPOj.08ogs8o14oK30GmzXLj5Aw",
       "domain": "localhost",
       "path": "/",
-      "expires": 1765907741.663592,
+      "expires": 1766211986.784276,
       "httpOnly": true,
-      "secure": false,
+      "secure": true,
       "sameSite": "Lax"
     }
   ],
@@ -37,7 +37,7 @@
       "localStorage": [
         {
           "name": "nextauth.message",
-          "value": "{\"event\":\"session\",\"data\":{\"trigger\":\"getSession\"},\"timestamp\":1765821341}"
+          "value": "{\"event\":\"session\",\"data\":{\"trigger\":\"getSession\"},\"timestamp\":1766125586}"
         },
         {
           "name": "theme",

@@ -125,4 +125,9 @@ export const RATE_LIMITS = {
     maxAttempts: 30, // Reduced from 100 to prevent DoS attacks
     windowMs: 60 * 1000, // 1 minute
   },
+  // IP-based rate limit for magic link requests (stricter)
+  MAGIC_LINK_IP: {
+    maxAttempts: 10,
+    windowMs: 60 * 60 * 1000, // 1 hour - max 10 requests per IP per hour
+  },
 } as const;

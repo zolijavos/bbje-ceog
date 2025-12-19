@@ -1412,6 +1412,49 @@ Please provide:
 • Clear browser cache`,
     keywords: ['support', 'help', 'error', 'problem'],
   },
+  {
+    id: 'diagram-dashboard',
+    category: 'System & Technical',
+    question: 'What is the Diagram Dashboard?',
+    answer: `The **Diagram Dashboard** is a visual documentation hub accessible at **/admin/diagrams** (Test Hub menu).
+
+**Contains 28 SVG diagrams** organized into categories:
+• **Architecture** (6): System Overview, Tech Stack, DB Schema, API, Security, Component Architecture
+• **Flows** (10): Registration, Payment, Check-in, Applicant flows, Admin vs Staff Roles
+• **Admin UI** (6): Dashboard wireframes and workflows
+• **Wireframes** (3): Guest Registration, PWA, Admin Core
+• **Test Cases** (2): E2E test flow diagrams
+• **Dataflow** (1): Email Rate Limiting
+
+**Features**:
+• HU/EN language toggle
+• Dark mode support
+• Notes for each diagram (CSV export/import)
+• Responsive sidebar navigation`,
+    keywords: ['diagram', 'dashboard', 'test', 'hub', 'svg', 'documentation', 'flow'],
+  },
+  {
+    id: 'email-retry-logic',
+    category: 'System & Technical',
+    question: 'How does email retry and rate limiting work?',
+    answer: `The email system includes **automatic retry** and **rate limiting**.
+
+**Retry Logic**:
+• 3 attempts per email
+• Exponential backoff: 1s → 2s → 4s delays
+• Automatic retries on transient errors
+
+**Rate Limiting** (per guest):
+• **5 emails per type per hour** (e.g., 5 magic links/hour)
+• **20 total emails per hour** (all types combined)
+
+**If rate limited**:
+• Wait 1 hour and retry
+• Use bulk email for large batches (handles limits automatically)
+
+**All emails are logged** in the Email Logs page with delivery status.`,
+    keywords: ['email', 'retry', 'rate', 'limit', 'backoff', 'delivery'],
+  },
 ];
 
 // Guide content - Hungarian version
@@ -2719,6 +2762,49 @@ Kérlek add meg:
 • Ellenőrizd az internetkapcsolatot
 • Töröld a böngésző cache-t`,
     keywords: ['támogatás', 'support', 'segítség', 'help', 'hiba', 'error'],
+  },
+  {
+    id: 'diagram-dashboard-hu',
+    category: 'System & Technical',
+    question: 'Mi az a Diagram Dashboard?',
+    answer: `A **Diagram Dashboard** egy vizuális dokumentációs központ, elérhető az **/admin/diagrams** címen (Test Hub menü).
+
+**28 SVG diagramot tartalmaz** kategóriákba rendezve:
+• **Architektúra** (6): Rendszer áttekintés, Tech Stack, DB Séma, API, Biztonság, Komponens Architektúra
+• **Folyamatok** (10): Regisztráció, Fizetés, Check-in, Jelentkező folyamatok, Admin vs Staff Szerepkörök
+• **Admin UI** (6): Dashboard wireframe-ek és workflow-k
+• **Wireframe-ek** (3): Vendég Regisztráció, PWA, Admin Core
+• **Teszt esetek** (2): E2E teszt folyamat diagramok
+• **Adatfolyam** (1): Email Rate Limiting
+
+**Funkciók**:
+• HU/EN nyelv váltás
+• Sötét mód támogatás
+• Megjegyzések minden diagramhoz (CSV export/import)
+• Reszponzív sidebar navigáció`,
+    keywords: ['diagram', 'dashboard', 'teszt', 'hub', 'svg', 'dokumentáció', 'folyamat'],
+  },
+  {
+    id: 'email-retry-logic-hu',
+    category: 'System & Technical',
+    question: 'Hogyan működik az email újrapróbálkozás és korlátozás?',
+    answer: `Az email rendszer **automatikus újrapróbálkozást** és **korlátozást** tartalmaz.
+
+**Újrapróbálkozás**:
+• 3 kísérlet emailenként
+• Exponenciális késleltetés: 1mp → 2mp → 4mp
+• Automatikus újrapróbálkozás átmeneti hibáknál
+
+**Korlátozás** (vendégenként):
+• **5 email típusonként óránként** (pl. 5 magic link/óra)
+• **20 összes email óránként** (minden típus együtt)
+
+**Ha korlátozva vagy**:
+• Várj 1 órát és próbáld újra
+• Használj tömeges emailt nagy mennyiséghez (automatikusan kezeli a limiteket)
+
+**Minden email naplózva van** az Email Logs oldalon a kézbesítési státusszal.`,
+    keywords: ['email', 'újrapróbálkozás', 'retry', 'korlát', 'limit', 'backoff', 'kézbesítés'],
   },
 ];
 

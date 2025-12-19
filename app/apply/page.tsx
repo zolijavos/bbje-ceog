@@ -8,7 +8,10 @@
  */
 
 import { useState } from 'react';
+import Link from 'next/link';
+import { PaperPlaneTilt, Check } from '@phosphor-icons/react';
 import GuestProfileFields from '@/app/register/components/GuestProfileFields';
+import ApplyWrapper from './ApplyWrapper';
 
 interface FormData {
   name: string;
@@ -140,90 +143,105 @@ export default function ApplyPage() {
   // Success state
   if (submitStatus === 'success') {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
+      <ApplyWrapper>
+        <div className="max-w-md mx-auto flex items-center justify-center min-h-[80vh]">
+          <div className="landing-card rounded-2xl shadow-2xl p-8 text-center border w-full">
+            <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Check weight="bold" size={32} className="text-emerald-600 dark:text-emerald-400" />
+            </div>
+            <h1 className="text-2xl font-bold landing-text-heading mb-2">Application Submitted!</h1>
+            <p className="landing-text-secondary mb-6">
+              Thank you for your interest in the CEO Gala 2026. We have received your application and will review it shortly.
+            </p>
+            <p className="landing-text-tertiary text-sm mb-6">
+              You will receive an email notification once your application has been reviewed.
+            </p>
+            <Link
+              href="/"
+              className="inline-block px-6 py-3 bg-accent-teal dark:bg-teal-600 text-white rounded-xl font-semibold
+                       hover:bg-accent-teal-dark dark:hover:bg-teal-700 transition-colors
+                       shadow-[0_4px_0_0_rgba(0,0,0,0.2)] hover:shadow-[0_2px_0_0_rgba(0,0,0,0.2)] hover:translate-y-[2px]"
+            >
+              Back to Home
+            </Link>
           </div>
-          <h1 className="text-2xl font-bold text-slate-800 mb-2">Application Submitted!</h1>
-          <p className="text-slate-600 mb-6">
-            Thank you for your interest in the CEO Gala 2026. We have received your application and will review it shortly.
-          </p>
-          <p className="text-slate-500 text-sm">
-            You will receive an email notification once your application has been reviewed.
-          </p>
         </div>
-      </div>
+      </ApplyWrapper>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 py-8 px-4">
+    <ApplyWrapper>
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">CEO Gala 2026</h1>
-          <h2 className="text-xl text-amber-400">Application to Attend</h2>
-          <p className="text-slate-300 mt-4 max-w-md mx-auto">
-            Not on the guest list? Apply here and we will review your application.
+          <Link href="/" className="inline-block hover:opacity-80 transition-opacity">
+            <h1 className="font-display text-4xl font-bold landing-text-heading mb-2">CEO Gala</h1>
+          </Link>
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <PaperPlaneTilt weight="duotone" size={24} className="text-amber-500 dark:text-amber-400" />
+            <h2 className="text-xl text-amber-600 dark:text-amber-400 font-medium">Apply to Attend</h2>
+          </div>
+          <p className="landing-text-secondary max-w-md mx-auto">
+            Not on the guest list? Submit your application and we&apos;ll review it.
           </p>
         </div>
 
         {/* Form Card */}
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
+        <div className="landing-card rounded-2xl shadow-2xl p-8 border">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Basic Info */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-slate-800 border-b pb-2">
+              <h3 className="text-lg font-semibold landing-text-heading border-b landing-divider pb-2">
                 Personal Information
               </h3>
 
               {/* Full Name */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
+                <label className="block text-sm font-medium landing-text-secondary mb-1">
                   Full Name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 ${
-                    errors.name ? 'border-red-500' : 'border-slate-300'
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 dark:focus:ring-amber-400 focus:border-amber-500 dark:focus:border-amber-400 outline-none transition-colors
+                             bg-white dark:bg-zinc-800 landing-text-primary placeholder:text-slate-400 dark:placeholder:text-zinc-500 ${
+                    errors.name ? 'border-red-500' : 'border-slate-300 dark:border-zinc-600'
                   }`}
                   placeholder="John Smith"
                   data-testid="name-input"
                 />
                 {errors.name && (
-                  <p className="text-red-600 text-sm mt-1">{errors.name}</p>
+                  <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.name}</p>
                 )}
               </div>
 
               {/* Email */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
+                <label className="block text-sm font-medium landing-text-secondary mb-1">
                   Email Address <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 ${
-                    errors.email ? 'border-red-500' : 'border-slate-300'
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 dark:focus:ring-amber-400 focus:border-amber-500 dark:focus:border-amber-400 outline-none transition-colors
+                             bg-white dark:bg-zinc-800 landing-text-primary placeholder:text-slate-400 dark:placeholder:text-zinc-500 ${
+                    errors.email ? 'border-red-500' : 'border-slate-300 dark:border-zinc-600'
                   }`}
                   placeholder="john@company.com"
                   data-testid="email-input"
                 />
                 {errors.email && (
-                  <p className="text-red-600 text-sm mt-1">{errors.email}</p>
+                  <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.email}</p>
                 )}
               </div>
             </div>
 
             {/* Profile Fields */}
             <div>
-              <h3 className="text-lg font-semibold text-slate-800 border-b pb-2 mb-4">
+              <h3 className="text-lg font-semibold landing-text-heading border-b landing-divider pb-2 mb-4">
                 Professional Details
               </h3>
               <GuestProfileFields
@@ -250,30 +268,30 @@ export default function ApplyPage() {
             </div>
 
             {/* GDPR Consent */}
-            <div className="border-t pt-6">
+            <div className="border-t landing-divider pt-6">
               <label className="flex items-start gap-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={formData.gdprConsent}
                   onChange={(e) => setFormData({ ...formData, gdprConsent: e.target.checked })}
-                  className="mt-1 w-5 h-5 text-amber-600 border-slate-300 rounded focus:ring-amber-500"
+                  className="mt-1 w-5 h-5 text-amber-600 dark:text-amber-400 border-slate-300 dark:border-zinc-600 rounded focus:ring-amber-500 dark:focus:ring-amber-400 bg-white dark:bg-zinc-800"
                   data-testid="gdpr-checkbox"
                 />
-                <span className="text-sm text-slate-600">
+                <span className="text-sm landing-text-secondary">
                   I consent to the processing of my personal data for the purpose of event registration
                   and communication. I understand that my data will be stored securely and used only
                   for event-related purposes. <span className="text-red-500">*</span>
                 </span>
               </label>
               {errors.gdprConsent && (
-                <p className="text-red-600 text-sm mt-2">{errors.gdprConsent}</p>
+                <p className="text-red-600 dark:text-red-400 text-sm mt-2">{errors.gdprConsent}</p>
               )}
             </div>
 
             {/* Error Message */}
             {submitStatus === 'error' && errorMessage && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                <p className="text-red-700 text-sm">{errorMessage}</p>
+              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                <p className="text-red-700 dark:text-red-400 text-sm">{errorMessage}</p>
               </div>
             )}
 
@@ -281,8 +299,11 @@ export default function ApplyPage() {
             <button
               type="submit"
               disabled={submitStatus === 'submitting'}
-              className="w-full bg-amber-600 text-white py-4 rounded-xl font-semibold hover:bg-amber-700
-                       transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-amber-600 dark:bg-amber-600 text-white py-4 rounded-xl font-semibold
+                       hover:bg-amber-700 dark:hover:bg-amber-700 transition-all
+                       disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2
+                       shadow-[0_4px_0_0_rgba(0,0,0,0.2)] hover:shadow-[0_2px_0_0_rgba(0,0,0,0.2)] hover:translate-y-[2px]
+                       active:shadow-none active:translate-y-[4px]"
               data-testid="submit-button"
             >
               {submitStatus === 'submitting' ? (
@@ -294,24 +315,35 @@ export default function ApplyPage() {
                   Submitting...
                 </>
               ) : (
-                'Submit Application'
+                <>
+                  <PaperPlaneTilt weight="bold" size={20} />
+                  Submit Application
+                </>
               )}
             </button>
 
-            <p className="text-center text-sm text-slate-500">
+            <p className="text-center text-sm landing-text-tertiary">
               Already received an invitation?{' '}
-              <a href="/register" className="text-amber-600 hover:underline">
-                Register here
-              </a>
+              <Link href="/register/request-link" className="text-amber-600 dark:text-amber-400 hover:underline">
+                Request your link
+              </Link>
             </p>
           </form>
         </div>
 
         {/* Footer */}
-        <p className="text-center text-slate-400 text-sm mt-6">
-          CEO Gala 2026 &copy; All rights reserved
+        <p className="text-center landing-footer text-sm mt-6">
+          <Link
+            href="/help"
+            className="text-accent-teal dark:text-teal-400 hover:underline"
+          >
+            Segítségre van szüksége?
+          </Link>
+        </p>
+        <p className="text-center landing-footer text-sm mt-4">
+          © 2026 CEO Gala • Executive Excellence
         </p>
       </div>
-    </div>
+    </ApplyWrapper>
   );
 }

@@ -107,6 +107,13 @@ export default async function PaymentSuccessPage({
             Back to Home
           </Link>
         </div>
+
+        {/* Help Link */}
+        <p className="text-sm text-neutral-500 mt-6 font-sans">
+          <Link href="/help" className="text-accent-teal hover:underline">
+            Segítségre van szüksége?
+          </Link>
+        </p>
       </div>
     </div>
   );

@@ -38,6 +38,44 @@ export async function middleware(request: NextRequest) {
       loginUrl.searchParams.set('callbackUrl', pathname);
       return NextResponse.redirect(loginUrl);
     }
+
+    // Role-based access control for staff users
+    const userRole = token.role as string;
+    if (userRole === 'staff') {
+      // Staff can only access these admin routes
+      const staffAllowedPaths = [
+        '/admin',           // Dashboard (will show limited view)
+        '/admin/checkin-log',
+        '/admin/help',
+      ];
+
+      // Check if current path is allowed for staff
+      const isAllowed = staffAllowedPaths.some(allowed => {
+        if (allowed === '/admin') {
+          return pathname === '/admin';
+        }
+        return pathname.startsWith(allowed);
+      });
+
+      if (!isAllowed) {
+        // Redirect staff to check-in scanner (their main tool)
+        return NextResponse.redirect(new URL('/checkin', request.url));
+      }
+    }
+  }
+
+  // Auth protection for check-in route (staff and admin both can access)
+  if (pathname.startsWith('/checkin')) {
+    const token = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
+
+    if (!token) {
+      const loginUrl = new URL('/admin/login', request.url);
+      loginUrl.searchParams.set('callbackUrl', pathname);
+      return NextResponse.redirect(loginUrl);
+    }
   }
 
   return NextResponse.next();
@@ -117,6 +155,7 @@ export const config = {
   matcher: [
     '/admin',
     '/admin/((?!login).*)',
+    '/checkin/:path*',
     '/api/:path*',
   ],
 };

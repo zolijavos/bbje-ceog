@@ -65,7 +65,7 @@
   --color-text-secondary: #D1D5DB;
   --color-text-tertiary: #9CA3AF;
   --color-text-disabled: #6B7280;
-  --color-text-inverse: #111827;
+  --color-text-inverse: #FFFFFF;
 
   --color-btn-primary-bg: #E5E7EB;
   --color-btn-primary-text: #111827;
@@ -597,6 +597,24 @@ tr:hover td {
   box-shadow: var(--shadow-card-hover);
 }
 
+/* Accent outline 3D button - high visibility with teal border */
+.btn-3d-accent {
+  background: transparent;
+  color: var(--color-accent);
+  border: 2px solid var(--color-accent);
+  box-shadow: 0 3px 0 var(--color-accent), var(--shadow-card);
+}
+
+.btn-3d-accent:hover:not(:disabled) {
+  background: var(--color-accent);
+  color: #FFFFFF;
+  box-shadow: 0 4px 0 #0D9488, var(--shadow-card-hover);
+}
+
+.btn-3d-accent:active:not(:disabled) {
+  box-shadow: 0 1px 0 #0D9488;
+}
+
 /* === FLOATING CARD === */
 .card-float {
   background: var(--color-bg-card);
@@ -1011,6 +1029,115 @@ tr:hover td {
 
 .pwa-border-emphasis {
   border-color: var(--color-border-emphasis);
+}
+
+/* ========================================
+   LANDING PAGE THEME SYSTEM
+   For homepage, request-link, apply pages
+   ======================================== */
+
+:root {
+  /* Landing page - Light mode */
+  --landing-bg-gradient-from: #F8FAFC;
+  --landing-bg-gradient-via: #F1F5F9;
+  --landing-bg-gradient-to: #E2E8F0;
+  --landing-card-bg: #FFFFFF;
+  --landing-card-bg-gradient-from: #FFFFFF;
+  --landing-card-bg-gradient-to: #F8FAFC;
+  --landing-card-border: rgba(148, 163, 184, 0.3);
+  --landing-btn-bg: rgba(241, 245, 249, 0.9);
+  --landing-btn-bg-hover: rgba(226, 232, 240, 0.95);
+  --landing-btn-border: rgba(148, 163, 184, 0.4);
+  --landing-btn-shadow: 0 4px 0 rgba(148, 163, 184, 0.3);
+  --landing-btn-shadow-hover: 0 2px 0 rgba(148, 163, 184, 0.3);
+  --landing-text-heading: #0F172A;
+  --landing-text-primary: #1E293B;
+  --landing-text-secondary: #475569;
+  --landing-text-tertiary: #64748B;
+  --landing-divider: rgba(148, 163, 184, 0.3);
+  --landing-icon-bg-teal: rgba(13, 148, 136, 0.12);
+  --landing-icon-bg-amber: rgba(245, 158, 11, 0.12);
+  --landing-footer-text: #64748B;
+}
+
+[data-theme="dark"],
+.dark {
+  /* Landing page - Dark mode */
+  --landing-bg-gradient-from: #0A0A0A;
+  --landing-bg-gradient-via: #171717;
+  --landing-bg-gradient-to: #0A0A0A;
+  --landing-card-bg: #1A1A1A;
+  --landing-card-bg-gradient-from: #1F1F1F;
+  --landing-card-bg-gradient-to: #171717;
+  --landing-card-border: rgba(63, 63, 70, 0.5);
+  --landing-btn-bg: rgba(39, 39, 42, 0.8);
+  --landing-btn-bg-hover: rgba(52, 52, 56, 0.9);
+  --landing-btn-border: rgba(63, 63, 70, 0.5);
+  --landing-btn-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
+  --landing-btn-shadow-hover: 0 2px 0 rgba(0, 0, 0, 0.4);
+  --landing-text-heading: #FAFAFA;
+  --landing-text-primary: #F4F4F5;
+  --landing-text-secondary: #A1A1AA;
+  --landing-text-tertiary: #71717A;
+  --landing-divider: rgba(63, 63, 70, 0.5);
+  --landing-icon-bg-teal: rgba(45, 212, 191, 0.15);
+  --landing-icon-bg-amber: rgba(251, 191, 36, 0.15);
+  --landing-footer-text: #52525B;
+}
+
+/* Landing page utility classes */
+.landing-bg {
+  background: linear-gradient(to bottom right, var(--landing-bg-gradient-from), var(--landing-bg-gradient-via), var(--landing-bg-gradient-to));
+}
+
+.landing-card {
+  background: linear-gradient(to bottom, var(--landing-card-bg-gradient-from), var(--landing-card-bg-gradient-to));
+  border-color: var(--landing-card-border);
+}
+
+.landing-btn {
+  background: var(--landing-btn-bg);
+  border-color: var(--landing-btn-border);
+  box-shadow: var(--landing-btn-shadow);
+  transition: all 0.15s ease-out;
+}
+
+.landing-btn:hover {
+  background: var(--landing-btn-bg-hover);
+  box-shadow: var(--landing-btn-shadow-hover);
+  transform: translateY(2px);
+}
+
+.landing-text-heading {
+  color: var(--landing-text-heading);
+}
+
+.landing-text-primary {
+  color: var(--landing-text-primary);
+}
+
+.landing-text-secondary {
+  color: var(--landing-text-secondary);
+}
+
+.landing-text-tertiary {
+  color: var(--landing-text-tertiary);
+}
+
+.landing-divider {
+  border-color: var(--landing-divider);
+}
+
+.landing-icon-teal {
+  background: var(--landing-icon-bg-teal);
+}
+
+.landing-icon-amber {
+  background: var(--landing-icon-bg-amber);
+}
+
+.landing-footer {
+  color: var(--landing-footer-text);
 }
 
 /* ========================================

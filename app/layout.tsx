@@ -3,6 +3,7 @@ import { Playfair_Display, Open_Sans } from 'next/font/google';
 import './globals.css';
 import { validateEnv } from '@/lib/utils/env';
 import Footer from './components/Footer';
+import MobileFooter from './components/MobileFooter';
 import GlobalProviders from './components/GlobalProviders';
 
 // Validate environment variables at startup
@@ -37,7 +38,12 @@ export const metadata: Metadata = {
     telephone: false,
   },
   icons: {
-    apple: '/icons/icon-192.svg',
+    icon: '/myforgelabs-logo.png',
+    shortcut: '/myforgelabs-logo.png',
+    apple: '/myforgelabs-logo.png',
+  },
+  other: {
+    'mobile-web-app-capable': 'yes',
   },
 };
 
@@ -69,6 +75,7 @@ export default function RootLayout({
       <body className="font-sans pb-10">
         <GlobalProviders>
           {children}
+          <MobileFooter />
           <Footer />
         </GlobalProviders>
       </body>

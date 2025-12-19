@@ -60,15 +60,15 @@ export default function MobileTabBar() {
 
       {/* More Menu Slide-up */}
       {moreOpen && (
-        <div className="fixed bottom-16 left-0 right-0 bg-white rounded-t-2xl shadow-lg z-50 md:hidden animate-slide-up">
+        <div className="fixed bottom-14 left-0 right-0 bg-white dark:bg-neutral-800 rounded-t-2xl shadow-lg z-50 md:hidden animate-slide-up">
           <div className="p-4">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">More</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">More</h3>
               <button
                 onClick={() => setMoreOpen(false)}
-                className="p-2 rounded-full hover:bg-gray-100"
+                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-700"
               >
-                <X size={20} className="text-gray-500" />
+                <X size={20} className="text-gray-500 dark:text-neutral-400" />
               </button>
             </div>
             <div className="grid grid-cols-3 gap-3">
@@ -82,8 +82,8 @@ export default function MobileTabBar() {
                     onClick={() => setMoreOpen(false)}
                     className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${
                       active
-                        ? 'bg-teal-50 text-teal-600'
-                        : 'hover:bg-gray-100 text-gray-600'
+                        ? 'bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400'
+                        : 'hover:bg-gray-100 dark:hover:bg-neutral-700 text-gray-600 dark:text-neutral-300'
                     }`}
                   >
                     <Icon size={24} weight={active ? 'fill' : 'regular'} />
@@ -99,8 +99,8 @@ export default function MobileTabBar() {
       )}
 
       {/* Bottom Tab Bar */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40 md:hidden safe-area-bottom">
-        <div className="flex items-center justify-around h-16">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-neutral-900 border-t border-gray-200 dark:border-neutral-700 z-40 md:hidden safe-area-bottom">
+        <div className="flex items-center justify-around h-14">
           {mainTabs.map((tab) => {
             const Icon = tab.icon;
             const active = isActive(tab.href);
@@ -109,28 +109,28 @@ export default function MobileTabBar() {
                 key={tab.href}
                 href={tab.href}
                 className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
-                  active ? 'text-teal-600' : 'text-gray-500'
+                  active ? 'text-teal-600 dark:text-teal-400' : 'text-gray-500 dark:text-neutral-400'
                 }`}
               >
-                <Icon size={24} weight={active ? 'fill' : 'regular'} />
-                <span className="text-xs font-medium mt-0.5">{tab.label}</span>
+                <Icon size={22} weight={active ? 'fill' : 'regular'} />
+                <span className="text-[10px] font-medium mt-0.5">{tab.label}</span>
               </Link>
             );
           })}
           <button
             onClick={() => setMoreOpen(!moreOpen)}
             className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
-              moreOpen || isMoreActive ? 'text-teal-600' : 'text-gray-500'
+              moreOpen || isMoreActive ? 'text-teal-600 dark:text-teal-400' : 'text-gray-500 dark:text-neutral-400'
             }`}
           >
-            <DotsThree size={24} weight={moreOpen || isMoreActive ? 'fill' : 'regular'} />
-            <span className="text-xs font-medium mt-0.5">More</span>
+            <DotsThree size={22} weight={moreOpen || isMoreActive ? 'fill' : 'regular'} />
+            <span className="text-[10px] font-medium mt-0.5">More</span>
           </button>
         </div>
       </nav>
 
-      {/* Spacer for fixed bottom nav */}
-      <div className="h-16 md:hidden" />
+      {/* Spacer for fixed bottom nav + footer */}
+      <div className="h-20 md:hidden" />
 
       <style jsx global>{`
         @keyframes slide-up {

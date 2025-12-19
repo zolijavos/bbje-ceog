@@ -120,21 +120,15 @@ function PWALayoutInner({ children }: { children: React.ReactNode }) {
       {/* Main content */}
       <main className="min-h-screen pb-14">{children}</main>
 
-      {/* Footer branding */}
-      <footer
-        className="fixed bottom-0 left-0 right-0 py-2 text-center border-t transition-colors duration-300"
-        style={{
-          background: 'var(--color-bg-card)',
-          borderColor: 'var(--color-border-subtle)',
-        }}
-      >
-        <span className="text-xs pwa-text-tertiary">
+      {/* Footer branding - blur effect */}
+      <footer className="fixed bottom-0 left-0 right-0 py-1.5 text-center border-t border-white/20 dark:border-neutral-700/30 bg-white/60 dark:bg-neutral-900/60 backdrop-blur-md transition-colors duration-300">
+        <span className="text-[10px] text-neutral-500/80 dark:text-neutral-400/80">
           Built By{' '}
           <a
             href="https://www.myforgelabs.com/#kapcsolat"
             target="_blank"
             rel="noopener noreferrer"
-            className="pwa-text-secondary hover:pwa-text-primary transition-colors underline"
+            className="text-neutral-600/80 dark:text-neutral-300/80 hover:text-neutral-800 dark:hover:text-white transition-colors underline"
           >
             MyForge Labs
           </a>

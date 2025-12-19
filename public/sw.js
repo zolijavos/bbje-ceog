@@ -1,15 +1,15 @@
 // CEO Gála 2026 - Service Worker
-const CACHE_NAME = 'ceogala-pwa-v2';
+// Version bump forces cache refresh on all clients
+const CACHE_VERSION = 'v3';
+const CACHE_NAME = `ceogala-pwa-${CACHE_VERSION}`;
 const OFFLINE_URL = '/pwa/offline';
 
-// Assets to cache on install
+// Only cache truly static assets on install
 const PRECACHE_ASSETS = [
-  '/pwa',
-  '/pwa/dashboard',
-  '/pwa/ticket',
-  '/pwa/profile',
   '/pwa/offline',
   '/manifest.json',
+  '/icons/icon-192.svg',
+  '/icons/icon-512.svg',
 ];
 
 // Install event - cache core assets
@@ -38,7 +38,7 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch event - network first, fallback to cache
+// Fetch event - NETWORK FIRST for pages, cache only for static assets
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
@@ -49,15 +49,21 @@ self.addEventListener('fetch', (event) => {
   // Skip cross-origin requests
   if (url.origin !== self.location.origin) return;
 
-  // Skip API requests (always go to network)
+  // Skip API requests (always go to network, no caching)
   if (url.pathname.startsWith('/api/')) return;
 
-  // For PWA routes: network first, cache fallback
-  if (url.pathname.startsWith('/pwa')) {
+  // Check if this is a static asset (images, fonts, etc.)
+  const isStaticAsset = /\.(png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/i.test(url.pathname) ||
+    url.pathname.startsWith('/_next/static/');
+
+  // For static assets: cache first, network fallback
+  if (isStaticAsset) {
     event.respondWith(
-      fetch(request)
-        .then((response) => {
-          // Clone and cache successful responses
+      caches.match(request).then((cachedResponse) => {
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+        return fetch(request).then((response) => {
           if (response.ok) {
             const responseClone = response.clone();
             caches.open(CACHE_NAME).then((cache) => {
@@ -65,40 +71,39 @@ self.addEventListener('fetch', (event) => {
             });
           }
           return response;
-        })
-        .catch(() => {
-          // Network failed, try cache
-          return caches.match(request).then((cachedResponse) => {
-            if (cachedResponse) {
-              return cachedResponse;
-            }
-            // Return offline page for navigation requests
-            if (request.mode === 'navigate') {
-              return caches.match(OFFLINE_URL);
-            }
-            return new Response('Offline', { status: 503 });
-          });
-        })
+        });
+      })
     );
     return;
   }
 
-  // For other assets: cache first, network fallback
+  // For ALL pages and other requests: NETWORK FIRST, cache fallback
+  // This ensures fresh content is always served
   event.respondWith(
-    caches.match(request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      return fetch(request).then((response) => {
-        if (response.ok) {
+    fetch(request)
+      .then((response) => {
+        // Only cache successful responses for PWA routes (offline support)
+        if (response.ok && url.pathname.startsWith('/pwa')) {
           const responseClone = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(request, responseClone);
           });
         }
         return response;
-      });
-    })
+      })
+      .catch(() => {
+        // Network failed, try cache (only useful for PWA offline mode)
+        return caches.match(request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          // Return offline page for navigation requests
+          if (request.mode === 'navigate') {
+            return caches.match(OFFLINE_URL);
+          }
+          return new Response('Offline', { status: 503 });
+        });
+      })
   );
 });
 

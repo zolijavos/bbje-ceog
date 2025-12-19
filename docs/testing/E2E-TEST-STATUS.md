@@ -1,6 +1,6 @@
 # E2E Teszt Státusz
 
-**Utolsó frissítés:** 2025-12-15
+**Utolsó frissítés:** 2025-12-17
 **Playwright verzió:** 1.49.1
 **Teszt környezet:** http://localhost:3000
 
@@ -8,17 +8,19 @@
 
 | Metrika | Érték |
 |---------|-------|
-| **Összes teszt** | 222 |
-| **Sikeres** | 201 |
+| **Összes teszt** | 232 |
+| **Sikeres** | 210 |
 | **Kihagyott** | 21 |
-| **Hibás** | 0 |
-| **Futási idő** | ~6 perc |
+| **Hibás** | 1 |
+| **Futási idő** | ~9 perc |
 
 ## Teszt fájlok
 
+### Funkcionális tesztek
+
 | Fájl | Tesztek | Státusz |
 |------|---------|---------|
-| `applicant.spec.ts` | 8 | ✅ Mind sikeres |
+| `applicant.spec.ts` | 19 | ✅ Mind sikeres |
 | `checkin.spec.ts` | 45 | ✅ 42 sikeres, 3 kihagyva |
 | `email-templates.spec.ts` | 12 | ✅ Mind sikeres |
 | `payments.spec.ts` | 15 | ✅ Mind sikeres |
@@ -29,6 +31,34 @@
 | `full-payment-flow-demo.spec.ts` | 1 | ✅ Sikeres |
 | `paired-payment-demo.spec.ts` | 1 | ✅ Sikeres |
 | `stripe-payment.spec.ts` | 1 | ✅ Sikeres |
+
+### Journey tesztek (videó rögzítéssel)
+
+| Fájl | Leírás | Státusz |
+|------|--------|---------|
+| `01-vip-registration.journey.spec.ts` | VIP regisztráció + PWA flow | ✅ Sikeres |
+| `02-applicant-approval.journey.spec.ts` | Jelentkezés → Admin jóváhagyás | ✅ Sikeres |
+| `03-admin-seating.journey.spec.ts` | Asztalok + Ültetési rend | ✅ Sikeres |
+| `04-admin-email.journey.spec.ts` | Email sablonok + Napló | ✅ Sikeres |
+| `05-staff-checkin.journey.spec.ts` | Staff check-in QR validálás | ✅ Sikeres |
+
+**Videók:** `public/test-videos/*.webm`
+
+## Hibás tesztek (1 db)
+
+### Registration tesztek
+
+| Teszt | Fájl | Hiba | Prioritás |
+|-------|------|------|-----------|
+| `should display registration status by email` | `registration.spec.ts:351` | Teszt hiányzó `code` paraméterrel hívja a `/status` oldalt → átirányítás `/pwa`-ra | Közepes |
+
+**Részletek:**
+- A teszt csak `email` paramétert ad meg: `/status?email=...`
+- A `/status` oldal megköveteli mind a `code` mind az `email` paramétert
+- Ha `code` hiányzik, automatikusan átirányít `/pwa`-ra (line 30-32 in `app/status/page.tsx`)
+- Javítási javaslat: A tesztben generálni kell érvényes magic link code-ot a vendéghez
+
+---
 
 ## Kihagyott tesztek
 
@@ -171,6 +201,27 @@ A tesztek egyedi fixture-öket használnak:
 
 ## Kapcsolódó dokumentáció
 
-- [Manuális fizetési teszt](./MANUAL-PAYMENT-FLOW-TEST.md)
+### Manuális tesztelési útmutatók
+
+| Útmutató | Flow | Időtartam |
+|----------|------|-----------|
+| [Vendég Import + Meghívó](./MANUAL-GUEST-IMPORT-INVITATION.md) | Vendég hozzáadás → CSV import → Magic link küldés | ~15-20 perc |
+| [VIP Regisztráció + PWA](./MANUAL-VIP-REGISTRATION.md) | VIP magic link → Regisztráció → PWA bejelentkezés | ~15 perc |
+| [Páros Regisztráció (E2E)](./MANUAL-PAIRED-REGISTRATION-FLOW.md) | Teljes páros flow: CSV → Reg → Fizetés → QR | ~25-30 perc |
+| [Banki Átutalás Fizetés](./MANUAL-PAYMENT-FLOW-TEST.md) | Páros jegy → Bank transfer → Admin jóváhagyás | ~10 perc |
+| [Jelentkező Jóváhagyás](./MANUAL-APPLICANT-APPROVAL.md) | Nyilvános jelentkezés → Admin jóváhagyás | ~10 perc |
+| [Admin Ültetés](./MANUAL-ADMIN-SEATING.md) | Asztal létrehozás → Vendég hozzárendelés | ~10 perc |
+| [Admin Email](./MANUAL-ADMIN-EMAIL.md) | Email sablonok → Napló → Ütemezett emailek | ~8 perc |
+| [Staff Check-in](./MANUAL-STAFF-CHECKIN.md) | Staff login → QR validálás → Duplikált kezelés | ~10 perc |
+| [Stripe Fizetés](./MANUAL-STRIPE-PAYMENT.md) | Fizető regisztráció → Stripe Checkout → Webhook | ~15 perc |
+
+### Egyéb
+
 - [Playwright konfiguráció](../../playwright.config.ts)
 - [Teszt helperek](../../tests/e2e/helpers/index.ts)
+- [DB fixtures](../../tests/e2e/fixtures/db-fixtures.ts)
+
+---
+
+*Utolsó frissítés: 2025-12-17*
+*Készítette: Paige (Tech Writer) + Murat (TEA)*

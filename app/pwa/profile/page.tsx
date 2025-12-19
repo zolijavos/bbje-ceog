@@ -222,7 +222,7 @@ export default function PWAProfilePage() {
             <ArrowLeft size={18} />
             Back
           </Link>
-          <h1 className="font-display text-xl">Edit Profile</h1>
+          <h1 className="font-display text-xl pwa-text-inverse">Edit Profile</h1>
         </div>
       </header>
 
@@ -396,6 +396,13 @@ export default function PWAProfilePage() {
           <Button3D type="submit" disabled={saving} loading={saving} fullWidth>
             {saving ? 'Saving...' : 'Save Changes'}
           </Button3D>
+
+          {/* Help link */}
+          <p className="text-center pwa-text-tertiary text-sm mt-6">
+            <Link href="/pwa/help" className="pwa-text-accent hover:underline">
+              Segítségre van szüksége?
+            </Link>
+          </p>
         </form>
       </div>
     </div>

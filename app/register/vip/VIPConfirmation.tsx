@@ -12,6 +12,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import GuestProfileFields from '../components/GuestProfileFields';
 import ConsentCheckboxes from '../components/ConsentCheckboxes';
 
@@ -194,9 +195,11 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
 
           {/* Event Details */}
           <div className="bg-neutral-50 rounded-lg p-4 mb-6 border-l-4 border-accent-gold">
-            <h2 className="font-display text-lg font-semibold text-neutral-800 mb-2">
-              CEO Gala 2026
-            </h2>
+            <Link href="/" className="hover:opacity-80 transition-opacity">
+              <h2 className="font-display text-lg font-semibold text-neutral-800 mb-2">
+                CEO Gala 2026
+              </h2>
+            </Link>
             <p className="text-neutral-500 text-sm font-sans">
               Friday, March 27, 2026 • 6:00 PM
               <br />
@@ -352,8 +355,13 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
         {/* Event Info Footer */}
         <div className="mt-8 pt-6 border-t border-neutral-300/20">
           <div className="text-center text-sm text-neutral-500 font-sans">
-            <p className="font-medium text-neutral-800">CEO Gala 2026</p>
+            <Link href="/" className="font-medium text-neutral-800 hover:text-accent-gold transition-colors">CEO Gala 2026</Link>
             <p>Friday, March 27, 2026 • 6:00 PM • Budapest, Marriott Hotel</p>
+            <p className="mt-3">
+              <Link href="/help" className="text-accent-gold hover:underline">
+                Segítségre van szüksége?
+              </Link>
+            </p>
           </div>
         </div>
       </div>

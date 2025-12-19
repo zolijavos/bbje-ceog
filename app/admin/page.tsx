@@ -5,5 +5,10 @@ import DashboardContent from './DashboardContent';
 export default async function AdminDashboard() {
   const session = await getServerSession(authOptions);
 
-  return <DashboardContent userName={session?.user?.name || ''} />;
+  return (
+    <DashboardContent
+      userName={session?.user?.name || ''}
+      userRole={session?.user?.role || 'staff'}
+    />
+  );
 }
