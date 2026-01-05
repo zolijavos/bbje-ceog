@@ -410,10 +410,11 @@ function dataUrlToBuffer(dataUrl: string): Buffer {
  * Send e-ticket email with QR code to a guest
  *
  * 1. Lookup registration with guest data
- * 2. Generate QR code (or use provided)
- * 3. Compose email with inline QR using CID attachment
- * 4. Send via Nodemailer with QR as inline attachment
- * 5. Log delivery attempt
+ * 2. Generate check-in QR code (or use provided)
+ * 3. Generate PWA login QR code
+ * 4. Compose email with inline QRs using CID attachments
+ * 5. Send via Nodemailer with QRs as inline attachments
+ * 6. Log delivery attempt
  *
  * @param registrationId - Registration ID to send ticket for
  * @param qrDataUrl - Optional pre-generated QR code data URL (generates if not provided)
@@ -448,15 +449,25 @@ export async function sendTicketEmail(
     }
 
     const guestId = registration.guest.id;
+    const pwaAuthCode = registration.guest.pwa_auth_code;
 
-    // 2. Generate QR code if not provided
+    // 2. Generate check-in QR code if not provided
     let qrCode = qrDataUrl;
     if (!qrCode) {
       const ticket = await generateTicket(registrationId);
       qrCode = ticket.qrCodeDataUrl;
     }
 
-    // 3. Compose email (try DB template first, fallback to hardcoded)
+    // 3. Generate PWA login QR code (contains URL with auth code)
+    const appUrl = process.env.APP_URL || 'https://ceogala.mflevents.space';
+    const pwaLoginUrl = pwaAuthCode ? `${appUrl}/pwa?code=${pwaAuthCode}` : null;
+    let pwaQrCode: string | null = null;
+    if (pwaLoginUrl) {
+      const { generateQRCodeDataURL } = await import('@/lib/services/qr-ticket');
+      pwaQrCode = await generateQRCodeDataURL(pwaLoginUrl);
+    }
+
+    // 4. Compose email (try DB template first, fallback to hardcoded)
     const ticketTypeLabels: Record<TicketType, string> = {
       vip_free: 'VIP Ticket',
       paid_single: 'Single Ticket',
@@ -464,9 +475,11 @@ export async function sendTicketEmail(
     };
     const ticketTypeLabel = ticketTypeLabels[registration.ticket_type] || registration.ticket_type;
 
-    // Use CID reference for inline image instead of data URL
+    // Use CID references for inline images instead of data URLs
     const qrCodeCid = 'qrcode@ceogala.hu';
     const qrCodeCidRef = `cid:${qrCodeCid}`;
+    const pwaQrCodeCid = 'pwa-qrcode@ceogala.hu';
+    const pwaQrCodeCidRef = `cid:${pwaQrCodeCid}`;
 
     let subject: string;
     let html: string;
@@ -478,6 +491,9 @@ export async function sendTicketEmail(
         ticketType: ticketTypeLabel,
         qrCodeDataUrl: qrCodeCidRef, // Use CID reference
         partnerName: registration.partner_name || undefined,
+        pwaAuthCode: pwaAuthCode || undefined,
+        pwaQrCodeDataUrl: pwaQrCode ? pwaQrCodeCidRef : undefined,
+        pwaLoginUrl: pwaLoginUrl || undefined,
       });
       subject = rendered.subject;
       html = rendered.html;
@@ -489,13 +505,16 @@ export async function sendTicketEmail(
         ticketType: registration.ticket_type,
         qrCodeDataUrl: qrCodeCidRef, // Use CID reference
         partnerName: registration.partner_name || undefined,
+        pwaAuthCode: pwaAuthCode || undefined,
+        pwaQrCodeDataUrl: pwaQrCode ? pwaQrCodeCidRef : undefined,
+        pwaLoginUrl: pwaLoginUrl || undefined,
       });
       subject = fallback.subject;
       html = fallback.html;
       text = fallback.text;
     }
 
-    // 4. Prepare QR code as CID inline attachment
+    // 5. Prepare QR codes as CID inline attachments
     const qrCodeBuffer = dataUrlToBuffer(qrCode);
     const attachments: EmailAttachment[] = [
       {
@@ -506,7 +525,18 @@ export async function sendTicketEmail(
       },
     ];
 
-    // 5. Send email with inline attachment
+    // Add PWA QR code attachment if available
+    if (pwaQrCode) {
+      const pwaQrCodeBuffer = dataUrlToBuffer(pwaQrCode);
+      attachments.push({
+        filename: 'pwa-qrcode.png',
+        content: pwaQrCodeBuffer,
+        contentType: 'image/png',
+        cid: pwaQrCodeCid,
+      });
+    }
+
+    // 6. Send email with inline attachments
     const result = await sendEmail({
       to: registration.guest.email,
       subject,
@@ -515,7 +545,7 @@ export async function sendTicketEmail(
       attachments,
     });
 
-    // 6. Log delivery
+    // 7. Log delivery
     await logEmailDelivery({
       guestId,
       recipient: registration.guest.email,
