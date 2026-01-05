@@ -44,17 +44,7 @@ async function generateTicketWithRetry(
       } else {
         // Final attempt failed - log critical error
         logError(`[VIP_REGISTRATION] CRITICAL: All ${maxRetries} attempts failed for registration ${registrationId}. Last error: ${ticketResult.error}. Manual intervention required!`);
-
-        // Mark registration as needing attention (optional: could update a status field)
-        await prisma.registration.update({
-          where: { id: registrationId },
-          data: {
-            // Add a note that ticket generation failed (uses existing field if available)
-            // This helps admins identify VIPs who need manual ticket sending
-          },
-        }).catch(() => {
-          // Ignore update errors - we've already logged the critical issue
-        });
+        // TODO: Consider adding admin notification or ticket_generation_failed flag
       }
     } catch (err) {
       // Unexpected error - log and retry
@@ -138,6 +128,7 @@ export interface VIPRegistrationInput {
   has_partner?: boolean;
   partner_name?: string | null;
   partner_email?: string | null;
+  partner_gdpr_consent?: boolean | null;
 }
 
 /**
@@ -238,24 +229,34 @@ export async function processVIPRegistration(
       });
 
       // For VIP with partner: Create partner as separate Guest record linked to main guest
+      // Partner also gets their own Registration and ticket
+      let partnerRegistrationId: number | null = null;
+
       if (data.has_partner && data.partner_name && data.partner_email && partnerPwaAuthCode) {
+        // Trim partner inputs
+        const trimmedPartnerName = data.partner_name.trim();
+        const trimmedPartnerEmail = data.partner_email.trim().toLowerCase();
+
         // Check if partner already exists as guest
         const existingPartner = await tx.guest.findUnique({
-          where: { email: data.partner_email },
+          where: { email: trimmedPartnerEmail },
         });
+
+        let partnerId: number;
 
         if (!existingPartner) {
           // Create new partner guest linked to main VIP guest
-          await tx.guest.create({
+          const newPartner = await tx.guest.create({
             data: {
-              email: data.partner_email,
-              name: data.partner_name,
+              email: trimmedPartnerEmail,
+              name: trimmedPartnerName,
               guest_type: 'vip', // Partner is also VIP (free)
               registration_status: 'approved', // Auto-approved through main guest
               paired_with_id: guestId, // Link to main guest
               pwa_auth_code: partnerPwaAuthCode,
             },
           });
+          partnerId = newPartner.id;
         } else {
           // Link existing guest as partner
           await tx.guest.update({
@@ -266,20 +267,40 @@ export async function processVIPRegistration(
               pwa_auth_code: existingPartner.pwa_auth_code || partnerPwaAuthCode,
             },
           });
+          partnerId = existingPartner.id;
         }
+
+        // Create Registration for partner so they get their own ticket
+        const partnerRegistration = await tx.registration.create({
+          data: {
+            guest_id: partnerId,
+            ticket_type: 'vip_free',
+            gdpr_consent: data.partner_gdpr_consent ?? false,
+            gdpr_consent_at: data.partner_gdpr_consent ? new Date() : null,
+            partner_name: null,
+            partner_email: null,
+          },
+        });
+        partnerRegistrationId = partnerRegistration.id;
       }
 
-      return registration;
+      return { registration, partnerRegistrationId };
     });
 
     // Generate QR ticket and send email for VIP with retry mechanism
     // Async with exponential backoff to ensure VIP guests receive their tickets
-    logInfo(`[VIP_REGISTRATION] Generating ticket for registration ${result.id}`);
-    void generateTicketWithRetry(result.id, 3);
+    logInfo(`[VIP_REGISTRATION] Generating ticket for registration ${result.registration.id}`);
+    void generateTicketWithRetry(result.registration.id, 3);
+
+    // Generate ticket for partner if they registered
+    if (result.partnerRegistrationId) {
+      logInfo(`[VIP_REGISTRATION] Generating ticket for partner registration ${result.partnerRegistrationId}`);
+      void generateTicketWithRetry(result.partnerRegistrationId, 3);
+    }
 
     return {
       success: true,
-      registrationId: result.id,
+      registrationId: result.registration.id,
       status: 'approved',
     };
   } catch (error) {

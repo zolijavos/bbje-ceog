@@ -46,6 +46,7 @@ interface FormData {
   hasPartner: boolean;
   partnerName: string;
   partnerEmail: string;
+  partnerGdprConsent: boolean;
 }
 
 interface FormErrors {
@@ -59,6 +60,7 @@ interface FormErrors {
   cancellation_accepted?: string;
   partner_name?: string;
   partner_email?: string;
+  partner_gdpr_consent?: string;
 }
 
 export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
@@ -80,6 +82,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
     hasPartner: false,
     partnerName: '',
     partnerEmail: '',
+    partnerGdprConsent: false,
   });
 
   const validateForm = (): boolean => {
@@ -109,6 +112,10 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
         if (!emailRegex.test(formData.partnerEmail)) {
           newErrors.partner_email = 'Invalid email format';
         }
+      }
+      // Partner GDPR consent required
+      if (!formData.partnerGdprConsent) {
+        newErrors.partner_gdpr_consent = 'Partner GDPR consent is required';
       }
     }
 
@@ -151,6 +158,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
           has_partner: formData.hasPartner,
           partner_name: formData.hasPartner ? formData.partnerName : null,
           partner_email: formData.hasPartner ? formData.partnerEmail : null,
+          partner_gdpr_consent: formData.hasPartner ? formData.partnerGdprConsent : null,
         }),
       });
 
@@ -355,7 +363,22 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
             <input
               type="checkbox"
               checked={formData.hasPartner}
-              onChange={(e) => setFormData((prev) => ({ ...prev, hasPartner: e.target.checked }))}
+              onChange={(e) => {
+                const checked = e.target.checked;
+                setFormData((prev) => ({
+                  ...prev,
+                  hasPartner: checked,
+                  // Clear partner fields when unchecked
+                  ...(checked ? {} : { partnerName: '', partnerEmail: '', partnerGdprConsent: false }),
+                }));
+                // Clear partner errors when unchecked
+                if (!checked) {
+                  setErrors((prev) => {
+                    const { partner_name, partner_email, partner_gdpr_consent, ...rest } = prev;
+                    return rest;
+                  });
+                }
+              }}
               className="w-5 h-5 rounded border-neutral-300 text-accent-gold focus:ring-accent-gold"
             />
             <span className="text-neutral-800 font-sans">
@@ -401,6 +424,24 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
                 <p className="text-xs text-neutral-400 mt-1">
                   Your partner will receive their own ticket via email.
                 </p>
+              </div>
+
+              {/* Partner GDPR Consent */}
+              <div className="pt-2">
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.partnerGdprConsent}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, partnerGdprConsent: e.target.checked }))}
+                    className={`w-5 h-5 mt-0.5 rounded border-neutral-300 text-accent-gold focus:ring-accent-gold ${errors.partner_gdpr_consent ? 'border-red-500' : ''}`}
+                  />
+                  <span className="text-sm text-neutral-700">
+                    I confirm that my partner has consented to the processing of their personal data according to the <a href="/privacy" target="_blank" className="text-accent-gold hover:underline">Privacy Policy</a>. <span className="text-red-500">*</span>
+                  </span>
+                </label>
+                {errors.partner_gdpr_consent && (
+                  <p className="text-red-500 text-sm mt-1 ml-8">{errors.partner_gdpr_consent}</p>
+                )}
               </div>
             </div>
           )}

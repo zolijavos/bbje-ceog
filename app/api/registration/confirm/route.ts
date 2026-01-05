@@ -8,6 +8,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { processVIPRegistration } from '@/lib/services/registration';
+import { checkRateLimit, RATE_LIMITS } from '@/lib/services/rate-limit';
 import { logError } from '@/lib/utils/logger';
 
 interface ConfirmBody {
@@ -25,12 +26,32 @@ interface ConfirmBody {
   has_partner?: boolean;
   partner_name?: string | null;
   partner_email?: string | null;
+  partner_gdpr_consent?: boolean | null;
 }
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit by IP address
+    const clientIp =
+      request.headers.get('x-forwarded-for')?.split(',')[0] ||
+      request.headers.get('x-real-ip') ||
+      'unknown';
+    const rateLimitKey = `registration-confirm:${clientIp}`;
+
+    const rateLimit = await checkRateLimit(rateLimitKey, RATE_LIMITS.AUTH);
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Too many requests. Please try again later.',
+          resetAt: rateLimit.resetAt,
+        },
+        { status: 429 }
+      );
+    }
+
     const body: ConfirmBody = await request.json();
-    const { guest_id, attendance, title, phone, company, position, dietary_requirements, seating_preferences, gdpr_consent, cancellation_accepted, has_partner, partner_name, partner_email } = body;
+    const { guest_id, attendance, title, phone, company, position, dietary_requirements, seating_preferences, gdpr_consent, cancellation_accepted, has_partner, partner_name, partner_email, partner_gdpr_consent } = body;
 
     // Validate required fields
     if (!guest_id || typeof guest_id !== 'number') {
@@ -90,6 +111,28 @@ export async function POST(request: NextRequest) {
             { status: 400 }
           );
         }
+        // Partner GDPR consent validation
+        if (!partner_gdpr_consent) {
+          return NextResponse.json(
+            { success: false, error: 'Partner GDPR consent is required' },
+            { status: 400 }
+          );
+        }
+      }
+    }
+
+    // Prevent self-registration as partner (must fetch guest email first)
+    if (has_partner && partner_email) {
+      const { prisma } = await import('@/lib/db/prisma');
+      const guest = await prisma.guest.findUnique({
+        where: { id: guest_id },
+        select: { email: true },
+      });
+      if (guest && guest.email.toLowerCase() === partner_email.trim().toLowerCase()) {
+        return NextResponse.json(
+          { success: false, error: 'Partner email cannot be the same as your own email' },
+          { status: 400 }
+        );
       }
     }
 
@@ -109,6 +152,7 @@ export async function POST(request: NextRequest) {
       has_partner,
       partner_name: has_partner ? partner_name : null,
       partner_email: has_partner ? partner_email : null,
+      partner_gdpr_consent: has_partner ? partner_gdpr_consent : null,
     });
 
     if (!result.success) {
@@ -126,7 +170,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Return 403 for non-VIP
-      if (result.error === 'This page is only available for VIP guests') {
+      if (result.error === 'This page is only accessible to VIP guests') {
         return NextResponse.json(
           { success: false, error: result.error },
           { status: 403 }
