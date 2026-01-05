@@ -228,6 +228,210 @@ describe('Registration Service', () => {
 
       expect(mockTransaction).toHaveBeenCalled();
     });
+
+    // CR-1: Partner ticket generation tests
+    it('should create partner registration when has_partner is true', async () => {
+      (prisma.guest.findUnique as Mock).mockResolvedValue(mockVIPGuest);
+      (prisma.guest.findFirst as Mock).mockResolvedValue(null);
+
+      // Track partner creation in transaction
+      let partnerCreated = false;
+      let partnerRegistrationCreated = false;
+
+      mockTransaction.mockImplementation(async (fn) => {
+        const txMock = {
+          guest: {
+            findUnique: vi.fn().mockResolvedValue(null), // Partner doesn't exist
+            update: vi.fn().mockResolvedValue({}),
+            create: vi.fn().mockImplementation(() => {
+              partnerCreated = true;
+              return Promise.resolve({ id: 201 });
+            }),
+          },
+          registration: {
+            create: vi.fn().mockImplementation((args) => {
+              if (args.data.guest_id === 201) {
+                partnerRegistrationCreated = true;
+              }
+              return Promise.resolve({ id: partnerRegistrationCreated ? 2 : 1 });
+            }),
+          },
+        };
+        return fn(txMock);
+      });
+
+      const result = await processVIPRegistration({
+        guest_id: 100,
+        attendance: 'confirm',
+        has_partner: true,
+        partner_name: 'Partner Name',
+        partner_email: 'partner@example.com',
+        partner_gdpr_consent: true,
+        gdpr_consent: true,
+        cancellation_accepted: true,
+      });
+
+      expect(result.success).toBe(true);
+      expect(partnerCreated).toBe(true);
+      expect(partnerRegistrationCreated).toBe(true);
+    });
+
+    // CR-3: Partner GDPR consent tests
+    it('should store partner GDPR consent in partner registration', async () => {
+      (prisma.guest.findUnique as Mock).mockResolvedValue(mockVIPGuest);
+      (prisma.guest.findFirst as Mock).mockResolvedValue(null);
+
+      let partnerGdprConsentStored = false;
+
+      mockTransaction.mockImplementation(async (fn) => {
+        const txMock = {
+          guest: {
+            findUnique: vi.fn().mockResolvedValue(null),
+            update: vi.fn().mockResolvedValue({}),
+            create: vi.fn().mockResolvedValue({ id: 201 }),
+          },
+          registration: {
+            create: vi.fn().mockImplementation((args) => {
+              if (args.data.guest_id === 201 && args.data.gdpr_consent === true) {
+                partnerGdprConsentStored = true;
+              }
+              return Promise.resolve({ id: 1 });
+            }),
+          },
+        };
+        return fn(txMock);
+      });
+
+      await processVIPRegistration({
+        guest_id: 100,
+        attendance: 'confirm',
+        has_partner: true,
+        partner_name: 'Partner Name',
+        partner_email: 'partner@example.com',
+        partner_gdpr_consent: true,
+        gdpr_consent: true,
+        cancellation_accepted: true,
+      });
+
+      expect(partnerGdprConsentStored).toBe(true);
+    });
+
+    // CR-6: Partner input trimming test
+    it('should trim partner name and email whitespace', async () => {
+      (prisma.guest.findUnique as Mock).mockResolvedValue(mockVIPGuest);
+      (prisma.guest.findFirst as Mock).mockResolvedValue(null);
+
+      let trimmedEmail = '';
+      let trimmedName = '';
+
+      mockTransaction.mockImplementation(async (fn) => {
+        const txMock = {
+          guest: {
+            findUnique: vi.fn().mockResolvedValue(null),
+            update: vi.fn().mockResolvedValue({}),
+            create: vi.fn().mockImplementation((args) => {
+              trimmedEmail = args.data.email;
+              trimmedName = args.data.name;
+              return Promise.resolve({ id: 201 });
+            }),
+          },
+          registration: {
+            create: vi.fn().mockResolvedValue({ id: 1 }),
+          },
+        };
+        return fn(txMock);
+      });
+
+      await processVIPRegistration({
+        guest_id: 100,
+        attendance: 'confirm',
+        has_partner: true,
+        partner_name: '  Partner Name  ',
+        partner_email: '  PARTNER@EXAMPLE.COM  ',
+        partner_gdpr_consent: true,
+        gdpr_consent: true,
+        cancellation_accepted: true,
+      });
+
+      expect(trimmedEmail).toBe('partner@example.com'); // Trimmed and lowercased
+      expect(trimmedName).toBe('Partner Name'); // Trimmed
+    });
+
+    it('should not create partner if has_partner is false', async () => {
+      (prisma.guest.findUnique as Mock).mockResolvedValue(mockVIPGuest);
+      (prisma.guest.findFirst as Mock).mockResolvedValue(null);
+
+      let partnerCreated = false;
+
+      mockTransaction.mockImplementation(async (fn) => {
+        const txMock = {
+          guest: {
+            findUnique: vi.fn(),
+            update: vi.fn().mockResolvedValue({}),
+            create: vi.fn().mockImplementation(() => {
+              partnerCreated = true;
+              return Promise.resolve({ id: 201 });
+            }),
+          },
+          registration: {
+            create: vi.fn().mockResolvedValue({ id: 1 }),
+          },
+        };
+        return fn(txMock);
+      });
+
+      await processVIPRegistration({
+        guest_id: 100,
+        attendance: 'confirm',
+        has_partner: false,
+        gdpr_consent: true,
+        cancellation_accepted: true,
+      });
+
+      expect(partnerCreated).toBe(false);
+    });
+
+    it('should link existing guest as partner instead of creating new', async () => {
+      (prisma.guest.findUnique as Mock).mockResolvedValue(mockVIPGuest);
+      (prisma.guest.findFirst as Mock).mockResolvedValue(null);
+
+      let existingPartnerUpdated = false;
+      let newPartnerCreated = false;
+
+      mockTransaction.mockImplementation(async (fn) => {
+        const txMock = {
+          guest: {
+            findUnique: vi.fn().mockResolvedValue({ id: 150, email: 'partner@example.com' }), // Partner exists
+            update: vi.fn().mockImplementation(() => {
+              existingPartnerUpdated = true;
+              return Promise.resolve({});
+            }),
+            create: vi.fn().mockImplementation(() => {
+              newPartnerCreated = true;
+              return Promise.resolve({ id: 201 });
+            }),
+          },
+          registration: {
+            create: vi.fn().mockResolvedValue({ id: 1 }),
+          },
+        };
+        return fn(txMock);
+      });
+
+      await processVIPRegistration({
+        guest_id: 100,
+        attendance: 'confirm',
+        has_partner: true,
+        partner_name: 'Partner Name',
+        partner_email: 'partner@example.com',
+        partner_gdpr_consent: true,
+        gdpr_consent: true,
+        cancellation_accepted: true,
+      });
+
+      expect(existingPartnerUpdated).toBe(true);
+      expect(newPartnerCreated).toBe(false);
+    });
   });
 
   // ============================================
