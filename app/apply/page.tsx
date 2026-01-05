@@ -337,7 +337,7 @@ export default function ApplyPage() {
             href="/help"
             className="text-accent-teal dark:text-teal-400 hover:underline"
           >
-            Segítségre van szüksége?
+            Need help?
           </Link>
         </p>
         <p className="text-center landing-footer text-sm mt-4">

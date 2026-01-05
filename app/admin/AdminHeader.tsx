@@ -24,6 +24,7 @@ import {
   QrCode,
   List,
   X,
+  Scroll,
 } from '@phosphor-icons/react';
 import AdminThemeToggle from './components/AdminThemeToggle';
 import LanguageToggle from './components/LanguageToggle';
@@ -51,6 +52,7 @@ const dropdownMenus = {
     items: [
       { href: '/admin/users', label: 'Users', icon: UserCircle },
       { href: '/admin/email-logs', label: 'Email Logs', icon: Envelope },
+      { href: '/admin/audit-log', label: 'Audit Log', icon: Scroll },
       { href: '/admin/diagrams', label: 'Test Hub', icon: TestTube },
     ],
   },
@@ -59,7 +61,7 @@ const dropdownMenus = {
 // Paths that belong to each dropdown (for highlighting)
 const eventPaths = ['/admin/seating', '/admin/checkin-log', '/admin/statistics'];
 const commsPaths = ['/admin/email-templates', '/admin/scheduled-emails', '/admin/payments'];
-const systemPaths = ['/admin/users', '/admin/email-logs', '/admin/diagrams'];
+const systemPaths = ['/admin/users', '/admin/email-logs', '/admin/audit-log', '/admin/diagrams'];
 
 export default function AdminHeader() {
   const pathname = usePathname();

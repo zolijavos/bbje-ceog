@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Html5QrcodeScanner } from 'html5-qrcode';
-import { Camera, Key, ArrowLeft, Envelope } from '@phosphor-icons/react';
+import Link from 'next/link';
+import { Camera, Key, ArrowLeft, Question } from '@phosphor-icons/react';
 import ThemeToggle from './components/ui/ThemeToggle';
 import Button3D from './components/ui/Button3D';
 import { useHaptic } from './hooks/useHaptic';
@@ -349,13 +350,21 @@ export default function PWALoginPage() {
           <p className="pwa-text-tertiary text-sm mb-2">
             Don't have a QR code?
           </p>
-          <a
-            href="mailto:info@ceogala.hu"
+          <Link
+            href="/register/request-link"
             className="inline-flex items-center gap-1 pwa-text-accent text-sm hover:opacity-80 transition-opacity"
           >
-            <Envelope size={16} />
-            Contact us via email
-          </a>
+            Request Registration Link
+          </Link>
+          <div className="mt-3">
+            <Link
+              href="/help"
+              className="inline-flex items-center gap-1 pwa-text-tertiary text-sm hover:opacity-80 transition-opacity"
+            >
+              <Question size={16} />
+              View Registration Guide
+            </Link>
+          </div>
         </div>
       </div>
     </div>

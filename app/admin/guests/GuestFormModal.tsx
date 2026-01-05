@@ -17,6 +17,8 @@ interface GuestFormData {
   email: string;
   name: string;
   title: string | null;
+  company: string | null;
+  position: string | null;
   guest_type: 'vip' | 'paying_single' | 'paying_paired';
   status: 'invited' | 'registered' | 'approved' | 'declined';
   dietary_requirements: string | null;
@@ -60,6 +62,8 @@ export default function GuestFormModal({
     email: '',
     name: '',
     title: null,
+    company: null,
+    position: null,
     guest_type: 'vip',
     status: 'invited',
     dietary_requirements: null,
@@ -75,6 +79,8 @@ export default function GuestFormModal({
         email: initialData?.email || '',
         name: initialData?.name || '',
         title: initialData?.title || null,
+        company: initialData?.company || null,
+        position: initialData?.position || null,
         guest_type: initialData?.guest_type || 'vip',
         status: initialData?.status || 'invited',
         dietary_requirements: initialData?.dietary_requirements || null,
@@ -110,6 +116,14 @@ export default function GuestFormModal({
 
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required';
+    }
+
+    if (!formData.company?.trim()) {
+      newErrors.company = 'Company is required';
+    }
+
+    if (!formData.position?.trim()) {
+      newErrors.position = 'Position is required';
     }
 
     setErrors(newErrors);
@@ -265,6 +279,60 @@ export default function GuestFormModal({
                   <option value="paying_single">Paying (Single)</option>
                   <option value="paying_paired">Paying (Paired)</option>
                 </select>
+              </div>
+
+              {/* Company */}
+              <div>
+                <label
+                  htmlFor="company"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Company *
+                </label>
+                <input
+                  type="text"
+                  id="company"
+                  name="company"
+                  value={formData.company || ''}
+                  onChange={handleChange}
+                  placeholder="e.g. Acme Corporation"
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                    errors.company ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                  data-testid="guest-company-input"
+                />
+                {errors.company && (
+                  <p className="mt-1 text-sm text-red-600" data-testid="company-error">
+                    {errors.company}
+                  </p>
+                )}
+              </div>
+
+              {/* Position */}
+              <div>
+                <label
+                  htmlFor="position"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Position *
+                </label>
+                <input
+                  type="text"
+                  id="position"
+                  name="position"
+                  value={formData.position || ''}
+                  onChange={handleChange}
+                  placeholder="e.g. CEO, Director"
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                    errors.position ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                  data-testid="guest-position-input"
+                />
+                {errors.position && (
+                  <p className="mt-1 text-sm text-red-600" data-testid="position-error">
+                    {errors.position}
+                  </p>
+                )}
               </div>
 
               {/* Status */}

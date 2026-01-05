@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import {
   CaretRight,
@@ -19,6 +20,9 @@ import {
   QrCode,
   Table,
   Envelope,
+  DeviceMobile,
+  Copy,
+  Check,
 } from '@phosphor-icons/react';
 import type { Icon } from '@phosphor-icons/react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
@@ -128,6 +132,15 @@ export default function DashboardContent({ userName, userRole }: { userName?: st
                 </Link>
               </div>
             </section>
+
+            {/* PWA Guest App Promotion */}
+            <section className="mt-8 pt-8 border-t border-neutral-200 dark:border-neutral-700">
+              <h2 className="flex items-center gap-2 text-lg font-semibold text-neutral-700 dark:text-neutral-200 mb-4">
+                <DeviceMobile size={24} weight="duotone" className="text-accent-teal" />
+                {language === 'hu' ? 'Vendég Alkalmazás' : 'Guest App'}
+              </h2>
+              <PWAPromoCard language={language} />
+            </section>
           </div>
         </div>
       </main>
@@ -198,5 +211,100 @@ function HelpLink({ href, icon: IconComponent, label }: { href: string; icon: Ic
       <IconComponent size={18} weight="duotone" />
       <span className="truncate">{label}</span>
     </Link>
+  );
+}
+
+function PWAPromoCard({ language }: { language: string }) {
+  const [copied, setCopied] = useState(false);
+  const pwaUrl = 'https://ceogala.mflevents.space/pwa';
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(pwaUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = pwaUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  return (
+    <div className="panel p-6">
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Info Section */}
+        <div className="flex-1">
+          <h3 className="font-display text-lg font-semibold text-neutral-800 dark:text-neutral-100 mb-2">
+            {language === 'hu' ? 'CEO Gala Vendég App' : 'CEO Gala Guest App'}
+          </h3>
+          <p className="text-neutral-500 dark:text-neutral-400 text-sm mb-4 font-sans">
+            {language === 'hu'
+              ? 'A vendégek letölthetik az alkalmazást, ahol offline is elérhetik a jegyüket, asztalinformációkat és esemény frissítéseket.'
+              : 'Guests can download the app to access their ticket, table info, and event updates - even offline.'}
+          </p>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-medium rounded">
+              <Check size={14} weight="bold" /> iPhone
+            </span>
+            <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-medium rounded">
+              <Check size={14} weight="bold" /> Android
+            </span>
+            <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-medium rounded">
+              <Check size={14} weight="bold" /> Desktop
+            </span>
+            <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-medium rounded">
+              <DeviceMobile size={14} weight="bold" /> Offline
+            </span>
+          </div>
+        </div>
+
+        {/* Link & Actions Section */}
+        <div className="lg:w-80 flex flex-col gap-3">
+          <div className="bg-neutral-100 dark:bg-neutral-700/50 rounded-lg p-3">
+            <label className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-1.5 block">
+              {language === 'hu' ? 'PWA Link (megosztható)' : 'PWA Link (shareable)'}
+            </label>
+            <div className="flex items-center gap-2">
+              <code className="flex-1 text-sm text-accent-teal font-mono truncate">
+                {pwaUrl}
+              </code>
+              <button
+                onClick={copyToClipboard}
+                className="flex-shrink-0 p-2 rounded-md bg-white dark:bg-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-500 transition-colors shadow-sm"
+                title={language === 'hu' ? 'Másolás' : 'Copy'}
+              >
+                {copied ? (
+                  <Check size={18} weight="bold" className="text-green-600" />
+                ) : (
+                  <Copy size={18} className="text-neutral-500 dark:text-neutral-300" />
+                )}
+              </button>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <Link
+              href="/pwa"
+              target="_blank"
+              className="flex-1 btn btn-primary text-center text-sm"
+            >
+              {language === 'hu' ? 'Megnyitás' : 'Open App'}
+            </Link>
+            <a
+              href={`mailto:?subject=${encodeURIComponent('CEO Gala 2026 - Vendég App')}&body=${encodeURIComponent(`Töltsd le a CEO Gala vendég alkalmazást: ${pwaUrl}`)}`}
+              className="flex-1 btn btn-secondary text-center text-sm"
+            >
+              {language === 'hu' ? 'Megosztás' : 'Share'}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

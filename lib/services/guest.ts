@@ -191,6 +191,8 @@ export interface CreateGuestInput {
 export interface UpdateGuestInput {
   name?: string;
   title?: string | null;
+  company?: string | null;
+  position?: string | null;
   guest_type?: GuestType;
   registration_status?: RegistrationStatus;
   dietary_requirements?: string | null;

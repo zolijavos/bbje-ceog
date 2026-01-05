@@ -302,7 +302,7 @@ export default function PWATicketPage() {
           </p>
           <p className="mt-4">
             <Link href="/pwa/help" className="pwa-text-accent hover:underline">
-              Segítségre van szüksége?
+              Need help?
             </Link>
           </p>
         </div>

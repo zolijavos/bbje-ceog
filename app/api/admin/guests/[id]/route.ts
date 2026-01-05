@@ -9,13 +9,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth, validateBody, parseIdParam, errorResponse, type RouteContext } from '@/lib/api';
 import { getGuestById, updateGuest, deleteGuest } from '@/lib/services/guest';
+import { createAuditLog } from '@/lib/services/audit';
 import { logError } from '@/lib/utils/logger';
 import { z } from 'zod';
 
 // Validation schema for updating a guest
 const updateGuestSchema = z.object({
-  name: z.string().min(1, 'A nev megadasa kotelezo').optional(),
+  name: z.string().min(1, 'Name is required').optional(),
   title: z.string().max(50).optional().nullable(),
+  company: z.string().optional().nullable(),
+  position: z.string().optional().nullable(),
   guest_type: z.enum(['vip', 'paying_single', 'paying_paired', 'applicant']).optional(),
   registration_status: z
     .enum(['invited', 'registered', 'approved', 'declined', 'pending_approval', 'rejected'])
@@ -71,6 +74,9 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       return idResult.response;
     }
 
+    // Get old values for audit log
+    const oldGuest = await getGuestById(idResult.id);
+
     // Parse and validate request body
     const validation = await validateBody(request, updateGuestSchema);
     if (!validation.success) {
@@ -79,6 +85,23 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
 
     // Update guest
     const guest = await updateGuest(idResult.id, validation.data);
+
+    // Log audit event
+    await createAuditLog({
+      action: 'UPDATE',
+      entityType: 'guest',
+      entityId: guest.id,
+      entityName: guest.name,
+      oldValues: oldGuest ? {
+        name: oldGuest.name,
+        title: oldGuest.title,
+        company: oldGuest.company,
+        position: oldGuest.position,
+        guest_type: oldGuest.guest_type,
+        registration_status: oldGuest.registration_status,
+      } : undefined,
+      newValues: validation.data,
+    });
 
     return NextResponse.json({
       success: true,
@@ -114,8 +137,27 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
       return idResult.response;
     }
 
+    // Get guest info for audit log before deletion
+    const guest = await getGuestById(idResult.id);
+
     // Delete guest
     await deleteGuest(idResult.id);
+
+    // Log audit event
+    if (guest) {
+      await createAuditLog({
+        action: 'DELETE',
+        entityType: 'guest',
+        entityId: idResult.id,
+        entityName: guest.name,
+        oldValues: {
+          email: guest.email,
+          name: guest.name,
+          guest_type: guest.guest_type,
+          registration_status: guest.registration_status,
+        },
+      });
+    }
 
     return NextResponse.json({
       success: true,

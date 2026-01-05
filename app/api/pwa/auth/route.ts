@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Túl sok bejelentkezési kísérlet. Próbálja újra később.',
+          error: 'Too many login attempts. Please try again later.',
           retryAfter: Math.ceil((rateLimit.resetAt.getTime() - Date.now()) / 1000),
         },
         {
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
         // Verify registration status is valid for PWA access
         if (!['registered', 'approved'].includes(registration.guest.registration_status)) {
           return NextResponse.json(
-            { success: false, error: 'A regisztráció nem aktív' },
+            { success: false, error: 'Registration is not active' },
             { status: 401 }
           );
         }
@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
         email = registration.guest.email;
       } catch (jwtError) {
         return NextResponse.json(
-          { success: false, error: 'Érvénytelen vagy lejárt QR kód' },
+          { success: false, error: 'Invalid or expired QR code' },
           { status: 401 }
         );
       }

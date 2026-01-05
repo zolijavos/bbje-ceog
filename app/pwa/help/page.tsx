@@ -176,7 +176,7 @@ const faqSections: FAQSection[] = [
       {
         id: 'payment-3',
         question: 'Can I get a refund or cancel my registration?',
-        answer: 'Please contact our team at info@ceogala.hu for cancellation requests. Refund eligibility depends on timing and ticket type.',
+        answer: 'Please check our Registration Guide for cancellation policies. Refund eligibility depends on timing and ticket type.',
       },
     ],
   },
@@ -357,21 +357,21 @@ export default function PWAHelpPage() {
 
         {/* Contact Card */}
         <Card variant="elevated" className="text-center">
-          <Envelope size={28} weight="fill" className="mx-auto mb-2" style={{ color: 'var(--color-accent)' }} />
+          <Question size={28} weight="fill" className="mx-auto mb-2" style={{ color: 'var(--color-accent)' }} />
           <h3 className="font-semibold pwa-text-primary mb-1">Need More Help?</h3>
           <p className="pwa-text-secondary text-sm mb-3">
-            Our team is here to assist you
+            Check our registration guide
           </p>
-          <a
-            href="mailto:info@ceogala.hu"
+          <Link
+            href="/help"
             className="inline-block px-6 py-2 text-sm font-medium transition-all"
             style={{
               background: 'var(--color-btn-primary-bg)',
               color: 'var(--color-btn-primary-text)',
             }}
           >
-            info@ceogala.hu
-          </a>
+            Registration Guide
+          </Link>
         </Card>
 
         {/* Footer */}

@@ -353,7 +353,7 @@ export default function PWAGalleryPage() {
       {/* Help link */}
       <div className="p-4 text-center">
         <Link href="/pwa/help" className="pwa-text-tertiary text-sm hover:underline">
-          Segítségre van szüksége?
+          Need help?
         </Link>
       </div>
 

@@ -114,13 +114,13 @@ export default function RegisterWelcome({ guest }: RegisterWelcomeProps) {
 
         {/* Footer */}
         <p className="text-center text-sm text-white/70 mt-6 font-sans">
-          For questions:{' '}
-          <a
-            href="mailto:info@ceogala.hu"
+          Questions?{' '}
+          <Link
+            href="/help"
             className="text-accent-teal hover:text-accent-teal-light"
           >
-            info@ceogala.hu
-          </a>
+            View Registration Guide
+          </Link>
         </p>
       </div>
     </div>

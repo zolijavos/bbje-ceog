@@ -340,11 +340,15 @@ export default function StatusContent({
         <div className="mt-6 text-center text-sm text-white/50 font-sans">
           <p>
             <Link href="/help" className="text-accent-gold hover:underline">
-              Segítségre van szüksége?
+              Need help?
             </Link>
           </p>
-          <p className="mt-2">For questions: info@ceogala.hu</p>
-          <p className="mt-2">© 2026 CEO Gala - Registration System</p>
+          <p className="mt-2">
+            <Link href="/help" className="text-accent-gold hover:underline">
+              View Registration Guide
+            </Link>
+          </p>
+          <p className="mt-2">© 2026 CEO Gala - Event Platform</p>
         </div>
       </div>
     </div>

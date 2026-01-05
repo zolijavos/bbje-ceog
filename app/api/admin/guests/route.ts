@@ -8,19 +8,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth, validateBody, errorResponse } from '@/lib/api';
 import { getGuestList, getGuestStats, createGuest } from '@/lib/services/guest';
+import { createAuditLog } from '@/lib/services/audit';
 import { logError } from '@/lib/utils/logger';
 import { GuestType, RegistrationStatus } from '@prisma/client';
 import { z } from 'zod';
 
 // Validation schema for creating a guest
 const createGuestSchema = z.object({
-  email: z.string().email('Ervenytelen email cim'),
-  name: z.string().min(1, 'A nev megadasa kotelezo'),
+  email: z.string().email('Invalid email address'),
+  name: z.string().min(1, 'Name is required'),
   guest_type: z.enum(['vip', 'paying_single', 'paying_paired', 'applicant']),
   title: z.string().nullable().optional(),
   phone: z.string().nullable().optional(),
-  company: z.string().nullable().optional(),
-  position: z.string().nullable().optional(),
+  company: z.string().min(1, 'Company is required'),
+  position: z.string().min(1, 'Position is required'),
   dietary_requirements: z.string().nullable().optional(),
   seating_preferences: z.string().nullable().optional(),
 });
@@ -112,6 +113,21 @@ export async function POST(request: NextRequest) {
       position: validation.data.position || null,
       dietary_requirements: validation.data.dietary_requirements || null,
       seating_preferences: validation.data.seating_preferences || null,
+    });
+
+    // Log audit event
+    await createAuditLog({
+      action: 'CREATE',
+      entityType: 'guest',
+      entityId: guest.id,
+      entityName: guest.name,
+      newValues: {
+        email: guest.email,
+        name: guest.name,
+        guest_type: guest.guest_type,
+        company: guest.company,
+        position: guest.position,
+      },
     });
 
     return NextResponse.json(

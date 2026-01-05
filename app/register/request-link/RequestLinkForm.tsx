@@ -171,7 +171,7 @@ export default function RequestLinkForm({
         {reason === 'expired' && (
           <div className="mb-4 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg">
             <p className="text-sm text-amber-700 dark:text-amber-400 font-sans">
-              Az előző linkje lejárt. Kérjen új meghívót.
+              Your previous link has expired. Please request a new one.
             </p>
           </div>
         )}

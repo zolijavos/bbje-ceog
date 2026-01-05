@@ -16,6 +16,7 @@ import {
   CurrencyDollar,
   UserPlus,
   Question,
+  Scroll,
 } from '@phosphor-icons/react';
 
 const mainTabs = [
@@ -31,6 +32,7 @@ const moreItems = [
   { href: '/admin/email-templates', label: 'Email Templates', icon: EnvelopeSimple },
   { href: '/admin/scheduled-emails', label: 'Scheduled Emails', icon: Clock },
   { href: '/admin/payments', label: 'Payments', icon: CurrencyDollar },
+  { href: '/admin/audit-log', label: 'Audit Log', icon: Scroll },
   { href: '/admin/help', label: 'Help', icon: Question },
 ];
 

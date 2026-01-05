@@ -234,8 +234,9 @@ export default function PublicHelpPage() {
             href="https://www.myforgelabs.com/#kapcsolat"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block px-6 py-2 bg-accent-teal dark:bg-teal-600 text-white rounded-lg font-medium text-sm
-                     hover:bg-accent-teal-dark dark:hover:bg-teal-700 transition-colors"
+            className="inline-block px-6 py-2 bg-accent-teal dark:bg-teal-700 rounded-lg font-semibold text-sm
+                     hover:bg-accent-teal-dark dark:hover:bg-teal-600 transition-colors"
+            style={{ color: 'white' }}
           >
             MyForge Labs
           </a>

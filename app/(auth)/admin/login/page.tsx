@@ -153,7 +153,7 @@ function LoginForm() {
 
         {/* Footer */}
         <p className="text-center text-sm text-white/70 mt-6 font-sans">
-          © 2026 CEO Gala - Registration System
+          © 2026 CEO Gala - Event Platform
         </p>
       </div>
     </div>

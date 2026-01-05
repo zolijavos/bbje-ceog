@@ -21,12 +21,16 @@ interface ConfirmBody {
   seating_preferences?: string | null;
   gdpr_consent?: boolean;
   cancellation_accepted?: boolean;
+  // Partner fields (optional for VIP)
+  has_partner?: boolean;
+  partner_name?: string | null;
+  partner_email?: string | null;
 }
 
 export async function POST(request: NextRequest) {
   try {
     const body: ConfirmBody = await request.json();
-    const { guest_id, attendance, title, phone, company, position, dietary_requirements, seating_preferences, gdpr_consent, cancellation_accepted } = body;
+    const { guest_id, attendance, title, phone, company, position, dietary_requirements, seating_preferences, gdpr_consent, cancellation_accepted, has_partner, partner_name, partner_email } = body;
 
     // Validate required fields
     if (!guest_id || typeof guest_id !== 'number') {
@@ -63,6 +67,30 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
+
+      // Validate partner fields if bringing a partner
+      if (has_partner) {
+        if (!partner_name || typeof partner_name !== 'string' || partner_name.trim().length < 2) {
+          return NextResponse.json(
+            { success: false, error: 'Partner name is required (min. 2 characters)' },
+            { status: 400 }
+          );
+        }
+        if (!partner_email || typeof partner_email !== 'string') {
+          return NextResponse.json(
+            { success: false, error: 'Partner email is required' },
+            { status: 400 }
+          );
+        }
+        // Basic email format validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(partner_email)) {
+          return NextResponse.json(
+            { success: false, error: 'Invalid partner email format' },
+            { status: 400 }
+          );
+        }
+      }
     }
 
     // Process VIP registration with all profile data
@@ -77,6 +105,10 @@ export async function POST(request: NextRequest) {
       seating_preferences,
       gdpr_consent,
       cancellation_accepted,
+      // Partner info (optional for VIP)
+      has_partner,
+      partner_name: has_partner ? partner_name : null,
+      partner_email: has_partner ? partner_email : null,
     });
 
     if (!result.success) {

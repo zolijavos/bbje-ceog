@@ -42,6 +42,10 @@ interface FormData {
   seatingPreferences: string;
   gdprConsent: boolean;
   cancellationAccepted: boolean;
+  // Partner fields (optional for VIP)
+  hasPartner: boolean;
+  partnerName: string;
+  partnerEmail: string;
 }
 
 interface FormErrors {
@@ -53,6 +57,8 @@ interface FormErrors {
   seating_preferences?: string;
   gdpr_consent?: string;
   cancellation_accepted?: string;
+  partner_name?: string;
+  partner_email?: string;
 }
 
 export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
@@ -71,6 +77,9 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
     seatingPreferences: guest.seating_preferences || '',
     gdprConsent: false,
     cancellationAccepted: false,
+    hasPartner: false,
+    partnerName: '',
+    partnerEmail: '',
   });
 
   const validateForm = (): boolean => {
@@ -85,6 +94,22 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
     }
     if (!formData.position || formData.position.trim().length < 1) {
       newErrors.position = 'Position is required';
+    }
+
+    // Partner validation (if bringing a partner)
+    if (formData.hasPartner) {
+      if (!formData.partnerName || formData.partnerName.trim().length < 2) {
+        newErrors.partner_name = 'Partner name is required (min. 2 characters)';
+      }
+      if (!formData.partnerEmail || formData.partnerEmail.trim().length < 5) {
+        newErrors.partner_email = 'Partner email is required';
+      } else {
+        // Basic email format validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.partnerEmail)) {
+          newErrors.partner_email = 'Invalid email format';
+        }
+      }
     }
 
     // Consent validation
@@ -122,6 +147,10 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
           seating_preferences: formData.seatingPreferences || null,
           gdpr_consent: formData.gdprConsent,
           cancellation_accepted: formData.cancellationAccepted,
+          // Partner info (optional for VIP)
+          has_partner: formData.hasPartner,
+          partner_name: formData.hasPartner ? formData.partnerName : null,
+          partner_email: formData.hasPartner ? formData.partnerEmail : null,
         }),
       });
 
@@ -310,6 +339,71 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
             onSeatingChange={(value) => setFormData((prev) => ({ ...prev, seatingPreferences: value }))}
             errors={errors}
           />
+        </div>
+
+        {/* Partner Section (Optional for VIP) */}
+        <div className="mb-6">
+          <h3 className="font-display text-lg font-medium text-neutral-800 mb-4">
+            Bringing a Partner?
+          </h3>
+          <p className="text-sm text-neutral-500 mb-4">
+            As a VIP guest, you may bring one partner free of charge.
+          </p>
+
+          {/* Partner Checkbox */}
+          <label className="flex items-center gap-3 cursor-pointer mb-4">
+            <input
+              type="checkbox"
+              checked={formData.hasPartner}
+              onChange={(e) => setFormData((prev) => ({ ...prev, hasPartner: e.target.checked }))}
+              className="w-5 h-5 rounded border-neutral-300 text-accent-gold focus:ring-accent-gold"
+            />
+            <span className="text-neutral-800 font-sans">
+              Yes, I would like to bring a partner
+            </span>
+          </label>
+
+          {/* Partner Details (shown when checkbox is checked) */}
+          {formData.hasPartner && (
+            <div className="space-y-4 p-4 bg-neutral-50 rounded-lg border border-neutral-200">
+              {/* Partner Name */}
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
+                  Partner Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={formData.partnerName}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, partnerName: e.target.value }))}
+                  placeholder="Full name"
+                  className={`input w-full ${errors.partner_name ? 'border-red-500' : ''}`}
+                />
+                {errors.partner_name && (
+                  <p className="text-red-500 text-sm mt-1">{errors.partner_name}</p>
+                )}
+              </div>
+
+              {/* Partner Email */}
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
+                  Partner Email <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="email"
+                  value={formData.partnerEmail}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, partnerEmail: e.target.value }))}
+                  placeholder="partner@example.com"
+                  className={`input w-full ${errors.partner_email ? 'border-red-500' : ''}`}
+                />
+                {errors.partner_email && (
+                  <p className="text-red-500 text-sm mt-1">{errors.partner_email}</p>
+                )}
+                <p className="text-xs text-neutral-400 mt-1">
+                  Your partner will receive their own ticket via email.
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Consent Section */}

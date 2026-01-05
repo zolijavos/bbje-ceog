@@ -126,7 +126,7 @@ export async function POST(request: NextRequest) {
     if (isProduction && recaptchaConfigured && !recaptchaToken) {
       logWarn('[REQUEST-LINK]', 'Missing reCAPTCHA token in production');
       return NextResponse.json(
-        { success: false, error: 'Biztonsági ellenőrzés szükséges. Kérjük, próbálja újra.' },
+        { success: false, error: 'Security verification required. Please try again.' },
         { status: 403 }
       );
     }
@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
       const recaptchaResult = await verifyRecaptcha(recaptchaToken);
       if (!recaptchaResult.success) {
         return NextResponse.json(
-          { success: false, error: 'Biztonsági ellenőrzés sikertelen. Kérjük, próbálja újra.' },
+          { success: false, error: 'Security verification failed. Please try again.' },
           { status: 403 }
         );
       }
@@ -151,7 +151,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Túl sok kérés a hálózatáról. Kérjük, próbálja újra később.',
+          error: 'Too many requests from your network. Please try again later.',
           retryAfter: Math.ceil((ipRateLimit.resetAt.getTime() - Date.now()) / 1000 / 60),
         },
         { status: 429 }
@@ -191,7 +191,7 @@ export async function POST(request: NextRequest) {
       // But return success with a generic message
       return NextResponse.json({
         success: true,
-        message: 'Ha az email cím szerepel a vendéglistán, hamarosan megérkezik az új meghívó.',
+        message: 'If the email address is on our guest list, you will receive your invitation link shortly.',
       });
     }
 
@@ -214,14 +214,14 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: 'Túl sok kérés. Kérjük, várjon egy órát az újabb próbálkozás előtt.',
+            error: 'Too many requests. Please wait an hour before trying again.',
           },
           { status: 429 }
         );
       }
 
       return NextResponse.json(
-        { success: false, error: result.error || 'Email küldési hiba' },
+        { success: false, error: result.error || 'Email sending error' },
         { status: 500 }
       );
     }
@@ -234,7 +234,7 @@ export async function POST(request: NextRequest) {
     logError('[REQUEST-LINK]', error);
 
     return NextResponse.json(
-      { success: false, error: 'Szerverhiba történt' },
+      { success: false, error: 'Server error occurred' },
       { status: 500 }
     );
   }

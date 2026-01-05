@@ -134,6 +134,10 @@ export interface VIPRegistrationInput {
   seating_preferences?: string | null;
   gdpr_consent?: boolean;
   cancellation_accepted?: boolean;
+  // Partner fields (optional for VIP - free partner)
+  has_partner?: boolean;
+  partner_name?: string | null;
+  partner_email?: string | null;
 }
 
 /**
@@ -197,8 +201,9 @@ export async function processVIPRegistration(
     }
 
     // 4. Handle confirm - create registration and update status with profile data
-    // Generate PWA auth code for guest app access
+    // Generate PWA auth codes before transaction (to avoid using prisma inside tx)
     const pwaAuthCode = await generateUniquePWAAuthCode();
+    const partnerPwaAuthCode = data.has_partner ? await generateUniquePWAAuthCode() : null;
 
     const result = await prisma.$transaction(async (tx) => {
       // Update guest profile and status with PWA auth code
@@ -217,7 +222,7 @@ export async function processVIPRegistration(
         },
       });
 
-      // Create registration record with consent fields
+      // Create registration record with consent fields and optional partner info
       const registration = await tx.registration.create({
         data: {
           guest_id: guestId,
@@ -226,8 +231,43 @@ export async function processVIPRegistration(
           gdpr_consent_at: data.gdpr_consent ? new Date() : null,
           cancellation_accepted: data.cancellation_accepted ?? false,
           cancellation_accepted_at: data.cancellation_accepted ? new Date() : null,
+          // Store partner info in registration (for reference)
+          partner_name: data.has_partner ? data.partner_name : null,
+          partner_email: data.has_partner ? data.partner_email : null,
         },
       });
+
+      // For VIP with partner: Create partner as separate Guest record linked to main guest
+      if (data.has_partner && data.partner_name && data.partner_email && partnerPwaAuthCode) {
+        // Check if partner already exists as guest
+        const existingPartner = await tx.guest.findUnique({
+          where: { email: data.partner_email },
+        });
+
+        if (!existingPartner) {
+          // Create new partner guest linked to main VIP guest
+          await tx.guest.create({
+            data: {
+              email: data.partner_email,
+              name: data.partner_name,
+              guest_type: 'vip', // Partner is also VIP (free)
+              registration_status: 'approved', // Auto-approved through main guest
+              paired_with_id: guestId, // Link to main guest
+              pwa_auth_code: partnerPwaAuthCode,
+            },
+          });
+        } else {
+          // Link existing guest as partner
+          await tx.guest.update({
+            where: { id: existingPartner.id },
+            data: {
+              paired_with_id: guestId,
+              registration_status: 'approved',
+              pwa_auth_code: existingPartner.pwa_auth_code || partnerPwaAuthCode,
+            },
+          });
+        }
+      }
 
       return registration;
     });

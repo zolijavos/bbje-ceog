@@ -25,7 +25,7 @@ const openSans = Open_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'CEO Gala 2026 - Registration System',
+  title: 'CEO Gala 2026 - Event Platform',
   description: 'CEO Gala 2026 event registration and check-in system',
   manifest: '/manifest.json',
   themeColor: '#1e293b',

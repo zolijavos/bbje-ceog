@@ -423,7 +423,7 @@ export default function CheckinScanner() {
       {/* Footer - Help link */}
       <footer className="bg-gray-800 px-4 py-2 text-center pb-8">
         <Link href="/help" className="text-amber-400 text-sm hover:underline">
-          Segítségre van szüksége?
+          Need help?
         </Link>
       </footer>
 

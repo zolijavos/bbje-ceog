@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Túl sok fizetési próbálkozás. Kérjük, várjon néhány percet.',
+          error: 'Too many payment attempts. Please wait a few minutes.',
         },
         { status: 429 }
       );

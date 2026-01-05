@@ -72,17 +72,8 @@ export default async function RequestLinkPage({
             href="/help"
             className="text-accent-teal dark:text-teal-400 hover:underline"
           >
-            Segítségre van szüksége?
+            Need help?
           </Link>
-        </p>
-        <p className="text-center text-sm landing-footer font-sans mt-2">
-          Questions?{' '}
-          <a
-            href="mailto:11.11@myforgelabs.com"
-            className="text-accent-teal dark:text-teal-400 hover:underline"
-          >
-            11.11@myforgelabs.com
-          </a>
         </p>
         <p className="text-center text-sm landing-footer font-sans mt-4">
           © 2026 CEO Gala • Executive Excellence
