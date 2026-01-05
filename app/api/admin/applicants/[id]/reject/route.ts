@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { requireAuth, parseIdParam, type RouteContext } from '@/lib/api';
 import { prisma } from '@/lib/db/prisma';
 import { sendEmail } from '@/lib/services/email';
@@ -101,6 +102,9 @@ export async function POST(request: NextRequest, context: RouteContext) {
     }
 
     logInfo(`[REJECT] Application rejected: ${applicant.email} (ID: ${guestId})${reason ? ` - Reason: ${reason}` : ''}`);
+
+    // Invalidate the applicants page cache to refresh the list
+    revalidatePath('/admin/applicants');
 
     return NextResponse.json({
       success: true,

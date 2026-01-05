@@ -571,10 +571,10 @@ export default function PaidRegistrationForm({
         <div className="mt-8 pt-6 border-t border-slate-200">
           <div className="text-center text-sm text-slate-500">
             <Link href="/" className="font-medium text-slate-700 hover:text-amber-600 transition-colors">CEO Gala 2026</Link>
-            <p>Friday, March 27, 2026 • 6:00 PM • Budapest, Marriott Hotel</p>
+            <p>Friday, March 27, 2026 • 6:00 PM • Budapest, Corinthia Hotel</p>
             <p className="mt-3">
               <Link href="/help" className="text-amber-600 hover:underline">
-                Segítségre van szüksége?
+                Need help?
               </Link>
             </p>
           </div>

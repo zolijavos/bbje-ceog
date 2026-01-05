@@ -281,7 +281,7 @@ export function getTicketDeliveryEmailTemplate(params: TicketEmailParams): {
           <p class="event-info-title">Event Details</p>
           <p><strong>Event:</strong> CEO Gala 2026</p>
           <p><strong>Date:</strong> Friday, March 27, 2026, 6:00 PM</p>
-          <p><strong>Venue:</strong> Budapest, Marriott Hotel</p>
+          <p><strong>Venue:</strong> Budapest, Corinthia Hotel</p>
         </div>
 
         <div class="qr-container">
@@ -364,7 +364,7 @@ EVENT DETAILS
 -------------
 Event: CEO Gala 2026
 Date: Friday, March 27, 2026, 6:00 PM
-Venue: Budapest, Marriott Hotel
+Venue: Budapest, Corinthia Hotel
 
 TICKET INFORMATION
 ------------------

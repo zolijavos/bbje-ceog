@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { requireAuth, parseIdParam, type RouteContext } from '@/lib/api';
 import { prisma } from '@/lib/db/prisma';
 import { generateMagicLinkHash } from '@/lib/auth/magic-link';
@@ -101,6 +102,11 @@ export async function POST(request: NextRequest, context: RouteContext) {
     }
 
     logInfo(`[APPROVE] Application approved: ${applicant.email} (ID: ${guestId})`);
+
+    // Invalidate the applicants page cache to refresh the list
+    revalidatePath('/admin/applicants');
+    // Also invalidate guests page since the approved applicant appears there
+    revalidatePath('/admin/guests');
 
     return NextResponse.json({
       success: true,

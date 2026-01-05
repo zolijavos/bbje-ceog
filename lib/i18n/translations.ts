@@ -167,7 +167,7 @@ export const translations = {
     eventName: 'CEO Gala 2026',
     eventDate: 'Friday, March 27, 2026',
     eventTime: '6:00 PM',
-    eventVenue: 'Budapest, Marriott Hotel',
+    eventVenue: 'Budapest, Corinthia Hotel',
     registration: 'Registration',
 
     // Apply page
@@ -638,7 +638,7 @@ export const translations = {
     eventName: 'CEO Gála 2026',
     eventDate: '2026. március 27., péntek',
     eventTime: '18:00',
-    eventVenue: 'Budapest, Marriott Hotel',
+    eventVenue: 'Budapest, Corinthia Hotel',
     registration: 'Regisztráció',
 
     // Apply page

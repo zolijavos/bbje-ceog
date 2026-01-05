@@ -6,7 +6,7 @@
  */
 
 import Link from 'next/link';
-import { Warning, ArrowLeft, Envelope } from '@phosphor-icons/react/dist/ssr';
+import { Warning, ArrowLeft, Question } from '@phosphor-icons/react/dist/ssr';
 
 interface StatusErrorProps {
   errorType: 'not_found' | 'no_link' | 'invalid' | 'expired' | string;
@@ -22,7 +22,7 @@ export default function StatusError({ errorType, message, email }: StatusErrorPr
         return {
           title: 'Link Expired',
           description:
-            'The invitation link has expired. Links expire after 5 minutes for security reasons.',
+            'The invitation link has expired. Links expire after 24 hours for security reasons.',
           showRequestLink: true,
         };
       case 'not_found':
@@ -90,13 +90,13 @@ export default function StatusError({ errorType, message, email }: StatusErrorPr
                 </Link>
               )}
 
-              <a
-                href="mailto:info@ceogala.hu"
+              <Link
+                href="/help"
                 className="flex items-center justify-center gap-2 w-full px-4 py-2 border border-neutral-300 text-sm font-medium rounded-md text-neutral-700 bg-neutral-100 hover:bg-neutral-50 transition-colors"
               >
-                <Envelope weight="light" size={18} />
-                Contact Us
-              </a>
+                <Question weight="light" size={18} />
+                Registration Guide
+              </Link>
             </div>
           </div>
         </div>
@@ -115,12 +115,12 @@ export default function StatusError({ errorType, message, email }: StatusErrorPr
         {/* Help Text */}
         <div className="mt-6 text-center text-sm text-white/50 font-sans">
           <p>
-            If you believe this is an error, please contact us at{' '}
-            <a href="mailto:info@ceogala.hu" className="text-accent-teal hover:text-accent-teal-light">
-              info@ceogala.hu
-            </a>
+            If you believe this is an error,{' '}
+            <Link href="/help" className="text-accent-teal hover:text-accent-teal-light">
+              check our Registration Guide
+            </Link>
           </p>
-          <p className="mt-4">© 2026 CEO Gala - Registration System</p>
+          <p className="mt-4">© 2026 CEO Gala - Event Platform</p>
         </div>
       </div>
     </div>

@@ -60,7 +60,7 @@ const SAMPLE_DATA: Record<string, Record<string, string>> = {
     guestName: 'John Smith',
     eventDate: 'Friday, March 27, 2026',
     eventTime: '6:00 PM',
-    eventVenue: 'Budapest Marriott Hotel',
+    eventVenue: 'Budapest, Corinthia Hotel',
     eventAddress: '1052 Budapest, Apáczai Csere János u. 4.',
     tableName: 'Table A1',
   },

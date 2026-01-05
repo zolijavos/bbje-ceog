@@ -5,6 +5,7 @@
  */
 
 import { redirect } from 'next/navigation';
+import Link from 'next/link';
 import { prisma } from '@/lib/db/prisma';
 
 interface DeclinedPageProps {
@@ -85,7 +86,7 @@ export default async function DeclinedPage({ searchParams }: DeclinedPageProps) 
           <p className="text-slate-600 text-sm">
             Friday, March 27, 2026 • 6:00 PM
             <br />
-            Budapest, Marriott Hotel
+            Budapest, Corinthia Hotel
           </p>
         </div>
 
@@ -100,12 +101,12 @@ export default async function DeclinedPage({ searchParams }: DeclinedPageProps) 
         {/* Contact Info */}
         <p className="text-xs text-slate-400">
           Questions?{' '}
-          <a
-            href="mailto:info@ceogala.hu"
+          <Link
+            href="/help"
             className="text-amber-600 hover:underline"
           >
-            info@ceogala.hu
-          </a>
+            View Registration Guide
+          </Link>
         </p>
       </div>
     </div>

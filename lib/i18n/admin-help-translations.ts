@@ -1566,7 +1566,7 @@ A **keresőmező** név vagy email alapján szűr.`,
 4. Kattints a **"Send to X recipients"** gombra
 
 **Fontos tudnivalók**:
-• A magic link 5 percig érvényes az első kattintás után
+• A magic link 24 óráig érvényes a generálás után
 • Egy vendégnek több link is küldhető (a régi érvénytelenné válik)
 • A küldött emailek száma látható minden vendégnél`,
     keywords: ['magic link', 'meghívó', 'email küldés', 'invitation', 'send'],
@@ -2715,7 +2715,7 @@ A felhasználók kezelése a Super Admin feladata.`,
 **Adatbiztonság**:
 • HTTPS titkosítás minden kommunikációhoz
 • Jelszavak bcrypt hash-elve
-• Magic link-ek 5 perc után lejárnak
+• Magic link-ek 24 óra után lejárnak
 
 **Fizetési biztonság**:
 • Stripe kezeli a kártyaadatokat (PCI-DSS)

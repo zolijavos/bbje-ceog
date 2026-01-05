@@ -30,8 +30,8 @@ export const RATE_LIMIT = {
 // ========================================
 
 export const MAGIC_LINK = {
-  /** Expiry time in minutes */
-  EXPIRY_MINUTES: 5,
+  /** Expiry time in minutes (24 hours) */
+  EXPIRY_MINUTES: 24 * 60,
   /** Minimum secret length */
   MIN_SECRET_LENGTH: 64,
 } as const;

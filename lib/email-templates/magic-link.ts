@@ -241,7 +241,7 @@ export function getMagicLinkEmailTemplate(params: MagicLinkEmailParams): {
           <p class="event-info-title">Rendezvény Információ</p>
           <p><strong>Esemény:</strong> CEO Gala 2026</p>
           <p><strong>Dátum:</strong> 2026. március 27., péntek</p>
-          <p><strong>Helyszín:</strong> Budapest Marriott Hotel</p>
+          <p><strong>Helyszín:</strong> Budapest, Corinthia Hotel</p>
         </div>
 
         <p style="color: #4B5563;">Kattintson az alábbi gombra a regisztráció megkezdéséhez:</p>
@@ -286,7 +286,7 @@ RENDEZVÉNY INFORMÁCIÓ
 ---------------------
 Esemény: CEO Gala 2026
 Dátum: 2026. március 27., péntek
-Helyszín: Budapest Marriott Hotel
+Helyszín: Budapest, Corinthia Hotel
 
 Kattintson az alábbi linkre a regisztráció megkezdéséhez:
 ${magicLinkUrl}

@@ -348,6 +348,32 @@ model RateLimitEntry {
 }
 
 // ==================================
+// AUDIT LOG
+// ==================================
+
+model AuditLog {
+  id           Int      @id @default(autoincrement())
+  user_id      Int?     // Admin user who performed the action (null for system actions)
+  user_email   String?  @db.VarChar(255) // Stored for historical reference
+  action       String   @db.VarChar(50)  // CREATE, UPDATE, DELETE, APPROVE, REJECT, SEND_EMAIL, LOGIN, etc.
+  entity_type  String   @db.VarChar(50)  // guest, table, payment, email, applicant, etc.
+  entity_id    Int?     // ID of the affected entity
+  entity_name  String?  @db.VarChar(255) // Human-readable name (guest name, table name, etc.)
+  old_values   String?  @db.Text         // JSON of previous values (for updates)
+  new_values   String?  @db.Text         // JSON of new values
+  ip_address   String?  @db.VarChar(45)  // IPv4 or IPv6
+  user_agent   String?  @db.VarChar(500) // Browser/client info
+  created_at   DateTime @default(now())
+
+  @@index([user_id])
+  @@index([action])
+  @@index([entity_type])
+  @@index([entity_type, entity_id])
+  @@index([created_at])
+  @@map("audit_logs")
+}
+
+// ==================================
 // ENUMS
 // ==================================
 
@@ -359,9 +385,9 @@ enum GuestType {
 }
 
 enum RegistrationStatus {
-  invited           // Magic link sent, not yet registered
-  registered        // Form submitted, awaiting approval (if paying)
-  approved          // Registration approved
+  invited           // On guest list, eligible for magic link (VIP/paying) - may or may not have received email yet
+  registered        // Form submitted, awaiting payment (if paying)
+  approved          // Registration approved, ticket issued
   declined          // Guest declined invitation
   pending_approval  // Applicant waiting for admin approval
   rejected          // Applicant rejected by admin

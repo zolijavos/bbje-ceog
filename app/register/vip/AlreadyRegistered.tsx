@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 /**
  * Already Registered Component
  *
@@ -114,19 +116,19 @@ export default function AlreadyRegistered({
           <p className="text-slate-600 text-sm">
             Friday, March 27, 2026 • 6:00 PM
             <br />
-            Budapest, Marriott Hotel
+            Budapest, Corinthia Hotel
           </p>
         </div>
 
         {/* Contact Info */}
         <p className="text-xs text-slate-400">
           Questions?{' '}
-          <a
-            href="mailto:info@ceogala.hu"
+          <Link
+            href="/help"
             className="text-amber-600 hover:underline"
           >
-            info@ceogala.hu
-          </a>
+            View Registration Guide
+          </Link>
         </p>
       </div>
     </div>

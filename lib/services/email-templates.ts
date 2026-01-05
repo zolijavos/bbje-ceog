@@ -619,7 +619,7 @@ CEO Gala Organizing Committee`,
           <h3>Event Details</h3>
           <p><strong>Event:</strong> CEO Gala 2026</p>
           <p><strong>Date:</strong> Friday, March 27, 2026, 6:00 PM</p>
-          <p><strong>Venue:</strong> Budapest, Marriott Hotel</p>
+          <p><strong>Venue:</strong> Budapest, Corinthia Hotel</p>
         </div>
         <div class="qr-container">
           <img src="{{qrCodeDataUrl}}" alt="QR code entry pass" />
@@ -678,7 +678,7 @@ EVENT DETAILS
 -------------------
 Event: CEO Gala 2026
 Date: Friday, March 27, 2026, 6:00 PM
-Venue: Budapest, Marriott Hotel
+Venue: Budapest, Corinthia Hotel
 
 TICKET DETAILS
 -----------

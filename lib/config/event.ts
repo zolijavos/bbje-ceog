@@ -18,7 +18,7 @@ export const EVENT_CONFIG = {
 
   // Venue
   venue: {
-    name: 'Marriott Hotel Budapest',
+    name: 'Corinthia Hotel Budapest',
     address: 'Budapest, Apáczai Csere János u. 4, 1052',
   },
 

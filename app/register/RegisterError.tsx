@@ -21,7 +21,7 @@ function getErrorDetails(errorType: MagicLinkErrorType): {
       return {
         title: 'Link Expired',
         description:
-          'The invitation link expires after 5 minutes. Request a new link using the button below.',
+          'The invitation link expires after 24 hours. Request a new link using the button below.',
         icon: 'expired',
         showRequestLink: true,
       };
@@ -188,12 +188,12 @@ export default function RegisterError({
         {/* Footer */}
         <p className="text-center text-sm text-white/70 mt-6 font-sans">
           Questions?{' '}
-          <a
-            href="mailto:info@ceogala.hu"
+          <Link
+            href="/help"
             className="text-accent-teal hover:text-accent-teal-light"
           >
-            info@ceogala.hu
-          </a>
+            View Registration Guide
+          </Link>
         </p>
       </div>
     </div>

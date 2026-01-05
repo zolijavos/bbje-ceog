@@ -203,7 +203,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
             <p className="text-neutral-500 text-sm font-sans">
               Friday, March 27, 2026 • 6:00 PM
               <br />
-              Budapest, Marriott Hotel
+              Budapest, Corinthia Hotel
             </p>
           </div>
 
@@ -356,10 +356,10 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
         <div className="mt-8 pt-6 border-t border-neutral-300/20">
           <div className="text-center text-sm text-neutral-500 font-sans">
             <Link href="/" className="font-medium text-neutral-800 hover:text-accent-gold transition-colors">CEO Gala 2026</Link>
-            <p>Friday, March 27, 2026 • 6:00 PM • Budapest, Marriott Hotel</p>
+            <p>Friday, March 27, 2026 • 6:00 PM • Budapest, Corinthia Hotel</p>
             <p className="mt-3">
               <Link href="/help" className="text-accent-gold hover:underline">
-                Segítségre van szüksége?
+                Need help?
               </Link>
             </p>
           </div>
