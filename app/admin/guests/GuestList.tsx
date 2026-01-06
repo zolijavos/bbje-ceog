@@ -19,6 +19,7 @@ import {
   CheckCircle,
   Envelope,
   SpinnerGap,
+  ArrowsClockwise,
 } from '@phosphor-icons/react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
@@ -55,6 +56,7 @@ interface Guest {
   magicLinkExpired: boolean;
   emailsSent: number;
   createdAt: string;
+  updatedAt: string;
   dietaryRequirements: string | null;
   seatingPreferences: string | null;
   tableAssignment?: {
@@ -121,6 +123,9 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
   // State for email preview modal
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [emailRecipients, setEmailRecipients] = useState<Array<{ id: number; name: string; email: string }>>([]);
+
+  // State for refresh button
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Apply filters when they change
   useEffect(() => {
@@ -436,6 +441,14 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
     }
   }, [approvingGuest, showNotification, router]);
 
+  // Refresh handler
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    router.refresh();
+    // Small delay to show loading state
+    setTimeout(() => setIsRefreshing(false), 500);
+  }, [router]);
+
   // Check if all paginated guests are selected
   const allPageSelected =
     paginatedGuests.length > 0 &&
@@ -462,7 +475,22 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
 
       {/* Action bar with Add button */}
       <div className="mb-4 flex justify-between items-center">
-        <h2 className="text-lg font-medium text-gray-900">{t('guestList')}</h2>
+        <div className="flex items-center gap-2">
+          <h2 className="text-lg font-medium text-gray-900">{t('guestList')}</h2>
+          <button
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+            className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
+            title={t('refresh')}
+            data-testid="refresh-button"
+          >
+            <ArrowsClockwise
+              size={20}
+              weight="duotone"
+              className={isRefreshing ? 'animate-spin' : ''}
+            />
+          </button>
+        </div>
         <button
           onClick={() => setShowAddModal(true)}
           className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium text-white bg-neutral-800 hover:bg-neutral-800/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-800"
@@ -523,6 +551,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
             data-testid="status-filter"
           >
             <option value="all">{t('allStatuses')}</option>
+            <option value="pending">Pending</option>
             <option value="invited">Invited</option>
             <option value="registered">Registered</option>
             <option value="approved">Approved</option>

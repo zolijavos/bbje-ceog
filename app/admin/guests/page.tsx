@@ -30,6 +30,7 @@ export default async function GuestsPage() {
       dietary_requirements: true,
       seating_preferences: true,
       created_at: true,
+      updated_at: true,
       paired_with_id: true,
       // Partner relation: if this guest is a main guest, get their partner
       partner_of: {
@@ -97,7 +98,7 @@ export default async function GuestsPage() {
       },
     },
     orderBy: {
-      created_at: 'desc',
+      updated_at: 'desc',
     },
   });
 
@@ -117,6 +118,7 @@ export default async function GuestsPage() {
       : true,
     emailsSent: g._count.email_logs,
     createdAt: g.created_at.toISOString(),
+    updatedAt: g.updated_at.toISOString(),
     dietaryRequirements: g.dietary_requirements,
     seatingPreferences: g.seating_preferences,
     tableAssignment: g.table_assignment
@@ -179,7 +181,7 @@ export default async function GuestsPage() {
             </Link>
             <Link
               href="/admin/guests/import"
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
             >
               <UploadSimple size={18} weight="duotone" className="mr-2" />
               CSV Import

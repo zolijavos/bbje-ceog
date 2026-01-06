@@ -330,7 +330,7 @@ export default function PaidRegistrationForm({
         <div className="mb-6">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm font-medium text-slate-600">{getStepName(step)}</span>
-            <span className="text-sm text-slate-400">{step}/{totalSteps}</span>
+            <span className="text-sm text-slate-600">{step}/{totalSteps}</span>
           </div>
           <div className="w-full bg-slate-200 rounded-full h-2">
             <div

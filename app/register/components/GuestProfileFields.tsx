@@ -163,7 +163,7 @@ export default function GuestProfileFields({
           ) : (
             <span />
           )}
-          <span className="text-xs text-slate-400">{dietaryRequirements.length}/500</span>
+          <span className="text-xs text-slate-500">{dietaryRequirements.length}/500</span>
         </div>
       </div>
 
@@ -189,7 +189,7 @@ export default function GuestProfileFields({
           ) : (
             <span />
           )}
-          <span className="text-xs text-slate-400">{seatingPreferences.length}/500</span>
+          <span className="text-xs text-slate-500">{seatingPreferences.length}/500</span>
         </div>
       </div>
     </div>

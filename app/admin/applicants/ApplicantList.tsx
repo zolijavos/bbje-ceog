@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Check, X, Clock, Eye, XCircle } from '@phosphor-icons/react';
+import { Check, X, Clock, Eye, XCircle, CheckCircle } from '@phosphor-icons/react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 interface Applicant {
@@ -24,12 +24,20 @@ interface ApplicantListProps {
   applicants: Applicant[];
 }
 
-type FilterStatus = 'all' | 'pending_approval' | 'rejected';
+type FilterStatus = 'all' | 'pending_approval' | 'approved' | 'rejected';
 
-export default function ApplicantList({ applicants }: ApplicantListProps) {
+export default function ApplicantList({ applicants: initialApplicants }: ApplicantListProps) {
   const router = useRouter();
   const { t } = useLanguage();
+  // Local state for applicants - allows immediate UI updates
+  const [applicants, setApplicants] = useState<Applicant[]>(initialApplicants);
   const [filter, setFilter] = useState<FilterStatus>('all');
+
+  // Sync local state when server data changes (e.g., after router.refresh())
+  useEffect(() => {
+    setApplicants(initialApplicants);
+  }, [initialApplicants]);
+
   const [selectedApplicant, setSelectedApplicant] = useState<Applicant | null>(null);
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [rejectingId, setRejectingId] = useState<number | null>(null);
@@ -55,6 +63,14 @@ export default function ApplicantList({ applicants }: ApplicantListProps) {
         throw new Error(data.error || 'Failed to approve application');
       }
 
+      // Update local state immediately - change status to 'approved'
+      setApplicants((prev) =>
+        prev.map((a) =>
+          a.id === id ? { ...a, status: 'approved' } : a
+        )
+      );
+
+      // Also trigger server refresh for stats bar in parent
       router.refresh();
     } catch (error) {
       alert(error instanceof Error ? error.message : 'Failed to approve application');
@@ -66,12 +82,14 @@ export default function ApplicantList({ applicants }: ApplicantListProps) {
   const handleReject = async () => {
     if (!rejectingId || processing) return;
     setProcessing(rejectingId);
+    const currentRejectingId = rejectingId;
+    const currentRejectionReason = rejectionReason;
 
     try {
-      const response = await fetch(`/api/admin/applicants/${rejectingId}/reject`, {
+      const response = await fetch(`/api/admin/applicants/${currentRejectingId}/reject`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ reason: rejectionReason }),
+        body: JSON.stringify({ reason: currentRejectionReason }),
       });
 
       if (!response.ok) {
@@ -79,9 +97,20 @@ export default function ApplicantList({ applicants }: ApplicantListProps) {
         throw new Error(data.error || 'Failed to reject application');
       }
 
+      // Update local state immediately - change status to 'rejected'
+      setApplicants((prev) =>
+        prev.map((a) =>
+          a.id === currentRejectingId
+            ? { ...a, status: 'rejected', rejectionReason: currentRejectionReason || null }
+            : a
+        )
+      );
+
       setShowRejectModal(false);
       setRejectingId(null);
       setRejectionReason('');
+
+      // Also trigger server refresh for stats bar in parent
       router.refresh();
     } catch (error) {
       alert(error instanceof Error ? error.message : 'Failed to reject application');
@@ -105,6 +134,13 @@ export default function ApplicantList({ applicants }: ApplicantListProps) {
             {t('pendingReview')}
           </span>
         );
+      case 'approved':
+        return (
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300">
+            <CheckCircle size={12} className="mr-1" />
+            {t('approved')}
+          </span>
+        );
       case 'rejected':
         return (
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300">
@@ -126,7 +162,7 @@ export default function ApplicantList({ applicants }: ApplicantListProps) {
       {/* Filter Tabs */}
       <div className="mb-4 border-b border-gray-200" data-testid="filter-tabs">
         <nav className="-mb-px flex space-x-8">
-          {(['all', 'pending_approval', 'rejected'] as FilterStatus[]).map((status) => (
+          {(['all', 'pending_approval', 'approved', 'rejected'] as FilterStatus[]).map((status) => (
             <button
               key={status}
               onClick={() => setFilter(status)}
@@ -139,6 +175,7 @@ export default function ApplicantList({ applicants }: ApplicantListProps) {
             >
               {status === 'all' && t('all')}
               {status === 'pending_approval' && `${t('pending')} (${applicants.filter((a) => a.status === 'pending_approval').length})`}
+              {status === 'approved' && `${t('approved')} (${applicants.filter((a) => a.status === 'approved').length})`}
               {status === 'rejected' && `${t('rejected')} (${applicants.filter((a) => a.status === 'rejected').length})`}
             </button>
           ))}
@@ -192,7 +229,7 @@ export default function ApplicantList({ applicants }: ApplicantListProps) {
                       <button
                         onClick={() => handleApprove(applicant.id)}
                         disabled={processing === applicant.id}
-                        className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 disabled:opacity-50"
+                        className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-green-700 hover:bg-green-800 disabled:opacity-50"
                         data-testid={`approve-btn-${applicant.id}`}
                       >
                         <Check size={16} className="mr-1" />
@@ -312,7 +349,7 @@ export default function ApplicantList({ applicants }: ApplicantListProps) {
                       handleApprove(selectedApplicant.id);
                       setSelectedApplicant(null);
                     }}
-                    className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700"
+                    className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-700 hover:bg-green-800"
                   >
                     {t('approveApplication')}
                   </button>

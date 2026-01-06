@@ -108,8 +108,8 @@ export function DroppableTable({ table, guests, activeGuest, onRemoveGuest }: Dr
         <div className="space-y-2">
           {guests.length === 0 ? (
             <div className="text-center py-6 border-2 border-dashed border-gray-200 rounded-lg">
-              <p className="text-sm text-gray-400">{t('dragGuestsHere')}</p>
-              <p className="text-xs text-gray-300 mt-1">
+              <p className="text-sm text-gray-500">{t('dragGuestsHere')}</p>
+              <p className="text-xs text-gray-500 mt-1">
                 ({table.capacity} {t('seats')})
               </p>
             </div>

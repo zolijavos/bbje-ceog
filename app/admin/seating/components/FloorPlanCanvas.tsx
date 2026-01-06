@@ -539,7 +539,7 @@ function FloorPlanCanvas({
               </ul>
             </div>
           ) : (
-            <p className="text-sm text-neutral-400 italic">No assigned guests</p>
+            <p className="text-sm text-neutral-500 italic">No assigned guests</p>
           )}
         </div>
       )}

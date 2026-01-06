@@ -46,8 +46,8 @@ export default function RegisterWelcome({ guest }: RegisterWelcomeProps) {
       <div className="max-w-md w-full">
         {/* Logo/Header */}
         <div className="text-center mb-8">
-          <h1 className="font-display text-4xl font-semibold text-white tracking-tight">CEO Gala 2026</h1>
-          <p className="text-accent-teal mt-2 font-sans uppercase tracking-widest text-sm">Registration</p>
+          <h1 className="font-display text-4xl font-bold text-white tracking-tight drop-shadow-lg" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>CEO Gala 2026</h1>
+          <p className="text-white mt-2 font-sans uppercase tracking-widest text-sm font-semibold">Registration</p>
         </div>
 
         {/* Welcome Card */}
@@ -94,10 +94,10 @@ export default function RegisterWelcome({ guest }: RegisterWelcomeProps) {
             <div className="text-neutral-800 font-medium font-sans">{guest.email}</div>
           </div>
 
-          {/* Continue Button */}
+          {/* Continue Button - High contrast for visibility */}
           <Link
             href={nextStepUrl}
-            className="btn btn-primary w-full text-center"
+            className="block w-full text-center py-4 px-6 bg-neutral-800 hover:bg-neutral-700 text-white font-semibold uppercase tracking-wider transition-all"
           >
             Continue to Registration
           </Link>
@@ -113,15 +113,26 @@ export default function RegisterWelcome({ guest }: RegisterWelcomeProps) {
         </div>
 
         {/* Footer */}
-        <p className="text-center text-sm text-white/70 mt-6 font-sans">
-          Questions?{' '}
-          <Link
-            href="/help"
-            className="text-accent-teal hover:text-accent-teal-light"
-          >
-            View Registration Guide
-          </Link>
-        </p>
+        <div className="text-center mt-6 font-sans space-y-2">
+          <p className="text-sm text-white/80">
+            Questions?{' '}
+            <Link
+              href="/help"
+              className="text-accent-teal hover:text-accent-teal-light"
+            >
+              View Registration Guide
+            </Link>
+          </p>
+          <p>
+            <Link
+              href="/"
+              aria-label="Back to home page"
+              className="text-sm text-white/60 hover:text-white/80 transition-colors"
+            >
+              ← Back to Home
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

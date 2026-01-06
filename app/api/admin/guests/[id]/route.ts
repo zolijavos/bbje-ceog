@@ -21,7 +21,7 @@ const updateGuestSchema = z.object({
   position: z.string().optional().nullable(),
   guest_type: z.enum(['vip', 'paying_single', 'paying_paired', 'applicant']).optional(),
   registration_status: z
-    .enum(['invited', 'registered', 'approved', 'declined', 'pending_approval', 'rejected'])
+    .enum(['pending', 'invited', 'registered', 'approved', 'declined', 'pending_approval', 'rejected'])
     .optional(),
   dietary_requirements: z.string().optional().nullable(),
   seating_preferences: z.string().optional().nullable(),

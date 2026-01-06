@@ -98,11 +98,11 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
         </div>
 
         {/* Event Details */}
-        <div className="bg-neutral-800/5 rounded-lg p-4 mb-6">
-          <h2 className="font-display text-lg font-semibold text-neutral-800 mb-2">
+        <div className="bg-neutral-100 rounded-lg p-4 mb-6">
+          <h2 className="font-display text-lg font-semibold text-neutral-900 mb-2">
             CEO Gala 2026
           </h2>
-          <p className="text-neutral-500 text-sm font-sans">
+          <p className="text-neutral-700 text-sm font-sans">
             Friday, March 27, 2026 • 6:00 PM
             <br />
             Budapest, Corinthia Hotel
@@ -170,19 +170,19 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
 
         {/* PWA Download Section - Show for VIP guests who already have tickets */}
         {isVIP && (
-          <div className="bg-gradient-to-r from-teal-500 to-teal-600 rounded-lg p-4 mb-6 text-center">
+          <div className="bg-gradient-to-r from-teal-600 to-teal-700 rounded-lg p-4 mb-6 text-center">
             <div className="flex items-center justify-center gap-2 mb-2">
               <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
               </svg>
               <h3 className="font-display font-semibold text-white text-sm">Download the Guest App</h3>
             </div>
-            <p className="text-white/90 text-xs mb-3 font-sans">
+            <p className="text-white text-sm mb-3 font-sans">
               Access your ticket &amp; event info - even offline!
             </p>
             <Link
               href="/pwa"
-              className="inline-block bg-white text-teal-600 font-semibold text-sm px-5 py-2 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+              className="inline-block bg-white text-teal-700 font-semibold text-sm px-5 py-2 rounded-lg shadow-md hover:shadow-lg transition-shadow"
             >
               Open CEO Gala App
             </Link>
@@ -190,15 +190,26 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
         )}
 
         {/* Contact Info */}
-        <p className="text-xs text-neutral-500 font-sans">
-          Questions?{' '}
-          <Link
-            href="/help"
-            className="text-accent-teal hover:text-accent-teal-dark"
-          >
-            View Registration Guide
-          </Link>
-        </p>
+        <div className="text-xs font-sans space-y-2">
+          <p className="text-neutral-600">
+            Questions?{' '}
+            <Link
+              href="/help"
+              className="text-accent-teal hover:text-accent-teal-dark"
+            >
+              View Registration Guide
+            </Link>
+          </p>
+          <p>
+            <Link
+              href="/"
+              aria-label="Back to home page"
+              className="text-neutral-500 hover:text-neutral-700 transition-colors"
+            >
+              ← Back to Home
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -94,7 +94,7 @@ export default function BillingForm({ data, onChange, errors }: BillingFormProps
         {errors?.taxNumber ? (
           <p className="text-red-600 text-sm mt-1">{errors.taxNumber}</p>
         ) : (
-          <p className="text-slate-400 text-xs mt-1">Format: 12345678-1-42</p>
+          <p className="text-slate-500 text-xs mt-1">Format: 12345678-1-42</p>
         )}
       </div>
 

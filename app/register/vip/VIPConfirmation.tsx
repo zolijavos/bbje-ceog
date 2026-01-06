@@ -421,7 +421,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
                 {errors.partner_email && (
                   <p className="text-red-500 text-sm mt-1">{errors.partner_email}</p>
                 )}
-                <p className="text-xs text-neutral-400 mt-1">
+                <p className="text-xs text-neutral-600 mt-1">
                   Your partner will receive their own ticket via email.
                 </p>
               </div>
