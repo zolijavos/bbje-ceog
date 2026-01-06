@@ -13,10 +13,11 @@ export default async function ApplicantsPage() {
     redirect('/admin/login');
   }
 
-  // Fetch applicants (guests with pending_approval or rejected status)
+  // Fetch all applicants - anyone who applied (has applied_at set)
+  // This includes approved applicants who now have guest_type 'paying_single'
   const applicants = await prisma.guest.findMany({
     where: {
-      guest_type: 'applicant',
+      applied_at: { not: null },
     },
     select: {
       id: true,
@@ -39,6 +40,16 @@ export default async function ApplicantsPage() {
     ],
   });
 
+  // Status mapping for applicant display
+  // When an applicant is approved, their DB status becomes 'invited' (to receive magic link)
+  // But on this page, we show it as 'approved' for clarity
+  const getDisplayStatus = (dbStatus: string): string => {
+    if (dbStatus === 'invited') return 'approved';
+    if (dbStatus === 'registered') return 'approved'; // Already registered = was approved
+    if (dbStatus === 'approved') return 'approved'; // Direct approved status
+    return dbStatus; // pending_approval, rejected, etc.
+  };
+
   // Transform for client component
   const applicantData = applicants.map((a) => ({
     id: a.id,
@@ -50,7 +61,7 @@ export default async function ApplicantsPage() {
     position: a.position,
     dietaryRequirements: a.dietary_requirements,
     seatingPreferences: a.seating_preferences,
-    status: a.registration_status,
+    status: getDisplayStatus(a.registration_status),
     rejectionReason: a.rejection_reason,
     appliedAt: a.applied_at?.toISOString() || a.created_at.toISOString(),
   }));

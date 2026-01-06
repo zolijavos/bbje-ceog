@@ -242,7 +242,7 @@ function PWAPromoCard({ language }: { language: string }) {
         {/* Info Section */}
         <div className="flex-1">
           <h3 className="font-display text-lg font-semibold text-neutral-800 dark:text-neutral-100 mb-2">
-            {language === 'hu' ? 'CEO Gala App' : 'CEO Gala App'}
+            {language === 'hu' ? 'Gala App' : 'Gala App'}
           </h3>
           <p className="text-neutral-500 dark:text-neutral-400 text-sm mb-4 font-sans">
             {language === 'hu'
@@ -297,7 +297,7 @@ function PWAPromoCard({ language }: { language: string }) {
               {language === 'hu' ? 'Megnyitás' : 'Open App'}
             </Link>
             <a
-              href={`mailto:?subject=${encodeURIComponent('CEO Gala 2026 - Vendég App')}&body=${encodeURIComponent(`Töltsd le a CEO Gala vendég alkalmazást: ${pwaUrl}`)}`}
+              href={`mailto:?subject=${encodeURIComponent('BBJ Events 2026 - Gala App')}&body=${encodeURIComponent(`Töltsd le a BBJ Events vendég alkalmazást: ${pwaUrl}`)}`}
               className="flex-1 btn btn-secondary text-center text-sm"
             >
               {language === 'hu' ? 'Megosztás' : 'Share'}

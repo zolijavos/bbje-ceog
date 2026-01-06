@@ -7,6 +7,7 @@ import { useState, useRef, useEffect } from 'react';
 import {
   House,
   Users,
+  UserPlus,
   Chair,
   ClipboardText,
   SignOut,
@@ -25,6 +26,7 @@ import {
   List,
   X,
   Scroll,
+  DeviceMobile,
 } from '@phosphor-icons/react';
 import AdminThemeToggle from './components/AdminThemeToggle';
 import LanguageToggle from './components/LanguageToggle';
@@ -54,6 +56,7 @@ const dropdownMenus = {
       { href: '/admin/email-logs', label: 'Email Logs', icon: Envelope },
       { href: '/admin/audit-log', label: 'Audit Log', icon: Scroll },
       { href: '/admin/diagrams', label: 'Test Hub', icon: TestTube },
+      { href: '/admin/pwa-apps', label: 'PWA Apps', icon: DeviceMobile },
     ],
   },
 };
@@ -61,7 +64,7 @@ const dropdownMenus = {
 // Paths that belong to each dropdown (for highlighting)
 const eventPaths = ['/admin/seating', '/admin/checkin-log', '/admin/statistics'];
 const commsPaths = ['/admin/email-templates', '/admin/scheduled-emails', '/admin/payments'];
-const systemPaths = ['/admin/users', '/admin/email-logs', '/admin/audit-log', '/admin/diagrams'];
+const systemPaths = ['/admin/users', '/admin/email-logs', '/admin/audit-log', '/admin/diagrams', '/admin/pwa-apps'];
 
 export default function AdminHeader() {
   const pathname = usePathname();
@@ -122,7 +125,7 @@ export default function AdminHeader() {
             )}
 
             <Link href="/admin" className="font-display text-lg md:text-xl font-semibold text-white">
-              CEO Gala Admin
+              BBJ Events Admin
             </Link>
 
             {/* Mobile: Staff primary buttons */}
@@ -224,7 +227,7 @@ export default function AdminHeader() {
                   href="/admin/guests"
                   className={`
                     flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors
-                    ${isActive('/admin/guests') || isActive('/admin/applicants')
+                    ${isActive('/admin/guests')
                       ? 'bg-white/10 text-white'
                       : 'text-white/70 hover:text-white hover:bg-white/5'
                     }
@@ -232,6 +235,23 @@ export default function AdminHeader() {
                 >
                   <Users size={18} weight={isActive('/admin/guests') ? 'fill' : 'regular'} />
                   Guests
+                </Link>
+              )}
+
+              {/* Applications - admin only */}
+              {isAdmin && (
+                <Link
+                  href="/admin/applicants"
+                  className={`
+                    flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors
+                    ${isActive('/admin/applicants')
+                      ? 'bg-white/10 text-white'
+                      : 'text-white/70 hover:text-white hover:bg-white/5'
+                    }
+                  `}
+                >
+                  <UserPlus size={18} weight={isActive('/admin/applicants') ? 'fill' : 'regular'} />
+                  Applications
                 </Link>
               )}
 
@@ -481,6 +501,21 @@ export default function AdminHeader() {
             >
               <Users size={22} weight={isActive('/admin/guests') ? 'fill' : 'regular'} />
               Guests
+            </Link>
+
+            {/* Applications */}
+            <Link
+              href="/admin/applicants"
+              className={`
+                flex items-center gap-3 px-3 py-3 rounded-lg text-base font-medium transition-colors
+                ${isActive('/admin/applicants')
+                  ? 'bg-accent-teal/20 text-accent-teal'
+                  : 'text-white/80 hover:bg-white/5 hover:text-white'
+                }
+              `}
+            >
+              <UserPlus size={22} weight={isActive('/admin/applicants') ? 'fill' : 'regular'} />
+              Applications
             </Link>
 
             {/* Divider */}

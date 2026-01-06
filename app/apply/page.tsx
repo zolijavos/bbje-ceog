@@ -151,7 +151,7 @@ export default function ApplyPage() {
             </div>
             <h1 className="text-2xl font-bold landing-text-heading mb-2">Application Submitted!</h1>
             <p className="landing-text-secondary mb-6">
-              Thank you for your interest in the CEO Gala 2026. We have received your application and will review it shortly.
+              Thank you for your interest in the BBJ Events 2026. We have received your application and will review it shortly.
             </p>
             <p className="landing-text-tertiary text-sm mb-6">
               You will receive an email notification once your application has been reviewed.
@@ -176,7 +176,7 @@ export default function ApplyPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-block hover:opacity-80 transition-opacity">
-            <h1 className="font-display text-4xl font-bold landing-text-heading mb-2">CEO Gala</h1>
+            <h1 className="font-display text-4xl font-bold landing-text-heading mb-2">BBJ Events</h1>
           </Link>
           <div className="flex items-center justify-center gap-2 mb-4">
             <PaperPlaneTilt weight="duotone" size={24} className="text-amber-500 dark:text-amber-400" />
@@ -341,7 +341,7 @@ export default function ApplyPage() {
           </Link>
         </p>
         <p className="text-center landing-footer text-sm mt-4">
-          © 2026 CEO Gala • Executive Excellence
+          © 2026 BBJ Events • Executive Excellence
         </p>
       </div>
     </ApplyWrapper>

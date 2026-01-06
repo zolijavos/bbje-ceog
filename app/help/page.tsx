@@ -254,7 +254,7 @@ export default function PublicHelpPage() {
 
         {/* Footer */}
         <p className="text-center landing-footer text-xs mt-8">
-          © 2026 CEO Gala • Executive Excellence
+          © 2026 BBJ Events • Executive Excellence
         </p>
       </div>
     </div>

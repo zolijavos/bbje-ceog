@@ -100,7 +100,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
         {/* Event Details */}
         <div className="bg-neutral-100 rounded-lg p-4 mb-6">
           <h2 className="font-display text-lg font-semibold text-neutral-900 mb-2">
-            CEO Gala 2026
+            BBJ Events 2026
           </h2>
           <p className="text-neutral-700 text-sm font-sans">
             Friday, March 27, 2026 • 6:00 PM
@@ -184,7 +184,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
               href="/pwa"
               className="inline-block bg-white text-teal-700 font-semibold text-sm px-5 py-2 rounded-lg shadow-md hover:shadow-lg transition-shadow"
             >
-              Open CEO Gala App
+              Open Gala App
             </Link>
           </div>
         )}

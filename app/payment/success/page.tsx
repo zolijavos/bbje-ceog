@@ -113,7 +113,7 @@ export default async function PaymentSuccessPage({
             href="/pwa"
             className="inline-block bg-white text-teal-600 font-semibold px-6 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-shadow"
           >
-            Open CEO Gala App
+            Open Gala App
           </Link>
           <p className="text-white/70 text-xs mt-3 font-sans">
             Works on iPhone, Android &amp; Desktop

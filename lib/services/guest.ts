@@ -220,7 +220,7 @@ export async function createGuest(data: CreateGuestInput) {
       email: data.email,
       name: data.name,
       guest_type: data.guest_type,
-      registration_status: 'invited',
+      registration_status: 'pending',
       title: data.title || null,
       phone: data.phone || null,
       company: data.company || null,

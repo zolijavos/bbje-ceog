@@ -385,7 +385,8 @@ enum GuestType {
 }
 
 enum RegistrationStatus {
-  invited           // On guest list, eligible for magic link (VIP/paying) - may or may not have received email yet
+  pending           // Added to guest list, invitation not yet sent
+  invited           // Magic link email sent, awaiting registration
   registered        // Form submitted, awaiting payment (if paying)
   approved          // Registration approved, ticket issued
   declined          // Guest declined invitation

@@ -292,7 +292,7 @@ describe('Guest Service', () => {
           email: 'new@example.com',
           name: 'New Guest',
           guest_type: 'vip',
-          registration_status: 'invited',
+          registration_status: 'pending',
         }),
       });
     });

@@ -66,7 +66,7 @@ export default async function PaidPage({ searchParams }: PaidPageProps) {
   // Determine if paired tickets are allowed
   const canSelectPaired = guest.guest_type === 'paying_paired';
 
-  // Render paid registration form
+  // Render paid registration form with all profile fields pre-filled
   return (
     <PaidRegistrationForm
       guest={{
@@ -74,6 +74,12 @@ export default async function PaidPage({ searchParams }: PaidPageProps) {
         name: guest.name,
         email: guest.email,
         guest_type: guest.guest_type,
+        title: guest.title,
+        phone: guest.phone,
+        company: guest.company,
+        position: guest.position,
+        dietary_requirements: guest.dietary_requirements,
+        seating_preferences: guest.seating_preferences,
       }}
       canSelectPaired={canSelectPaired}
     />

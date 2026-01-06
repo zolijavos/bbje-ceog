@@ -18,14 +18,14 @@ interface EmailPreviewModalProps {
 }
 
 // Default email template (matches the actual email template)
-const DEFAULT_SUBJECT = 'CEO Gala - Registration Invitation';
+const DEFAULT_SUBJECT = 'BBJ Events - Registration Invitation';
 
 const DEFAULT_BODY = `Dear {guestName},
 
-We are pleased to inform you that you have received an invitation to the CEO Gala event.
+We are pleased to inform you that you have received an invitation to the BBJ Events.
 
 Event details:
-- Event: CEO Gala 2026
+- Event: BBJ Events 2026
 - Location: Budapest
 - You will find more details during registration.
 
@@ -37,7 +37,7 @@ This link is valid for 24 hours.
 If you have any questions, please contact us.
 
 Best regards,
-CEO Gala Organizing Committee`;
+BBJ Events Organizing Committee`;
 
 export default function EmailPreviewModal({
   isOpen,

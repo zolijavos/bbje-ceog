@@ -570,7 +570,7 @@ export default function PaidRegistrationForm({
         {/* Event Info Footer */}
         <div className="mt-8 pt-6 border-t border-slate-200">
           <div className="text-center text-sm text-slate-500">
-            <Link href="/" className="font-medium text-slate-700 hover:text-amber-600 transition-colors">CEO Gala 2026</Link>
+            <Link href="/" className="font-medium text-slate-700 hover:text-amber-600 transition-colors">BBJ Events 2026</Link>
             <p>Friday, March 27, 2026 • 6:00 PM • Budapest, Corinthia Hotel</p>
             <p className="mt-3">
               <Link href="/help" className="text-amber-600 hover:underline">

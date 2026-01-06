@@ -1,0 +1,27 @@
+{
+  "name": "CEO Gala 2026 - Staff Scanner",
+  "short_name": "Staff Scanner",
+  "description": "QR code scanner for event check-in staff",
+  "start_url": "/checkin",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#111827",
+  "orientation": "portrait",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/myforgelabs-logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/myforgelabs-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "lang": "en"
+}

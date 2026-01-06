@@ -70,7 +70,7 @@ function LoginForm() {
             <ShieldCheck weight="light" size={64} className="text-accent-teal" />
           </div>
           <Link href="/" className="inline-block hover:opacity-80 transition-opacity">
-            <h1 className="font-display text-4xl font-semibold text-white tracking-tight">CEO Gala 2026</h1>
+            <h1 className="font-display text-4xl font-semibold text-white tracking-tight">BBJ Events 2026</h1>
           </Link>
           <p className="text-accent-teal mt-2 font-sans uppercase tracking-widest text-sm">Admin</p>
         </div>
@@ -153,7 +153,7 @@ function LoginForm() {
 
         {/* Footer */}
         <p className="text-center text-sm text-white/70 mt-6 font-sans">
-          © 2026 CEO Gala - Event Platform
+          © 2026 BBJ Events - Event Platform
         </p>
       </div>
     </div>

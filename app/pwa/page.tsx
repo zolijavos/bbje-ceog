@@ -101,7 +101,7 @@ export default function PWALoginPage() {
         </div>
 
         <h1 className="font-display text-3xl pwa-text-primary mb-2">
-          CEO Gala 2026
+          BBJ Events 2026
         </h1>
         <p className="pwa-text-tertiary text-sm">Gala App</p>
       </header>

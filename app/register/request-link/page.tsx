@@ -30,7 +30,7 @@ export default async function RequestLinkPage({
         <div className="text-center mb-10">
           <Link href="/" className="inline-block hover:opacity-80 transition-opacity">
             <h1 className="font-display text-4xl md:text-5xl font-bold landing-text-heading tracking-tight mb-3">
-              CEO Gala
+              BBJ Events
             </h1>
           </Link>
           <p className="text-accent-teal dark:text-teal-400 uppercase tracking-widest text-sm font-sans">
@@ -76,7 +76,7 @@ export default async function RequestLinkPage({
           </Link>
         </p>
         <p className="text-center text-sm landing-footer font-sans mt-4">
-          © 2026 CEO Gala • Executive Excellence
+          © 2026 BBJ Events • Executive Excellence
         </p>
       </div>
     </RequestLinkWrapper>

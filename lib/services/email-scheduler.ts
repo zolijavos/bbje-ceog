@@ -297,7 +297,7 @@ export async function schedulePaymentReminders(config?: {
         guestName: reg.guest.name,
         ticketType: ticketLabels[reg.ticket_type] || reg.ticket_type,
         amount: reg.payment ? `${Number(reg.payment.amount).toLocaleString('hu-HU')} ${reg.payment.currency}` : 'N/A',
-        paymentUrl: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/status?guestId=${reg.guest_id}`,
+        paymentUrl: `${process.env.APP_URL || 'https://ceogala.mflevents.space'}/status?guestId=${reg.guest_id}`,
       },
       scheduleType: 'payment_reminder',
     });

@@ -90,7 +90,7 @@ export async function createCheckoutSession(registrationId: number): Promise<{
   const productName = TICKET_NAMES[ticketType];
 
   // Build success and cancel URLs
-  const baseUrl = process.env.APP_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const baseUrl = process.env.APP_URL || process.env.NEXT_PUBLIC_APP_URL || 'https://ceogala.mflevents.space';
 
   // DEBUG: Log the URL construction
   console.log('[PAYMENT] APP_URL env:', process.env.APP_URL);

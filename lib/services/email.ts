@@ -280,17 +280,18 @@ export async function sendMagicLinkEmail(
     // 3. Generate magic link hash
     const { hash, expiresAt } = generateMagicLinkHash(guest.email);
 
-    // 4. Update guest record
+    // 4. Update guest record - set status to 'invited' when magic link is sent
     await prisma.guest.update({
       where: { id: guestId },
       data: {
         magic_link_hash: hash,
         magic_link_expires_at: expiresAt,
+        registration_status: 'invited',
       },
     });
 
     // 5. Compose email (try DB template first, fallback to hardcoded)
-    const appUrl = process.env.APP_URL || 'http://localhost:3000';
+    const appUrl = process.env.APP_URL || 'https://ceogala.mflevents.space';
     const magicLinkUrl = `${appUrl}/register?code=${hash}&email=${encodeURIComponent(guest.email)}`;
 
     let subject: string;
@@ -458,14 +459,11 @@ export async function sendTicketEmail(
       qrCode = ticket.qrCodeDataUrl;
     }
 
-    // 3. Generate PWA login QR code (contains URL with auth code)
+    // 3. Build PWA login URL with code parameter for deep linking
     const appUrl = process.env.APP_URL || 'https://ceogala.mflevents.space';
-    const pwaLoginUrl = pwaAuthCode ? `${appUrl}/pwa?code=${pwaAuthCode}` : null;
-    let pwaQrCode: string | null = null;
-    if (pwaLoginUrl) {
-      const { generateQRCodeDataURL } = await import('@/lib/services/qr-ticket');
-      pwaQrCode = await generateQRCodeDataURL(pwaLoginUrl);
-    }
+    const pwaLoginUrl = pwaAuthCode
+      ? `${appUrl}/pwa?code=${pwaAuthCode}`
+      : `${appUrl}/pwa`;
 
     // 4. Compose email (try DB template first, fallback to hardcoded)
     const ticketTypeLabels: Record<TicketType, string> = {
@@ -478,8 +476,6 @@ export async function sendTicketEmail(
     // Use CID references for inline images instead of data URLs
     const qrCodeCid = 'qrcode@ceogala.hu';
     const qrCodeCidRef = `cid:${qrCodeCid}`;
-    const pwaQrCodeCid = 'pwa-qrcode@ceogala.hu';
-    const pwaQrCodeCidRef = `cid:${pwaQrCodeCid}`;
 
     let subject: string;
     let html: string;
@@ -492,8 +488,7 @@ export async function sendTicketEmail(
         qrCodeDataUrl: qrCodeCidRef, // Use CID reference
         partnerName: registration.partner_name || undefined,
         pwaAuthCode: pwaAuthCode || undefined,
-        pwaQrCodeDataUrl: pwaQrCode ? pwaQrCodeCidRef : undefined,
-        pwaLoginUrl: pwaLoginUrl || undefined,
+        pwaLoginUrl: pwaLoginUrl,
       });
       subject = rendered.subject;
       html = rendered.html;
@@ -506,15 +501,14 @@ export async function sendTicketEmail(
         qrCodeDataUrl: qrCodeCidRef, // Use CID reference
         partnerName: registration.partner_name || undefined,
         pwaAuthCode: pwaAuthCode || undefined,
-        pwaQrCodeDataUrl: pwaQrCode ? pwaQrCodeCidRef : undefined,
-        pwaLoginUrl: pwaLoginUrl || undefined,
+        pwaLoginUrl: pwaLoginUrl,
       });
       subject = fallback.subject;
       html = fallback.html;
       text = fallback.text;
     }
 
-    // 5. Prepare QR codes as CID inline attachments
+    // 5. Prepare QR code as CID inline attachment
     const qrCodeBuffer = dataUrlToBuffer(qrCode);
     const attachments: EmailAttachment[] = [
       {
@@ -524,17 +518,6 @@ export async function sendTicketEmail(
         cid: qrCodeCid, // Content-ID for inline reference
       },
     ];
-
-    // Add PWA QR code attachment if available
-    if (pwaQrCode) {
-      const pwaQrCodeBuffer = dataUrlToBuffer(pwaQrCode);
-      attachments.push({
-        filename: 'pwa-qrcode.png',
-        content: pwaQrCodeBuffer,
-        contentType: 'image/png',
-        cid: pwaQrCodeCid,
-      });
-    }
 
     // 6. Send email with inline attachments
     const result = await sendEmail({

@@ -504,14 +504,14 @@ new@example.com,New Guest,vip`;
             email: 'john@example.com',
             name: 'John Doe',
             guest_type: 'vip',
-            registration_status: 'invited',
+            registration_status: 'pending',
           }),
         ]),
         skipDuplicates: false,
       });
     });
 
-    it('should set registration_status to invited', async () => {
+    it('should set registration_status to pending (not yet invited)', async () => {
       (prisma.guest.createMany as Mock).mockResolvedValue({ count: 1 });
 
       const rows: CSVRow[] = [
@@ -521,7 +521,7 @@ new@example.com,New Guest,vip`;
       await bulkInsertGuests(rows);
 
       const callArg = (prisma.guest.createMany as Mock).mock.calls[0][0];
-      expect(callArg.data[0].registration_status).toBe('invited');
+      expect(callArg.data[0].registration_status).toBe('pending');
     });
 
     it('should handle optional fields', async () => {

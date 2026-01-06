@@ -340,7 +340,7 @@ export async function bulkInsertGuests(rows: CSVRow[]): Promise<number> {
       email: row.email.toLowerCase().trim(),
       name: row.name.trim(),
       guest_type: row.guest_type as GuestType,
-      registration_status: 'invited' as const,
+      registration_status: 'pending' as const,
       phone: row.phone || null,
       company: row.company || null,
       position: row.position || null,

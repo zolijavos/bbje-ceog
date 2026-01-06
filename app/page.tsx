@@ -52,7 +52,7 @@ export default function HomePage() {
         {/* Header */}
         <div className="text-center mb-10">
           <h1 className="font-display text-5xl font-bold landing-text-heading tracking-tight mb-3 drop-shadow-sm">
-            CEO Gala
+            BBJ Events
           </h1>
           <p className="text-accent-teal dark:text-teal-400 text-lg font-medium tracking-widest uppercase mb-4">
             2026
@@ -150,7 +150,7 @@ export default function HomePage() {
 
         {/* Subtle branding */}
         <p className="text-center landing-footer text-xs mt-6">
-          © 2026 CEO Gala • Executive Excellence
+          © 2026 BBJ Events • Executive Excellence
         </p>
       </div>
     </div>

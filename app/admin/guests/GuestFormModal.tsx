@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { titleOptions } from '@/lib/validations/guest-profile';
 
 interface BillingInfo {
   billing_name: string;
@@ -247,16 +248,19 @@ export default function GuestFormModal({
                 >
                   Title
                 </label>
-                <input
-                  type="text"
+                <select
                   id="title"
                   name="title"
                   value={formData.title || ''}
                   onChange={handleChange}
-                  placeholder="e.g. Dr., Prof."
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  data-testid="guest-title-input"
-                />
+                  data-testid="guest-title-select"
+                >
+                  <option value="">-- Select --</option>
+                  {titleOptions.filter(t => t !== '').map((title) => (
+                    <option key={title} value={title}>{title}</option>
+                  ))}
+                </select>
               </div>
 
               {/* Guest Type */}

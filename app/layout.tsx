@@ -25,14 +25,14 @@ const openSans = Open_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'CEO Gala 2026 - Event Platform',
-  description: 'CEO Gala 2026 event registration and check-in system',
+  title: 'BBJ Events 2026 - Event Platform',
+  description: 'BBJ Events 2026 event registration and check-in system',
   manifest: '/manifest.json',
   themeColor: '#1e293b',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'CEO Gála',
+    title: 'BBJ Events',
   },
   formatDetection: {
     telephone: false,

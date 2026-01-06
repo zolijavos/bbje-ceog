@@ -39,7 +39,7 @@ interface StatusContentProps {
 // Bank transfer details for pending payments
 const BANK_DETAILS = {
   bankName: 'OTP Bank',
-  accountHolder: 'CEO Gala Organizing Committee',
+  accountHolder: 'BBJ Events Organizing Committee',
   accountNumber: '11773016-01234567-00000000',
   iban: 'HU12 1177 3016 0123 4567 0000 0000',
   swift: 'OTPVHUHB',
@@ -125,7 +125,7 @@ export default function StatusContent({
         <div className="text-center mb-10">
           <Link href="/" className="inline-block hover:opacity-80 transition-opacity">
             <h1 className="font-display text-4xl md:text-5xl font-semibold text-white tracking-tight mb-3">
-              CEO Gala 2026
+              BBJ Events 2026
             </h1>
           </Link>
           <p className="text-accent-teal uppercase tracking-widest text-sm font-sans">
@@ -348,7 +348,7 @@ export default function StatusContent({
               View Registration Guide
             </Link>
           </p>
-          <p className="mt-2">© 2026 CEO Gala - Event Platform</p>
+          <p className="mt-2">© 2026 BBJ Events - Event Platform</p>
         </div>
       </div>
     </div>

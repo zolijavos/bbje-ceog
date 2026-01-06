@@ -62,7 +62,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
 
     // Send approval email with magic link using customizable template
     try {
-      const magicLinkUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/register?code=${hash}&email=${encodeURIComponent(applicant.email)}`;
+      const magicLinkUrl = `${process.env.APP_URL || 'https://ceogala.mflevents.space'}/register?code=${hash}&email=${encodeURIComponent(applicant.email)}`;
 
       const rendered = await renderTemplate('applicant_approval', {
         guestName: applicant.name,
@@ -94,7 +94,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
           guest_id: guestId,
           email_type: 'application_approved',
           recipient: applicant.email,
-          subject: 'CEO Gala 2026 - Application Approved',
+          subject: 'BBJ Events 2026 - Application Approved',
           status: 'failed',
           error_message: emailError instanceof Error ? emailError.message : 'Unknown error',
         },

@@ -255,7 +255,7 @@ export default function CheckinScanner() {
       {/* Header */}
       <header className="bg-gray-800 px-4 py-3 flex items-center justify-between">
         <Link href="/admin" className="text-white text-lg font-semibold hover:text-amber-400 transition-colors">
-          CEO Gala Check-in
+          BBJ Events Check-in
         </Link>
         <div className="flex items-center gap-2">
           {/* Install App Button */}

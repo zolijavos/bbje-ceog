@@ -27,6 +27,10 @@ export interface StatusInfo {
 }
 
 export const REGISTRATION_STATUS_INFO: Record<RegistrationStatus, StatusInfo> = {
+  pending: {
+    label: 'Pending',
+    color: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
+  },
   invited: {
     label: 'Invited',
     color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300',

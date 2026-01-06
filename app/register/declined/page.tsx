@@ -75,15 +75,15 @@ export default async function DeclinedPage({ searchParams }: DeclinedPageProps) 
         {/* Guest Name */}
         <p className="text-slate-500 mb-6">
           Dear <span className="font-medium">{guest.name}</span>, we are sorry
-          that you cannot attend the CEO Gala 2026 event.
+          that you cannot attend the BBJ Events 2026 event.
         </p>
 
         {/* Event Details */}
-        <div className="bg-slate-50 rounded-lg p-4 mb-6">
-          <h2 className="text-lg font-semibold text-slate-800 mb-2">
-            CEO Gala 2026
+        <div className="bg-slate-100 rounded-lg p-4 mb-6">
+          <h2 className="text-lg font-semibold text-slate-900 mb-2">
+            BBJ Events 2026
           </h2>
-          <p className="text-slate-600 text-sm">
+          <p className="text-slate-700 text-sm">
             Friday, March 27, 2026 • 6:00 PM
             <br />
             Budapest, Corinthia Hotel
@@ -99,15 +99,26 @@ export default async function DeclinedPage({ searchParams }: DeclinedPageProps) 
         </div>
 
         {/* Contact Info */}
-        <p className="text-xs text-slate-400">
-          Questions?{' '}
-          <Link
-            href="/help"
-            className="text-amber-600 hover:underline"
-          >
-            View Registration Guide
-          </Link>
-        </p>
+        <div className="text-xs space-y-2">
+          <p className="text-slate-500">
+            Questions?{' '}
+            <Link
+              href="/help"
+              className="text-amber-600 hover:underline"
+            >
+              View Registration Guide
+            </Link>
+          </p>
+          <p>
+            <Link
+              href="/"
+              aria-label="Back to home page"
+              className="text-slate-500 hover:text-slate-700 transition-colors"
+            >
+              ← Back to Home
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -234,7 +234,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
           <div className="bg-neutral-50 rounded-lg p-4 mb-6 border-l-4 border-accent-gold">
             <Link href="/" className="hover:opacity-80 transition-opacity">
               <h2 className="font-display text-lg font-semibold text-neutral-800 mb-2">
-                CEO Gala 2026
+                BBJ Events 2026
               </h2>
             </Link>
             <p className="text-neutral-500 text-sm font-sans">
@@ -490,7 +490,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
         {/* Event Info Footer */}
         <div className="mt-8 pt-6 border-t border-neutral-300/20">
           <div className="text-center text-sm text-neutral-500 font-sans">
-            <Link href="/" className="font-medium text-neutral-800 hover:text-accent-gold transition-colors">CEO Gala 2026</Link>
+            <Link href="/" className="font-medium text-neutral-800 hover:text-accent-gold transition-colors">BBJ Events 2026</Link>
             <p>Friday, March 27, 2026 • 6:00 PM • Budapest, Corinthia Hotel</p>
             <p className="mt-3">
               <Link href="/help" className="text-accent-gold hover:underline">
