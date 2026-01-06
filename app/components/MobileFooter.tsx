@@ -23,7 +23,7 @@ export default function MobileFooter({ bottomOffset = '0', zIndex = 30, classNam
     <div
       className={`
         fixed left-0 right-0 md:hidden
-        py-1
+        py-1.5
         flex items-center justify-center
         bg-white/40 dark:bg-neutral-900/40
         backdrop-blur-sm
@@ -32,15 +32,15 @@ export default function MobileFooter({ bottomOffset = '0', zIndex = 30, classNam
       `}
       style={{ bottom: bottomOffset, zIndex }}
     >
-      <div className="flex items-center justify-center gap-1.5">
+      <div className="flex items-center justify-center gap-2">
         <Image
           src="/myforgelabs-logo.png"
           alt="MyForge Labs"
-          width={14}
-          height={14}
+          width={21}
+          height={21}
           className="opacity-50"
         />
-        <span className="text-xs text-neutral-500/50 dark:text-neutral-400/50">
+        <span className="text-sm text-neutral-500/50 dark:text-neutral-400/50">
           Built By{' '}
           <a
             href="https://www.myforgelabs.com/#kapcsolat"

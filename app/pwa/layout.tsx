@@ -121,8 +121,8 @@ function PWALayoutInner({ children }: { children: React.ReactNode }) {
       <main className="min-h-screen pb-14">{children}</main>
 
       {/* Footer branding - blur effect */}
-      <footer className="fixed bottom-0 left-0 right-0 py-1.5 text-center border-t border-white/20 dark:border-neutral-700/30 bg-white/60 dark:bg-neutral-900/60 backdrop-blur-md transition-colors duration-300">
-        <span className="text-[10px] text-neutral-500/80 dark:text-neutral-400/80">
+      <footer className="fixed bottom-0 left-0 right-0 py-2 text-center border-t border-white/20 dark:border-neutral-700/30 bg-white/60 dark:bg-neutral-900/60 backdrop-blur-md transition-colors duration-300">
+        <span className="text-[15px] text-neutral-500/80 dark:text-neutral-400/80">
           Built By{' '}
           <a
             href="https://www.myforgelabs.com/#kapcsolat"
