@@ -56,7 +56,7 @@ const faqs: FAQItem[] = [
   {
     id: '6',
     question: 'Can I bring a guest or partner?',
-    answer: 'This depends on your invitation type. VIP invitations are for one person. Paired ticket holders can register with their partner during the registration process.',
+    answer: 'VIP guests can now add a free partner during registration! Simply select the option to bring a partner and enter their details. Paired ticket holders also register with their partner. Both you and your partner will receive separate tickets and access to the Gala App.',
   },
   {
     id: '7',
@@ -67,6 +67,16 @@ const faqs: FAQItem[] = [
     id: '8',
     question: 'When will I receive my ticket?',
     answer: 'Your e-ticket with QR code is sent immediately after successful payment. For bank transfers, tickets are sent within 24-48 hours after payment verification.',
+  },
+  {
+    id: '9',
+    question: 'What is the Gala App?',
+    answer: 'The Gala App is our mobile-friendly web app where you can view your QR ticket (works offline!), check your table assignment, and update your profile. Your ticket email includes a login code (CEOG-XXXXXX) - just enter it to access the app. No password needed!',
+  },
+  {
+    id: '10',
+    question: 'How do I access my ticket on my phone?',
+    answer: 'Open the Gala App link from your ticket email and enter your 6-character login code (e.g., CEOG-A1B2C3). Your QR ticket will be saved for offline use, so it works even without internet at the event!',
   },
 ];
 

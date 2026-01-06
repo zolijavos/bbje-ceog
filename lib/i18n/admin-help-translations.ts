@@ -255,6 +255,40 @@ The **search box** filters by name or email.`,
 The number of selected guests is shown next to the action buttons.`,
     keywords: ['bulk', 'select', 'multiple', 'batch'],
   },
+  {
+    id: 'gl-refresh',
+    category: 'Guest List',
+    question: 'How do I refresh the guest list?',
+    answer: `Click the **"Refresh"** button (circular arrow icon) next to the filter buttons to manually reload the guest list.
+
+**When to use**:
+• After another admin makes changes
+• If the list seems outdated
+• After bulk operations
+
+The list now sorts by **most recently updated** first, so new changes appear at the top.`,
+    keywords: ['refresh', 'reload', 'update', 'sync'],
+  },
+  {
+    id: 'gl-vip-partner',
+    category: 'Guest List',
+    question: 'Can VIP guests bring a partner?',
+    answer: `Yes! **VIP guests can now register a free partner** during the registration process.
+
+**How it works**:
+1. VIP guest clicks their magic link
+2. On the registration form, they can choose to add a partner
+3. Partner details (name, email) are collected
+4. Both guests receive tickets and can access the Gala App
+
+**Admin view**:
+• Partner appears as a separate guest with type "VIP"
+• Partner is linked to the main VIP guest
+• Both are automatically assigned to the same table when seating
+
+**Note**: This is different from "Paying Paired" tickets where guests pay for two tickets.`,
+    keywords: ['vip', 'partner', 'free', 'companion', 'plus one', 'guest'],
+  },
 
   // ==========================================
   // CSV IMPORT
@@ -1455,6 +1489,54 @@ Please provide:
 **All emails are logged** in the Email Logs page with delivery status.`,
     keywords: ['email', 'retry', 'rate', 'limit', 'backoff', 'delivery'],
   },
+  {
+    id: 'gala-app-overview',
+    category: 'System & Technical',
+    question: 'What is the Gala App?',
+    answer: `The **Gala App** is a Progressive Web App (PWA) for guests to access their event information on mobile devices.
+
+**Guest features**:
+• View and display QR ticket (works offline!)
+• Check assigned table number
+• Edit profile and dietary preferences
+• Event information and updates
+
+**How guests access it**:
+1. Guests receive a **6-character login code** (e.g., CEOG-A1B2C3) in their ticket email
+2. They visit the Gala App URL or click the link in their email
+3. Enter the code to log in - no password needed!
+
+**Admin access**:
+• Find the Gala App at **/admin/pwa-apps** (PWA Apps menu)
+• You can open both the Staff Scanner and Gala App from there
+• Installation instructions for iOS and Android are provided
+
+**Note**: The app was previously called "Guest App" and has been renamed to "Gala App".`,
+    keywords: ['gala', 'app', 'pwa', 'mobile', 'guest', 'qr', 'ticket', 'offline'],
+  },
+  {
+    id: 'pwa-auth-code',
+    category: 'System & Technical',
+    question: 'What is the PWA auth code in ticket emails?',
+    answer: `Every ticket delivery email now includes a **6-character PWA authentication code**.
+
+**Format**: \`CEOG-XXXXXX\` (e.g., CEOG-A1B2C3)
+
+**Purpose**:
+• Simple login for the Gala App - no password needed
+• Each guest has a unique code tied to their email
+• Code is permanent and doesn't expire
+
+**In the ticket email, guests see**:
+• Their QR code ticket
+• Gala App login code
+• Direct link to the Gala App
+
+**If a guest loses their code**:
+• They can request their ticket email to be resent
+• Or look it up in the guest details (pwa_auth_code field)`,
+    keywords: ['pwa', 'auth', 'code', 'login', 'ticket', 'email', 'ceog'],
+  },
 ];
 
 // Guide content - Hungarian version
@@ -1605,6 +1687,40 @@ A **keresőmező** név vagy email alapján szűr.`,
 
 A kijelölt vendégek száma látható a műveleti gombok mellett.`,
     keywords: ['tömeges', 'bulk', 'kijelölés', 'select', 'művelet'],
+  },
+  {
+    id: 'gl-refresh',
+    category: 'Guest List',
+    question: 'Hogyan frissíthetem a vendéglistát?',
+    answer: `Kattints a **"Refresh"** gombra (körbeforduló nyíl ikon) a szűrő gombok mellett a vendéglista manuális újratöltéséhez.
+
+**Mikor használd**:
+• Ha másik admin módosított valamit
+• Ha a lista elavultnak tűnik
+• Tömeges műveletek után
+
+A lista mostantól **a legutóbb módosított** szerint rendez, így az új változások felül jelennek meg.`,
+    keywords: ['frissítés', 'refresh', 'újratöltés', 'reload', 'szinkron'],
+  },
+  {
+    id: 'gl-vip-partner',
+    category: 'Guest List',
+    question: 'Hozhatnak a VIP vendégek partnert?',
+    answer: `Igen! **A VIP vendégek mostantól regisztrálhatnak ingyenes partnert** a regisztrációs folyamat során.
+
+**Hogyan működik**:
+1. A VIP vendég a magic linkjére kattint
+2. A regisztrációs űrlapon választhat, hogy hoz-e partnert
+3. A partner adatait (név, email) bekérjük
+4. Mindkét vendég jegyet kap és eléri a Gala App-ot
+
+**Admin nézet**:
+• A partner külön vendégként jelenik meg "VIP" típussal
+• A partner a fő VIP vendéghez van kapcsolva
+• Mindketten automatikusan ugyanahhoz az asztalhoz kerülnek ültetéskor
+
+**Megjegyzés**: Ez különbözik a "Paying Paired" jegyektől, ahol a vendég fizet két jegyért.`,
+    keywords: ['vip', 'partner', 'ingyenes', 'kísérő', 'plusz egy', 'vendég'],
   },
 
   // ==========================================
@@ -2805,6 +2921,54 @@ Kérlek add meg:
 
 **Minden email naplózva van** az Email Logs oldalon a kézbesítési státusszal.`,
     keywords: ['email', 'újrapróbálkozás', 'retry', 'korlát', 'limit', 'backoff', 'kézbesítés'],
+  },
+  {
+    id: 'gala-app-overview-hu',
+    category: 'System & Technical',
+    question: 'Mi az a Gala App?',
+    answer: `A **Gala App** egy Progressive Web App (PWA), amelyen keresztül a vendégek mobilon elérhetik az esemény információkat.
+
+**Vendég funkciók**:
+• QR jegy megtekintése és mutatása (offline is működik!)
+• Kiosztott asztalszám ellenőrzése
+• Profil és étrendi preferenciák szerkesztése
+• Esemény információk és frissítések
+
+**Hogyan érik el a vendégek**:
+1. A jegy emailben kapnak egy **6 karakteres bejelentkezési kódot** (pl. CEOG-A1B2C3)
+2. A Gala App URL-re mennek vagy a linkre kattintanak az emailben
+3. Beírják a kódot - nincs szükség jelszóra!
+
+**Admin hozzáférés**:
+• A Gala App elérhető az **/admin/pwa-apps** címen (PWA Apps menü)
+• Innen megnyitható a Staff Scanner és a Gala App is
+• iOS és Android telepítési útmutató is elérhető
+
+**Megjegyzés**: Az alkalmazás korábban "Guest App" néven futott, átnevezésre került "Gala App"-ra.`,
+    keywords: ['gala', 'app', 'pwa', 'mobil', 'vendég', 'qr', 'jegy', 'offline'],
+  },
+  {
+    id: 'pwa-auth-code-hu',
+    category: 'System & Technical',
+    question: 'Mi az a PWA auth kód a jegy emailekben?',
+    answer: `Minden jegy kézbesítő email tartalmaz egy **6 karakteres PWA hitelesítő kódot**.
+
+**Formátum**: \`CEOG-XXXXXX\` (pl. CEOG-A1B2C3)
+
+**Cél**:
+• Egyszerű bejelentkezés a Gala App-ba - nincs szükség jelszóra
+• Minden vendégnek egyedi kódja van az emailjéhez kötve
+• A kód állandó és nem jár le
+
+**A jegy emailben a vendégek látják**:
+• QR kódos jegyüket
+• Gala App bejelentkezési kódot
+• Közvetlen linket a Gala App-hoz
+
+**Ha a vendég elveszíti a kódját**:
+• Kérhet új jegy emailt
+• Vagy megkeresheted a vendég adataiban (pwa_auth_code mező)`,
+    keywords: ['pwa', 'auth', 'kód', 'bejelentkezés', 'jegy', 'email', 'ceog'],
   },
 ];
 
