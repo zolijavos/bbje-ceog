@@ -641,7 +641,7 @@ CEO Gala Organizing Committee`,
           </ul>
         </div>
         <div style="background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%); border-radius: 12px; padding: 24px; margin: 24px 0; text-align: center;">
-          <p style="font-size: 14px; font-weight: 600; color: white; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 12px 0;">Download the Guest App</p>
+          <p style="font-size: 14px; font-weight: 600; color: white; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 12px 0;">Download the Gala App</p>
           <p style="color: rgba(255,255,255,0.9); font-size: 14px; margin: 0 0 16px 0;">Access your ticket, table info, and event updates anytime - even offline!</p>
           {{#if pwaAuthCode}}
           <div style="background: rgba(255,255,255,0.95); border-radius: 12px; padding: 20px; margin: 16px 0;">
@@ -694,7 +694,7 @@ HELPFUL INFORMATION
 - Save the QR code to your phone or print it out
 - Photo ID may be required
 
-DOWNLOAD THE GUEST APP
+DOWNLOAD THE GALA APP
 ----------------------
 Access your ticket, table info, and event updates anytime - even offline!
 {{#if pwaAuthCode}}

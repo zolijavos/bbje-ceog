@@ -121,7 +121,7 @@ export default function HomePage() {
               <div className="landing-btn rounded-xl p-4 border text-center hover:border-accent-teal/40 dark:hover:border-teal-400/40">
                 <QrCode weight="duotone" size={28} className="landing-text-tertiary group-hover:text-accent-teal dark:group-hover:text-teal-400 transition-colors mx-auto mb-2" />
                 <span className="text-sm font-medium landing-text-secondary group-hover:text-accent-teal dark:group-hover:text-teal-400 transition-colors">
-                  Guest App
+                  Gala App
                 </span>
               </div>
             </Link>

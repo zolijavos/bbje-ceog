@@ -137,7 +137,7 @@ export default function DashboardContent({ userName, userRole }: { userName?: st
             <section className="mt-8 pt-8 border-t border-neutral-200 dark:border-neutral-700">
               <h2 className="flex items-center gap-2 text-lg font-semibold text-neutral-700 dark:text-neutral-200 mb-4">
                 <DeviceMobile size={24} weight="duotone" className="text-accent-teal" />
-                {language === 'hu' ? 'Vendég Alkalmazás' : 'Guest App'}
+                {language === 'hu' ? 'Gala Alkalmazás' : 'Gala App'}
               </h2>
               <PWAPromoCard language={language} />
             </section>
@@ -242,7 +242,7 @@ function PWAPromoCard({ language }: { language: string }) {
         {/* Info Section */}
         <div className="flex-1">
           <h3 className="font-display text-lg font-semibold text-neutral-800 dark:text-neutral-100 mb-2">
-            {language === 'hu' ? 'CEO Gala Vendég App' : 'CEO Gala Guest App'}
+            {language === 'hu' ? 'CEO Gala App' : 'CEO Gala App'}
           </h3>
           <p className="text-neutral-500 dark:text-neutral-400 text-sm mb-4 font-sans">
             {language === 'hu'
