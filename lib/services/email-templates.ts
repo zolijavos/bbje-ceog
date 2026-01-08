@@ -14,14 +14,14 @@ export const DEFAULT_TEMPLATES = {
   magic_link: {
     slug: 'magic_link',
     name: 'Magic Link Invitation',
-    subject: 'CEO Gala - Registration Invitation',
+    subject: 'BBJ Events -Registration Invitation',
     variables: ['guestName', 'magicLinkUrl'],
     html_body: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CEO Gala - Invitation</title>
+  <title>BBJ Events -Invitation</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -44,14 +44,14 @@ export const DEFAULT_TEMPLATES = {
   <div class="container">
     <div class="card">
       <div class="header">
-        <h1>CEO Gala</h1>
+        <h1>BBJ Events</h1>
       </div>
       <div class="content">
         <p class="greeting">Dear {{guestName}},</p>
-        <p>We are pleased to inform you that you have received an invitation to the CEO Gala event.</p>
+        <p>We are pleased to inform you that you have received an invitation to the BBJ Events gala.</p>
         <div class="event-info">
           <h3>Event Details</h3>
-          <p><strong>Event:</strong> CEO Gala 2026</p>
+          <p><strong>Event:</strong> BBJ Events 2026</p>
           <p><strong>Venue:</strong> Budapest</p>
           <p>You will find more details during registration.</p>
         </div>
@@ -63,7 +63,7 @@ export const DEFAULT_TEMPLATES = {
       </div>
       <div class="footer">
         <p>If you have any questions, please contact us.</p>
-        <p>Best regards,<br>CEO Gala Organizing Committee</p>
+        <p>Best regards,<br>BBJ Events Organizing Team</p>
       </div>
       <p class="link-fallback">
         If the button doesn't work, copy this link into your browser:<br>
@@ -73,14 +73,14 @@ export const DEFAULT_TEMPLATES = {
   </div>
 </body>
 </html>`,
-    text_body: `CEO Gala - Invitation
+    text_body: `BBJ Events -Invitation
 
 Dear {{guestName}},
 
-We are pleased to inform you that you have received an invitation to the CEO Gala event.
+We are pleased to inform you that you have received an invitation to the BBJ Events gala.
 
 Event details:
-- Event: CEO Gala 2026
+- Event: BBJ Events 2026
 - Venue: Budapest
 - You will find more details during registration.
 
@@ -92,19 +92,19 @@ This link is valid for 24 hours.
 If you have any questions, please contact us.
 
 Best regards,
-CEO Gala Organizing Committee`,
+BBJ Events Organizing Team`,
   },
   applicant_approval: {
     slug: 'applicant_approval',
     name: 'Applicant Approval',
-    subject: 'CEO Gala 2026 - Application Approved',
+    subject: 'BBJ Events 2026 - Application Approved',
     variables: ['guestName', 'magicLinkUrl'],
     html_body: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CEO Gala - Application Approved</title>
+  <title>BBJ Events -Application Approved</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -126,12 +126,12 @@ CEO Gala Organizing Committee`,
   <div class="container">
     <div class="card">
       <div class="header">
-        <h1>CEO Gala</h1>
+        <h1>BBJ Events</h1>
         <span class="success-badge">- Application Approved</span>
       </div>
       <div class="content">
         <p class="greeting">Dear {{guestName}},</p>
-        <p>Great news! Your application to attend the CEO Gala 2026 has been <strong>approved</strong>.</p>
+        <p>Great news! Your application to attend the BBJ Events 2026 has been <strong>approved</strong>.</p>
         <p>You can now complete your registration by clicking the button below:</p>
         <div class="cta-container">
           <a href="{{magicLinkUrl}}" class="cta-button">Complete Registration</a>
@@ -140,7 +140,7 @@ CEO Gala Organizing Committee`,
       </div>
       <div class="footer">
         <p>If you have any questions, please contact us.</p>
-        <p>Best regards,<br>CEO Gala Organizing Committee</p>
+        <p>Best regards,<br>BBJ Events Organizing Team</p>
       </div>
       <p class="link-fallback">
         If the button doesn't work, copy this link into your browser:<br>
@@ -150,11 +150,11 @@ CEO Gala Organizing Committee`,
   </div>
 </body>
 </html>`,
-    text_body: `CEO Gala - Application Approved
+    text_body: `BBJ Events -Application Approved
 
 Dear {{guestName}},
 
-Great news! Your application to attend the CEO Gala 2026 has been APPROVED.
+Great news! Your application to attend the BBJ Events 2026 has been APPROVED.
 
 You can now complete your registration by clicking the link below:
 {{magicLinkUrl}}
@@ -164,19 +164,19 @@ This link is valid for 72 hours.
 If you have any questions, please contact us.
 
 Best regards,
-CEO Gala Organizing Committee`,
+BBJ Events Organizing Team`,
   },
   applicant_rejection: {
     slug: 'applicant_rejection',
     name: 'Applicant Rejection',
-    subject: 'CEO Gala 2026 - Application Status',
+    subject: 'BBJ Events 2026 - Application Status',
     variables: ['guestName', 'rejectionReason'],
     html_body: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CEO Gala - Application Status</title>
+  <title>BBJ Events -Application Status</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -194,11 +194,11 @@ CEO Gala Organizing Committee`,
   <div class="container">
     <div class="card">
       <div class="header">
-        <h1>CEO Gala</h1>
+        <h1>BBJ Events</h1>
       </div>
       <div class="content">
         <p class="greeting">Dear {{guestName}},</p>
-        <p>Thank you for your interest in attending the CEO Gala 2026.</p>
+        <p>Thank you for your interest in attending the BBJ Events 2026.</p>
         <p>After careful consideration, we regret to inform you that we are unable to accommodate your application at this time.</p>
         {{#if rejectionReason}}
         <div class="reason-box">
@@ -209,17 +209,17 @@ CEO Gala Organizing Committee`,
       </div>
       <div class="footer">
         <p>If you have any questions, please contact us.</p>
-        <p>Best regards,<br>CEO Gala Organizing Committee</p>
+        <p>Best regards,<br>BBJ Events Organizing Team</p>
       </div>
     </div>
   </div>
 </body>
 </html>`,
-    text_body: `CEO Gala - Application Status
+    text_body: `BBJ Events -Application Status
 
 Dear {{guestName}},
 
-Thank you for your interest in attending the CEO Gala 2026.
+Thank you for your interest in attending the BBJ Events 2026.
 
 After careful consideration, we regret to inform you that we are unable to accommodate your application at this time.
 
@@ -230,19 +230,19 @@ We appreciate your understanding and hope to welcome you at future events.
 If you have any questions, please contact us.
 
 Best regards,
-CEO Gala Organizing Committee`,
+BBJ Events Organizing Team`,
   },
   payment_reminder: {
     slug: 'payment_reminder',
     name: 'Payment Reminder',
-    subject: 'CEO Gala 2026 - Payment Reminder',
+    subject: 'BBJ Events 2026 - Payment Reminder',
     variables: ['guestName', 'ticketType', 'amount', 'paymentUrl', 'dueDate'],
     html_body: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CEO Gala - Payment Reminder</title>
+  <title>BBJ Events -Payment Reminder</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -265,12 +265,12 @@ CEO Gala Organizing Committee`,
   <div class="container">
     <div class="card">
       <div class="header">
-        <h1>CEO Gala</h1>
+        <h1>BBJ Events</h1>
         <span class="reminder-badge">Payment Reminder</span>
       </div>
       <div class="content">
         <p class="greeting">Dear {{guestName}},</p>
-        <p>This is a friendly reminder that your registration payment for CEO Gala 2026 is still pending.</p>
+        <p>This is a friendly reminder that your registration payment for BBJ Events 2026 is still pending.</p>
         <div class="payment-info">
           <h3>Payment Details</h3>
           <p><strong>Ticket Type:</strong> {{ticketType}}</p>
@@ -284,17 +284,17 @@ CEO Gala Organizing Committee`,
       </div>
       <div class="footer">
         <p>If you have already completed the payment, please disregard this email.</p>
-        <p>Best regards,<br>CEO Gala Organizing Committee</p>
+        <p>Best regards,<br>BBJ Events Organizing Team</p>
       </div>
     </div>
   </div>
 </body>
 </html>`,
-    text_body: `CEO Gala - Payment Reminder
+    text_body: `BBJ Events -Payment Reminder
 
 Dear {{guestName}},
 
-This is a friendly reminder that your registration payment for CEO Gala 2026 is still pending.
+This is a friendly reminder that your registration payment for BBJ Events 2026 is still pending.
 
 PAYMENT DETAILS
 ---------------
@@ -308,19 +308,19 @@ Please complete your payment to secure your spot at the event:
 If you have already completed the payment, please disregard this email.
 
 Best regards,
-CEO Gala Organizing Committee`,
+BBJ Events Organizing Team`,
   },
   payment_confirmation: {
     slug: 'payment_confirmation',
     name: 'Payment Confirmation',
-    subject: 'CEO Gala 2026 - Payment Confirmed',
+    subject: 'BBJ Events 2026 - Payment Confirmed',
     variables: ['guestName', 'ticketType', 'amount', 'paymentDate', 'transactionId'],
     html_body: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CEO Gala - Payment Confirmed</title>
+  <title>BBJ Events -Payment Confirmed</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -342,12 +342,12 @@ CEO Gala Organizing Committee`,
   <div class="container">
     <div class="card">
       <div class="header">
-        <h1>CEO Gala</h1>
+        <h1>BBJ Events</h1>
         <span class="success-badge">- Payment Confirmed</span>
       </div>
       <div class="content">
         <p class="greeting">Dear {{guestName}},</p>
-        <p>Thank you! Your payment for CEO Gala 2026 has been successfully processed.</p>
+        <p>Thank you! Your payment for BBJ Events 2026 has been successfully processed.</p>
         <div class="payment-info">
           <h3>Payment Receipt</h3>
           <p><strong>Ticket Type:</strong> {{ticketType}}</p>
@@ -362,17 +362,17 @@ CEO Gala Organizing Committee`,
       </div>
       <div class="footer">
         <p>Please keep this email for your records.</p>
-        <p>Best regards,<br>CEO Gala Organizing Committee</p>
+        <p>Best regards,<br>BBJ Events Organizing Team</p>
       </div>
     </div>
   </div>
 </body>
 </html>`,
-    text_body: `CEO Gala - Payment Confirmed
+    text_body: `BBJ Events -Payment Confirmed
 
 Dear {{guestName}},
 
-Thank you! Your payment for CEO Gala 2026 has been successfully processed.
+Thank you! Your payment for BBJ Events 2026 has been successfully processed.
 
 PAYMENT RECEIPT
 ---------------
@@ -387,19 +387,19 @@ Your e-ticket with QR code will be sent to you in a separate email shortly.
 Please keep this email for your records.
 
 Best regards,
-CEO Gala Organizing Committee`,
+BBJ Events Organizing Team`,
   },
   table_assignment: {
     slug: 'table_assignment',
     name: 'Table Assignment Notification',
-    subject: 'CEO Gala 2026 - Your Table Assignment',
+    subject: 'BBJ Events 2026 - Your Table Assignment',
     variables: ['guestName', 'tableName', 'seatNumber', 'tablemates'],
     html_body: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CEO Gala - Table Assignment</title>
+  <title>BBJ Events -Table Assignment</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -423,12 +423,12 @@ CEO Gala Organizing Committee`,
   <div class="container">
     <div class="card">
       <div class="header">
-        <h1>CEO Gala</h1>
+        <h1>BBJ Events</h1>
         <span class="table-badge">Table Assignment</span>
       </div>
       <div class="content">
         <p class="greeting">Dear {{guestName}},</p>
-        <p>Your table assignment for CEO Gala 2026 has been confirmed!</p>
+        <p>Your table assignment for BBJ Events 2026 has been confirmed!</p>
         <div class="table-info">
           <p class="table-name">{{tableName}}</p>
           {{#if seatNumber}}<p class="seat-number">Seat {{seatNumber}}</p>{{/if}}
@@ -443,17 +443,17 @@ CEO Gala Organizing Committee`,
       </div>
       <div class="footer">
         <p>If you have any questions about your seating, please contact us.</p>
-        <p>Best regards,<br>CEO Gala Organizing Committee</p>
+        <p>Best regards,<br>BBJ Events Organizing Team</p>
       </div>
     </div>
   </div>
 </body>
 </html>`,
-    text_body: `CEO Gala - Table Assignment
+    text_body: `BBJ Events -Table Assignment
 
 Dear {{guestName}},
 
-Your table assignment for CEO Gala 2026 has been confirmed!
+Your table assignment for BBJ Events 2026 has been confirmed!
 
 TABLE: {{tableName}}
 {{#if seatNumber}}SEAT: {{seatNumber}}{{/if}}
@@ -466,19 +466,19 @@ We look forward to seeing you at the event!
 If you have any questions about your seating, please contact us.
 
 Best regards,
-CEO Gala Organizing Committee`,
+BBJ Events Organizing Team`,
   },
   event_reminder: {
     slug: 'event_reminder',
     name: 'Event Reminder',
-    subject: 'CEO Gala 2026 - Event Tomorrow!',
+    subject: 'BBJ Events 2026 - Event Tomorrow!',
     variables: ['guestName', 'eventDate', 'eventTime', 'eventVenue', 'eventAddress', 'tableName'],
     html_body: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CEO Gala - Event Reminder</title>
+  <title>BBJ Events -Event Reminder</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -503,12 +503,12 @@ CEO Gala Organizing Committee`,
   <div class="container">
     <div class="card">
       <div class="header">
-        <h1>CEO Gala</h1>
+        <h1>BBJ Events</h1>
         <span class="reminder-badge">Tomorrow!</span>
       </div>
       <div class="content">
         <p class="greeting">Dear {{guestName}},</p>
-        <p>We're excited to remind you that CEO Gala 2026 is <strong>tomorrow</strong>!</p>
+        <p>We're excited to remind you that BBJ Events 2026 is <strong>tomorrow</strong>!</p>
         <div class="event-details">
           <h3>Event Details</h3>
           <p><strong>Date:</strong> {{eventDate}}</p>
@@ -520,7 +520,7 @@ CEO Gala Organizing Committee`,
         <div class="checklist">
           <h4>Before You Arrive</h4>
           <ul>
-            <li>Have your QR code ready (check your email or the CEO Gala app)</li>
+            <li>Have your QR code ready (check your email or the Gala App)</li>
             <li>Bring a valid photo ID</li>
             <li>Arrive by 5:30 PM for smooth registration</li>
             <li>Dress code: Business formal</li>
@@ -530,17 +530,17 @@ CEO Gala Organizing Committee`,
       </div>
       <div class="footer">
         <p>If you have any last-minute questions, please contact us.</p>
-        <p>Best regards,<br>CEO Gala Organizing Committee</p>
+        <p>Best regards,<br>BBJ Events Organizing Team</p>
       </div>
     </div>
   </div>
 </body>
 </html>`,
-    text_body: `CEO Gala - Event Tomorrow!
+    text_body: `BBJ Events -Event Tomorrow!
 
 Dear {{guestName}},
 
-We're excited to remind you that CEO Gala 2026 is TOMORROW!
+We're excited to remind you that BBJ Events 2026 is TOMORROW!
 
 EVENT DETAILS
 -------------
@@ -552,7 +552,7 @@ Venue: {{eventVenue}}
 
 BEFORE YOU ARRIVE
 -----------------
-- Have your QR code ready (check your email or the CEO Gala app)
+- Have your QR code ready (check your email or the Gala App)
 - Bring a valid photo ID
 - Arrive by 5:30 PM for smooth registration
 - Dress code: Business formal
@@ -562,19 +562,19 @@ We look forward to welcoming you!
 If you have any last-minute questions, please contact us.
 
 Best regards,
-CEO Gala Organizing Committee`,
+BBJ Events Organizing Team`,
   },
   ticket_delivery: {
     slug: 'ticket_delivery',
     name: 'E-Ticket Delivery',
-    subject: 'CEO Gala 2026 - E-ticket - {{guestName}}',
+    subject: 'BBJ Events 2026 - E-ticket - {{guestName}}',
     variables: ['guestName', 'ticketType', 'qrCodeDataUrl', 'partnerName', 'pwaAuthCode', 'pwaQrCodeDataUrl'],
     html_body: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CEO Gala - E-ticket</title>
+  <title>BBJ Events -E-ticket</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -608,16 +608,16 @@ CEO Gala Organizing Committee`,
   <div class="container">
     <div class="card">
       <div class="header">
-        <h1>CEO Gala 2026</h1>
+        <h1>BBJ Events 2026</h1>
         <p class="subtitle">E-ticket / Entry Pass</p>
         <span class="ticket-badge">{{ticketType}}</span>
       </div>
       <div class="content">
         <p class="greeting">Dear {{guestName}},</p>
-        <p>Thank you for registering! The QR code below is your entry pass to the CEO Gala event.</p>
+        <p>Thank you for registering! The QR code below is your entry pass to the BBJ Events gala.</p>
         <div class="event-info">
           <h3>Event Details</h3>
-          <p><strong>Event:</strong> CEO Gala 2026</p>
+          <p><strong>Event:</strong> BBJ Events 2026</p>
           <p><strong>Date:</strong> Friday, March 27, 2026, 6:00 PM</p>
           <p><strong>Venue:</strong> Budapest, Corinthia Hotel</p>
         </div>
@@ -655,28 +655,28 @@ CEO Gala Organizing Committee`,
             {{/if}}
           </div>
           {{/if}}
-          <a href="https://ceogala.mflevents.space/pwa" style="display: inline-block; background: white; color: #0D9488; font-size: 14px; font-weight: 600; padding: 12px 28px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">Open CEO Gala App</a>
+          <a href="https://ceogala.mflevents.space/pwa" style="display: inline-block; background: white; color: #0D9488; font-size: 14px; font-weight: 600; padding: 12px 28px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">Open Gala App</a>
           <p style="color: rgba(255,255,255,0.7); font-size: 12px; margin: 12px 0 0 0;">Works on iPhone, Android &amp; Desktop</p>
         </div>
       </div>
       <div class="footer">
         <p>If you have any questions, please contact us:</p>
         <p><a href="mailto:info@ceogala.hu">info@ceogala.hu</a></p>
-        <p style="margin-top: 20px;">Best regards,<br>CEO Gala Organizing Committee</p>
+        <p style="margin-top: 20px;">Best regards,<br>BBJ Events Organizing Team</p>
       </div>
     </div>
   </div>
 </body>
 </html>`,
-    text_body: `CEO Gala 2026 - E-ticket
+    text_body: `BBJ Events 2026 - E-ticket
 
 Dear {{guestName}},
 
-Thank you for registering! This message contains your entry pass to the CEO Gala event.
+Thank you for registering! This message contains your entry pass to the BBJ Events gala.
 
 EVENT DETAILS
 -------------------
-Event: CEO Gala 2026
+Event: BBJ Events 2026
 Date: Friday, March 27, 2026, 6:00 PM
 Venue: Budapest, Corinthia Hotel
 
@@ -707,7 +707,7 @@ Works on iPhone, Android & Desktop
 If you have any questions, please contact us: info@ceogala.hu
 
 Best regards,
-CEO Gala Organizing Committee`,
+BBJ Events Organizing Team`,
   },
 } as const;
 

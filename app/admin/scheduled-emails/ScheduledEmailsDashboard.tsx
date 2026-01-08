@@ -142,9 +142,35 @@ export default function ScheduledEmailsDashboard() {
   const [bulkFilters, setBulkFilters] = useState({
     guest_types: [] as string[],
     registration_statuses: [] as string[],
+    is_vip_reception: null as boolean | null,
     has_ticket: null as boolean | null,
     has_table: null as boolean | null,
   });
+
+  // Localized type labels
+  const getLocalizedTypeLabel = (type: string): string => {
+    const typeMap: Record<string, string> = {
+      vip: t('vip'),
+      paying_single: t('payingSingle'),
+      paying_paired: t('payingPaired'),
+      applicant: t('applicant'),
+    };
+    return typeMap[type] || type;
+  };
+
+  // Localized status labels
+  const getLocalizedStatusLabel = (status: string): string => {
+    const statusMap: Record<string, string> = {
+      pending: t('pending'),
+      invited: t('invited'),
+      registered: t('registered'),
+      approved: t('approved'),
+      declined: t('declined'),
+      pending_approval: t('pendingApproval'),
+      rejected: t('rejected'),
+    };
+    return statusMap[status] || status;
+  };
   const [bulkTemplate, setBulkTemplate] = useState('');
   const [bulkScheduledFor, setBulkScheduledFor] = useState('');
   const [bulkScheduling, setBulkScheduling] = useState(false);
@@ -320,6 +346,7 @@ export default function ScheduledEmailsDashboard() {
           filter: {
             guest_types: bulkFilters.guest_types.length > 0 ? bulkFilters.guest_types : undefined,
             registration_statuses: bulkFilters.registration_statuses.length > 0 ? bulkFilters.registration_statuses : undefined,
+            is_vip_reception: bulkFilters.is_vip_reception,
             has_ticket: bulkFilters.has_ticket,
             has_table: bulkFilters.has_table,
           },
@@ -334,7 +361,7 @@ export default function ScheduledEmailsDashboard() {
           type: 'success',
           text: `Scheduled: ${data.scheduled}, Skipped: ${data.skipped}, Failed: ${data.failed}`,
         });
-        setBulkFilters({ guest_types: [], registration_statuses: [], has_ticket: null, has_table: null });
+        setBulkFilters({ guest_types: [], registration_statuses: [], is_vip_reception: null, has_ticket: null, has_table: null });
         setBulkTemplate('');
         setBulkScheduledFor('');
         fetchEmails();
@@ -997,7 +1024,7 @@ export default function ScheduledEmailsDashboard() {
                         }}
                         className="mr-2"
                       />
-                      <span className="text-sm">{type.replace('_', ' ').toUpperCase()}</span>
+                      <span className="text-sm">{getLocalizedTypeLabel(type)}</span>
                     </label>
                   ))}
                 </div>
@@ -1005,10 +1032,10 @@ export default function ScheduledEmailsDashboard() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Registration Status
+                  {t('status')}
                 </label>
                 <div className="space-y-2">
-                  {['invited', 'registered', 'approved', 'pending_approval'].map((status) => (
+                  {['pending', 'invited', 'registered', 'approved', 'declined', 'pending_approval', 'rejected'].map((status) => (
                     <label key={status} className="flex items-center">
                       <input
                         type="checkbox"
@@ -1030,14 +1057,31 @@ export default function ScheduledEmailsDashboard() {
                         }}
                         className="mr-2"
                       />
-                      <span className="text-sm">{status.replace('_', ' ')}</span>
+                      <span className="text-sm">{getLocalizedStatusLabel(status)}</span>
                     </label>
                   ))}
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">{t('vipReception')}</label>
+                <select
+                  value={bulkFilters.is_vip_reception === null ? '' : bulkFilters.is_vip_reception.toString()}
+                  onChange={(e) =>
+                    setBulkFilters({
+                      ...bulkFilters,
+                      is_vip_reception: e.target.value === '' ? null : e.target.value === 'true',
+                    })
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                >
+                  <option value="">{t('all')}</option>
+                  <option value="true">{t('vipOnly')}</option>
+                  <option value="false">{t('nonVipOnly')}</option>
+                </select>
+              </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Has Ticket?</label>
                 <select

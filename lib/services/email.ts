@@ -312,7 +312,7 @@ export async function sendMagicLinkEmail(
         guestName: guest.name,
         magicLinkUrl,
       });
-      subject = 'CEO Gala - Registration Invitation';
+      subject = 'BBJ Events - Registration Invitation';
       html = fallback.html;
       text = fallback.text;
     }
@@ -349,7 +349,7 @@ export async function sendMagicLinkEmail(
       await logEmailDelivery({
         guestId,
         recipient: 'unknown',
-        subject: 'CEO Gala - Registration Invitation',
+        subject: 'BBJ Events - Registration Invitation',
         success: false,
         errorMessage,
       });

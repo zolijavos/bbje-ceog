@@ -38,15 +38,15 @@ export default function MobileFooter({ bottomOffset = '0', zIndex = 30, classNam
           alt="MyForge Labs"
           width={21}
           height={21}
-          className="opacity-50"
+          className="opacity-80"
         />
-        <span className="text-sm text-neutral-500/50 dark:text-neutral-400/50">
+        <span className="text-sm text-neutral-600 dark:text-neutral-400">
           Built By{' '}
           <a
             href="https://www.myforgelabs.com/#kapcsolat"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-neutral-600/50 dark:text-neutral-300/50 hover:text-neutral-800 dark:hover:text-white transition-colors underline"
+            className="text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors underline"
           >
             MyForge Labs
           </a>

@@ -14,7 +14,7 @@ import { z } from 'zod';
 
 // Valid enum values for type-safe filtering
 const VALID_GUEST_TYPES = ['vip', 'paying_single', 'paying_paired', 'applicant'] as const;
-const VALID_REGISTRATION_STATUSES = ['invited', 'registered', 'approved', 'declined', 'pending_approval', 'rejected'] as const;
+const VALID_REGISTRATION_STATUSES = ['pending', 'invited', 'registered', 'approved', 'declined', 'pending_approval', 'rejected'] as const;
 const VALID_PAYMENT_STATUSES = ['pending', 'paid', 'failed', 'refunded'] as const;
 const MAX_BULK_RECIPIENTS = 1000;
 
@@ -23,8 +23,9 @@ const bulkScheduleSchema = z.object({
   filter: z.object({
     guest_types: z.array(z.enum(VALID_GUEST_TYPES)).optional(),
     registration_statuses: z.array(z.enum(VALID_REGISTRATION_STATUSES)).optional(),
-    has_ticket: z.boolean().optional(),
-    has_table: z.boolean().optional(),
+    is_vip_reception: z.boolean().nullable().optional(),
+    has_ticket: z.boolean().nullable().optional(),
+    has_table: z.boolean().nullable().optional(),
     payment_status: z.enum(VALID_PAYMENT_STATUSES).optional(),
   }).optional(),
 
@@ -84,6 +85,12 @@ export async function POST(request: NextRequest) {
 
       if (filter.registration_statuses && filter.registration_statuses.length > 0) {
         where.registration_status = { in: filter.registration_statuses };
+      }
+
+      if (filter.is_vip_reception === true) {
+        where.is_vip_reception = true;
+      } else if (filter.is_vip_reception === false) {
+        where.is_vip_reception = false;
       }
 
       if (filter.has_ticket === true) {

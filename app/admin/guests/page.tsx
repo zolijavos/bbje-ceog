@@ -31,6 +31,7 @@ export default async function GuestsPage() {
       seating_preferences: true,
       created_at: true,
       updated_at: true,
+      is_vip_reception: true,
       paired_with_id: true,
       // Partner relation: if this guest is a main guest, get their partner
       partner_of: {
@@ -155,6 +156,8 @@ export default async function GuestsPage() {
           seatingPreferences: g.partner_of.seating_preferences,
         }
       : null,
+    // VIP Reception flag
+    isVipReception: g.is_vip_reception ?? false,
   }));
 
   return (

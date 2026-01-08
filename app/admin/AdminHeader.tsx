@@ -27,6 +27,7 @@ import {
   X,
   Scroll,
   DeviceMobile,
+  ClockCounterClockwise,
 } from '@phosphor-icons/react';
 import AdminThemeToggle from './components/AdminThemeToggle';
 import LanguageToggle from './components/LanguageToggle';
@@ -55,6 +56,7 @@ const dropdownMenus = {
       { href: '/admin/users', label: 'Users', icon: UserCircle },
       { href: '/admin/email-logs', label: 'Email Logs', icon: Envelope },
       { href: '/admin/audit-log', label: 'Audit Log', icon: Scroll },
+      { href: '/admin/changelog', label: 'Changelog', icon: ClockCounterClockwise },
       { href: '/admin/diagrams', label: 'Test Hub', icon: TestTube },
       { href: '/admin/pwa-apps', label: 'PWA Apps', icon: DeviceMobile },
     ],
@@ -64,7 +66,7 @@ const dropdownMenus = {
 // Paths that belong to each dropdown (for highlighting)
 const eventPaths = ['/admin/seating', '/admin/checkin-log', '/admin/statistics'];
 const commsPaths = ['/admin/email-templates', '/admin/scheduled-emails', '/admin/payments'];
-const systemPaths = ['/admin/users', '/admin/email-logs', '/admin/audit-log', '/admin/diagrams', '/admin/pwa-apps'];
+const systemPaths = ['/admin/users', '/admin/email-logs', '/admin/audit-log', '/admin/changelog', '/admin/diagrams', '/admin/pwa-apps'];
 
 export default function AdminHeader() {
   const pathname = usePathname();

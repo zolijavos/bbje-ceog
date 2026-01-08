@@ -63,8 +63,8 @@ export default async function PaidPage({ searchParams }: PaidPageProps) {
     return <AlreadyRegistered guest={guest} declined />;
   }
 
-  // Determine if paired tickets are allowed
-  const canSelectPaired = guest.guest_type === 'paying_paired';
+  // Allow all paying guests to select paired ticket (they can bring a partner)
+  const canSelectPaired = true;
 
   // Render paid registration form with all profile fields pre-filled
   return (

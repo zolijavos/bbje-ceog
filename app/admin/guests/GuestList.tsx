@@ -97,8 +97,47 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [vipFilter, setVipFilter] = useState<string>('all');
+  const [paymentFilter, setPaymentFilter] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(25);
+
+  // Localized type labels
+  const getLocalizedTypeLabel = (type: string): string => {
+    const typeMap: Record<string, string> = {
+      vip: t('vip'),
+      paying_single: t('payingSingle'),
+      paying_paired: t('payingPaired'),
+      applicant: t('applicant'),
+    };
+    return typeMap[type] || type;
+  };
+
+  // Localized status labels
+  const getLocalizedStatusLabel = (status: string): string => {
+    const statusMap: Record<string, string> = {
+      pending: t('pending'),
+      invited: t('invited'),
+      registered: t('registered'),
+      approved: t('approved'),
+      declined: t('declined'),
+      pending_approval: t('pendingApproval'),
+      rejected: t('rejected'),
+    };
+    return statusMap[status] || status;
+  };
+
+  // Localized payment status labels
+  const getLocalizedPaymentStatusLabel = (status: string | null): string => {
+    if (!status) return t('paymentNone');
+    const statusMap: Record<string, string> = {
+      pending: t('paymentPending'),
+      paid: t('paymentPaid'),
+      failed: t('paymentFailed'),
+      refunded: t('paymentRefunded'),
+    };
+    return statusMap[status] || status;
+  };
 
   // State for guest data and operations
   const [filteredGuests, setFilteredGuests] = useState<Guest[]>(initialGuests);
@@ -133,6 +172,9 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
   useEffect(() => {
     let result = [...initialGuests];
 
+    // Sort by last updated (newest first)
+    result.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+
     // Search filter
     if (search) {
       const searchLower = search.toLowerCase();
@@ -153,9 +195,23 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
       result = result.filter(g => g.status === statusFilter);
     }
 
+    // VIP filter
+    if (vipFilter !== 'all') {
+      result = result.filter(g => vipFilter === 'yes' ? g.isVipReception : !g.isVipReception);
+    }
+
+    // Payment status filter
+    if (paymentFilter !== 'all') {
+      if (paymentFilter === 'none') {
+        result = result.filter(g => !g.paymentStatus);
+      } else {
+        result = result.filter(g => g.paymentStatus === paymentFilter);
+      }
+    }
+
     setFilteredGuests(result);
     setCurrentPage(1); // Reset to first page when filters change
-  }, [initialGuests, search, typeFilter, statusFilter]);
+  }, [initialGuests, search, typeFilter, statusFilter, vipFilter, paymentFilter]);
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredGuests.length / pageSize);
@@ -332,6 +388,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
       status?: string;
       dietary_requirements?: string | null;
       seating_preferences?: string | null;
+      is_vip_reception?: boolean;
     }) => {
       if (!editingGuest) return;
 
@@ -347,6 +404,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
           registration_status: data.status,
           dietary_requirements: data.dietary_requirements,
           seating_preferences: data.seating_preferences,
+          is_vip_reception: data.is_vip_reception,
         }),
       });
 
@@ -513,9 +571,9 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
       </div>
 
       {/* Filters */}
-      <div className="mb-4 grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="mb-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {/* Search */}
-        <div className="md:col-span-2">
+        <div className="sm:col-span-2">
           <label htmlFor="search" className="sr-only">
             Search
           </label>
@@ -567,6 +625,47 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
             <option value="registered">{t('registered')}</option>
             <option value="approved">{t('approved')}</option>
             <option value="declined">{t('declined')}</option>
+            <option value="pending_approval">{t('pendingApproval')}</option>
+            <option value="rejected">{t('rejected')}</option>
+          </select>
+        </div>
+
+        {/* VIP filter */}
+        <div>
+          <label htmlFor="vip-filter" className="sr-only">
+            VIP Filter
+          </label>
+          <select
+            id="vip-filter"
+            value={vipFilter}
+            onChange={e => setVipFilter(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            data-testid="vip-filter"
+          >
+            <option value="all">{t('allVip')}</option>
+            <option value="yes">{t('vipOnly')}</option>
+            <option value="no">{t('nonVipOnly')}</option>
+          </select>
+        </div>
+
+        {/* Payment status filter */}
+        <div>
+          <label htmlFor="payment-filter" className="sr-only">
+            Payment Filter
+          </label>
+          <select
+            id="payment-filter"
+            value={paymentFilter}
+            onChange={e => setPaymentFilter(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            data-testid="payment-filter"
+          >
+            <option value="all">{t('allPaymentStatuses')}</option>
+            <option value="pending">{t('paymentPending')}</option>
+            <option value="paid">{t('paymentPaid')}</option>
+            <option value="failed">{t('paymentFailed')}</option>
+            <option value="refunded">{t('paymentRefunded')}</option>
+            <option value="none">{t('paymentNone')}</option>
           </select>
         </div>
       </div>
@@ -648,6 +747,12 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                 <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                   {t('status').toUpperCase()}
                 </th>
+                <th className="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase hidden sm:table-cell" title={t('vipReception')}>
+                  VIP
+                </th>
+                <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase hidden lg:table-cell">
+                  {t('payment').toUpperCase()}
+                </th>
                 <th className="px-2 py-2 text-right text-xs font-medium text-gray-500 uppercase">
                   {t('actions').toUpperCase()}
                 </th>
@@ -656,7 +761,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
             <tbody className="bg-white divide-y divide-gray-200">
               {paginatedGuests.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-8 text-center text-gray-500">
+                  <td colSpan={7} className="px-4 py-8 text-center text-gray-500">
                     {filteredGuests.length === 0 && initialGuests.length > 0
                       ? t('noFilterResults')
                       : t('noGuestsYet')}
@@ -730,7 +835,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                           className="text-xs text-gray-600"
                           data-testid={`guest-type-${guest.id}`}
                         >
-                          {getGuestTypeLabel(guest.guestType as GuestType)}
+                          {getLocalizedTypeLabel(guest.guestType)}
                         </span>
                       </td>
                       <td className="px-2 py-2">
@@ -738,7 +843,35 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                           className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${statusInfo.color}`}
                           data-testid={`guest-status-${guest.id}`}
                         >
-                          {statusInfo.label}
+                          {getLocalizedStatusLabel(guest.status)}
+                        </span>
+                      </td>
+                      <td className="px-2 py-2 text-center hidden sm:table-cell">
+                        {guest.isVipReception && (
+                          <span
+                            className="inline-flex items-center justify-center w-6 h-6 text-yellow-500"
+                            title={t('vipReception')}
+                          >
+                            ⭐
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-2 py-2 hidden lg:table-cell">
+                        <span
+                          className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
+                            guest.paymentStatus === 'paid'
+                              ? 'bg-green-100 text-green-800'
+                              : guest.paymentStatus === 'pending'
+                              ? 'bg-orange-100 text-orange-800'
+                              : guest.paymentStatus === 'failed'
+                              ? 'bg-red-100 text-red-800'
+                              : guest.paymentStatus === 'refunded'
+                              ? 'bg-purple-100 text-purple-800'
+                              : 'bg-gray-100 text-gray-500'
+                          }`}
+                          data-testid={`guest-payment-${guest.id}`}
+                        >
+                          {getLocalizedPaymentStatusLabel(guest.paymentStatus)}
                         </span>
                       </td>
                       <td className="px-2 py-2 text-right">

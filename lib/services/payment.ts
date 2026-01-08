@@ -45,9 +45,9 @@ export function formatHUF(huf: number): string {
 
 // Ticket names for display
 const TICKET_NAMES: Record<TicketType, string> = {
-  paid_single: 'CEO Gala 2026 - Single Ticket',
-  paid_paired: 'CEO Gala 2026 - Paired Ticket',
-  vip_free: 'CEO Gala 2026 - VIP Ticket',
+  paid_single: 'BBJ Events 2026 - Single Ticket',
+  paid_paired: 'BBJ Events 2026 - Paired Ticket',
+  vip_free: 'BBJ Events 2026 - VIP Ticket',
 };
 
 /**

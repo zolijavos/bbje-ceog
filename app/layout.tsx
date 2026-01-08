@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Playfair_Display, Open_Sans } from 'next/font/google';
+import { Playfair_Display, Inter } from 'next/font/google';
 import './globals.css';
 import { validateEnv } from '@/lib/utils/env';
 import Footer from './components/Footer';
@@ -17,9 +17,9 @@ const playfair = Playfair_Display({
   weight: ['400', '500', '600', '700'],
 });
 
-const openSans = Open_Sans({
+const inter = Inter({
   subsets: ['latin', 'latin-ext'],
-  variable: '--font-opensans',
+  variable: '--font-inter',
   display: 'swap',
   weight: ['300', '400', '500', '600', '700'],
 });
@@ -53,7 +53,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="hu" className={`${playfair.variable} ${openSans.variable}`} suppressHydrationWarning>
+    <html lang="hu" className={`${playfair.variable} ${inter.variable}`} suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{

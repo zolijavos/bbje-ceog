@@ -198,6 +198,7 @@ export interface UpdateGuestInput {
   registration_status?: RegistrationStatus;
   dietary_requirements?: string | null;
   seating_preferences?: string | null;
+  is_vip_reception?: boolean;
 }
 
 /**

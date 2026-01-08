@@ -24,7 +24,7 @@ const config: Config = {
       fontFamily: {
         // CEO Gala fonts
         serif: ['var(--font-playfair)', 'Playfair Display', 'Georgia', 'serif'],
-        sans: ['var(--font-opensans)', 'Open Sans', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
         display: ['var(--font-playfair)', 'Playfair Display', 'Georgia', 'serif'],
       },
       colors: {
