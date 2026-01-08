@@ -4,6 +4,9 @@ import { prisma } from '@/lib/db/prisma';
 import { z } from 'zod';
 import { verifyPWASession } from '@/lib/services/pwa-auth';
 
+// Check if table numbers should be shown to guests (configurable via env)
+const SHOW_TABLE_NUMBERS = process.env.SHOW_TABLE_NUMBERS !== 'false';
+
 // Helper to get session from cookie
 async function getSession() {
   const cookieStore = await cookies();
@@ -46,6 +49,16 @@ export async function GET() {
     const registration = guest.registration;
     const tableAssignment = guest.table_assignment;
 
+    // Conditionally include table info based on admin setting
+    const tableInfo = SHOW_TABLE_NUMBERS && tableAssignment
+      ? {
+          id: tableAssignment.table.id,
+          name: tableAssignment.table.name,
+          table_type: tableAssignment.table.type,
+          seat_number: tableAssignment.seat_number,
+        }
+      : null;
+
     return NextResponse.json({
       guest: {
         id: guest.id,
@@ -66,14 +79,9 @@ export async function GET() {
             partner_email: registration.partner_email,
           }
         : null,
-      table: tableAssignment
-        ? {
-            id: tableAssignment.table.id,
-            name: tableAssignment.table.name,
-            table_type: tableAssignment.table.type,
-            seat_number: tableAssignment.seat_number,
-          }
-        : null,
+      table: tableInfo,
+      // Flag to indicate if table numbers are being hidden (for UI messaging)
+      tableNumbersHidden: !SHOW_TABLE_NUMBERS && tableAssignment !== null,
       dietary_requirements: guest.dietary_requirements || null,
       seating_preferences: guest.seating_preferences || null,
     });

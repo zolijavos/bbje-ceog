@@ -71,7 +71,7 @@ const faqSections: FAQSection[] = [
       {
         id: 'event-4',
         question: 'Is parking available?',
-        answer: 'Yes, the venue has parking available. VIP guests have access to reserved parking spaces. Please show your digital ticket at the parking entrance.',
+        answer: 'Yes, the venue has parking available. Invited guests have access to reserved parking spaces. Please show your digital ticket at the parking entrance.',
       },
     ],
   },
@@ -166,7 +166,7 @@ const faqSections: FAQSection[] = [
       {
         id: 'payment-1',
         question: 'Where can I see my ticket status?',
-        answer: 'Your ticket status is shown on the dashboard. VIP guests have complimentary tickets. Paid guests can view their payment confirmation in the app.',
+        answer: 'Your ticket status is shown on the dashboard. Invited guests have complimentary tickets. Paid guests can view their payment confirmation in the app.',
       },
       {
         id: 'payment-2',

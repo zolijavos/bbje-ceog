@@ -27,6 +27,7 @@ export interface GuestListItem {
   name: string;
   guest_type: GuestType;
   registration_status: RegistrationStatus;
+  is_vip_reception: boolean;
   created_at: Date;
   updated_at: Date;
   table_assignment: {

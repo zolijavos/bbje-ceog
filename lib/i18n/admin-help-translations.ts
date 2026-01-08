@@ -117,7 +117,7 @@ export const adminGuidesEn: GuideItem[] = [
     question: 'How does the guest list work?',
     answer: `The guest list is the central management interface for all invited and registered guests. Here you can see:
 
-• **Guest data**: Name, email, address, guest type (VIP, Paying Single, Paying Paired)
+• **Guest data**: Name, email, address, guest type (Invited, Paying Single, Paying Paired)
 • **Status**: Invited, Registered, Approved, Declined, Pending Approval
 • **Payment status**: Pending, Paid, Failed (for paying guests)
 • **Table assignment**: Which table the guest is seated at
@@ -135,7 +135,7 @@ The list can be filtered by guest type, status, and table assignment. Use the se
    • **Name**: Guest's full name (required)
    • **Email**: Email address - must be unique (required)
    • **Title**: Salutation (Mr., Ms., Dr., etc.)
-   • **Guest Type**: VIP (free), Paying Single (1 ticket), Paying Paired (2 tickets)
+   • **Guest Type**: Invited (free), Paying Single (1 ticket), Paying Paired (2 tickets)
    • **Dietary Requirements**: Dietary needs (vegetarian, vegan, gluten-free, etc.)
    • **Seating Preferences**: Seating preferences
 3. Click the **"Save"** button
@@ -180,7 +180,7 @@ Instead of deleting, consider setting the guest to "Declined" status.`,
 
 **By guest type**:
 • All Types - All guests
-• VIP - Free VIP guests
+• Invited - Free invited guests
 • Paying Single - Single ticket paying guests
 • Paying Paired - Paired ticket paying guests
 
@@ -272,18 +272,18 @@ The list now sorts by **most recently updated** first, so new changes appear at 
   {
     id: 'gl-vip-partner',
     category: 'Guest List',
-    question: 'Can VIP guests bring a partner?',
-    answer: `Yes! **VIP guests can now register a free partner** during the registration process.
+    question: 'Can invited guests bring a partner?',
+    answer: `Yes! **Invited guests can now register a free partner** during the registration process.
 
 **How it works**:
-1. VIP guest clicks their magic link
+1. Invited guest clicks their magic link
 2. On the registration form, they can choose to add a partner
 3. Partner details (name, email) are collected
 4. Both guests receive tickets and can access the Gala App
 
 **Admin view**:
-• Partner appears as a separate guest with type "VIP"
-• Partner is linked to the main VIP guest
+• Partner appears as a separate guest with type "Invited"
+• Partner is linked to the main invited guest
 • Both are automatically assigned to the same table when seating
 
 **Note**: This is different from "Paying Paired" tickets where guests pay for two tickets.`,
@@ -985,7 +985,7 @@ Scheduled emails appear on the Emails tab with "Pending" status.`,
     answer: `On the **Bulk** tab you can target guests with filters:
 
 **Filter options**:
-• **Guest Types**: VIP, Paying Single, Paying Paired
+• **Guest Types**: Invited, Paying Single, Paying Paired
 • **Registration Status**: Invited, Registered, Approved, etc.
 • **Has Ticket**: Whether they have a ticket
 • **Has Table**: Whether they have a table
@@ -1082,7 +1082,7 @@ Rules **run automatically** in the background.`,
 • Declined: Declined
 
 **By type**:
-• VIP Guests: Free VIP guests
+• Invited Guests: Free invited guests
 • Paying (Single): Single ticket payers
 • Paying (Paired): Paired ticket payers
 
@@ -1550,7 +1550,7 @@ export const adminGuidesHu: GuideItem[] = [
     question: 'Hogyan működik a vendéglista?',
     answer: `A vendéglista az összes meghívott és regisztrált vendég központi kezelőfelülete. Itt láthatod:
 
-• **Vendég adatok**: Név, email, cím, vendég típus (VIP, Paying Single, Paying Paired)
+• **Vendég adatok**: Név, email, cím, vendég típus (Meghívott, Paying Single, Paying Paired)
 • **Státusz**: Invited, Registered, Approved, Declined, Pending Approval
 • **Fizetési állapot**: Pending, Paid, Failed (fizető vendégeknél)
 • **Asztal kiosztás**: Melyik asztalnál ül a vendég
@@ -1568,7 +1568,7 @@ A lista szűrhető vendég típus, státusz és asztal kiosztás szerint. Haszn�
    • **Name**: Vendég teljes neve (kötelező)
    • **Email**: Email cím - egyedinek kell lennie (kötelező)
    • **Title**: Megszólítás (Mr., Ms., Dr., stb.)
-   • **Guest Type**: VIP (ingyenes), Paying Single (1 jegy), Paying Paired (2 jegy)
+   • **Guest Type**: Meghívott (ingyenes), Paying Single (1 jegy), Paying Paired (2 jegy)
    • **Dietary Requirements**: Étrendi igények (vegetáriánus, vegán, gluténmentes, stb.)
    • **Seating Preferences**: Ültetési preferenciák
 3. Kattints a **"Save"** gombra
@@ -1613,7 +1613,7 @@ Törlés helyett érdemes lehet a vendéget "Declined" státuszra állítani.`,
 
 **Vendég típus szerint**:
 • All Types - Minden vendég
-• VIP - Ingyenes VIP vendégek
+• Meghívott - Ingyenes meghívott vendégek
 • Paying Single - Egy jegyes fizető vendégek
 • Paying Paired - Páros jegyes fizető vendégek
 
@@ -1705,18 +1705,18 @@ A lista mostantól **a legutóbb módosított** szerint rendez, így az új vál
   {
     id: 'gl-vip-partner',
     category: 'Guest List',
-    question: 'Hozhatnak a VIP vendégek partnert?',
-    answer: `Igen! **A VIP vendégek mostantól regisztrálhatnak ingyenes partnert** a regisztrációs folyamat során.
+    question: 'Hozhatnak a meghívott vendégek partnert?',
+    answer: `Igen! **A meghívott vendégek mostantól regisztrálhatnak ingyenes partnert** a regisztrációs folyamat során.
 
 **Hogyan működik**:
-1. A VIP vendég a magic linkjére kattint
+1. A meghívott vendég a magic linkjére kattint
 2. A regisztrációs űrlapon választhat, hogy hoz-e partnert
 3. A partner adatait (név, email) bekérjük
 4. Mindkét vendég jegyet kap és eléri a Gala App-ot
 
 **Admin nézet**:
-• A partner külön vendégként jelenik meg "VIP" típussal
-• A partner a fő VIP vendéghez van kapcsolva
+• A partner külön vendégként jelenik meg "Meghívott" típussal
+• A partner a fő meghívott vendéghez van kapcsolva
 • Mindketten automatikusan ugyanahhoz az asztalhoz kerülnek ültetéskor
 
 **Megjegyzés**: Ez különbözik a "Paying Paired" jegyektől, ahol a vendég fizet két jegyért.`,
@@ -2418,7 +2418,7 @@ Az ütemezett emailek megjelennek az Emails fülön "Pending" státusszal.`,
     answer: `A **Bulk** fülön szűrők alapján célozhatod a vendégeket:
 
 **Szűrési lehetőségek**:
-• **Guest Types**: VIP, Paying Single, Paying Paired
+• **Guest Types**: Invited, Paying Single, Paying Paired
 • **Registration Status**: Invited, Registered, Approved, stb.
 • **Has Ticket**: Van-e már jegye
 • **Has Table**: Van-e asztala
@@ -2515,7 +2515,7 @@ A szabályok **automatikusan futnak** a háttérben.`,
 • Declined: Visszautasított
 
 **Típus szerint**:
-• VIP Guests: Ingyenes VIP vendégek
+• Meghívott vendégek: Ingyenes meghívott vendégek
 • Paying (Single): Egy jegyes fizető
 • Paying (Paired): Páros jegyes fizető
 

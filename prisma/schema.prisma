@@ -30,6 +30,7 @@ model Guest {
   seating_preferences    String?            @db.Text  // Ültetési preferenciák (kivel szeretne ülni)
   applied_at             DateTime?          // When applicant submitted their application
   rejection_reason       String?            @db.Text  // Reason for rejection (if rejected)
+  is_vip_reception       Boolean            @default(false)  // Külön VIP fogadásra meghívott
   pwa_auth_code          String?            @unique @db.VarChar(20)  // PWA login code (e.g., "CEOG-ABC123")
   push_token             String?            @db.VarChar(500)          // Firebase FCM push notification token
   created_at             DateTime           @default(now())

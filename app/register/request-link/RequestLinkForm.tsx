@@ -8,6 +8,9 @@ import { Check, ArrowLeft, Envelope, ShieldCheck } from '@phosphor-icons/react';
 // reCAPTCHA site key from environment variable
 const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
+// Magic link expiry hours from env (default: 24)
+const MAGIC_LINK_EXPIRY_HOURS = parseInt(process.env.NEXT_PUBLIC_MAGIC_LINK_EXPIRY_HOURS || '24', 10);
+
 // Declare grecaptcha type
 declare global {
   interface Window {
@@ -227,7 +230,7 @@ export default function RequestLinkForm({
 
         {/* Info text */}
         <p className="text-xs landing-text-tertiary text-center mt-4 font-sans">
-          The link will be valid for 24 hours.
+          The link will be valid for {MAGIC_LINK_EXPIRY_HOURS} hours.
         </p>
 
         {/* reCAPTCHA badge notice */}

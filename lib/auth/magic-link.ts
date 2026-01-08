@@ -4,16 +4,13 @@
  */
 
 import crypto from 'crypto';
-
-// Magic link validity period - 24 hours
-const MAGIC_LINK_EXPIRY_HOURS = 24;
-const MAGIC_LINK_EXPIRY_MINUTES = MAGIC_LINK_EXPIRY_HOURS * 60; // 24 hours
+import { MAGIC_LINK } from '@/lib/config/constants';
 
 /**
  * Generate a magic link hash and expiry timestamp
  *
  * Algorithm: SHA-256(email + APP_SECRET + timestamp)
- * Expiry: 24 hours from generation
+ * Expiry: Configurable via MAGIC_LINK_EXPIRY_HOURS env var (default: 24 hours)
  *
  * @param email - Guest email address
  * @returns Object containing hash and expiry date
@@ -24,8 +21,8 @@ export function generateMagicLinkHash(email: string): {
 } {
   const appSecret = process.env.APP_SECRET;
 
-  if (!appSecret || appSecret.length < 64) {
-    throw new Error('APP_SECRET must be at least 64 characters');
+  if (!appSecret || appSecret.length < MAGIC_LINK.MIN_SECRET_LENGTH) {
+    throw new Error(`APP_SECRET must be at least ${MAGIC_LINK.MIN_SECRET_LENGTH} characters`);
   }
 
   const timestamp = Date.now().toString();
@@ -36,7 +33,7 @@ export function generateMagicLinkHash(email: string): {
     .update(dataToHash)
     .digest('hex');
 
-  const expiresAt = new Date(Date.now() + MAGIC_LINK_EXPIRY_MINUTES * 60 * 1000);
+  const expiresAt = new Date(Date.now() + MAGIC_LINK.EXPIRY_MINUTES * 60 * 1000);
 
   return { hash, expiresAt };
 }
@@ -114,7 +111,7 @@ export async function validateMagicLink(
     return {
       valid: false,
       errorType: 'expired',
-      error: 'The invitation link has expired (invalid after 24 hours)',
+      error: `The invitation link has expired (invalid after ${MAGIC_LINK.EXPIRY_HOURS} hours)`,
     };
   }
 

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Envelope, PaperPlaneTilt, QrCode, GearSix, Info, Calendar, MapTrifold, Sun, Moon } from '@phosphor-icons/react';
+import { Envelope, QrCode, GearSix, Info, Calendar, MapTrifold, Sun, Moon } from '@phosphor-icons/react';
 
 export default function HomePage() {
   const [isDark, setIsDark] = useState(true);
@@ -86,26 +86,6 @@ export default function HomePage() {
                   </h2>
                   <p className="landing-text-secondary text-sm">
                     Request your registration link
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Link>
-
-          {/* Apply to Attend */}
-          <Link href="/apply" className="group block">
-            <div className="landing-btn rounded-xl p-4 border hover:border-amber-500/50 dark:hover:border-amber-400/50">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl landing-icon-amber flex items-center justify-center flex-shrink-0
-                              group-hover:scale-105 transition-transform shadow-inner">
-                  <PaperPlaneTilt weight="duotone" size={26} className="text-amber-600 dark:text-amber-400" />
-                </div>
-                <div>
-                  <h2 className="font-semibold landing-text-primary group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors text-lg">
-                    Apply to Attend
-                  </h2>
-                  <p className="landing-text-secondary text-sm">
-                    Submit your attendance request
                   </p>
                 </div>
               </div>

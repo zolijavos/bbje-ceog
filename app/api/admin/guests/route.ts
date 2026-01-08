@@ -24,6 +24,7 @@ const createGuestSchema = z.object({
   position: z.string().min(1, 'Position is required'),
   dietary_requirements: z.string().nullable().optional(),
   seating_preferences: z.string().nullable().optional(),
+  is_vip_reception: z.boolean().optional(),
 });
 
 export async function GET(request: NextRequest) {

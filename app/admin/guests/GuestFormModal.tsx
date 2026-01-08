@@ -21,9 +21,10 @@ interface GuestFormData {
   company: string | null;
   position: string | null;
   guest_type: 'vip' | 'paying_single' | 'paying_paired';
-  status: 'invited' | 'registered' | 'approved' | 'declined';
+  status: 'pending' | 'invited' | 'registered' | 'approved' | 'declined';
   dietary_requirements: string | null;
   seating_preferences: string | null;
+  is_vip_reception: boolean;
 }
 
 interface PartnerGuestInfo {
@@ -69,6 +70,7 @@ export default function GuestFormModal({
     status: 'invited',
     dietary_requirements: null,
     seating_preferences: null,
+    is_vip_reception: false,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -86,6 +88,7 @@ export default function GuestFormModal({
         status: initialData?.status || 'invited',
         dietary_requirements: initialData?.dietary_requirements || null,
         seating_preferences: initialData?.seating_preferences || null,
+        is_vip_reception: initialData?.is_vip_reception || false,
       });
       setErrors({});
     }
@@ -279,7 +282,7 @@ export default function GuestFormModal({
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   data-testid="guest-type-select"
                 >
-                  <option value="vip">VIP</option>
+                  <option value="vip">Invited</option>
                   <option value="paying_single">Paying (Single)</option>
                   <option value="paying_paired">Paying (Paired)</option>
                 </select>
@@ -356,6 +359,7 @@ export default function GuestFormModal({
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     data-testid="guest-status-select"
                   >
+                    <option value="pending">Pending</option>
                     <option value="invited">Invited</option>
                     <option value="registered">Registered</option>
                     <option value="approved">Approved</option>
@@ -363,6 +367,22 @@ export default function GuestFormModal({
                   </select>
                 </div>
               )}
+
+              {/* VIP Reception Checkbox */}
+              <div className="flex items-center gap-3 mt-2 md:col-span-2">
+                <input
+                  type="checkbox"
+                  id="is_vip_reception"
+                  name="is_vip_reception"
+                  checked={formData.is_vip_reception}
+                  onChange={(e) => setFormData(prev => ({ ...prev, is_vip_reception: e.target.checked }))}
+                  className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                  data-testid="vip-reception-checkbox"
+                />
+                <label htmlFor="is_vip_reception" className="text-sm text-gray-700">
+                  VIP Reception (külön fogadásra meghívott)
+                </label>
+              </div>
             </div>
           </div>
 

@@ -11,7 +11,7 @@ import { GuestType, RegistrationStatus, PaymentStatus } from '@prisma/client';
 // ========================================
 
 export const GUEST_TYPE_LABELS: Record<GuestType, string> = {
-  vip: 'VIP',
+  vip: 'Invited',
   paying_single: 'Paying (Single)',
   paying_paired: 'Paying (Paired)',
   applicant: 'Applicant',
@@ -80,9 +80,9 @@ export const PAYMENT_STATUS_INFO: Record<PaymentStatus, StatusInfo> = {
   },
 } as const;
 
-// VIP special payment status (for display purposes)
+// Invited guest special payment status (for display purposes)
 export const VIP_PAYMENT_STATUS_INFO: StatusInfo = {
-  label: 'VIP',
+  label: 'Invited (Free)',
   color: 'bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300',
 } as const;
 
@@ -101,7 +101,7 @@ export const TABLE_TYPE_COLORS: Record<string, string> = {
 // ========================================
 
 export const TICKET_TYPE_LABELS: Record<string, string> = {
-  vip_free: 'VIP Ticket (Free)',
+  vip_free: 'Invited Ticket (Free)',
   paid_single: 'Single Ticket',
   paid_paired: 'Paired Ticket',
 } as const;

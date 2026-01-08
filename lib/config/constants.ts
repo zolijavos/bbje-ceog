@@ -29,9 +29,16 @@ export const RATE_LIMIT = {
 // MAGIC LINK
 // ========================================
 
+/** Magic link expiry hours - configurable via MAGIC_LINK_EXPIRY_HOURS env var (default: 24) */
+const MAGIC_LINK_EXPIRY_HOURS = typeof process !== 'undefined' && process.env?.MAGIC_LINK_EXPIRY_HOURS
+  ? parseInt(process.env.MAGIC_LINK_EXPIRY_HOURS, 10)
+  : 24;
+
 export const MAGIC_LINK = {
-  /** Expiry time in minutes (24 hours) */
-  EXPIRY_MINUTES: 24 * 60,
+  /** Expiry time in hours (configurable via env) */
+  EXPIRY_HOURS: MAGIC_LINK_EXPIRY_HOURS,
+  /** Expiry time in minutes */
+  EXPIRY_MINUTES: MAGIC_LINK_EXPIRY_HOURS * 60,
   /** Minimum secret length */
   MIN_SECRET_LENGTH: 64,
 } as const;

@@ -79,6 +79,7 @@ interface DashboardData {
   guest: GuestData;
   registration: RegistrationData | null;
   table: TableData | null;
+  tableNumbersHidden?: boolean; // Flag indicating table info is hidden by admin
   dietary_requirements: string | null;
   seating_preferences: string | null;
 }
@@ -332,6 +333,10 @@ export default function PWADashboardPage() {
                   {data.table.seat_number && ` • Seat ${data.table.seat_number}`}
                 </p>
               </div>
+            </div>
+          ) : data.tableNumbersHidden ? (
+            <div className="pwa-text-tertiary text-sm py-2">
+              Table assignment will be revealed soon
             </div>
           ) : (
             <div className="pwa-text-tertiary text-sm py-2">Table not yet assigned</div>

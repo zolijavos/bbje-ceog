@@ -20,6 +20,7 @@ import {
   Envelope,
   SpinnerGap,
   ArrowsClockwise,
+  DownloadSimple,
 } from '@phosphor-icons/react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
@@ -69,6 +70,7 @@ interface Guest {
   partnerName: string | null;
   partnerEmail: string | null;
   billingInfo: BillingInfo | null;
+  isVipReception?: boolean;
   // Partner relation fields
   isPartner?: boolean;
   pairedWithId?: number | null;
@@ -491,6 +493,15 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
             />
           </button>
         </div>
+        <a
+          href="/api/admin/guests/export"
+          download
+          className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          title="Export CSV"
+        >
+          <DownloadSimple size={18} weight="duotone" className="mr-2" />
+          {t('exportCSV')}
+        </a>
         <button
           onClick={() => setShowAddModal(true)}
           className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium text-white bg-neutral-800 hover:bg-neutral-800/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-800"
@@ -532,9 +543,9 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
             data-testid="type-filter"
           >
             <option value="all">{t('allTypes')}</option>
-            <option value="vip">VIP</option>
-            <option value="paying_single">Paying (Single)</option>
-            <option value="paying_paired">Paying (Paired)</option>
+            <option value="vip">{t('vip')}</option>
+            <option value="paying_single">{t('payingSingle')}</option>
+            <option value="paying_paired">{t('payingPaired')}</option>
           </select>
         </div>
 
@@ -551,11 +562,11 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
             data-testid="status-filter"
           >
             <option value="all">{t('allStatuses')}</option>
-            <option value="pending">Pending</option>
-            <option value="invited">Invited</option>
-            <option value="registered">Registered</option>
-            <option value="approved">Approved</option>
-            <option value="declined">Declined</option>
+            <option value="pending">{t('pending')}</option>
+            <option value="invited">{t('invited')}</option>
+            <option value="registered">{t('registered')}</option>
+            <option value="approved">{t('approved')}</option>
+            <option value="declined">{t('declined')}</option>
           </select>
         </div>
       </div>
@@ -876,9 +887,10 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                 company: editingGuest.company,
                 position: editingGuest.position,
                 guest_type: editingGuest.guestType as 'vip' | 'paying_single' | 'paying_paired',
-                status: editingGuest.status as 'invited' | 'registered' | 'approved' | 'declined',
+                status: editingGuest.status as 'pending' | 'invited' | 'registered' | 'approved' | 'declined',
                 dietary_requirements: editingGuest.dietaryRequirements,
                 seating_preferences: editingGuest.seatingPreferences,
+                is_vip_reception: editingGuest.isVipReception || false,
                 partner_name: editingGuest.partnerName,
                 partner_email: editingGuest.partnerEmail,
                 billing_info: editingGuest.billingInfo,

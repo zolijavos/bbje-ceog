@@ -3,6 +3,9 @@
 import Link from 'next/link';
 import type { MagicLinkErrorType } from '@/lib/auth/magic-link';
 
+// Magic link expiry hours from env (default: 24)
+const MAGIC_LINK_EXPIRY_HOURS = parseInt(process.env.NEXT_PUBLIC_MAGIC_LINK_EXPIRY_HOURS || '24', 10);
+
 interface RegisterErrorProps {
   errorType: MagicLinkErrorType;
   email?: string;
@@ -21,7 +24,7 @@ function getErrorDetails(errorType: MagicLinkErrorType): {
       return {
         title: 'Link Expired',
         description:
-          'The invitation link expires after 24 hours. Request a new link using the button below.',
+          `The invitation link expires after ${MAGIC_LINK_EXPIRY_HOURS} hours. Request a new link using the button below.`,
         icon: 'expired',
         showRequestLink: true,
       };

@@ -56,12 +56,12 @@ const faqs: FAQItem[] = [
   {
     id: '6',
     question: 'Can I bring a guest or partner?',
-    answer: 'VIP guests can now add a free partner during registration! Simply select the option to bring a partner and enter their details. Paired ticket holders also register with their partner. Both you and your partner will receive separate tickets and access to the Gala App.',
+    answer: 'Invited guests can now add a free partner during registration! Simply select the option to bring a partner and enter their details. Paired ticket holders also register with their partner. Both you and your partner will receive separate tickets and access to the Gala App.',
   },
   {
     id: '7',
     question: 'What payment methods are accepted?',
-    answer: 'We accept credit/debit cards (Visa, Mastercard, American Express) via Stripe, and bank transfers. VIP guests attend free of charge.',
+    answer: 'We accept credit/debit cards (Visa, Mastercard, American Express) via Stripe, and bank transfers. Invited guests attend free of charge.',
   },
   {
     id: '8',

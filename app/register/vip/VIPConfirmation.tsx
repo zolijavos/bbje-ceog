@@ -228,7 +228,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
           <h1 className="font-display text-2xl font-semibold text-neutral-800 mb-2">
             Dear {guest.name}!
           </h1>
-          <p className="text-accent-gold font-semibold mb-6 font-sans uppercase tracking-wider text-sm">VIP Guest</p>
+          <p className="text-accent-gold font-semibold mb-6 font-sans uppercase tracking-wider text-sm">Invited Guest</p>
 
           {/* Event Details */}
           <div className="bg-neutral-50 rounded-lg p-4 mb-6 border-l-4 border-accent-gold">
@@ -246,8 +246,8 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
 
           {/* Invitation Text */}
           <p className="text-neutral-500 mb-8 font-sans">
-            It is our honor to welcome you as a VIP guest at the CEO
-            Gala 2026 event.
+            It is our honor to welcome you as an invited guest at the
+            CEO Gala 2026 event.
           </p>
 
           {/* Action Buttons */}
@@ -315,7 +315,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
             </svg>
           </div>
           <h1 className="font-display text-2xl font-semibold text-neutral-800 mb-1">
-            VIP Registration
+            Invited Guest Registration
           </h1>
           <p className="text-neutral-500 font-sans">Dear {guest.name}!</p>
         </div>
@@ -355,7 +355,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
             Bringing a Partner?
           </h3>
           <p className="text-sm text-neutral-500 mb-4">
-            As a VIP guest, you may bring one partner free of charge.
+            As an invited guest, you may bring one partner free of charge.
           </p>
 
           {/* Partner Checkbox */}

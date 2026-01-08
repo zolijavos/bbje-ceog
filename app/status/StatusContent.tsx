@@ -56,7 +56,7 @@ const TICKET_PRICES: Record<string, string> = {
 const TICKET_LABELS: Record<string, string> = {
   paid_single: 'Single Ticket',
   paid_paired: 'Paired Ticket',
-  vip_free: 'VIP Ticket',
+  vip_free: 'Invited Ticket',
 };
 
 export default function StatusContent({
@@ -86,7 +86,7 @@ export default function StatusContent({
     if (isVIP) {
       return (
         <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-accent-teal/10 text-accent-teal">
-          VIP - Free
+          Invited - Free
         </span>
       );
     }
@@ -273,7 +273,7 @@ export default function StatusContent({
             )}
             {isVIP && (
               <p className="text-neutral-600 font-sans">
-                As a VIP guest, you have received a free invitation to the event.
+                As an invited guest, you have received a free invitation to the event.
               </p>
             )}
             {!registration && (

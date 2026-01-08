@@ -85,8 +85,8 @@ export const translations = {
     awaitingTransfer: 'Awaiting Transfer',
 
     // Guest types
-    vip: 'VIP',
-    vipGuest: 'VIP Guest',
+    vip: 'Invited',
+    vipGuest: 'Invited Guest',
     payingSingle: 'Paying (Single)',
     payingPaired: 'Paying (Paired)',
     payingGuest: 'Paying Guest',
@@ -219,10 +219,10 @@ export const translations = {
     backToHome: 'Back to Home',
     questions: 'Questions?',
 
-    // VIP registration
-    vipRegistration: 'VIP Registration',
+    // Invited guest registration
+    vipRegistration: 'Invited Guest Registration',
     dearGuest: 'Dear',
-    vipWelcomeText: 'It is our honor to welcome you as a VIP guest at the CEO Gala 2026 event.',
+    vipWelcomeText: 'It is our honor to welcome you as an invited guest at the CEO Gala 2026 event.',
     yesIWillAttend: 'Yes, I will attend',
     iCannotAttend: 'I cannot attend',
     qrTicketNote: 'Your QR ticket will arrive via email after confirmation.',
@@ -286,8 +286,8 @@ export const translations = {
     registrationTime: 'Registration Time',
     singleTicket: 'Single Ticket',
     pairedTicket: 'Paired Ticket',
-    vipTicket: 'VIP Ticket',
-    vipFree: 'VIP - Free',
+    vipTicket: 'Invited Ticket',
+    vipFree: 'Invited - Free',
     pendingTransfer: 'Pending Transfer',
     paymentFailed: 'Payment Failed',
     noRegistration: 'No Registration',
@@ -298,7 +298,7 @@ export const translations = {
     reference: 'Reference',
     eticketAfterPayment: 'You will automatically receive your e-ticket via email after payment is received.',
     tryAgain: 'Try Again',
-    vipFreeInvitation: 'As a VIP guest, you have received a free invitation to the event.',
+    vipFreeInvitation: 'As an invited guest, you have received a free invitation to the event.',
     notRegisteredYet: 'You have not registered for the event yet. Use the link from your invitation to register.',
     eTicket: 'E-Ticket',
     showQrAtCheckin: 'Show this QR code at the check-in point',
@@ -377,7 +377,7 @@ export const translations = {
     pairedGuestNeedsSeats: 'Paired guest: needs 2 seats, only {available} available',
     tableFull: 'Table is full',
     removeFromTable: 'Remove',
-    vipTable: 'VIP table',
+    vipTable: 'Invited table',
     standardTable: 'Standard table',
     sponsorTable: 'Sponsor table',
     emailCancelled: 'Email cancelled',
@@ -556,8 +556,8 @@ export const translations = {
     awaitingTransfer: 'Utalásra vár',
 
     // Guest types
-    vip: 'VIP',
-    vipGuest: 'VIP vendég',
+    vip: 'Meghívott',
+    vipGuest: 'Meghívott vendég',
     payingSingle: 'Fizető (egyéni)',
     payingPaired: 'Fizető (páros)',
     payingGuest: 'Fizető vendég',
@@ -690,10 +690,10 @@ export const translations = {
     backToHome: 'Vissza a főoldalra',
     questions: 'Kérdése van?',
 
-    // VIP registration
-    vipRegistration: 'VIP Regisztráció',
+    // Meghívott vendég regisztráció
+    vipRegistration: 'Meghívott vendég regisztráció',
     dearGuest: 'Kedves',
-    vipWelcomeText: 'Megtiszteltetés számunkra, hogy VIP vendégként üdvözölhetjük a CEO Gála 2026 rendezvényen.',
+    vipWelcomeText: 'Megtiszteltetés számunkra, hogy meghívott vendégként üdvözölhetjük a CEO Gála 2026 rendezvényen.',
     yesIWillAttend: 'Igen, részt veszek',
     iCannotAttend: 'Nem tudok részt venni',
     qrTicketNote: 'QR kódos jegye a megerősítés után emailben érkezik.',
@@ -817,7 +817,7 @@ export const translations = {
     pairedGuestNeedsSeats: 'Páros vendég: 2 hely kell, csak {available} van',
     tableFull: 'Az asztal megtelt',
     removeFromTable: 'Eltávolítás',
-    vipTable: 'VIP asztal',
+    vipTable: 'Meghívott asztal',
     standardTable: 'Standard asztal',
     sponsorTable: 'Szponzor asztal',
     emailCancelled: 'Email törölve',

@@ -25,6 +25,7 @@ const updateGuestSchema = z.object({
     .optional(),
   dietary_requirements: z.string().optional().nullable(),
   seating_preferences: z.string().optional().nullable(),
+  is_vip_reception: z.boolean().optional(),
 });
 
 export async function GET(request: NextRequest, context: RouteContext) {
