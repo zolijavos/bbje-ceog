@@ -32,6 +32,44 @@ interface ChangelogEntry {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: '2.5.0',
+    date: '2026-01-08',
+    changes: [
+      {
+        type: 'feature',
+        category: 'guest',
+        titleEn: 'Payment Status Column & Filter',
+        titleHu: 'Fizetési Státusz Oszlop & Szűrő',
+        descriptionEn: 'Added Payment Status column to guest list with color-coded badges. New filter allows filtering by payment status (Awaiting Transfer, Paid, Failed, Refunded).',
+        descriptionHu: 'Fizetési státusz oszlop hozzáadva a vendéglistához színkódolt jelzésekkel. Új szűrő a fizetési státusz szerinti szűréshez (Utalásra vár, Fizetve, Sikertelen, Visszatérítve).',
+      },
+      {
+        type: 'fix',
+        category: 'guest',
+        titleEn: 'VIP Filter & Checkbox Fix',
+        titleHu: 'VIP Szűrő & Checkbox Javítás',
+        descriptionEn: 'Fixed VIP filter not working on guest list. Fixed VIP checkbox not saving when editing guests.',
+        descriptionHu: 'Javítva a VIP szűrő, ami nem működött a vendéglistában. Javítva a VIP checkbox mentése szerkesztésnél.',
+      },
+      {
+        type: 'feature',
+        category: 'email',
+        titleEn: 'VIP Filter for Bulk Emails',
+        titleHu: 'VIP Szűrő Tömeges Emailekhez',
+        descriptionEn: 'Added VIP Reception filter to bulk email scheduling. Now you can send emails to VIP-only or non-VIP guests.',
+        descriptionHu: 'VIP Fogadás szűrő hozzáadva a tömeges email küldéshez. Most már küldhetsz emailt csak VIP vagy csak nem-VIP vendégeknek.',
+      },
+      {
+        type: 'improvement',
+        category: 'ui',
+        titleEn: 'Inter Font',
+        titleHu: 'Inter Betűtípus',
+        descriptionEn: 'Changed primary font from Open Sans to Inter for better readability across all pages.',
+        descriptionHu: 'Elsődleges betűtípus cserélve Open Sans-ról Inter-re a jobb olvashatóság érdekében minden oldalon.',
+      },
+    ],
+  },
+  {
     version: '2.4.0',
     date: '2026-01-08',
     changes: [
