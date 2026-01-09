@@ -137,7 +137,14 @@ export default function GuestFormModal({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validate()) return;
+    if (!validate()) {
+      // Scroll to error summary
+      const errorSummary = document.getElementById('error-summary');
+      if (errorSummary) {
+        errorSummary.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
+    }
 
     setIsSubmitting(true);
     try {
@@ -170,6 +177,30 @@ export default function GuestFormModal({
         <h2 className="text-xl font-semibold text-gray-900 mb-4">
           {mode === 'add' ? 'Add New Guest' : 'Edit Guest'}
         </h2>
+
+        {/* Error Summary */}
+        {Object.keys(errors).filter(key => key !== 'general').length > 0 && (
+          <div
+            id="error-summary"
+            className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg"
+            data-testid="error-summary"
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <span className="font-medium text-red-800">
+                {Object.keys(errors).filter(key => key !== 'general').length} error(s) found. Please fix the following:
+              </span>
+            </div>
+            <ul className="list-disc list-inside space-y-1 text-sm text-red-700">
+              {errors.email && <li><button type="button" onClick={() => document.getElementById('email')?.focus()} className="hover:underline text-left">Email: {errors.email}</button></li>}
+              {errors.name && <li><button type="button" onClick={() => document.getElementById('name')?.focus()} className="hover:underline text-left">Name: {errors.name}</button></li>}
+              {errors.company && <li><button type="button" onClick={() => document.getElementById('company')?.focus()} className="hover:underline text-left">Company: {errors.company}</button></li>}
+              {errors.position && <li><button type="button" onClick={() => document.getElementById('position')?.focus()} className="hover:underline text-left">Position: {errors.position}</button></li>}
+            </ul>
+          </div>
+        )}
 
         {errors.general && (
           <div

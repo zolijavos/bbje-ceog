@@ -224,6 +224,14 @@ export default function PaidRegistrationForm({
       } else {
         setStep(step + 1);
       }
+    } else {
+      // Scroll to error summary
+      setTimeout(() => {
+        const errorSummary = document.getElementById('error-summary');
+        if (errorSummary) {
+          errorSummary.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
     }
   };
 
@@ -238,7 +246,16 @@ export default function PaidRegistrationForm({
 
   const handleSubmit = async () => {
     const lastStep = formData.ticketType === 'paid_paired' ? 5 : 4;
-    if (!validateStep(lastStep)) return;
+    if (!validateStep(lastStep)) {
+      // Scroll to error summary
+      setTimeout(() => {
+        const errorSummary = document.getElementById('error-summary');
+        if (errorSummary) {
+          errorSummary.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+      return;
+    }
 
     setIsLoading(true);
     setError(null);
@@ -344,6 +361,37 @@ export default function PaidRegistrationForm({
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
             {error}
+          </div>
+        )}
+
+        {/* Validation Error Summary */}
+        {Object.keys(errors).length > 0 && (
+          <div
+            id="error-summary"
+            className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg"
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <svg className="w-5 h-5 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <span className="font-medium text-red-800 text-sm">
+                Please fix the following errors:
+              </span>
+            </div>
+            <ul className="list-disc list-inside space-y-1 text-sm text-red-700">
+              {errors.phone && <li>Phone: {errors.phone}</li>}
+              {errors.company && <li>Company: {errors.company}</li>}
+              {errors.position && <li>Position: {errors.position}</li>}
+              {errors.billingName && <li>Billing Name: {errors.billingName}</li>}
+              {errors.addressLine1 && <li>Address: {errors.addressLine1}</li>}
+              {errors.city && <li>City: {errors.city}</li>}
+              {errors.postalCode && <li>Postal Code: {errors.postalCode}</li>}
+              {errors.taxNumber && <li>Tax Number: {errors.taxNumber}</li>}
+              {errors.partnerName && <li>Partner Name: {errors.partnerName}</li>}
+              {errors.partnerEmail && <li>Partner Email: {errors.partnerEmail}</li>}
+              {errors.gdpr_consent && <li>GDPR: {errors.gdpr_consent}</li>}
+              {errors.cancellation_accepted && <li>Cancellation: {errors.cancellation_accepted}</li>}
+            </ul>
           </div>
         )}
 

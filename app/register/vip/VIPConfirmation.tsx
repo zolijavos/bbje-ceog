@@ -132,7 +132,16 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
   };
 
   const handleConfirm = async () => {
-    if (!validateForm()) return;
+    if (!validateForm()) {
+      // Scroll to error summary
+      setTimeout(() => {
+        const errorSummary = document.getElementById('error-summary');
+        if (errorSummary) {
+          errorSummary.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+      return;
+    }
 
     setIsLoading(true);
     setError(null);
@@ -324,6 +333,33 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 font-sans">
             {error}
+          </div>
+        )}
+
+        {/* Validation Error Summary */}
+        {Object.keys(errors).length > 0 && (
+          <div
+            id="error-summary"
+            className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg"
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <svg className="w-5 h-5 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <span className="font-medium text-red-800 text-sm font-sans">
+                Please fix the following errors:
+              </span>
+            </div>
+            <ul className="list-disc list-inside space-y-1 text-sm text-red-700 font-sans">
+              {errors.phone && <li>Phone: {errors.phone}</li>}
+              {errors.company && <li>Company: {errors.company}</li>}
+              {errors.position && <li>Position: {errors.position}</li>}
+              {errors.partner_name && <li>Partner Name: {errors.partner_name}</li>}
+              {errors.partner_email && <li>Partner Email: {errors.partner_email}</li>}
+              {errors.partner_gdpr_consent && <li>Partner Consent: {errors.partner_gdpr_consent}</li>}
+              {errors.gdpr_consent && <li>GDPR: {errors.gdpr_consent}</li>}
+              {errors.cancellation_accepted && <li>Cancellation: {errors.cancellation_accepted}</li>}
+            </ul>
           </div>
         )}
 

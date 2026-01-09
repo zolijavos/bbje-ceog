@@ -102,6 +102,13 @@ export default function ApplyPage() {
     e.preventDefault();
 
     if (!validateForm()) {
+      // Scroll to error summary
+      setTimeout(() => {
+        const errorSummary = document.getElementById('error-summary');
+        if (errorSummary) {
+          errorSummary.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
       return;
     }
 
@@ -190,6 +197,31 @@ export default function ApplyPage() {
         {/* Form Card */}
         <div className="landing-card rounded-2xl shadow-2xl p-8 border">
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Validation Error Summary */}
+            {Object.keys(errors).length > 0 && (
+              <div
+                id="error-summary"
+                className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg"
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <svg className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  <span className="font-medium text-red-800 dark:text-red-300 text-sm">
+                    Please fix the following errors:
+                  </span>
+                </div>
+                <ul className="list-disc list-inside space-y-1 text-sm text-red-700 dark:text-red-400">
+                  {errors.name && <li>Name: {errors.name}</li>}
+                  {errors.email && <li>Email: {errors.email}</li>}
+                  {errors.phone && <li>Phone: {errors.phone}</li>}
+                  {errors.company && <li>Company: {errors.company}</li>}
+                  {errors.position && <li>Position: {errors.position}</li>}
+                  {errors.gdprConsent && <li>Consent: {errors.gdprConsent}</li>}
+                </ul>
+              </div>
+            )}
+
             {/* Basic Info */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold landing-text-heading border-b landing-divider pb-2">
