@@ -4,6 +4,16 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
 
 ---
 
+## v2.6.0 (2026-01-09)
+
+### Improvements / Javítások
+
+- **Form Validation Error Summary** / **Űrlap Validációs Hibaösszesítő**
+  - EN: All forms now display a clear error summary box at the top when validation fails. The summary lists all errors with clickable links that scroll to and focus on the problematic field. Implemented on: Admin Guest Form, VIP Registration, Paid Registration, and Public Application forms.
+  - HU: Minden űrlapon mostantól megjelenik egy hibaösszesítő doboz validációs hiba esetén. Az összesítő felsorolja a hibákat kattintható linkekkel, amelyek a problémás mezőhöz görgetnek és fókuszálnak. Implementálva: Admin Vendég Űrlap, VIP Regisztráció, Fizetős Regisztráció és Nyilvános Jelentkezés űrlapokon.
+
+---
+
 ## v2.5.0 (2026-01-08)
 
 ### New Features / Új funkciók

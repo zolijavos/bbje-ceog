@@ -32,6 +32,20 @@ interface ChangelogEntry {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: '2.6.0',
+    date: '2026-01-09',
+    changes: [
+      {
+        type: 'improvement',
+        category: 'ui',
+        titleEn: 'Form Validation Error Summary',
+        titleHu: 'Űrlap Validációs Hibaösszesítő',
+        descriptionEn: 'All forms now display a clear error summary box at the top when validation fails. Errors are listed with field names, and in admin modal you can click to jump to the field. Auto-scroll to error summary on submit.',
+        descriptionHu: 'Minden űrlapon mostantól megjelenik egy hibaösszesítő doboz validációs hiba esetén. A hibák mező nevekkel jelennek meg, admin modalban kattintással ugorhatsz a mezőre. Automatikus görgetés a hibalistához submit után.',
+      },
+    ],
+  },
+  {
     version: '2.5.0',
     date: '2026-01-08',
     changes: [
