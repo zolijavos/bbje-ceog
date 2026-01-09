@@ -8,29 +8,29 @@
    ======================================== */
 
 :root {
-  /* Light mode (default) */
-  --color-bg-base: #F8F9FA;
+  /* Light mode (default) - BBJ Events 2026 Palette */
+  --color-bg-base: #F9FAFB;
   --color-bg-card: #FFFFFF;
   --color-bg-elevated: #FFFFFF;
-  --color-bg-header: #1F2937;
+  --color-bg-header: #000D38;
 
   --color-text-primary: #111827;
-  --color-text-secondary: #4B5563;
+  --color-text-secondary: #6B7280;
   --color-text-tertiary: #9CA3AF;
   --color-text-disabled: #D1D5DB;
   --color-text-inverse: #FFFFFF;
 
-  --color-btn-primary-bg: #1F2937;
+  --color-btn-primary-bg: #000D38;
   --color-btn-primary-text: #FFFFFF;
   --color-btn-secondary-bg: #F3F4F6;
-  --color-btn-secondary-text: #1F2937;
+  --color-btn-secondary-text: #000D38;
 
   --color-border-subtle: #E5E7EB;
   --color-border-emphasis: #D1D5DB;
 
-  --color-accent: #0D9488;
-  --color-accent-light: #14B8A6;
-  --color-accent-glow: rgba(13, 148, 136, 0.2);
+  --color-accent: #000D38;
+  --color-accent-light: #0A1A4A;
+  --color-accent-glow: rgba(0, 13, 56, 0.2);
 
   /* Shadows - Light mode */
   --shadow-card: 0 1px 3px rgba(0,0,0,0.08);
@@ -38,7 +38,7 @@
   --shadow-btn-3d: 0 4px 0 #D1D5DB, 0 6px 12px rgba(0,0,0,0.1);
   --shadow-btn-3d-hover: 0 6px 0 #D1D5DB, 0 10px 20px rgba(0,0,0,0.15);
   --shadow-btn-3d-active: 0 1px 0 #D1D5DB, 0 2px 4px rgba(0,0,0,0.1);
-  --shadow-glow: 0 0 20px rgba(13, 148, 136, 0.3);
+  --shadow-glow: 0 0 20px rgba(0, 13, 56, 0.3);
 
   /* Skeleton */
   --skeleton-base: #E5E7EB;
@@ -46,57 +46,57 @@
 
   /* Status colors */
   --color-success: #059669;
-  --color-success-bg: #ECFDF5;
+  --color-success-bg: #D1FAE5;
   --color-warning: #D97706;
-  --color-warning-bg: #FFFBEB;
+  --color-warning-bg: #FEF3C7;
   --color-error: #DC2626;
-  --color-error-bg: #FEF2F2;
+  --color-error-bg: #FEE2E2;
 }
 
 [data-theme="dark"],
 .dark {
-  /* Dark mode */
-  --color-bg-base: #0F0F0F;
-  --color-bg-card: #1A1A1A;
-  --color-bg-elevated: #262626;
-  --color-bg-header: #1A1A1A;
+  /* Dark mode - BBJ Events 2026 Navy Palette */
+  --color-bg-base: #000D38;
+  --color-bg-card: #0A1A4A;
+  --color-bg-elevated: #1A2D5C;
+  --color-bg-header: #000D38;
 
-  --color-text-primary: #F9FAFB;
-  --color-text-secondary: #D1D5DB;
-  --color-text-tertiary: #9CA3AF;
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #9CA3AF;
+  --color-text-tertiary: #6B7280;
   --color-text-disabled: #6B7280;
-  --color-text-inverse: #FFFFFF;
+  --color-text-inverse: #000D38;
 
-  --color-btn-primary-bg: #E5E7EB;
-  --color-btn-primary-text: #111827;
-  --color-btn-secondary-bg: #374151;
-  --color-btn-secondary-text: #E5E7EB;
+  --color-btn-primary-bg: #FFFFFF;
+  --color-btn-primary-text: #000D38;
+  --color-btn-secondary-bg: transparent;
+  --color-btn-secondary-text: #FFFFFF;
 
-  --color-border-subtle: #2D2D2D;
-  --color-border-emphasis: #404040;
+  --color-border-subtle: #2A4070;
+  --color-border-emphasis: #3A5070;
 
-  --color-accent: #2DD4BF;
-  --color-accent-light: #5EEAD4;
-  --color-accent-glow: rgba(45, 212, 191, 0.25);
+  --color-accent: #FFFFFF;
+  --color-accent-light: #E5E7EB;
+  --color-accent-glow: rgba(255, 255, 255, 0.15);
 
-  /* Shadows - Dark mode (glow effects) */
-  --shadow-card: 0 0 0 1px rgba(255,255,255,0.05);
-  --shadow-card-hover: 0 0 30px rgba(45,212,191,0.15), 0 0 0 1px rgba(255,255,255,0.1);
-  --shadow-btn-3d: 0 4px 0 #0A0A0A, 0 0 20px rgba(0,0,0,0.5);
-  --shadow-btn-3d-hover: 0 6px 0 #0A0A0A, 0 0 25px rgba(45,212,191,0.2);
-  --shadow-btn-3d-active: 0 1px 0 #0A0A0A, 0 0 10px rgba(0,0,0,0.3);
-  --shadow-glow: 0 0 30px rgba(45, 212, 191, 0.4);
+  /* Shadows - Dark mode (subtle navy glow) */
+  --shadow-card: 0 0 0 1px rgba(42, 64, 112, 0.5);
+  --shadow-card-hover: 0 0 30px rgba(255,255,255,0.08), 0 0 0 1px rgba(42, 64, 112, 0.8);
+  --shadow-btn-3d: 0 4px 0 #000820, 0 0 20px rgba(0,0,0,0.5);
+  --shadow-btn-3d-hover: 0 6px 0 #000820, 0 0 25px rgba(255,255,255,0.1);
+  --shadow-btn-3d-active: 0 1px 0 #000820, 0 0 10px rgba(0,0,0,0.3);
+  --shadow-glow: 0 0 30px rgba(255, 255, 255, 0.2);
 
   /* Skeleton */
-  --skeleton-base: #262626;
-  --skeleton-shimmer: #374151;
+  --skeleton-base: #0A1A4A;
+  --skeleton-shimmer: #1A2D5C;
 
-  /* Status colors - Dark mode adjusted */
-  --color-success: #10B981;
+  /* Status colors - Dark mode (muted for navy bg) */
+  --color-success: #059669;
   --color-success-bg: #064E3B;
-  --color-warning: #FBBF24;
+  --color-warning: #D97706;
   --color-warning-bg: #78350F;
-  --color-error: #F87171;
+  --color-error: #DC2626;
   --color-error-bg: #7F1D1D;
 }
 
@@ -393,7 +393,7 @@ tr:hover td {
 }
 
 .badge-vip {
-  @apply bg-accent-gold text-white;
+  @apply bg-primary text-white;
 }
 
 /* ========================================
@@ -495,7 +495,7 @@ tr:hover td {
 
 .vip-highlight::before {
   content: '';
-  @apply absolute -left-3 top-0 bottom-0 w-1 bg-accent-gold;
+  @apply absolute -left-3 top-0 bottom-0 w-1 bg-primary;
 }
 
 /* Elegant section divider */
@@ -1037,52 +1037,52 @@ tr:hover td {
    ======================================== */
 
 :root {
-  /* Landing page - Light mode */
-  --landing-bg-gradient-from: #F8FAFC;
-  --landing-bg-gradient-via: #F1F5F9;
-  --landing-bg-gradient-to: #E2E8F0;
+  /* Landing page - Light mode (BBJ Events 2026) */
+  --landing-bg-gradient-from: #F9FAFB;
+  --landing-bg-gradient-via: #F3F4F6;
+  --landing-bg-gradient-to: #E5E7EB;
   --landing-card-bg: #FFFFFF;
   --landing-card-bg-gradient-from: #FFFFFF;
-  --landing-card-bg-gradient-to: #F8FAFC;
-  --landing-card-border: rgba(148, 163, 184, 0.3);
-  --landing-btn-bg: rgba(241, 245, 249, 0.9);
-  --landing-btn-bg-hover: rgba(226, 232, 240, 0.95);
-  --landing-btn-border: rgba(148, 163, 184, 0.4);
-  --landing-btn-shadow: 0 4px 0 rgba(148, 163, 184, 0.3);
-  --landing-btn-shadow-hover: 0 2px 0 rgba(148, 163, 184, 0.3);
-  --landing-text-heading: #0F172A;
-  --landing-text-primary: #1E293B;
-  --landing-text-secondary: #475569;
-  --landing-text-tertiary: #64748B;
-  --landing-divider: rgba(148, 163, 184, 0.3);
-  --landing-icon-bg-teal: rgba(13, 148, 136, 0.12);
-  --landing-icon-bg-amber: rgba(245, 158, 11, 0.12);
-  --landing-footer-text: #64748B;
+  --landing-card-bg-gradient-to: #F9FAFB;
+  --landing-card-border: rgba(0, 13, 56, 0.15);
+  --landing-btn-bg: rgba(243, 244, 246, 0.9);
+  --landing-btn-bg-hover: rgba(229, 231, 235, 0.95);
+  --landing-btn-border: rgba(0, 13, 56, 0.2);
+  --landing-btn-shadow: 0 4px 0 rgba(0, 13, 56, 0.15);
+  --landing-btn-shadow-hover: 0 2px 0 rgba(0, 13, 56, 0.15);
+  --landing-text-heading: #000D38;
+  --landing-text-primary: #111827;
+  --landing-text-secondary: #6B7280;
+  --landing-text-tertiary: #9CA3AF;
+  --landing-divider: rgba(0, 13, 56, 0.15);
+  --landing-icon-bg-teal: rgba(0, 13, 56, 0.08);
+  --landing-icon-bg-amber: rgba(0, 13, 56, 0.08);
+  --landing-footer-text: #6B7280;
 }
 
 [data-theme="dark"],
 .dark {
-  /* Landing page - Dark mode */
-  --landing-bg-gradient-from: #0A0A0A;
-  --landing-bg-gradient-via: #171717;
-  --landing-bg-gradient-to: #0A0A0A;
-  --landing-card-bg: #1A1A1A;
-  --landing-card-bg-gradient-from: #1F1F1F;
-  --landing-card-bg-gradient-to: #171717;
-  --landing-card-border: rgba(63, 63, 70, 0.5);
-  --landing-btn-bg: rgba(39, 39, 42, 0.8);
-  --landing-btn-bg-hover: rgba(52, 52, 56, 0.9);
-  --landing-btn-border: rgba(63, 63, 70, 0.5);
+  /* Landing page - Dark mode (BBJ Events 2026 Navy) */
+  --landing-bg-gradient-from: #000D38;
+  --landing-bg-gradient-via: #000820;
+  --landing-bg-gradient-to: #000D38;
+  --landing-card-bg: #0A1A4A;
+  --landing-card-bg-gradient-from: #0A1A4A;
+  --landing-card-bg-gradient-to: #000D38;
+  --landing-card-border: rgba(42, 64, 112, 0.5);
+  --landing-btn-bg: rgba(10, 26, 74, 0.8);
+  --landing-btn-bg-hover: rgba(26, 45, 92, 0.9);
+  --landing-btn-border: rgba(42, 64, 112, 0.5);
   --landing-btn-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
   --landing-btn-shadow-hover: 0 2px 0 rgba(0, 0, 0, 0.4);
-  --landing-text-heading: #FAFAFA;
-  --landing-text-primary: #F4F4F5;
-  --landing-text-secondary: #A1A1AA;
-  --landing-text-tertiary: #71717A;
-  --landing-divider: rgba(63, 63, 70, 0.5);
-  --landing-icon-bg-teal: rgba(45, 212, 191, 0.15);
-  --landing-icon-bg-amber: rgba(251, 191, 36, 0.15);
-  --landing-footer-text: #52525B;
+  --landing-text-heading: #FFFFFF;
+  --landing-text-primary: #FFFFFF;
+  --landing-text-secondary: #9CA3AF;
+  --landing-text-tertiary: #6B7280;
+  --landing-divider: rgba(42, 64, 112, 0.5);
+  --landing-icon-bg-teal: rgba(255, 255, 255, 0.1);
+  --landing-icon-bg-amber: rgba(255, 255, 255, 0.1);
+  --landing-footer-text: #6B7280;
 }
 
 /* Landing page utility classes */

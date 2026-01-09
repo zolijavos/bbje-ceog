@@ -32,6 +32,44 @@ interface ChangelogEntry {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: '2.7.0',
+    date: '2026-01-09',
+    changes: [
+      {
+        type: 'feature',
+        category: 'branding',
+        titleEn: 'BBJ Events 2026 Color Scheme',
+        titleHu: 'BBJ Events 2026 Színséma',
+        descriptionEn: 'Complete visual refresh with new navy-based color palette (#000D38 primary). Dark mode and light mode fully redesigned for elegant, VIP event branding.',
+        descriptionHu: 'Teljes vizuális frissítés új navy alapú színpalettával (#000D38 elsődleges). Sötét és világos téma újratervezve elegáns, VIP esemény arculathoz.',
+      },
+      {
+        type: 'feature',
+        category: 'ui',
+        titleEn: 'UX Design Wireframes',
+        titleHu: 'UX Design Wireframe-ek',
+        descriptionEn: 'Created complete wireframes for all 6 guest-facing screens (PWA Login, Dashboard, Ticket, Table, VIP Registration, Payment Success) in both dark and light modes.',
+        descriptionHu: 'Elkészültek a teljes wireframe-ek mind a 6 vendég oldali képernyőhöz (PWA Bejelentkezés, Dashboard, Jegy, Asztal, VIP Regisztráció, Sikeres Fizetés) sötét és világos módban.',
+      },
+      {
+        type: 'improvement',
+        category: 'ui',
+        titleEn: 'Monochrome Icon System',
+        titleHu: 'Monokróm Ikon Rendszer',
+        descriptionEn: 'All icons converted to monochrome navy/white palette. No colored icons in the UI for consistent VIP aesthetic.',
+        descriptionHu: 'Minden ikon monokróm navy/fehér palettára konvertálva. Nincsenek színes ikonok a felületen az egységes VIP esztétikáért.',
+      },
+      {
+        type: 'improvement',
+        category: 'ui',
+        titleEn: 'Inter Typography',
+        titleHu: 'Inter Tipográfia',
+        descriptionEn: 'Inter font standardized across all pages with proper weight hierarchy (400 Regular, 500 Medium, 600 SemiBold).',
+        descriptionHu: 'Inter betűtípus szabványosítva minden oldalon megfelelő súly hierarchiával (400 Regular, 500 Medium, 600 SemiBold).',
+      },
+    ],
+  },
+  {
     version: '2.6.0',
     date: '2026-01-09',
     changes: [

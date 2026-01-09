@@ -99,7 +99,7 @@ export default function PWATicketPage() {
               width: 300,
               margin: 2,
               color: {
-                dark: '#1e293b',
+                dark: '#000D38',  // BBJ Events 2026 primary navy
                 light: '#ffffff',
               },
             });

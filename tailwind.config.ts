@@ -22,61 +22,67 @@ const config: Config = {
     },
     extend: {
       fontFamily: {
-        // CEO Gala fonts
+        // BBJ Events 2026 fonts (Inter primary)
         serif: ['var(--font-playfair)', 'Playfair Display', 'Georgia', 'serif'],
         sans: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
-        display: ['var(--font-playfair)', 'Playfair Display', 'Georgia', 'serif'],
+        display: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
-        // CEO Gala - Monochrome palette (based on BBJ CEO Gala official branding)
-        // See docs/DESIGN-GUIDE.md for full specification
+        // BBJ Events 2026 - Navy palette
+        // See docs/ux-design-specification.md for full specification
 
-        // Accent colors - USE SPARINGLY! See docs/DESIGN-GUIDE.md
-        // Teal: primary accent (links, surnames, year badge, CTA)
-        // Gold: secondary accent (awards, special highlights - rarely!)
-        accent: {
-          teal: '#00A0A0',
-          'teal-dark': '#008585',
-          'teal-light': '#33B3B3',
-          gold: '#C4A24D',
-          'gold-dark': '#B8923D',
-          'gold-light': '#D4B86A',
+        // Primary brand colors (navy)
+        primary: {
+          DEFAULT: '#000D38',
+          light: '#0A1A4A',
+          lighter: '#1A2D5C',
+          subtle: '#2A4070',
+          dark: '#000820',
         },
 
-        // Status colors (muted, not vibrant)
+        // Status colors (muted, brand-appropriate)
         status: {
           success: '#059669',  // emerald-600
           warning: '#D97706',  // amber-600
           error: '#DC2626',    // red-600
-          info: '#2563EB',     // blue-600
+          info: '#000D38',     // navy (brand color)
         },
 
-        // Neutral gray palette (Tailwind default extended)
+        // Neutral gray palette (BBJ Events 2026)
         neutral: {
-          50: '#fafafa',
-          100: '#f5f5f5',
-          200: '#e5e5e5',
-          300: '#d4d4d4',
-          400: '#a3a3a3',
-          500: '#737373',
-          600: '#525252',
-          700: '#404040',
-          800: '#262626',
-          900: '#171717',
-          950: '#0a0a0a',
+          50: '#F9FAFB',
+          100: '#F3F4F6',
+          200: '#E5E7EB',
+          300: '#D1D5DB',
+          400: '#9CA3AF',
+          500: '#6B7280',
+          600: '#4B5563',
+          700: '#374151',
+          800: '#1F2937',
+          900: '#111827',
+          950: '#030712',
         },
 
-        // Legacy aliases (for backwards compatibility during migration)
-        // TODO: Migrate all usages to neutral/accent palette, then remove
+        // Legacy aliases (for backwards compatibility)
         gala: {
-          gold: '#C4A24D',
-          'gold-light': '#D4B86A',
-          'gold-dark': '#B8923D',
-          navy: '#1F2937',       // Maps to neutral-800
-          'navy-light': '#374151',
-          charcoal: '#171717',   // Maps to neutral-900
-          cream: '#FAFAFA',      // Maps to neutral-50
+          gold: '#000D38',      // Replaced with navy
+          'gold-light': '#0A1A4A',
+          'gold-dark': '#000820',
+          navy: '#000D38',
+          'navy-light': '#0A1A4A',
+          charcoal: '#000D38',
+          cream: '#F9FAFB',
           'warm-gray': '#6B7280',
+        },
+
+        // Accent (monochrome - navy shades)
+        accent: {
+          DEFAULT: '#000D38',
+          light: '#0A1A4A',
+          dark: '#000820',
+          teal: '#000D38',      // Legacy alias
+          'teal-dark': '#000820',
+          'teal-light': '#0A1A4A',
         },
       },
       boxShadow: {
@@ -104,8 +110,8 @@ const config: Config = {
           '100%': { transform: 'translateY(2px)' },
         },
         'field-focus': {
-          '0%': { boxShadow: '0 0 0 0 rgba(0, 160, 160, 0)' },
-          '100%': { boxShadow: '0 0 0 3px rgba(0, 160, 160, 0.15)' },
+          '0%': { boxShadow: '0 0 0 0 rgba(0, 13, 56, 0)' },
+          '100%': { boxShadow: '0 0 0 3px rgba(0, 13, 56, 0.15)' },
         },
         'fade-in': {
           '0%': { opacity: '0' },

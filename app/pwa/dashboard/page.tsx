@@ -229,13 +229,14 @@ export default function PWADashboardPage() {
   }
 
   const getGuestTypeBadge = (type: string) => {
+    // BBJ Events 2026 - Monochrome navy palette for guest types
     switch (type) {
       case 'vip':
-        return { text: 'VIP Guest', bg: 'rgba(217, 119, 6, 0.15)', color: '#D97706' };
+        return { text: 'VIP Guest', bg: 'rgba(0, 13, 56, 0.15)', color: '#000D38' };
       case 'paid_single':
-        return { text: 'Single Ticket', bg: 'rgba(37, 99, 235, 0.15)', color: '#2563EB' };
+        return { text: 'Single Ticket', bg: 'rgba(10, 26, 74, 0.15)', color: '#0A1A4A' };
       case 'paid_paired':
-        return { text: 'Paired Ticket', bg: 'rgba(147, 51, 234, 0.15)', color: '#9333EA' };
+        return { text: 'Paired Ticket', bg: 'rgba(26, 45, 92, 0.15)', color: '#1A2D5C' };
       case 'applicant':
         return { text: 'Applicant', bg: 'rgba(5, 150, 105, 0.15)', color: '#059669' };
       default:
@@ -438,7 +439,7 @@ export default function PWADashboardPage() {
         <Card
           variant="elevated"
           className="relative overflow-hidden event-info-card"
-          style={{ background: '#1F2937' }}
+          style={{ background: '#000D38' }}
         >
           <div className="flex items-center gap-2 mb-3">
             <CalendarBlank size={20} weight="fill" className="text-white" />

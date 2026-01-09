@@ -4,6 +4,30 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
 
 ---
 
+## v2.7.0 (2026-01-09)
+
+### New Features / Új funkciók
+
+- **BBJ Events 2026 Color Scheme** / **BBJ Events 2026 Színséma**
+  - EN: Complete visual refresh with new navy-based color palette (#000D38 primary). Dark mode and light mode fully redesigned for elegant, VIP event branding. All PWA pages, admin screens, and registration flows updated.
+  - HU: Teljes vizuális frissítés új navy alapú színpalettával (#000D38 elsődleges). Sötét és világos téma újratervezve elegáns, VIP esemény arculathoz. Minden PWA oldal, admin képernyő és regisztrációs folyamat frissítve.
+
+- **UX Design Wireframes** / **UX Design Wireframe-ek**
+  - EN: Created complete Excalidraw wireframes for all 6 guest-facing screens (PWA Login, Dashboard, Ticket, Table, VIP Registration, Payment Success) in both dark and light modes. Exported as portable HTML viewer.
+  - HU: Elkészültek a teljes Excalidraw wireframe-ek mind a 6 vendég oldali képernyőhöz (PWA Bejelentkezés, Dashboard, Jegy, Asztal, VIP Regisztráció, Sikeres Fizetés) sötét és világos módban. Exportálva hordozható HTML megjelenítőként.
+
+### Improvements / Javítások
+
+- **Monochrome Icon System** / **Monokróm Ikon Rendszer**
+  - EN: All icons converted to monochrome navy/white palette. No colored icons in the UI for consistent VIP aesthetic.
+  - HU: Minden ikon monokróm navy/fehér palettára konvertálva. Nincsenek színes ikonok a felületen az egységes VIP esztétikáért.
+
+- **Inter Typography** / **Inter Tipográfia**
+  - EN: Inter font standardized across all pages with proper weight hierarchy (400 Regular, 500 Medium, 600 SemiBold).
+  - HU: Inter betűtípus szabványosítva minden oldalon megfelelő súly hierarchiával (400 Regular, 500 Medium, 600 SemiBold).
+
+---
+
 ## v2.6.0 (2026-01-09)
 
 ### Improvements / Javítások
