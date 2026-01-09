@@ -118,12 +118,13 @@ export const adminGuidesEn: GuideItem[] = [
     answer: `The guest list is the central management interface for all invited and registered guests. Here you can see:
 
 • **Guest data**: Name, email, address, guest type (Invited, Paying Single, Paying Paired)
+• **VIP Reception**: Star icon indicates VIP guests (edit guest to toggle)
 • **Status**: Invited, Registered, Approved, Declined, Pending Approval
-• **Payment status**: Pending, Paid, Failed (for paying guests)
+• **Payment status**: Awaiting Transfer, Paid, Failed, Refunded (for paying guests)
 • **Table assignment**: Which table the guest is seated at
 • **Email sending**: How many magic links you have sent
 
-The list can be filtered by guest type, status, and table assignment. Use the search bar to find guests by name or email.`,
+The list can be filtered by guest type, status, payment status, VIP reception, and table assignment. Use the search bar to find guests by name or email.`,
     keywords: ['guest', 'list', 'overview', 'introduction'],
   },
   {
@@ -191,13 +192,25 @@ Instead of deleting, consider setting the guest to "Declined" status.`,
 • Approved - Approved, ticket issued
 • Declined - Declined
 
+**By payment status**:
+• All Payment Status - All payment statuses
+• Awaiting Transfer - Waiting for bank transfer confirmation
+• Paid - Payment confirmed
+• Failed - Payment failed
+• Refunded - Payment refunded
+
+**By VIP Reception**:
+• All - All guests
+• VIP Only - Only VIP reception guests
+• Non-VIP - Guests not in VIP reception
+
 **By table**:
 • All Tables - All guests
 • Unassigned - No table assigned
 • [Table names] - Guests assigned to specific tables
 
 The **search box** filters by name or email.`,
-    keywords: ['filter', 'search', 'type', 'status'],
+    keywords: ['filter', 'search', 'type', 'status', 'payment', 'vip'],
   },
   {
     id: 'gl-magic-link',
@@ -987,6 +1000,7 @@ Scheduled emails appear on the Emails tab with "Pending" status.`,
 **Filter options**:
 • **Guest Types**: Invited, Paying Single, Paying Paired
 • **Registration Status**: Invited, Registered, Approved, etc.
+• **VIP Reception**: Send only to VIP guests or non-VIP guests
 • **Has Ticket**: Whether they have a ticket
 • **Has Table**: Whether they have a table
 
@@ -997,7 +1011,7 @@ Scheduled emails appear on the Emails tab with "Pending" status.`,
 4. Click the **"Schedule Bulk"** button
 
 The system calculates how many guests will receive the email.`,
-    keywords: ['bulk', 'mass', 'filter', 'batch'],
+    keywords: ['bulk', 'mass', 'filter', 'batch', 'vip'],
   },
   {
     id: 'sched-auto',
@@ -1551,13 +1565,14 @@ export const adminGuidesHu: GuideItem[] = [
     answer: `A vendéglista az összes meghívott és regisztrált vendég központi kezelőfelülete. Itt láthatod:
 
 • **Vendég adatok**: Név, email, cím, vendég típus (Meghívott, Paying Single, Paying Paired)
+• **VIP Fogadás**: Csillag ikon jelzi a VIP vendégeket (szerkesztésnél állítható)
 • **Státusz**: Invited, Registered, Approved, Declined, Pending Approval
-• **Fizetési állapot**: Pending, Paid, Failed (fizető vendégeknél)
+• **Fizetési állapot**: Utalásra vár, Fizetve, Sikertelen, Visszatérítve (fizető vendégeknél)
 • **Asztal kiosztás**: Melyik asztalnál ül a vendég
 • **Email küldés**: Hány magic link-et küldtél már
 
-A lista szűrhető vendég típus, státusz és asztal kiosztás szerint. Használd a keresőt név vagy email alapján.`,
-    keywords: ['vendég', 'lista', 'guest', 'áttekintés', 'overview'],
+A lista szűrhető vendég típus, státusz, fizetési státusz, VIP fogadás és asztal kiosztás szerint. Használd a keresőt név vagy email alapján.`,
+    keywords: ['vendég', 'lista', 'guest', 'áttekintés', 'overview', 'vip'],
   },
   {
     id: 'gl-add',
@@ -1624,13 +1639,25 @@ Törlés helyett érdemes lehet a vendéget "Declined" státuszra állítani.`,
 • Approved - Jóváhagyott, jegy kiküldve
 • Declined - Visszautasított
 
+**Fizetési státusz szerint**:
+• Összes fizetési státusz - Minden fizetési állapot
+• Utalásra vár - Banki utalás jóváhagyására vár
+• Fizetve - Fizetés megerősítve
+• Sikertelen - Fizetés sikertelen
+• Visszatérítve - Fizetés visszatérítve
+
+**VIP Fogadás szerint**:
+• Összes - Minden vendég
+• Csak VIP - Csak VIP fogadásra meghívott vendégek
+• Nem VIP - VIP fogadásra nem meghívott vendégek
+
 **Asztal szerint**:
 • All Tables - Minden vendég
 • Unassigned - Nincs asztala
 • [Asztal nevek] - Adott asztalhoz rendelt vendégek
 
 A **keresőmező** név vagy email alapján szűr.`,
-    keywords: ['szűrés', 'filter', 'keresés', 'search', 'típus', 'státusz'],
+    keywords: ['szűrés', 'filter', 'keresés', 'search', 'típus', 'státusz', 'fizetés', 'vip'],
   },
   {
     id: 'gl-magic-link',
@@ -2420,6 +2447,7 @@ Az ütemezett emailek megjelennek az Emails fülön "Pending" státusszal.`,
 **Szűrési lehetőségek**:
 • **Guest Types**: Invited, Paying Single, Paying Paired
 • **Registration Status**: Invited, Registered, Approved, stb.
+• **VIP Fogadás**: Küldés csak VIP vagy csak nem-VIP vendégeknek
 • **Has Ticket**: Van-e már jegye
 • **Has Table**: Van-e asztala
 
@@ -2430,7 +2458,7 @@ Az ütemezett emailek megjelennek az Emails fülön "Pending" státusszal.`,
 4. Kattints a **"Schedule Bulk"** gombra
 
 A rendszer kiszámolja hány vendégnek megy az email.`,
-    keywords: ['tömeges', 'bulk', 'mass', 'szűrő', 'filter'],
+    keywords: ['tömeges', 'bulk', 'mass', 'szűrő', 'filter', 'vip'],
   },
   {
     id: 'sched-auto',
