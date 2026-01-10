@@ -4,6 +4,30 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
 
 ---
 
+## v2.8.0 (2026-01-10)
+
+### New Features / Új funkciók
+
+- **Floor Plan Export (PNG/PDF)** / **Ültetési térkép exportálás (PNG/PDF)**
+  - EN: Export the floor plan canvas as high-quality PNG image or PDF document. PDF includes header with room name, dimensions, table count, and legend. Access via the download dropdown in Floor Plan view.
+  - HU: Ültetési térkép exportálása magas minőségű PNG képként vagy PDF dokumentumként. A PDF tartalmaz fejlécet terem nevével, méretekkel, asztalszámmal és jelmagyarázattal. Elérhető a letöltés menüből a Floor Plan nézetben.
+
+### Improvements / Javítások
+
+- **Smart Tooltip Positioning** / **Okos Tooltip Pozicionálás**
+  - EN: Floor plan table tooltips now intelligently position themselves to stay within canvas bounds. Tooltips for bottom/right tables appear above/left of cursor instead of being cut off.
+  - HU: Az ültetési térkép asztal tooltipjei most okosan pozicionálják magukat, hogy a canvas határain belül maradjanak. Az alsó/jobb oldali asztalok tooltipjei a kurzor felett/balra jelennek meg, nem vágódnak le.
+
+- **Hoverable Tooltips** / **Görögethető Tooltipek**
+  - EN: Table tooltips now remain visible when hovering over them, allowing scrolling through guest lists on tables with many guests. 300ms delay before hiding.
+  - HU: Az asztal tooltipek most láthatóak maradnak amikor fölöttük van a kurzor, lehetővé téve a vendéglista görgetését sok vendéges asztaloknál. 300ms késleltetés eltűnés előtt.
+
+- **Dashboard Dark Mode Colors** / **Vezérlőpult Sötét Mód Színek**
+  - EN: Fixed dashboard link visibility in dark mode. "Open" buttons and accent colors now properly visible in both light and dark themes.
+  - HU: Javítva a vezérlőpult linkek láthatósága sötét módban. A "Megnyitás" gombok és kiemelő színek most megfelelően láthatóak mindkét témában.
+
+---
+
 ## v2.7.0 (2026-01-09)
 
 ### New Features / Új funkciók

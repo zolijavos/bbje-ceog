@@ -1,6 +1,6 @@
 # E2E Teszt Státusz
 
-**Utolsó frissítés:** 2025-12-17
+**Utolsó frissítés:** 2026-01-10
 **Playwright verzió:** 1.49.1
 **Teszt környezet:** http://localhost:3000
 
@@ -9,9 +9,9 @@
 | Metrika | Érték |
 |---------|-------|
 | **Összes teszt** | 232 |
-| **Sikeres** | 210 |
+| **Sikeres** | 211 |
 | **Kihagyott** | 21 |
-| **Hibás** | 1 |
+| **Hibás** | 0 |
 | **Futási idő** | ~9 perc |
 
 ## Teszt fájlok
@@ -223,5 +223,5 @@ A tesztek egyedi fixture-öket használnak:
 
 ---
 
-*Utolsó frissítés: 2025-12-17*
+*Utolsó frissítés: 2026-01-10*
 *Készítette: Paige (Tech Writer) + Murat (TEA)*

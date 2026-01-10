@@ -138,9 +138,23 @@ VALUES ({TABLE_ID}, {GUEST_ID}, 1, NOW(), NOW());
 2. Megjelenik az ülésrend részletesen
 3. Láthatók az ülőhelyek számozása
 
-### 5.3 Export (ha elérhető)
-1. Kattints: **Export** / **Exportálás**
+### 5.3 Export funkciók
+
+**CSV Export (Grid nézet):**
+1. Kattints: **Export** gombra
 2. CSV fájl letöltődik az ültetési renddel
+
+**PNG/PDF Export (Floor Plan nézet):**
+1. Válts **Floor Plan** nézetre
+2. Kattints a **letöltés ikonra** (dropdown menü)
+3. Válaszd ki a formátumot:
+   - **Download as PNG** - Kép prezentációkhoz
+   - **Download as PDF** - Nyomtatásra kész dokumentum
+4. A fájl automatikusan letöltődik
+
+**Várt eredmény:**
+- PNG: `floor-plan-ballroom-YYYY-MM-DD.png`
+- PDF: `floor-plan-ballroom-YYYY-MM-DD.pdf` (fejléccel, jelmagyarázattal)
 
 ---
 
@@ -246,5 +260,5 @@ BASE_URL=http://localhost:3000 npx playwright test --project=video-journey 03-ad
 
 ---
 
-*Utolsó frissítés: 2025-12-17*
+*Utolsó frissítés: 2026-01-10*
 *Készítette: Paige (Tech Writer) + Murat (TEA)*

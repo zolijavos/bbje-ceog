@@ -467,12 +467,19 @@ Imported guests are added with "Invited" status.`,
 • Move guests between tables
 • Remove guests from tables
 • Statistics: occupancy, assigned/unassigned guests
+• Export as PNG or PDF (Floor Plan view)
 
 **Color codes** (Floor Plan):
 • Green: Has free seats
 • Yellow: Partially occupied
-• Red: Full`,
-    keywords: ['seating', 'table', 'drag', 'drop', 'arrangement'],
+• Red: Full
+
+**Table tooltips**:
+• Hover over a table to see assigned guests
+• Tooltip stays visible when you move cursor over it
+• Scroll to see all guests on large tables
+• Smart positioning: tooltips adjust for edge tables`,
+    keywords: ['seating', 'table', 'drag', 'drop', 'arrangement', 'tooltip'],
   },
   {
     id: 'seat-assign',
@@ -546,18 +553,32 @@ jane@example.com,Table 5
     id: 'seat-export',
     category: 'Seating Arrangement',
     question: 'How do I export the seating arrangement?',
-    answer: `1. Click the **"Export"** button
+    answer: `**CSV Export** (data):
+1. Click the **"Export"** button in Grid view
 2. The CSV file downloads automatically
 
-**File contents**:
+**Floor Plan Export** (visual):
+1. Switch to **Floor Plan view**
+2. Click the **download icon** dropdown
+3. Choose format:
+   • **PNG** - High-quality image for presentations
+   • **PDF** - Print-ready document with header and legend
+
+**CSV File contents**:
 • Table name
 • Guest name
 • Guest email
 • Seat number
 • Guest type
 
-This is useful for printing or sending to the event venue.`,
-    keywords: ['export', 'download', 'csv', 'save'],
+**PDF includes**:
+• Room name and dimensions
+• Table count and capacity summary
+• Visual floor plan
+• Color legend (VIP/Standard/Sponsor)
+
+This is useful for printing, presentations, or sending to the event venue.`,
+    keywords: ['export', 'download', 'csv', 'save', 'png', 'pdf', 'print', 'floor plan'],
   },
 
   // ==========================================
@@ -1914,12 +1935,19 @@ Az importált vendégek "Invited" státusszal kerülnek be.`,
 • Vendégek áthelyezése asztalok között
 • Vendégek eltávolítása asztalokról
 • Statisztikák: foglaltság, kiosztott/kiosztásra váró vendégek
+• Export PNG vagy PDF formátumban (Floor Plan nézet)
 
 **Színkódok** (Floor Plan):
 • 🟢 Zöld: Van szabad hely
 • 🟡 Sárga: Részben foglalt
-• 🔴 Piros: Tele van`,
-    keywords: ['ültetés', 'seating', 'asztal', 'table', 'drag', 'drop'],
+• 🔴 Piros: Tele van
+
+**Asztal tooltipek**:
+• Vidd az egeret az asztal fölé a kiosztott vendégek megtekintéséhez
+• A tooltip látható marad ha fölötte van a kurzor
+• Görgesd végig a vendéglistát nagy asztaloknál
+• Okos pozicionálás: a tooltip igazodik a szélső asztaloknál`,
+    keywords: ['ültetés', 'seating', 'asztal', 'table', 'drag', 'drop', 'tooltip'],
   },
   {
     id: 'seat-assign',
@@ -1993,18 +2021,32 @@ jane@example.com,Table 5
     id: 'seat-export',
     category: 'Seating Arrangement',
     question: 'Hogyan exportálhatom az ültetési rendet?',
-    answer: `1. Kattints az **"Export"** gombra
+    answer: `**CSV Export** (adat):
+1. Kattints az **"Export"** gombra a Grid nézetben
 2. A CSV fájl automatikusan letöltődik
 
-**A fájl tartalma**:
+**Floor Plan Export** (vizuális):
+1. Válts **Floor Plan nézetre**
+2. Kattints a **letöltés ikon** legördülő menüre
+3. Válaszd ki a formátumot:
+   • **PNG** - Magas minőségű kép prezentációkhoz
+   • **PDF** - Nyomtatásra kész dokumentum fejléccel és jelmagyarázattal
+
+**CSV fájl tartalma**:
 • Asztal neve
 • Vendég neve
 • Vendég email
 • Ülőhely szám
 • Vendég típus
 
-Ez hasznos nyomtatáshoz vagy a rendezvény helyszínére küldéshez.`,
-    keywords: ['export', 'letöltés', 'download', 'csv', 'mentés'],
+**PDF tartalma**:
+• Terem neve és méretei
+• Asztalszám és kapacitás összesítő
+• Vizuális ültetési térkép
+• Színes jelmagyarázat (VIP/Standard/Sponsor)
+
+Ez hasznos nyomtatáshoz, prezentációkhoz, vagy a rendezvény helyszínére küldéshez.`,
+    keywords: ['export', 'letöltés', 'download', 'csv', 'mentés', 'png', 'pdf', 'nyomtatás', 'floor plan'],
   },
 
   // ==========================================

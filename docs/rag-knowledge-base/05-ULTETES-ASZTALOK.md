@@ -43,6 +43,16 @@ Admin → Seating (Ültetés) menüpont
 - **Bal oldal**: Asztalok vizuális nézete (drag & drop terület)
 - **Jobb oldal**: Még be nem ültetett vendégek listája
 
+### Nézetek
+1. **Grid nézet**: Kártyás megjelenítés, asztalonként
+2. **Floor Plan nézet**: 2D térkép kerek asztalokkal
+
+### Asztal tooltipek (Floor Plan)
+- Vidd az egeret az asztal fölé → látod a kiosztott vendégeket
+- A tooltip látható marad ha fölötte van a kurzor
+- Görgethető vendéglista nagy asztaloknál
+- Okos pozicionálás: szélső asztaloknál automatikusan igazodik
+
 ### Drag & Drop működés
 1. Fogd meg a vendéget a jobb oldali listából
 2. Húzd az asztalra a bal oldalon
@@ -131,15 +141,28 @@ Nem ajánlott, de ha szükséges:
 ### Ültetési rend export
 Admin → Seating → Export
 
-**Formátumok:**
-- **CSV**: Táblázatkezelőhöz (Excel)
-- **PDF**: Nyomtatáshoz
+**Grid nézetben (CSV):**
+1. Kattints az **"Export"** gombra
+2. CSV automatikusan letöltődik
 
-**Tartalom:**
+**Floor Plan nézetben (vizuális):**
+1. Válts **Floor Plan nézetre**
+2. Kattints a **letöltés ikonra** (dropdown menü)
+3. Válassz formátumot:
+   - **PNG**: Magas minőségű kép prezentációkhoz
+   - **PDF**: Nyomtatásra kész dokumentum fejléccel
+
+**CSV tartalom:**
 - Asztal neve
-- Vendégek listája asztalonként
-- Étkezési igények
-- Megjegyzések
+- Vendég neve és email
+- Ülőhely szám
+- Vendég típus
+
+**PDF tartalom:**
+- Terem neve és méretei
+- Asztalszám és kapacitás összesítő
+- Vizuális térkép az asztalokkal
+- Színes jelmagyarázat (VIP/Standard/Sponsor)
 
 ### Catering export
 Speciális export az étkezési igényekkel:
