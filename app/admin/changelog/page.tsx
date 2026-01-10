@@ -167,41 +167,41 @@ const changelogData: ChangelogEntry[] = [
         type: 'feature',
         category: 'guest',
         titleEn: 'VIP Reception Column',
-        titleHu: 'VIP Fogadas oszlop',
+        titleHu: 'VIP Fogadás Oszlop',
         descriptionEn: 'Added VIP Reception indicator column to guest list. VIP guests are marked with a star icon. Edit guests to toggle VIP status.',
-        descriptionHu: 'VIP Fogadas jelzo oszlop hozzaadva a vendeglistahoz. VIP vendegek csillag ikonnal jelolve. Vendeg szerkesztesekor allithato.',
+        descriptionHu: 'VIP Fogadás jelző oszlop hozzáadva a vendéglistához. VIP vendégek csillag ikonnal jelölve. Vendég szerkesztésekor állítható.',
       },
       {
         type: 'feature',
         category: 'registration',
         titleEn: 'Partner Registration for All Guests',
-        titleHu: 'Partner regisztracio minden vendegnek',
+        titleHu: 'Partner Regisztráció Minden Vendégnek',
         descriptionEn: 'All paying guests can now bring a partner. Previously only paired ticket holders could register partners.',
-        descriptionHu: 'Minden fizetos vendeg hozhat partnert. Korabban csak paros jegyes vendegek regisztralhattakk partnert.',
+        descriptionHu: 'Minden fizető vendég hozhat partnert. Korábban csak páros jegyes vendégek regisztrálhattak partnert.',
       },
       {
         type: 'improvement',
         category: 'export',
         titleEn: 'Complete CSV Export',
-        titleHu: 'Teljes CSV export',
+        titleHu: 'Teljes CSV Export',
         descriptionEn: 'Guest export now includes all fields: billing info, check-in status, payment details, paired guest info, and more.',
-        descriptionHu: 'A vendeg export mar tartalmazza az osszes mezot: szamlazasi adatok, check-in statusz, fizetesi adatok, partner adatok es meg tobb.',
+        descriptionHu: 'A vendég export már tartalmazza az összes mezőt: számlázási adatok, check-in státusz, fizetési adatok, partner adatok és még több.',
       },
       {
         type: 'fix',
         category: 'status',
         titleEn: 'Status Filter Improvements',
-        titleHu: 'Statusz szuro javitasok',
+        titleHu: 'Státusz Szűrő Javítások',
         descriptionEn: 'Fixed status filtering to properly distinguish "Declined" (guest cancelled) from "Rejected" (admin rejected). Hungarian translations corrected.',
-        descriptionHu: 'Javitva a statusz szures, hogy megkulonboztesse a "Lemondta" (vendeg lemondta) es "Elutasitva" (admin elutasitotta) statuszokat.',
+        descriptionHu: 'Javítva a státusz szűrés, hogy megkülönböztesse a "Lemondta" (vendég lemondta) és "Elutasítva" (admin elutasította) státuszokat.',
       },
       {
         type: 'improvement',
         category: 'branding',
         titleEn: 'BBJ Events Branding',
-        titleHu: 'BBJ Events branding',
+        titleHu: 'BBJ Events Branding',
         descriptionEn: 'Updated all email templates and payment references from "CEO Gala" to "BBJ Events".',
-        descriptionHu: 'Frissitve az osszes email sablon es fizetesi hivatkozas "CEO Gala"-rol "BBJ Events"-re.',
+        descriptionHu: 'Frissítve az összes email sablon és fizetési hivatkozás "CEO Gala"-ról "BBJ Events"-re.',
       },
     ],
   },
@@ -213,25 +213,25 @@ const changelogData: ChangelogEntry[] = [
         type: 'feature',
         category: 'audit',
         titleEn: 'Admin Audit Log',
-        titleHu: 'Admin Audit Naplo',
+        titleHu: 'Admin Audit Napló',
         descriptionEn: 'New audit log page tracks all admin actions: guest changes, email sends, payment approvals, and more. Filter by action type, entity, or date.',
-        descriptionHu: 'Uj audit naplo oldal koveti az osszes admin muveletet: vendeg valtoztatasok, email kuldesek, fizetes jovahagyasok es meg tobb.',
+        descriptionHu: 'Új audit napló oldal követi az összes admin műveletet: vendég változtatások, email küldések, fizetés jóváhagyások és még több.',
       },
       {
         type: 'feature',
         category: 'guest',
         titleEn: 'Company & Position Fields',
-        titleHu: 'Ceg & Beosztas mezok',
+        titleHu: 'Cég & Beosztás Mezők',
         descriptionEn: 'Added Company and Position fields to guest edit modal. These are now required fields.',
-        descriptionHu: 'Ceg es Beosztas mezok hozzaadva a vendeg szerkeszto modalhoz. Ezek most kotelezo mezok.',
+        descriptionHu: 'Cég és Beosztás mezők hozzáadva a vendég szerkesztő modalhoz. Ezek most kötelező mezők.',
       },
       {
         type: 'fix',
         category: 'ui',
         titleEn: 'Guest List Refresh Button',
-        titleHu: 'Vendeg lista frissites gomb',
+        titleHu: 'Vendég Lista Frissítés Gomb',
         descriptionEn: 'Added refresh button to guest list for manual data reload without page refresh.',
-        descriptionHu: 'Frissites gomb hozzaadva a vendeglistahoz a kezzi adat ujratolteshez oldal frissites nelkul.',
+        descriptionHu: 'Frissítés gomb hozzáadva a vendéglistához a kézi adat újratöltéshez oldal frissítés nélkül.',
       },
     ],
   },
@@ -243,17 +243,17 @@ const changelogData: ChangelogEntry[] = [
         type: 'feature',
         category: 'pwa',
         titleEn: 'Gala App (PWA) Enhancements',
-        titleHu: 'Gala App (PWA) fejlesztesek',
+        titleHu: 'Gala App (PWA) Fejlesztések',
         descriptionEn: 'Improved offline support, faster loading, and better QR code display. Push notifications ready.',
-        descriptionHu: 'Javitott offline tamogatas, gyorsabb betoltes, es jobb QR kod megjlenites. Push ertesitesek keszen.',
+        descriptionHu: 'Javított offline támogatás, gyorsabb betöltés, és jobb QR kód megjelenítés. Push értesítések készen.',
       },
       {
         type: 'improvement',
         category: 'help',
         titleEn: 'Comprehensive Help System',
-        titleHu: 'Atfogo sugo rendszer',
+        titleHu: 'Átfogó Súgó Rendszer',
         descriptionEn: 'New searchable FAQ with 50+ entries covering all admin features. Available in Hungarian and English.',
-        descriptionHu: 'Uj keresheto GYIK 50+ bejegyzessal, minden admin funkciot lefed. Elerheto magyarul es angolul.',
+        descriptionHu: 'Új kereshető GYIK 50+ bejegyzéssel, minden admin funkciót lefed. Elérhető magyarul és angolul.',
       },
     ],
   },
@@ -265,17 +265,17 @@ const changelogData: ChangelogEntry[] = [
         type: 'feature',
         category: 'email',
         titleEn: 'Email Rate Limiting',
-        titleHu: 'Email korlatozas',
+        titleHu: 'Email Korlátozás',
         descriptionEn: 'Prevents email spam: max 5 emails per type per hour, 20 total per hour per guest.',
-        descriptionHu: 'Megakadalyozza az email spamet: max 5 email tipusonkent orankent, 20 osszes orankent vendegenkent.',
+        descriptionHu: 'Megakadályozza az email spamet: max 5 email típusonként óránként, 20 összes óránként vendégenként.',
       },
       {
         type: 'feature',
         category: 'seating',
         titleEn: 'Drag-and-Drop Seating Map',
-        titleHu: 'Drag-and-drop ultetesi terkep',
+        titleHu: 'Drag-and-Drop Ültetési Térkép',
         descriptionEn: 'Interactive visual seating map with drag-and-drop guest assignment.',
-        descriptionHu: 'Interaktiv vizualis ultetesi terkep drag-and-drop vendeg hozzarendelessel.',
+        descriptionHu: 'Interaktív vizuális ültetési térkép drag-and-drop vendég hozzárendeléssel.',
       },
     ],
   },
@@ -287,17 +287,17 @@ const changelogData: ChangelogEntry[] = [
         type: 'feature',
         category: 'applicant',
         titleEn: 'Applicant Flow',
-        titleHu: 'Jelentkezo flow',
+        titleHu: 'Jelentkező Flow',
         descriptionEn: 'Public application form for non-invited guests. Admin approval workflow with email notifications.',
-        descriptionHu: 'Nyilvanos jelentkezesi urlap nem meghivott vendegeknek. Admin jovahagyasi folyamat email ertesitesekkel.',
+        descriptionHu: 'Nyilvános jelentkezési űrlap nem meghívott vendégeknek. Admin jóváhagyási folyamat email értesítésekkel.',
       },
       {
         type: 'feature',
         category: 'pwa',
         titleEn: 'PWA Guest App Launch',
-        titleHu: 'PWA Gala App indulas',
+        titleHu: 'PWA Gala App Indulás',
         descriptionEn: 'Progressive Web App for guests with offline QR ticket, table info, and profile management.',
-        descriptionHu: 'Progressive Web App vendegeknek offline QR jeggyel, asztal infoval, es profil kezelessel.',
+        descriptionHu: 'Progressive Web App vendégeknek offline QR jeggyel, asztal infóval, és profil kezeléssel.',
       },
     ],
   },
@@ -318,10 +318,10 @@ const typeColors = {
 };
 
 const typeLabels = {
-  feature: { en: 'New Feature', hu: 'Uj funkcio' },
-  fix: { en: 'Bug Fix', hu: 'Hibajavitas' },
-  improvement: { en: 'Improvement', hu: 'Javitas' },
-  breaking: { en: 'Breaking Change', hu: 'Toro valtozas' },
+  feature: { en: 'New Feature', hu: 'Új funkció' },
+  fix: { en: 'Bug Fix', hu: 'Hibajavítás' },
+  improvement: { en: 'Improvement', hu: 'Javítás' },
+  breaking: { en: 'Breaking Change', hu: 'Törő változás' },
 };
 
 const categoryIcons: Record<string, typeof Users> = {
@@ -358,12 +358,12 @@ export default function ChangelogPage() {
   };
 
   const ui = {
-    title: language === 'hu' ? 'Valtozasnaplo' : 'Changelog',
+    title: language === 'hu' ? 'Változásnapló' : 'Changelog',
     subtitle: language === 'hu'
-      ? 'Legfrissebb fejlesztesek es javitasok'
+      ? 'Legfrissebb fejlesztések és javítások'
       : 'Latest updates and improvements',
-    expandAll: language === 'hu' ? 'Osszes kibontasa' : 'Expand All',
-    collapseAll: language === 'hu' ? 'Osszes osszezarasa' : 'Collapse All',
+    expandAll: language === 'hu' ? 'Összes kibontása' : 'Expand All',
+    collapseAll: language === 'hu' ? 'Összes összezárása' : 'Collapse All',
   };
 
   const allExpanded = changelogData.every(entry => expandedVersions.has(entry.version));
@@ -451,7 +451,7 @@ export default function ChangelogPage() {
                     </div>
                   </div>
                   <span className="text-sm text-gray-500 dark:text-gray-400">
-                    {entry.changes.length} {language === 'hu' ? 'valtozas' : 'changes'}
+                    {entry.changes.length} {language === 'hu' ? 'változás' : 'changes'}
                   </span>
                 </button>
 
@@ -502,7 +502,7 @@ export default function ChangelogPage() {
         <div className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
           <p>
             {language === 'hu'
-              ? 'Kerdese van? Keresse az adminisztratort.'
+              ? 'Kérdése van? Keresse az adminisztrátort.'
               : 'Have questions? Contact your administrator.'}
           </p>
         </div>
