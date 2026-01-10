@@ -29,7 +29,7 @@ export default function LanguageToggle() {
   return (
     <button
       onClick={toggleLanguage}
-      className="flex items-center gap-1.5 px-2 py-1.5 rounded-md text-white/70 hover:text-white hover:bg-white/5 transition-colors text-sm font-medium"
+      className="flex items-center gap-1.5 px-2 py-1.5 rounded-md text-white/90 hover:text-white hover:bg-white/5 transition-colors text-sm font-medium"
       title={language === 'hu' ? 'Switch to English' : 'Váltás magyarra'}
     >
       <Globe size={18} weight="duotone" />

@@ -45,7 +45,7 @@ export default function AdminThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-md text-white/70 hover:text-white hover:bg-white/5 transition-colors"
+      className="p-2 rounded-md text-white/90 hover:text-white hover:bg-white/5 transition-colors"
       title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
       aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
     >

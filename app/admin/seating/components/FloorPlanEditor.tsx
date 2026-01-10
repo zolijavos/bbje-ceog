@@ -9,11 +9,14 @@
  *
  * Room dimensions are configurable.
  * Supports zoom and pan for large venues.
+ * Exportable as PNG or PDF.
  */
 
 import { useState, useEffect, useCallback } from 'react';
 import dynamic from 'next/dynamic';
+import { jsPDF } from 'jspdf';
 import { logError } from '@/lib/utils/logger';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 import type { TableData } from '../types';
 
 // Professional SVG Icons
@@ -38,6 +41,26 @@ const Icons = {
   resize: (
     <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
       <path strokeLinecap="square" d="M4 8V4h4M20 8V4h-4M4 16v4h4M20 16v4h-4" />
+    </svg>
+  ),
+  download: (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+    </svg>
+  ),
+  chevronDown: (
+    <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+    </svg>
+  ),
+  image: (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+    </svg>
+  ),
+  pdf: (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
     </svg>
   ),
 };
@@ -87,14 +110,180 @@ export function FloorPlanEditor({
   tables,
   onRefresh,
 }: FloorPlanEditorProps) {
+  const { t } = useLanguage();
+  const [stageInstance, setStageInstance] = useState<any>(null);
   const [showSettings, setShowSettings] = useState(false);
+  const [showExportMenu, setShowExportMenu] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [exportSuccess, setExportSuccess] = useState<string | null>(null);
+
+  // Callback to receive stage instance from canvas
+  const handleStageReady = useCallback((stage: any) => {
+    setStageInstance(stage);
+  }, []);
 
   // Room configuration state
   const [roomConfig, setRoomConfig] = useState<RoomConfig>(DEFAULT_ROOM_CONFIG);
   const [localRoomConfig, setLocalRoomConfig] = useState<RoomConfig>(DEFAULT_ROOM_CONFIG);
+
+  // Close export menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('[data-export-menu]')) {
+        setShowExportMenu(false);
+      }
+    };
+    if (showExportMenu) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [showExportMenu]);
+
+  // Clear export success message after 3 seconds
+  useEffect(() => {
+    if (exportSuccess) {
+      const timer = setTimeout(() => setExportSuccess(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [exportSuccess]);
+
+  // Export floor plan as PNG
+  const exportAsPNG = useCallback(() => {
+    if (!stageInstance) {
+      console.error('Stage not available');
+      setError('Canvas not ready. Please wait and try again.');
+      setShowExportMenu(false);
+      return;
+    }
+    const stage = stageInstance;
+
+    try {
+      // Temporarily reset stage position and scale for full export
+      const oldScale = stage.scaleX();
+      const oldPosition = { x: stage.x(), y: stage.y() };
+
+      stage.scale({ x: 1, y: 1 });
+      stage.position({ x: 0, y: 0 });
+
+      const dataURL = stage.toDataURL({
+        pixelRatio: 2, // High quality
+        mimeType: 'image/png',
+      });
+
+      // Restore original position and scale
+      stage.scale({ x: oldScale, y: oldScale });
+      stage.position(oldPosition);
+
+      // Create download link
+      const link = document.createElement('a');
+      link.download = `floor-plan-${roomConfig.name.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.png`;
+      link.href = dataURL;
+      link.click();
+
+      setExportSuccess(t('floorPlanExported'));
+      setShowExportMenu(false);
+    } catch (err) {
+      logError('Failed to export PNG:', err);
+      setError('Failed to export PNG');
+    }
+  }, [roomConfig.name, t, stageInstance]);
+
+  // Export floor plan as PDF
+  const exportAsPDF = useCallback(() => {
+    if (!stageInstance) {
+      console.error('Stage not available');
+      setError('Canvas not ready. Please wait and try again.');
+      setShowExportMenu(false);
+      return;
+    }
+    const stage = stageInstance;
+
+    try {
+      // Temporarily reset stage position and scale for full export
+      const oldScale = stage.scaleX();
+      const oldPosition = { x: stage.x(), y: stage.y() };
+
+      stage.scale({ x: 1, y: 1 });
+      stage.position({ x: 0, y: 0 });
+
+      const dataURL = stage.toDataURL({
+        pixelRatio: 2,
+        mimeType: 'image/png',
+      });
+
+      // Restore original position and scale
+      stage.scale({ x: oldScale, y: oldScale });
+      stage.position(oldPosition);
+
+      // Create PDF (landscape A4)
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'mm',
+        format: 'a4',
+      });
+
+      // A4 landscape dimensions: 297mm x 210mm
+      const pageWidth = 297;
+      const pageHeight = 210;
+      const margin = 15;
+      const contentWidth = pageWidth - (margin * 2);
+      const contentHeight = pageHeight - (margin * 2) - 30; // Reserve space for header
+
+      // Add header
+      pdf.setFontSize(18);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text(roomConfig.name, margin, margin + 5);
+
+      pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(`${roomConfig.width}m x ${roomConfig.height}m`, margin, margin + 12);
+      pdf.text(new Date().toLocaleDateString(), pageWidth - margin - 30, margin + 5);
+
+      // Add table count
+      const tableCount = tables.length;
+      const totalCapacity = tables.reduce((sum, t) => sum + t.capacity, 0);
+      const totalAssigned = tables.reduce((sum, t) => sum + t.assignments.length, 0);
+      pdf.text(`Tables: ${tableCount} | Capacity: ${totalCapacity} | Assigned: ${totalAssigned}`, margin, margin + 19);
+
+      // Add floor plan image
+      const imgWidth = stage.width();
+      const imgHeight = stage.height();
+      const ratio = Math.min(contentWidth / imgWidth, contentHeight / imgHeight);
+      const scaledWidth = imgWidth * ratio;
+      const scaledHeight = imgHeight * ratio;
+      const imgX = margin + (contentWidth - scaledWidth) / 2;
+      const imgY = margin + 25;
+
+      pdf.addImage(dataURL, 'PNG', imgX, imgY, scaledWidth, scaledHeight);
+
+      // Add legend at bottom
+      const legendY = pageHeight - margin - 5;
+      pdf.setFontSize(8);
+      pdf.setFillColor(184, 134, 11); // VIP gold
+      pdf.rect(margin, legendY - 3, 4, 4, 'F');
+      pdf.text('VIP', margin + 6, legendY);
+
+      pdf.setFillColor(62, 107, 177); // Standard blue
+      pdf.rect(margin + 25, legendY - 3, 4, 4, 'F');
+      pdf.text('Standard', margin + 31, legendY);
+
+      pdf.setFillColor(113, 113, 122); // Sponsor gray
+      pdf.rect(margin + 60, legendY - 3, 4, 4, 'F');
+      pdf.text('Sponsor', margin + 66, legendY);
+
+      // Save PDF
+      pdf.save(`floor-plan-${roomConfig.name.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.pdf`);
+
+      setExportSuccess(t('floorPlanExported'));
+      setShowExportMenu(false);
+    } catch (err) {
+      logError('Failed to export PDF:', err);
+      setError('Failed to export PDF');
+    }
+  }, [roomConfig, tables, t, stageInstance]);
 
   // Load room config from localStorage
   useEffect(() => {
@@ -207,6 +396,13 @@ export function FloorPlanEditor({
         </div>
       )}
 
+      {/* Success Toast */}
+      {exportSuccess && (
+        <div className="bg-emerald-600 text-white px-4 py-3 border-l-4 border-emerald-800 animate-slide-up">
+          <p className="text-sm font-medium">{exportSuccess}</p>
+        </div>
+      )}
+
       {/* Saving indicator */}
       {saving && (
         <div className="bg-accent-50 text-accent-800 px-4 py-2 border-l-4 border-accent-600 flex items-center gap-3 animate-slide-up">
@@ -218,12 +414,41 @@ export function FloorPlanEditor({
       {/* Toolbar */}
       <div className="panel flex items-center justify-between p-4">
         <div className="flex items-center gap-4">
-          <h3 className="font-semibold text-neutral-800">Floor Plan</h3>
+          <h3 className="font-semibold text-neutral-800">{t('floorPlan')}</h3>
           <span className="text-sm text-neutral-500 border-l border-neutral-300 pl-4">
             {roomConfig.name} ({roomConfig.width}m × {roomConfig.height}m)
           </span>
         </div>
         <div className="flex items-center gap-2">
+          {/* Export dropdown */}
+          <div className="relative" data-export-menu>
+            <button
+              onClick={() => setShowExportMenu(!showExportMenu)}
+              className={`icon-btn flex items-center gap-1.5 ${showExportMenu ? 'icon-btn-active' : ''}`}
+              title={t('exportFloorPlan')}
+            >
+              {Icons.download}
+              {Icons.chevronDown}
+            </button>
+            {showExportMenu && (
+              <div className="absolute right-0 top-full mt-1 bg-white border border-neutral-200 rounded-lg shadow-lg py-1 z-50 min-w-[160px] animate-fade-in">
+                <button
+                  onClick={exportAsPNG}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 transition-colors"
+                >
+                  {Icons.image}
+                  {t('exportAsPNG')}
+                </button>
+                <button
+                  onClick={exportAsPDF}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 transition-colors"
+                >
+                  {Icons.pdf}
+                  {t('exportAsPDF')}
+                </button>
+              </div>
+            )}
+          </div>
           <button
             onClick={() => setShowSettings(!showSettings)}
             className={`icon-btn ${showSettings ? 'icon-btn-active' : ''}`}
@@ -328,6 +553,7 @@ export function FloorPlanEditor({
         roomConfig={roomConfig}
         onTableMove={saveTablePosition}
         onTableResize={saveTableCapacity}
+        onStageReady={handleStageReady}
       />
 
       {/* Instructions */}

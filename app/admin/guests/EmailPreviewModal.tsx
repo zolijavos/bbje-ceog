@@ -92,7 +92,7 @@ export default function EmailPreviewModal({
             </h2>
             <button
               onClick={onClose}
-              className="text-white/70 hover:text-white"
+              className="text-white/90 hover:text-white"
               disabled={isSending}
             >
               <X size={24} weight="duotone" />

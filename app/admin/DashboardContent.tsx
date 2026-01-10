@@ -82,7 +82,7 @@ export default function DashboardContent({ userName, userRole }: { userName?: st
             {cardGroups.map((group) => (
               <section key={group.titleKey}>
                 <h2 className="flex items-center gap-2 text-lg font-semibold text-neutral-700 dark:text-neutral-200 mb-4">
-                  <group.GroupIcon size={24} weight="duotone" className="text-accent-teal" />
+                  <group.GroupIcon size={24} weight="duotone" className="text-accent-600 dark:text-accent-400" />
                   {t(group.titleKey)}
                 </h2>
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -108,7 +108,7 @@ export default function DashboardContent({ userName, userRole }: { userName?: st
             {/* Help Quick Links */}
             <section className="mt-8 pt-8 border-t border-neutral-200 dark:border-neutral-700">
               <h2 className="flex items-center gap-2 text-lg font-semibold text-neutral-700 dark:text-neutral-200 mb-4">
-                <Question size={24} weight="duotone" className="text-accent-teal" />
+                <Question size={24} weight="duotone" className="text-accent-600 dark:text-accent-400" />
                 {t('help')}
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -125,7 +125,7 @@ export default function DashboardContent({ userName, userRole }: { userName?: st
                 <HelpLink href="/admin/help#applications" icon={UserPlus} label={language === 'hu' ? 'Jelentkezők' : 'Applicants'} />
                 <Link
                   href="/admin/help"
-                  className="flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-accent-teal/10 text-accent-teal hover:bg-accent-teal/20 transition-colors font-medium text-sm"
+                  className="flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-accent-600/10 dark:bg-accent-400/10 text-accent-600 dark:text-accent-400 hover:bg-accent-600/20 dark:hover:bg-accent-400/20 transition-colors font-medium text-sm"
                 >
                   <Question size={18} weight="fill" />
                   {language === 'hu' ? 'Összes' : 'All Topics'}
@@ -136,7 +136,7 @@ export default function DashboardContent({ userName, userRole }: { userName?: st
             {/* PWA Guest App Promotion */}
             <section className="mt-8 pt-8 border-t border-neutral-200 dark:border-neutral-700">
               <h2 className="flex items-center gap-2 text-lg font-semibold text-neutral-700 dark:text-neutral-200 mb-4">
-                <DeviceMobile size={24} weight="duotone" className="text-accent-teal" />
+                <DeviceMobile size={24} weight="duotone" className="text-accent-600 dark:text-accent-400" />
                 {language === 'hu' ? 'Gala Alkalmazás' : 'Gala App'}
               </h2>
               <PWAPromoCard language={language} />
@@ -186,7 +186,7 @@ function DashboardCard({
       </div>
       {!disabled && (
         <div className="px-6 py-3 bg-neutral-50/50 dark:bg-neutral-700/50 border-t border-neutral-300/10 dark:border-neutral-600/30">
-          <span className="text-sm font-sans text-accent-teal font-medium flex items-center">
+          <span className="text-sm font-sans text-accent-600 dark:text-accent-400 font-medium flex items-center">
             {openLabel}
             <CaretRight size={16} weight="bold" className="ml-1" />
           </span>
@@ -272,7 +272,7 @@ function PWAPromoCard({ language }: { language: string }) {
               {language === 'hu' ? 'PWA Link (megosztható)' : 'PWA Link (shareable)'}
             </label>
             <div className="flex items-center gap-2">
-              <code className="flex-1 text-sm text-accent-teal font-mono truncate">
+              <code className="flex-1 text-sm text-accent-600 dark:text-accent-400 font-mono truncate">
                 {pwaUrl}
               </code>
               <button

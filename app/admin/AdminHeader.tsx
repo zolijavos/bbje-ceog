@@ -119,7 +119,7 @@ export default function AdminHeader() {
             {isAdmin && (
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 rounded-md text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+                className="md:hidden p-2 rounded-md text-white/90 hover:text-white hover:bg-white/10 transition-colors"
                 aria-label="Menu"
               >
                 {mobileMenuOpen ? <X size={24} weight="bold" /> : <List size={24} weight="bold" />}
@@ -172,7 +172,7 @@ export default function AdminHeader() {
                     flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors
                     ${pathname === '/admin'
                       ? 'bg-white/10 text-white'
-                      : 'text-white/70 hover:text-white hover:bg-white/5'
+                      : 'text-white/90 hover:text-white hover:bg-white/5'
                     }
                   `}
                 >
@@ -193,7 +193,7 @@ export default function AdminHeader() {
                       }`
                     : `px-3 py-2 text-sm ${pathname.startsWith('/checkin')
                         ? 'bg-white/10 text-white'
-                        : 'text-white/70 hover:text-white hover:bg-white/5'
+                        : 'text-white/90 hover:text-white hover:bg-white/5'
                       }`
                   }
                 `}
@@ -214,7 +214,7 @@ export default function AdminHeader() {
                       }`
                     : `px-3 py-2 text-sm ${isActive('/admin/checkin-log')
                         ? 'bg-white/10 text-white'
-                        : 'text-white/70 hover:text-white hover:bg-white/5'
+                        : 'text-white/90 hover:text-white hover:bg-white/5'
                       }`
                   }
                 `}
@@ -231,7 +231,7 @@ export default function AdminHeader() {
                     flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors
                     ${isActive('/admin/guests')
                       ? 'bg-white/10 text-white'
-                      : 'text-white/70 hover:text-white hover:bg-white/5'
+                      : 'text-white/90 hover:text-white hover:bg-white/5'
                     }
                   `}
                 >
@@ -248,7 +248,7 @@ export default function AdminHeader() {
                     flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors
                     ${isActive('/admin/applicants')
                       ? 'bg-white/10 text-white'
-                      : 'text-white/70 hover:text-white hover:bg-white/5'
+                      : 'text-white/90 hover:text-white hover:bg-white/5'
                     }
                   `}
                 >
@@ -266,7 +266,7 @@ export default function AdminHeader() {
                       flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium transition-colors
                       ${isDropdownActive(eventPaths)
                         ? 'bg-white/10 text-white'
-                        : 'text-white/70 hover:text-white hover:bg-white/5'
+                        : 'text-white/90 hover:text-white hover:bg-white/5'
                       }
                     `}
                   >
@@ -314,7 +314,7 @@ export default function AdminHeader() {
                       flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium transition-colors
                       ${isDropdownActive(commsPaths)
                         ? 'bg-white/10 text-white'
-                        : 'text-white/70 hover:text-white hover:bg-white/5'
+                        : 'text-white/90 hover:text-white hover:bg-white/5'
                       }
                     `}
                   >
@@ -362,7 +362,7 @@ export default function AdminHeader() {
                       flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium transition-colors
                       ${isDropdownActive(systemPaths)
                         ? 'bg-white/10 text-white'
-                        : 'text-white/70 hover:text-white hover:bg-white/5'
+                        : 'text-white/90 hover:text-white hover:bg-white/5'
                       }
                     `}
                   >
@@ -414,7 +414,7 @@ export default function AdminHeader() {
             {/* Navigation icons */}
             <Link
               href="/"
-              className="p-1.5 rounded-md text-white/60 hover:text-white hover:bg-white/5 transition-colors"
+              className="p-1.5 rounded-md text-white/80 hover:text-white hover:bg-white/5 transition-colors"
               title="Public Site"
             >
               <Globe size={18} weight="duotone" />
@@ -426,7 +426,7 @@ export default function AdminHeader() {
                 p-1.5 rounded-md transition-colors
                 ${isActive('/admin/help')
                   ? 'bg-white/10 text-white'
-                  : 'text-white/60 hover:text-white hover:bg-white/5'
+                  : 'text-white/80 hover:text-white hover:bg-white/5'
                 }
               `}
               title="Help"
@@ -447,7 +447,7 @@ export default function AdminHeader() {
             {/* Logout - icon only */}
             <button
               onClick={() => signOut({ callbackUrl: '/admin/login' })}
-              className="p-1.5 rounded-md text-white/60 hover:text-red-400 hover:bg-white/5 transition-colors ml-1"
+              className="p-1.5 rounded-md text-white/80 hover:text-red-400 hover:bg-white/5 transition-colors ml-1"
               title="Logout"
             >
               <SignOut size={18} weight="regular" />
@@ -536,7 +536,7 @@ export default function AdminHeader() {
                     flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
                     ${active
                       ? 'bg-accent-teal/20 text-accent-teal'
-                      : 'text-white/70 hover:bg-white/5 hover:text-white'
+                      : 'text-white/90 hover:bg-white/5 hover:text-white'
                     }
                   `}
                 >
@@ -559,7 +559,7 @@ export default function AdminHeader() {
                     flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
                     ${active
                       ? 'bg-accent-teal/20 text-accent-teal'
-                      : 'text-white/70 hover:bg-white/5 hover:text-white'
+                      : 'text-white/90 hover:bg-white/5 hover:text-white'
                     }
                   `}
                 >
@@ -582,7 +582,7 @@ export default function AdminHeader() {
                     flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
                     ${active
                       ? 'bg-accent-teal/20 text-accent-teal'
-                      : 'text-white/70 hover:bg-white/5 hover:text-white'
+                      : 'text-white/90 hover:bg-white/5 hover:text-white'
                     }
                   `}
                 >
@@ -599,28 +599,28 @@ export default function AdminHeader() {
             <p className="px-3 py-1 text-xs font-semibold text-white/50 uppercase tracking-wider">Help</p>
             <Link
               href="/admin/help#guest-list"
-              className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-white/70 hover:bg-white/5 hover:text-white transition-colors"
+              className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-white/90 hover:bg-white/5 hover:text-white transition-colors"
             >
               <Users size={18} />
               Guest Management
             </Link>
             <Link
               href="/admin/help#seating"
-              className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-white/70 hover:bg-white/5 hover:text-white transition-colors"
+              className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-white/90 hover:bg-white/5 hover:text-white transition-colors"
             >
               <Chair size={18} />
               Seating & Tables
             </Link>
             <Link
               href="/admin/help#checkin"
-              className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-white/70 hover:bg-white/5 hover:text-white transition-colors"
+              className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-white/90 hover:bg-white/5 hover:text-white transition-colors"
             >
               <QrCode size={18} />
               Check-in
             </Link>
             <Link
               href="/admin/help#email-templates"
-              className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-white/70 hover:bg-white/5 hover:text-white transition-colors"
+              className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-white/90 hover:bg-white/5 hover:text-white transition-colors"
             >
               <EnvelopeSimple size={18} />
               Email & Comms

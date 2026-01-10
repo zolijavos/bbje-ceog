@@ -154,8 +154,16 @@
     @apply font-sans text-base text-neutral-600 dark:text-neutral-300 leading-relaxed;
   }
 
+  /* Links - inherit color by default, specific components style their own links */
   a {
-    @apply text-accent-teal hover:text-accent-teal-dark dark:text-accent-teal-light dark:hover:text-accent-teal transition-colors;
+    @apply transition-colors;
+  }
+
+  /* Content area links (not in navigation) get accent color */
+  main a:not([class*="text-"]),
+  .prose a,
+  article a {
+    @apply text-accent-teal hover:text-accent-teal-dark dark:text-accent-teal-light dark:hover:text-accent-teal;
   }
 }
 

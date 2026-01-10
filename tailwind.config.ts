@@ -75,14 +75,24 @@ const config: Config = {
           'warm-gray': '#6B7280',
         },
 
-        // Accent (monochrome - navy shades)
+        // Accent (blue scale for visibility in both light and dark modes)
         accent: {
-          DEFAULT: '#000D38',
-          light: '#0A1A4A',
-          dark: '#000820',
-          teal: '#000D38',      // Legacy alias
-          'teal-dark': '#000820',
-          'teal-light': '#0A1A4A',
+          DEFAULT: '#3B82F6',   // blue-500
+          50: '#EFF6FF',
+          100: '#DBEAFE',
+          200: '#BFDBFE',
+          300: '#93C5FD',
+          400: '#60A5FA',       // Light mode: visible on dark, dark mode: bright
+          500: '#3B82F6',
+          600: '#2563EB',       // Light mode: primary accent
+          700: '#1D4ED8',
+          800: '#1E40AF',
+          900: '#1E3A8A',
+          light: '#60A5FA',     // Legacy alias (blue-400)
+          dark: '#1D4ED8',      // Legacy alias (blue-700)
+          teal: '#2563EB',      // Legacy alias
+          'teal-dark': '#1D4ED8',
+          'teal-light': '#60A5FA',
         },
       },
       boxShadow: {

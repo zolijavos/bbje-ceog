@@ -12,10 +12,16 @@
  * - Zoom and pan the canvas
  */
 
-import React, { useState, useRef, useEffect, useCallback, useMemo, memo } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo, memo, forwardRef, useImperativeHandle } from 'react';
 import { Stage, Layer, Circle, Text, Rect, Group, Transformer } from 'react-konva';
+import Konva from 'konva';
 import type { TableData, Assignment } from '../types';
 import { Users, User, UsersFour } from '@phosphor-icons/react';
+
+// Export handle type for parent component to call getStage()
+export interface FloorPlanCanvasHandle {
+  getStage: () => Konva.Stage | null;
+}
 
 // Guest type labels
 const GUEST_TYPE_LABELS: Record<string, string> = {
@@ -73,6 +79,7 @@ interface FloorPlanCanvasProps {
   roomConfig: RoomConfig;
   onTableMove: (tableId: number, xMeters: number, yMeters: number) => void;
   onTableResize?: (tableId: number, newCapacity: number) => void;
+  onStageReady?: (stage: Konva.Stage) => void;
 }
 
 // Pixels per meter (scale factor)
@@ -86,13 +93,15 @@ const MAX_TABLE_RADIUS = 80;
 const MIN_CAPACITY = 4;
 const MAX_CAPACITY = 12;
 
-function FloorPlanCanvas({
+const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(({
   tables,
   roomConfig,
   onTableMove,
   onTableResize,
-}: FloorPlanCanvasProps) {
+  onStageReady,
+}, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<Konva.Stage>(null);
   const [stageSize, setStageSize] = useState({ width: 800, height: 600 });
   const [scale, setScale] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -100,9 +109,56 @@ function FloorPlanCanvas({
   const [resizingTableId, setResizingTableId] = useState<number | null>(null);
   const [tableRadii, setTableRadii] = useState<Record<number, number>>({});
 
+  // Expose getStage method to parent component
+  useImperativeHandle(ref, () => ({
+    getStage: () => stageRef.current,
+  }));
+
+  // Notify parent when stage is ready (after first render)
+  useEffect(() => {
+    // Use a small timeout to ensure the Stage component has mounted
+    const timer = setTimeout(() => {
+      if (stageRef.current && onStageReady) {
+        onStageReady(stageRef.current);
+      }
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [onStageReady]);
+
   // Tooltip state
   const [hoveredTable, setHoveredTable] = useState<TableData | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const [isTooltipHovered, setIsTooltipHovered] = useState(false);
+  const tooltipHideTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Clear tooltip hide timeout
+  const clearTooltipTimeout = useCallback(() => {
+    if (tooltipHideTimeout.current) {
+      clearTimeout(tooltipHideTimeout.current);
+      tooltipHideTimeout.current = null;
+    }
+  }, []);
+
+  // Schedule tooltip hide with delay
+  const scheduleTooltipHide = useCallback(() => {
+    clearTooltipTimeout();
+    tooltipHideTimeout.current = setTimeout(() => {
+      if (!isTooltipHovered) {
+        setHoveredTable(null);
+      }
+    }, 300); // 300ms delay before hiding
+  }, [clearTooltipTimeout, isTooltipHovered]);
+
+  // Handle tooltip hover
+  const handleTooltipMouseEnter = useCallback(() => {
+    clearTooltipTimeout();
+    setIsTooltipHovered(true);
+  }, [clearTooltipTimeout]);
+
+  const handleTooltipMouseLeave = useCallback(() => {
+    setIsTooltipHovered(false);
+    setHoveredTable(null);
+  }, []);
 
   // Generate a key based on table data to force re-render when assignments change
   // Uses calculateOccupiedSeats instead of length to detect paired guest seat changes
@@ -250,6 +306,7 @@ function FloorPlanCanvas({
       style={{ height: '500px' }}
     >
       <Stage
+        ref={stageRef}
         width={stageSize.width}
         height={stageSize.height}
         scaleX={scale}
@@ -321,6 +378,7 @@ function FloorPlanCanvas({
                 onClick={() => setSelectedTableId(isSelected ? null : table.id)}
                 onTap={() => setSelectedTableId(isSelected ? null : table.id)}
                 onMouseEnter={(e) => {
+                  clearTooltipTimeout();
                   const stage = e.target.getStage();
                   if (stage) {
                     const container = stage.container();
@@ -347,7 +405,7 @@ function FloorPlanCanvas({
                     const container = stage.container();
                     if (container) container.style.cursor = 'default';
                   }
-                  setHoveredTable(null);
+                  scheduleTooltipHide();
                 }}
               >
                 {/* Selection ring */}
@@ -462,15 +520,35 @@ function FloorPlanCanvas({
         </Layer>
       </Stage>
 
-      {/* Tooltip overlay */}
-      {hoveredTable && (
+      {/* Tooltip overlay - interactive for scrolling, smart positioning */}
+      {hoveredTable && (() => {
+        // Smart positioning: calculate optimal position based on container bounds
+        const tooltipWidth = 320;
+        const tooltipHeight = 350; // Estimated max height
+        const offset = 15;
+
+        // Determine horizontal position
+        const showLeft = tooltipPosition.x > stageSize.width - tooltipWidth - offset;
+        const left = showLeft
+          ? Math.max(10, tooltipPosition.x - tooltipWidth - offset)
+          : Math.min(tooltipPosition.x + offset, stageSize.width - tooltipWidth - 10);
+
+        // Determine vertical position
+        const showAbove = tooltipPosition.y > stageSize.height - tooltipHeight - offset;
+        const top = showAbove
+          ? Math.max(10, tooltipPosition.y - tooltipHeight - offset)
+          : Math.min(tooltipPosition.y + offset, stageSize.height - tooltipHeight - 10);
+
+        return (
         <div
-          className="absolute z-50 pointer-events-none bg-white border border-neutral-300 rounded-lg shadow-xl p-4 min-w-[220px] max-w-[320px]"
+          className="absolute z-50 bg-white border border-neutral-300 rounded-lg shadow-xl p-4 min-w-[220px] max-w-[320px]"
           style={{
-            left: tooltipPosition.x,
-            top: tooltipPosition.y,
-            transform: tooltipPosition.x > stageSize.width - 250 ? 'translateX(-100%)' : 'none',
+            left,
+            top,
+            maxHeight: `${Math.min(tooltipHeight, stageSize.height - 20)}px`,
           }}
+          onMouseEnter={handleTooltipMouseEnter}
+          onMouseLeave={handleTooltipMouseLeave}
         >
           {/* Header */}
           <div className="flex items-center gap-2 mb-3 pb-2 border-b border-neutral-200">
@@ -500,11 +578,11 @@ function FloorPlanCanvas({
             );
           })()}
 
-          {/* Guest list */}
+          {/* Guest list - scrollable */}
           {hoveredTable.assignments.length > 0 ? (
             <div className="space-y-1.5">
               <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide">Guests:</p>
-              <ul className="space-y-1.5 max-h-[160px] overflow-y-auto">
+              <ul className="space-y-1.5 max-h-[250px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent">
                 {hoveredTable.assignments
                   .filter(a => !a.guest.paired_with_id) // Only show main guests, not partners
                   .map((assignment) => {
@@ -542,20 +620,15 @@ function FloorPlanCanvas({
             <p className="text-sm text-neutral-500 italic">No assigned guests</p>
           )}
         </div>
-      )}
+        );
+      })()}
     </div>
   );
-}
+});
+
+// Set display name for debugging
+FloorPlanCanvas.displayName = 'FloorPlanCanvas';
 
 // Memoize component to prevent unnecessary re-renders when parent state changes
 // Only re-render when tables data, roomConfig, or callbacks actually change
-export default memo(FloorPlanCanvas, (prevProps, nextProps) => {
-  // Custom comparison for performance
-  // Return true if props are equal (skip re-render)
-  return (
-    prevProps.tables === nextProps.tables &&
-    prevProps.roomConfig === nextProps.roomConfig &&
-    prevProps.onTableMove === nextProps.onTableMove &&
-    prevProps.onTableResize === nextProps.onTableResize
-  );
-});
+export default memo(FloorPlanCanvas);
