@@ -32,6 +32,44 @@ interface ChangelogEntry {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: '2.8.0',
+    date: '2026-01-10',
+    changes: [
+      {
+        type: 'feature',
+        category: 'seating',
+        titleEn: 'Floor Plan Export (PNG/PDF)',
+        titleHu: 'Ültetési Térkép Exportálás (PNG/PDF)',
+        descriptionEn: 'Download floor plan as high-quality PNG image or print-ready PDF with header, legend, and event info. Perfect for event coordinators and venue staff.',
+        descriptionHu: 'Töltsd le az ültetési térképet magas minőségű PNG képként vagy nyomtatásra kész PDF-ként fejléccel, jelmagyarázattal és esemény infóval.',
+      },
+      {
+        type: 'improvement',
+        category: 'seating',
+        titleEn: 'Smart Tooltip Positioning',
+        titleHu: 'Okos Tooltip Pozicionálás',
+        descriptionEn: 'Table tooltips automatically adjust position to stay on screen. Edge tables show tooltips on the appropriate side.',
+        descriptionHu: 'Az asztal tooltipek automatikusan igazodnak a képernyőn maradáshoz. Szélső asztaloknál megfelelő oldalon jelennek meg.',
+      },
+      {
+        type: 'improvement',
+        category: 'seating',
+        titleEn: 'Hoverable Tooltips',
+        titleHu: 'Görögethető Tooltipek',
+        descriptionEn: 'Tooltips stay visible when hovering over them with 300ms delay. Scrollable guest lists for large tables.',
+        descriptionHu: 'A tooltipek láthatóak maradnak hover közben 300ms késleltetéssel. Görgethető vendéglista nagy asztaloknál.',
+      },
+      {
+        type: 'fix',
+        category: 'ui',
+        titleEn: 'Dashboard Dark Mode Colors',
+        titleHu: 'Vezérlőpult Sötét Mód Színek',
+        descriptionEn: 'Fixed accent color visibility in dark mode on dashboard. Changed from accent-500 to accent-600/400 for better contrast.',
+        descriptionHu: 'Javítva az accent szín láthatósága sötét módban a vezérlőpulton. accent-500 helyett accent-600/400 a jobb kontraszt érdekében.',
+      },
+    ],
+  },
+  {
     version: '2.7.0',
     date: '2026-01-09',
     changes: [
