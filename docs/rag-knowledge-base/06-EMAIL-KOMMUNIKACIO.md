@@ -13,22 +13,28 @@
 - **Mikor**: Sikeres regisztráció és fizetés után
 - **Tartalom**: QR kód, esemény részletek, PWA link
 
-### Jelentkezés visszaigazolás
-- **Cél**: Jelentkezés beérkezésének megerősítése
-- **Mikor**: Jelentkezési űrlap beküldése után
-- **Tartalom**: Köszönet, várható feldolgozási idő
-
-### Jelentkezés elbírálás
-- **Cél**: Döntés közlése a jelentkezővel
-- **Mikor**: Admin jóváhagyás vagy elutasítás után
-- **Tartalom**:
-  - Jóváhagyás: Magic link a regisztrációhoz
-  - Elutasítás: Indoklás
-
 ### Fizetési visszaigazolás
 - **Cél**: Sikeres fizetés megerősítése
 - **Mikor**: Stripe fizetés vagy banki átutalás jóváhagyása után
 - **Tartalom**: Összeg, fizetési mód, következő lépések
+
+### E-10 Emlékeztető (10 nappal az esemény előtt)
+- **Cél**: Emlékeztető az eseményről, részvétel megerősítés kérés
+- **Mikor**: Automatikusan 10 nappal az esemény előtt
+- **Tartalom**: Esemény részletek, lemondási link, megerősítés kérés
+- **Fontos**: Tartalmazza a `/pwa/cancel` linket
+
+### E-7 Emlékeztető (7 nappal az esemény előtt)
+- **Cél**: Utolsó emlékeztető, utolsó esély lemondásra
+- **Mikor**: Automatikusan 7 nappal az esemény előtt
+- **Tartalom**: Esemény infó, **utolsó nap a lemondásra**
+- **Fontos**: Lemondási határidő figyelmeztetés
+
+### No-Show Fizetési Felszólítás
+- **Cél**: Díj bekérése no-show vendégtől
+- **Mikor**: Esemény után (manuálisan vagy automatikusan)
+- **Tartalom**: Számla adatok, fizetési határidő, indoklás
+- **Címzettek**: VIP vendégek, akik nem jelentek meg
 
 ## Email küldés (Admin)
 
@@ -60,14 +66,34 @@ Admin → Email menüpont
 2. Állítsd be a dátumot és időt
 3. A rendszer automatikusan elküldi
 
+## Automatikus Email Ütemező
+
+### Előre beállított ütemezések
+- **E-10**: 10 nappal az esemény előtt (emlékeztető lemondási linkkel)
+- **E-7**: 7 nappal az esemény előtt (utolsó lemondási lehetőség)
+- **No-Show**: Esemény után (fizetési felszólítás)
+
+### Bulk ütemezés
+1. Admin → Email → Scheduled
+2. "Schedule Bulk" gomb
+3. Válassz email típust (E-10, E-7, stb.)
+4. Válassz célcsoportot (VIP, Fizető, Összes)
+5. A rendszer kiszámolja a küldési dátumot az esemény dátuma alapján
+
+### Ütemezett emailek kezelése
+- Függőben lévő emailek láthatók az Email → Scheduled listában
+- Törölhető/módosítható a küldés előtt
+- Státusz: Pending → Sent / Failed
+
 ## Email sablonok
 
 ### Beépített sablonok
-- Magic Link (HU/EN)
+- Magic Link (HU/EN) - Elegáns meghívó design Georgia serif betűtípussal
 - Ticket Delivery (HU/EN)
 - Payment Confirmation (HU/EN)
-- Application Received (HU/EN)
-- Application Approved/Rejected (HU/EN)
+- **E-10 Event Reminder** (HU/EN) - Lemondási linkkel
+- **E-7 Event Reminder** (HU/EN) - Utolsó lemondási lehetőség
+- **No-Show Payment Request** (HU/EN) - Fizetési felszólítás
 
 ### Sablon változók
 A sablonokban használható változók:
@@ -79,6 +105,8 @@ A sablonokban használható változók:
 - `{{qr_code}}` - QR kód (képként)
 - `{{table_name}}` - Asztal neve
 - `{{ticket_type}}` - Jegy típusa
+- `{{cancel_url}}` - Lemondási link (PWA cancel oldal)
+- `{{cancel_deadline}}` - Lemondási határidő dátuma
 
 ## Email napló
 
@@ -160,9 +188,14 @@ Admin → Email → Email Log
 
 ### Esemény előtti emlékeztetők
 Ajánlott ütemezés:
-- 1 hét előtt: Általános emlékeztető
+- **E-10** (10 nap előtt): Emlékeztető lemondási linkkel
+- **E-7** (7 nap előtt): Utolsó lemondási lehetőség figyelmeztetés
 - 1 nap előtt: Részletes infó (helyszín, parkolás)
 - Esemény napján reggel: QR kód emlékeztető
+
+### Esemény utáni emailek
+- **No-Show felszólítás**: Esemény után 1-3 nappal
+- Célcsoport: Regisztrált de nem jelent meg vendégek
 
 ## Email tartalom tippek
 

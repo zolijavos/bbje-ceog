@@ -64,11 +64,26 @@ A check-in rendszer lehetővé teszi a vendégek gyors és biztonságos beenged�
 - Hamis/módosított kód
 - Törölt regisztráció
 - Nem létező vendég
+- **Lemondott regisztráció** (vendég a PWA-ban lemondta)
 
 **Teendő:**
 - Ellenőrizd a vendég adatait manuálisan
 - Keress rá a nevére a rendszerben
+- **Lemondott vendég esetén:** NE engedd be - értesítsd az admint
 - Szükség esetén admin segítség
+
+### NARANCSSÁRGA - Lemondott vendég
+**Mit jelent:** A vendég korábban lemondta a részvételt a PWA-ban.
+
+**Megjelenő információk:**
+- Vendég neve
+- "Lemondott" státusz badge
+- Lemondás dátuma és oka
+
+**Teendő:**
+- **NE engedd be automatikusan**
+- Értesítsd az admint
+- Ha a vendég mégis részt akar venni: admin döntés szükséges
 
 ## Admin Override
 

@@ -7,9 +7,40 @@
 2. Magic link kiküldése emailben
 3. Vendég kattint a linkre
 4. Kitölti a regisztrációs adatokat
-5. GDPR és lemondási feltételek elfogadása
+5. **GDPR hozzájárulás és részvételi kötelezettségvállalás elfogadása**
 6. **Azonnal megkapja a QR jegyet emailben**
 7. Státusz: Jóváhagyott
+
+## Consent és GDPR
+
+### GDPR Hozzájárulás
+A regisztrációs űrlapon kötelező elfogadni az adatkezelési hozzájárulást.
+
+**Kezelt adatok:**
+- Név, email cím
+- Telefonszám, cég, beosztás
+- Étkezési igények/allergiák
+
+**Adatkezelési célok:**
+- Esemény regisztráció és szervezés
+- Kommunikáció a vendéggel
+- Étkezési igények továbbítása catering-nek
+
+**Megőrzési idő:** 12 hónap az esemény után
+
+**Érintetti jogok:**
+- Hozzáférés, helyesbítés, törlés kérése
+- Adatkezelés elleni tiltakozás
+
+### Részvételi Kötelezettségvállalás (VIP vendégek)
+**Fontos szabályok:**
+- Részvétel lemondható az esemény előtt **7 napig** a PWA-ban
+- 7 napon belüli lemondás: személyes kapcsolatfelvétel szükséges
+- **No-show esetén** (nem jelenik meg értesítés nélkül): jegyár-egyenértékű díj számítható fel
+
+**Miért van ez?**
+- Helyfoglalás és catering előre tervezése
+- Más vendégek beengedése lemondás esetén
 
 ### Fizető regisztráció (egyéni jegy)
 1. Admin hozzáadja a vendéget
@@ -27,13 +58,6 @@
 2. Partner adatokat is meg kell adni (név, email)
 3. Fizetés után MINDKETTEN kapnak QR jegyet
 4. Partner automatikusan létrejön a rendszerben
-
-### Jelentkezés (nem meghívott)
-1. Vendég kitölti a jelentkezési űrlapot (`/apply`)
-2. Admin értesítést kap
-3. Admin elbírálja:
-   - **Jóváhagyás**: Magic link küldés → normál regisztráció
-   - **Elutasítás**: Vendég értesítése az okkal
 
 ## Fizetési módok
 

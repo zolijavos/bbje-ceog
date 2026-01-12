@@ -17,7 +17,6 @@ A CEO Gala Event Registration System egy komplett rendezvénykezelő platform, a
 - Vendégek hozzáadása, szerkesztése, törlése
 - CSV import vendéglistából
 - Fizetések jóváhagyása (banki átutalás esetén)
-- Jelentkezők elbírálása
 - Ültetési rend kezelése
 - Email küldés
 - Check-in override (duplikált belépés engedélyezése)
@@ -37,29 +36,22 @@ A CEO Gala Event Registration System egy komplett rendezvénykezelő platform, a
 - Nem kell fizetnie
 
 ### Fizető vendég (Egyéni)
-- Meghívott vagy jelentkező
+- Meghívott vendég
 - 1 fős jegy
 - Fizethet kártyával (Stripe) vagy banki átutalással
 - Fizetés után kapja meg a QR jegyet
 
 ### Fizető vendég (Páros)
-- Meghívott vagy jelentkező
+- Meghívott vendég
 - 2 fős jegy (fő vendég + partner)
 - Partner adatait is meg kell adni regisztrációkor
 - Mindketten külön QR jegyet kapnak
 - Automatikusan ugyanahhoz az asztalhoz kerülnek
 
-### Jelentkező (Applicant)
-- Nem meghívott, önként jelentkezik
-- Admin jóváhagyásra vár
-- Jóváhagyás után magic linket kap
-- Elutasítás esetén értesítést kap
-
 ## Rendszer URL-ek
 
 ### Publikus oldalak
 - `/` - Főoldal
-- `/apply` - Jelentkezési űrlap (nem meghívottaknak)
 - `/register?code=XXX&email=XXX` - Magic link regisztráció
 - `/status?email=XXX` - Regisztrációs státusz ellenőrzés
 - `/help` - Vendég súgó
@@ -70,9 +62,10 @@ A CEO Gala Event Registration System egy komplett rendezvénykezelő platform, a
 - `/admin/tables` - Asztalok kezelése
 - `/admin/seating` - Ültetési rend (drag & drop)
 - `/admin/payments` - Fizetések
-- `/admin/applicants` - Jelentkezők
 - `/admin/email` - Email küldés
 - `/admin/checkin-log` - Check-in napló
+- `/admin/changelog` - Változásnapló (verziónkénti funkciók)
+- `/admin/release-testing` - Manuális tesztelési lépések verziónként
 - `/admin/help` - Admin súgó
 
 ### Check-in
@@ -83,6 +76,7 @@ A CEO Gala Event Registration System egy komplett rendezvénykezelő platform, a
 - `/pwa/dashboard` - Vendég főoldal
 - `/pwa/ticket` - QR jegy
 - `/pwa/profile` - Profil szerkesztés
+- `/pwa/cancel` - Részvétel lemondása (7 nappal az esemény előtt)
 
 ## Bejelentkezés
 

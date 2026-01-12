@@ -199,6 +199,38 @@
 2. Javítsd a hibás mezőket
 3. Próbáld újra
 
+## Lemondás és No-Show
+
+### "A vendég le szeretné mondani a részvételt"
+**7 napnál korábban:**
+1. Irányítsd a vendéget a PWA-ba (`/pwa/cancel`)
+2. Ott kiválaszthatja a lemondás okát
+3. A státusz automatikusan "Lemondott"-ra változik
+
+**7 napon belül:**
+- Online lemondás már nem lehetséges
+- Személyes kapcsolatfelvétel szükséges
+- Admin manuálisan módosíthatja a státuszt
+
+### "Mi történik no-show esetén?"
+**No-show = regisztrált vendég, aki nem jelent meg és nem mondta le**
+
+1. Azonosítás: Regisztrált státuszú + nincs check-in
+2. VIP vendégeknél: díj számítható fel (jegyár-egyenértékű)
+3. Automatikus email küldhető fizetési felszólítással
+
+### "Hol látom a no-show statisztikákat?"
+Admin Dashboard-on látható:
+- Lemondottak száma
+- Potenciális no-show-k (regisztrált de nem check-in)
+- Lemondási okok megoszlása
+
+### "Lemondott vendég mégis be akar lépni"
+1. A QR kód piros kártyát fog adni
+2. NE engedd be automatikusan
+3. Értesítsd az admint
+4. Admin döntése alapján: manuális regisztráció újra vagy elutasítás
+
 ## Gyakran Ismételt Kérdések
 
 ### "Hány vendég fér a rendszerbe?"

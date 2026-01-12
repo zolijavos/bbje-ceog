@@ -6,14 +6,16 @@
 Admin → Guests (Vendégek) menüpont
 
 ### Szűrési lehetőségek
-- **Kategória**: VIP, Fizető egyéni, Fizető páros, Jelentkező
-- **Státusz**: Meghívott, Regisztrált, Jóváhagyott, Elutasított, Jóváhagyásra vár
+- **Kategória**: VIP, Fizető egyéni, Fizető páros
+- **Státusz**: Meghívott, Regisztrált, Jóváhagyott, Visszautasított, Lemondott
+- **Fizetési státusz**: Utalásra vár, Fizetve, Sikertelen, Visszatérítve
 - **Asztal**: Adott asztalhoz rendelt vendégek
+- **VIP fogadás**: Csak VIP / Nem VIP vendégek
 - **Keresés**: Név, email, cég alapján
 
 ### Mit látok a listában?
 - Vendég neve és emailje
-- Típus (VIP/Paying/Applicant)
+- Típus (VIP / Fizető egyéni / Fizető páros)
 - Regisztrációs státusz
 - Fizetési státusz (ha releváns)
 - Asztal (ha van hozzárendelve)
@@ -113,17 +115,32 @@ Egyedi, biztonságos link, amivel a vendég regisztrálhat. 24 óráig érvénye
 - QR jegy kiállítva
 - Beléphet az eseményre
 
-### Pending Approval (Jóváhagyásra vár)
-- Jelentkező típusnál
-- Admin döntésre vár
-
-### Rejected (Elutasított)
-- Jelentkezés elutasítva
-- Vendég értesítést kapott
-
 ### Declined (Visszautasított)
 - Vendég visszamondta a részvételt
 - Magic linken a "Nem tudok részt venni" opciót választotta
+
+### Cancelled (Lemondott)
+- Vendég lemondta a részvételt a PWA-ban (`/pwa/cancel`)
+- Narancssárga badge a vendéglistában
+- Lemondási ok és megjegyzés rögzítve
+- QR jegy érvénytelen (check-in-nél piros kártya)
+- Az esemény előtt 7 napig mondható le online
+
+## No-Show Statisztikák
+
+### Mit jelent a No-Show?
+A vendég regisztrált és jóváhagyott, de nem jelent meg az eseményen (nem történt check-in).
+
+### Admin Dashboard statisztikák
+- **Lemondottak száma**: Hány vendég mondta le a PWA-ban
+- **Potenciális no-show**: Regisztrált de nem jelent meg
+- **Friss lemondások**: Utolsó 7 nap lemondásai
+- **Lemondási okok megoszlása**: Időpont ütközés / Betegség / Egyéb
+
+### No-Show kezelés
+1. Esemény után azonosíthatók a no-show vendégek
+2. Automatikus email küldhető fizetési felszólítással
+3. VIP vendégeknél no-show díj számítható fel
 
 ## Étkezési igények kezelése
 

@@ -58,6 +58,14 @@ Ha a vendéghez asztal van rendelve:
 - Asztal neve/száma
 - Asztaltársak (opcionálisan)
 
+**Megjegyzés:** Az asztal kártya ideiglenesen el lehet rejtve a dashboard-on (feature flag), amíg az ültetési rend nem végleges.
+
+### Lemondás (`/pwa/cancel`)
+- Részvétel lemondása az esemény előtt 7 napig
+- Lemondási ok választás (időpont ütközés, betegség, egyéb)
+- Opcionális megjegyzés mező
+- Megerősítés után a státusz "Lemondott"-ra változik
+
 ## Offline működés
 
 ### Mi működik offline?
@@ -140,7 +148,19 @@ Igen, ha korábban már megnyitottad a jegyet, offline is megjelenik.
 A PWA Dashboard-on látható, ha már hozzá lettél rendelve egy asztalhoz.
 
 ### "Lemondhatom a részvételt a PWA-ban?"
-Jelenleg nem. A lemondáshoz vegye fel a kapcsolatot a szervezőkkel.
+Igen! A `/pwa/cancel` oldalon lemondhatod a regisztrációdat az esemény előtt **7 nappal**.
+
+**Lemondási folyamat:**
+1. Nyisd meg a PWA Dashboard-ot
+2. Kattints a "Részvétel lemondása" gombra
+3. Válaszd ki a lemondás okát:
+   - Időpont ütközés
+   - Betegség
+   - Egyéb (saját indoklás)
+4. Opcionálisan adj meg megjegyzést
+5. Erősítsd meg a lemondást
+
+**Fontos:** 7 napnál rövidebb időn belül már nem mondható le online. No-show esetén díj számítható fel.
 
 ## Push értesítések (opcionális)
 
@@ -176,7 +196,8 @@ Admin → Notifications menüpontból küldhető push értesítés a vendégekne
 A PWA alján megjelenik a fejlesztő logója és neve. Ez nem módosítható.
 
 ### Színek és téma
-A PWA a CEO Gala arculatát követi:
-- Sötét háttér
-- Arany/teal kiemelések
-- Elegáns tipográfia
+A PWA a BBJ Events 2026 arculatát követi:
+- Navy alapú színpaletta (#000D38 elsődleges)
+- Monokróm ikon rendszer (navy/fehér)
+- Inter betűtípus elegáns hierarchiával
+- Sötét és világos mód támogatás

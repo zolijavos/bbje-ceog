@@ -8,9 +8,6 @@ Adminisztrátor felhasználó, aki teljes hozzáféréssel rendelkezik a rendsze
 ### Admin Override
 Admin jogosultsággal végrehajtott művelet, amely felülírja a normál szabályokat (pl. duplikált belépés engedélyezése).
 
-### Applicant
-Jelentkező - olyan személy, aki nem kapott meghívót, de szeretne részt venni az eseményen.
-
 ### Approved
 Jóváhagyott státusz - a vendég regisztrációja és fizetése rendben, beléphet az eseményre.
 
@@ -23,6 +20,12 @@ Számlázási adatok - név, cím, adószám a fizető vendégek számára.
 Tömeges művelet - egyszerre több vendégre alkalmazott akció (pl. email küldés, jóváhagyás).
 
 ## C
+
+### Cancelled
+Lemondott státusz - a vendég a PWA-ban lemondta a részvételt az esemény előtt 7 nappal.
+
+### Cancel URL
+Lemondási link - a `/pwa/cancel` oldal URL-je, ahol a vendégek lemondhatják részvételüket.
 
 ### Check-in
 Bejelentkezés/beléptetés az eseményre QR kód alapján.
@@ -55,6 +58,14 @@ Email napló - az összes elküldött email rögzítése.
 ### Email Template
 Email sablon - előre elkészített email formátum változókkal.
 
+### E-10 / E-7 Reminder
+Automatikus esemény emlékeztető emailek 10 és 7 nappal az esemény előtt, lemondási linkkel.
+
+## F
+
+### Feature Flag
+Funkció kapcsoló - beállítás, amivel bizonyos funkciók ideiglenesen ki/be kapcsolhatók (pl. PWA asztal kártya elrejtése).
+
 ## G
 
 ### GDPR
@@ -64,7 +75,7 @@ General Data Protection Regulation - európai adatvédelmi rendelet.
 Vendég - bárki, aki részt vesz az eseményen.
 
 ### Guest Type
-Vendég típus - VIP, Fizető egyéni, Fizető páros, vagy Jelentkező.
+Vendég típus - VIP, Fizető egyéni, vagy Fizető páros.
 
 ## I
 
@@ -80,6 +91,14 @@ JSON Web Token - biztonságos token formátum a QR kódokhoz.
 
 ### Magic Link
 Egyedi, biztonságos link a regisztrációhoz. 24 óráig érvényes.
+
+## N
+
+### No-Show
+Vendég, aki regisztrált és jóváhagyott volt, de nem jelent meg az eseményen (nem történt check-in). VIP vendégeknél díj számítható fel.
+
+### No-Show Payment Request
+Fizetési felszólítás email no-show vendégeknek az esemény után.
 
 ## O
 
@@ -109,9 +128,6 @@ Fizetési mód - kártyás (Stripe) vagy banki átutalás.
 ### Pending
 Függőben - folyamatban lévő művelet, várakozik valamilyen eseményre.
 
-### Pending Approval
-Jóváhagyásra vár - jelentkező admin döntésre vár.
-
 ### PWA
 Progressive Web App - mobil-optimalizált webalkalmazás a vendégeknek.
 
@@ -133,9 +149,6 @@ Regisztrált státusz - a vendég kitöltötte a regisztrációs űrlapot.
 
 ### Registration
 Regisztráció - a vendég adatainak rögzítése a részvételhez.
-
-### Rejected
-Elutasított státusz - a jelentkezés nem lett jóváhagyva.
 
 ### Resend
 Újraküldés - email vagy jegy ismételt kiküldése.
@@ -202,9 +215,8 @@ Engedélyezési lista - pl. email címek, amelyekről fogadunk leveleket.
 | Invited | Meghívott | Magic link elküldve, vár regisztrációra |
 | Registered | Regisztrált | Űrlap kitöltve, fizetésre vár (ha fizető) |
 | Approved | Jóváhagyott | Minden rendben, QR jegy kiállítva |
-| Pending Approval | Jóváhagyásra vár | Jelentkező, admin döntésre vár |
-| Rejected | Elutasított | Jelentkezés elutasítva |
-| Declined | Visszautasított | Vendég lemondta a részvételt |
+| Declined | Visszautasított | Vendég visszautasította a magic linken |
+| **Cancelled** | **Lemondott** | **Vendég a PWA-ban lemondta (7 napig)** |
 
 ## Fizetési státuszok
 
