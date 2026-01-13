@@ -16,6 +16,12 @@ import { z } from 'zod';
 
 type SlugContext = { params: Promise<{ slug: string }> };
 
+// Sample QR code placeholder (1x1 transparent PNG)
+const SAMPLE_QR_CODE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEwAACxMBAJqcGAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAOCSURBVHic7d1BbhNBGIbh/+/YJBA2LOACwJZDcATO0Cuw5hQcgTVHYMkKbkCyCQTbM94wdBIncWwnVZL39Ug7Hp+Zvzqt1OXo5PLqKsBOHT73BYBddYQGUoehn/sKwI6ch6E/93WAnXQUhvLcFwF20vUeGnZ0PIb+7osAu+gKDRYOQ3/u6wA76br0n/s6wM66QtM+9yWAHXWEhnqHoT/3dYAddIQGe4ehP/d1gF10XHof+gKsxcCwsHcY+nNfB9hJR2jQO+yl7xLsjSs0WDgM/bmvA+ykIzTUO+yl7xLsjSs0WDgM/bmvA+ykIzToHfbSdwn2xhUaLByG/tzXAXbSERrqHfbSdwn2xhUaLByG/tzXAXbSERr0DnvpuwR74woNFg5Df+7rADvpCA31DnvpuwR74woNFg5Df+7rADvpCA16h730XYK9cYUGC4ehP/d1gJ10hIZ6h730XYK9cYUGC4ehP/d1gJ10hAa9w176LsHeuEKDhcPQn/s6wE46QkO9w176LsHeuEKDhcPQn/s6wE46QoPeYS99l2BvXKHBwmHoz30dYCcdoaHeYS99l2BvXKHBwmHoz30dYCcdoUHvsJe+S7A3rtBg4TD0574OsJOO0FDvsJe+S7A3rtBg4TD0574OsJOO0KB32EvfJdgbV2iwcBj6c18H2ElHaKh32EvfJdgbV2iwcBj6c18H2ElHaNA77KXvEuyNKzRYOAz9ua8D7KQjNNQ77KXvEuyNKzRYOAz9ua8D7KQjNOgd9tJ3CfbGFRosHIb+3NcBdtIRGuod9tJ3CfbGFRosHIb+3NcBdtIRGvQOe+m7BHvjCg0WDkN/7usAO+kIDfUOe+m7BHvjCg0WDkN/7usAO+kIDXqHvfRdgr1xhQYLh6E/93WAnXSEhnqHvfRdgr1xhQYLh6E/93WAnXSEBr3DXvouwd64QoOFw9Cf+zrATjpCQ73DXvouwd64QoOFw9Cf+zrATjpCg95hL32XYG9cocHCYejPfR1gJx2hod5hL32XYG9cocHCYejPfR1gJx2hQe+wl75LsDeu0GDhMPTnvg6wk47QUO+wl75LsDeu0GDhMPTnvg6wk47QoHfYS98l2BtXaLBwGPpzXwfYSUdoqHfYS98l2BtXaLBwGPpzXwfYyb+GprzD0J/7OsBOOkJDvcNe+i7B3rhCg4XD0J/7OsBO/gFi/T3fgxgJJAAAAABJRU5ErkJggg==';
+
+// Sample header image URL for preview (using public path)
+const SAMPLE_HEADER_IMAGE = '/images/email-header.jpg';
+
 // Sample data for previewing templates
 const SAMPLE_DATA: Record<string, Record<string, string>> = {
   magic_link: {
@@ -24,9 +30,23 @@ const SAMPLE_DATA: Record<string, Record<string, string>> = {
   },
   ticket_delivery: {
     guestName: 'John Smith',
+    guestTitle: 'Mr.',
     ticketType: 'VIP Ticket',
-    qrCodeDataUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+    qrCodeDataUrl: SAMPLE_QR_CODE,
+    guestQrCode: SAMPLE_QR_CODE,
+    partnerQrCode: SAMPLE_QR_CODE,
     partnerName: 'Jane Smith',
+    hasPartner: 'true',
+    headerImage: SAMPLE_HEADER_IMAGE,
+  },
+  partner_ticket_delivery: {
+    partnerName: 'Jane Smith',
+    partnerTitle: 'Mrs.',
+    mainGuestName: 'John Smith',
+    mainGuestTitle: 'Mr.',
+    partnerQrCode: SAMPLE_QR_CODE,
+    mainGuestQrCode: SAMPLE_QR_CODE,
+    headerImage: SAMPLE_HEADER_IMAGE,
   },
   applicant_approval: {
     guestName: 'John Smith',
@@ -61,7 +81,7 @@ const SAMPLE_DATA: Record<string, Record<string, string>> = {
     eventDate: 'Friday, March 27, 2026',
     eventTime: '6:00 PM',
     eventVenue: 'Budapest, Corinthia Hotel',
-    eventAddress: '1052 Budapest, Apáczai Csere János u. 4.',
+    eventAddress: '1073 Budapest, Erzsébet krt. 43-49.',
     tableName: 'Table A1',
   },
 };

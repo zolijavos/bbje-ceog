@@ -34,6 +34,28 @@ function validateSmtpConfig(): void {
   }
 }
 
+// Header image path for confirmation emails
+const HEADER_IMAGE_PATH = 'public/images/email-header.jpg';
+
+/**
+ * Validate header image exists at startup (warning only, not fatal)
+ */
+function validateHeaderImage(): void {
+  try {
+    const fs = require('fs');
+    const path = require('path');
+    const fullPath = path.join(process.cwd(), HEADER_IMAGE_PATH);
+    if (!fs.existsSync(fullPath)) {
+      logError(`[EMAIL] Warning: Header image not found at ${HEADER_IMAGE_PATH}. Confirmation emails will be sent without header image.`);
+    }
+  } catch {
+    // Ignore errors during validation - will fail gracefully at runtime
+  }
+}
+
+// Validate header image on module load
+validateHeaderImage();
+
 // Maximum time to wait for transporter initialization (10 seconds)
 const TRANSPORTER_INIT_TIMEOUT_MS = 10000;
 
@@ -302,6 +324,7 @@ export async function sendMagicLinkEmail(
       const rendered = await renderTemplate('magic_link', {
         guestName: guest.name,
         magicLinkUrl,
+        baseUrl: appUrl,
       });
       subject = rendered.subject;
       html = rendered.html;
@@ -311,8 +334,9 @@ export async function sendMagicLinkEmail(
       const fallback = getMagicLinkEmailTemplate({
         guestName: guest.name,
         magicLinkUrl,
+        baseUrl: appUrl,
       });
-      subject = 'BBJ Events - Registration Invitation';
+      subject = 'Invitation to the CEO Gala 2026';
       html = fallback.html;
       text = fallback.text;
     }
@@ -408,28 +432,32 @@ function dataUrlToBuffer(dataUrl: string): Buffer {
 }
 
 /**
- * Send e-ticket email with QR code to a guest
+ * Send confirmation email with QR code(s) to main guest
  *
- * 1. Lookup registration with guest data
- * 2. Generate check-in QR code (or use provided)
- * 3. Generate PWA login QR code
- * 4. Compose email with inline QRs using CID attachments
- * 5. Send via Nodemailer with QRs as inline attachments
- * 6. Log delivery attempt
+ * For guests with partners: includes BOTH QR codes (main + partner)
+ * For single guests: includes only their QR code
  *
- * @param registrationId - Registration ID to send ticket for
- * @param qrDataUrl - Optional pre-generated QR code data URL (generates if not provided)
+ * @param registrationId - Main guest's registration ID
+ * @param qrDataUrl - Main guest's QR code data URL
+ * @param partnerQrDataUrl - Partner's QR code data URL (optional)
+ * @param partnerRegistrationId - Partner's registration ID (optional, for fetching partner data)
  */
 export async function sendTicketEmail(
   registrationId: number,
-  qrDataUrl?: string
+  qrDataUrl?: string,
+  partnerQrDataUrl?: string,
+  partnerRegistrationId?: number
 ): Promise<EmailResult> {
   try {
-    // 1. Lookup registration with guest
+    // 1. Lookup registration with guest and partner info
     const registration = await prisma.registration.findUnique({
       where: { id: registrationId },
       include: {
-        guest: true,
+        guest: {
+          include: {
+            paired_with: true, // Get partner guest record if exists
+          },
+        },
       },
     });
 
@@ -450,33 +478,38 @@ export async function sendTicketEmail(
     }
 
     const guestId = registration.guest.id;
-    const pwaAuthCode = registration.guest.pwa_auth_code;
 
     // 2. Generate check-in QR code if not provided
-    let qrCode = qrDataUrl;
-    if (!qrCode) {
+    let guestQrCode = qrDataUrl;
+    if (!guestQrCode) {
       const ticket = await generateTicket(registrationId);
-      qrCode = ticket.qrCodeDataUrl;
+      guestQrCode = ticket.qrCodeDataUrl;
     }
 
-    // 3. Build PWA login URL with code parameter for deep linking
-    const appUrl = process.env.APP_URL || 'https://ceogala.mflevents.space';
-    const pwaLoginUrl = pwaAuthCode
-      ? `${appUrl}/pwa?code=${pwaAuthCode}`
-      : `${appUrl}/pwa`;
+    // 3. Determine if guest has a partner
+    const hasPartner = !!(registration.partner_name || registration.guest.paired_with);
+    let partnerName = registration.partner_name || registration.guest.paired_with?.name || '';
+    let partnerQrCode = partnerQrDataUrl;
 
-    // 4. Compose email (try DB template first, fallback to hardcoded)
-    const ticketTypeLabels: Record<TicketType, string> = {
-      vip_free: 'VIP Ticket',
-      paid_single: 'Single Ticket',
-      paid_paired: 'Paired Ticket',
-    };
-    const ticketTypeLabel = ticketTypeLabels[registration.ticket_type] || registration.ticket_type;
+    // If partner exists but QR not provided, try to generate it
+    if (hasPartner && !partnerQrCode && partnerRegistrationId) {
+      try {
+        const partnerTicket = await generateTicket(partnerRegistrationId);
+        partnerQrCode = partnerTicket.qrCodeDataUrl;
+      } catch {
+        logError(`[TICKET_EMAIL] Failed to generate partner QR for registration ${partnerRegistrationId}`);
+      }
+    }
 
-    // Use CID references for inline images instead of data URLs
-    const qrCodeCid = 'qrcode@ceogala.hu';
-    const qrCodeCidRef = `cid:${qrCodeCid}`;
+    // 4. Prepare CID references for inline images
+    const guestQrCid = 'guestqr@ceogala.hu';
+    const partnerQrCid = 'partnerqr@ceogala.hu';
+    const headerImageCid = 'header@ceogala.hu';
+    const guestQrCidRef = `cid:${guestQrCid}`;
+    const partnerQrCidRef = hasPartner && partnerQrCode ? `cid:${partnerQrCid}` : '';
+    const headerImageCidRef = `cid:${headerImageCid}`;
 
+    // 5. Compose email using new confirmation template
     let subject: string;
     let html: string;
     let text: string;
@@ -484,42 +517,68 @@ export async function sendTicketEmail(
     try {
       const rendered = await renderTemplate('ticket_delivery', {
         guestName: registration.guest.name,
-        ticketType: ticketTypeLabel,
-        qrCodeDataUrl: qrCodeCidRef, // Use CID reference
-        partnerName: registration.partner_name || undefined,
-        pwaAuthCode: pwaAuthCode || undefined,
-        pwaLoginUrl: pwaLoginUrl,
+        guestTitle: registration.guest.title || '',
+        partnerName: partnerName || undefined,
+        guestQrCode: guestQrCidRef,
+        partnerQrCode: partnerQrCidRef || undefined,
+        hasPartner: hasPartner ? 'true' : undefined,
+        headerImage: headerImageCidRef,
       });
       subject = rendered.subject;
       html = rendered.html;
       text = rendered.text;
     } catch {
-      // Fallback to hardcoded template
+      // Fallback to hardcoded template (legacy format)
       const fallback = getTicketDeliveryEmailTemplate({
         guestName: registration.guest.name,
         ticketType: registration.ticket_type,
-        qrCodeDataUrl: qrCodeCidRef, // Use CID reference
-        partnerName: registration.partner_name || undefined,
-        pwaAuthCode: pwaAuthCode || undefined,
-        pwaLoginUrl: pwaLoginUrl,
+        qrCodeDataUrl: guestQrCidRef,
+        partnerName: partnerName || undefined,
       });
       subject = fallback.subject;
       html = fallback.html;
       text = fallback.text;
     }
 
-    // 5. Prepare QR code as CID inline attachment
-    const qrCodeBuffer = dataUrlToBuffer(qrCode);
+    // 6. Prepare images as CID inline attachments
+    const guestQrBuffer = dataUrlToBuffer(guestQrCode);
     const attachments: EmailAttachment[] = [
       {
-        filename: 'qrcode.png',
-        content: qrCodeBuffer,
+        filename: 'guest-qrcode.png',
+        content: guestQrBuffer,
         contentType: 'image/png',
-        cid: qrCodeCid, // Content-ID for inline reference
+        cid: guestQrCid,
       },
     ];
 
-    // 6. Send email with inline attachments
+    // Add partner QR if exists
+    if (hasPartner && partnerQrCode) {
+      const partnerQrBuffer = dataUrlToBuffer(partnerQrCode);
+      attachments.push({
+        filename: 'partner-qrcode.png',
+        content: partnerQrBuffer,
+        contentType: 'image/png',
+        cid: partnerQrCid,
+      });
+    }
+
+    // Add header image
+    try {
+      const fs = await import('fs');
+      const path = await import('path');
+      const headerImagePath = path.join(process.cwd(), HEADER_IMAGE_PATH);
+      const headerImageBuffer = fs.readFileSync(headerImagePath);
+      attachments.push({
+        filename: 'email-header.jpg',
+        content: headerImageBuffer,
+        contentType: 'image/jpeg',
+        cid: headerImageCid,
+      });
+    } catch (headerErr) {
+      logError('[TICKET_EMAIL] Failed to load header image:', headerErr);
+    }
+
+    // 7. Send email with inline attachments
     const result = await sendEmail({
       to: registration.guest.email,
       subject,
@@ -528,7 +587,7 @@ export async function sendTicketEmail(
       attachments,
     });
 
-    // 7. Log delivery
+    // 8. Log delivery
     await logEmailDelivery({
       guestId,
       recipient: registration.guest.email,
@@ -541,9 +600,9 @@ export async function sendTicketEmail(
     });
 
     if (!result.success) {
-      logError(`[TICKET_EMAIL] Failed to send ticket to ${registration.guest.email}: ${result.error}`);
+      logError(`[TICKET_EMAIL] Failed to send confirmation to ${registration.guest.email}: ${result.error}`);
     } else {
-      logInfo(`[TICKET_EMAIL] Ticket sent successfully to ${registration.guest.email}`);
+      logInfo(`[TICKET_EMAIL] Confirmation sent successfully to ${registration.guest.email}`);
     }
 
     return {
@@ -553,7 +612,190 @@ export async function sendTicketEmail(
     };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    logError(`[TICKET_EMAIL] Error sending ticket for registration ${registrationId}:`, errorMessage);
+    logError(`[TICKET_EMAIL] Error sending confirmation for registration ${registrationId}:`, errorMessage);
+
+    return {
+      success: false,
+      guestId: 0,
+      error: errorMessage,
+    };
+  }
+}
+
+/**
+ * Send confirmation email to partner guest
+ *
+ * Includes BOTH QR codes (partner's own + main guest's)
+ * Uses partner_ticket_delivery template with different cancellation instructions
+ *
+ * @param partnerRegistrationId - Partner's registration ID
+ * @param mainGuestRegistrationId - Main guest's registration ID
+ * @param partnerQrDataUrl - Partner's QR code data URL
+ * @param mainGuestQrDataUrl - Main guest's QR code data URL
+ */
+export async function sendPartnerTicketEmail(
+  partnerRegistrationId: number,
+  mainGuestRegistrationId: number,
+  partnerQrDataUrl?: string,
+  mainGuestQrDataUrl?: string
+): Promise<EmailResult> {
+  try {
+    // 1. Lookup partner registration with guest data
+    const partnerRegistration = await prisma.registration.findUnique({
+      where: { id: partnerRegistrationId },
+      include: {
+        guest: true,
+      },
+    });
+
+    // 2. Lookup main guest registration
+    const mainGuestRegistration = await prisma.registration.findUnique({
+      where: { id: mainGuestRegistrationId },
+      include: {
+        guest: true,
+      },
+    });
+
+    if (!partnerRegistration || !partnerRegistration.guest) {
+      return {
+        success: false,
+        guestId: 0,
+        error: 'PARTNER_REGISTRATION_NOT_FOUND',
+      };
+    }
+
+    if (!mainGuestRegistration || !mainGuestRegistration.guest) {
+      return {
+        success: false,
+        guestId: 0,
+        error: 'MAIN_GUEST_REGISTRATION_NOT_FOUND',
+      };
+    }
+
+    const partnerId = partnerRegistration.guest.id;
+
+    // 3. Generate QR codes if not provided
+    let partnerQrCode = partnerQrDataUrl;
+    if (!partnerQrCode) {
+      const ticket = await generateTicket(partnerRegistrationId);
+      partnerQrCode = ticket.qrCodeDataUrl;
+    }
+
+    let mainGuestQrCode = mainGuestQrDataUrl;
+    if (!mainGuestQrCode) {
+      const ticket = await generateTicket(mainGuestRegistrationId);
+      mainGuestQrCode = ticket.qrCodeDataUrl;
+    }
+
+    // 4. Prepare CID references for inline images
+    const partnerQrCid = 'partnerqr@ceogala.hu';
+    const mainGuestQrCid = 'mainguestqr@ceogala.hu';
+    const headerImageCid = 'header@ceogala.hu';
+    const partnerQrCidRef = `cid:${partnerQrCid}`;
+    const mainGuestQrCidRef = `cid:${mainGuestQrCid}`;
+    const headerImageCidRef = `cid:${headerImageCid}`;
+
+    // 5. Compose email using partner confirmation template
+    let subject: string;
+    let html: string;
+    let text: string;
+
+    try {
+      const rendered = await renderTemplate('partner_ticket_delivery', {
+        partnerName: partnerRegistration.guest.name,
+        partnerTitle: partnerRegistration.guest.title || '',
+        mainGuestName: mainGuestRegistration.guest.name,
+        mainGuestTitle: mainGuestRegistration.guest.title || '',
+        partnerQrCode: partnerQrCidRef,
+        mainGuestQrCode: mainGuestQrCidRef,
+        headerImage: headerImageCidRef,
+      });
+      subject = rendered.subject;
+      html = rendered.html;
+      text = rendered.text;
+    } catch {
+      // Fallback to basic template format
+      const fallback = getTicketDeliveryEmailTemplate({
+        guestName: partnerRegistration.guest.name,
+        ticketType: partnerRegistration.ticket_type,
+        qrCodeDataUrl: partnerQrCidRef,
+        partnerName: mainGuestRegistration.guest.name,
+      });
+      subject = fallback.subject;
+      html = fallback.html;
+      text = fallback.text;
+    }
+
+    // 6. Prepare images as CID inline attachments
+    const partnerQrBuffer = dataUrlToBuffer(partnerQrCode);
+    const mainGuestQrBuffer = dataUrlToBuffer(mainGuestQrCode);
+
+    const attachments: EmailAttachment[] = [
+      {
+        filename: 'your-qrcode.png',
+        content: partnerQrBuffer,
+        contentType: 'image/png',
+        cid: partnerQrCid,
+      },
+      {
+        filename: 'partner-qrcode.png',
+        content: mainGuestQrBuffer,
+        contentType: 'image/png',
+        cid: mainGuestQrCid,
+      },
+    ];
+
+    // Add header image
+    try {
+      const fs = await import('fs');
+      const path = await import('path');
+      const headerImagePath = path.join(process.cwd(), HEADER_IMAGE_PATH);
+      const headerImageBuffer = fs.readFileSync(headerImagePath);
+      attachments.push({
+        filename: 'email-header.jpg',
+        content: headerImageBuffer,
+        contentType: 'image/jpeg',
+        cid: headerImageCid,
+      });
+    } catch (headerErr) {
+      logError('[PARTNER_TICKET_EMAIL] Failed to load header image:', headerErr);
+    }
+
+    // 7. Send email with inline attachments
+    const result = await sendEmail({
+      to: partnerRegistration.guest.email,
+      subject,
+      html,
+      text,
+      attachments,
+    });
+
+    // 8. Log delivery
+    await logEmailDelivery({
+      guestId: partnerId,
+      recipient: partnerRegistration.guest.email,
+      subject,
+      success: result.success,
+      errorMessage: result.error,
+      emailType: 'partner_ticket_delivery',
+      htmlBody: html,
+      textBody: text,
+    });
+
+    if (!result.success) {
+      logError(`[PARTNER_TICKET_EMAIL] Failed to send confirmation to ${partnerRegistration.guest.email}: ${result.error}`);
+    } else {
+      logInfo(`[PARTNER_TICKET_EMAIL] Confirmation sent successfully to ${partnerRegistration.guest.email}`);
+    }
+
+    return {
+      success: result.success,
+      guestId: partnerId,
+      error: result.error,
+    };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    logError(`[PARTNER_TICKET_EMAIL] Error sending confirmation for partner registration ${partnerRegistrationId}:`, errorMessage);
 
     return {
       success: false,
@@ -571,8 +813,12 @@ export async function sendTicketEmail(
  * This prevents duplicate emails from Stripe webhook retries and concurrent requests.
  *
  * @param registrationId - Registration ID
+ * @param partnerRegistrationId - Optional partner's registration ID (for paired confirmation)
  */
-export async function generateAndSendTicket(registrationId: number): Promise<EmailResult> {
+export async function generateAndSendTicket(
+  registrationId: number,
+  partnerRegistrationId?: number
+): Promise<EmailResult> {
   try {
     // Atomic idempotency check - try to acquire lock for ticket generation
     // Uses updateMany with WHERE qr_code_hash IS NULL to prevent TOCTOU race condition
@@ -598,11 +844,37 @@ export async function generateAndSendTicket(registrationId: number): Promise<Ema
       };
     }
 
-    // We have the lock - now generate the ticket
-    const ticket = await generateTicket(registrationId);
+    // We have the lock - now generate the main guest's ticket
+    const mainTicket = await generateTicket(registrationId);
 
-    // Send email with the QR code
-    return await sendTicketEmail(registrationId, ticket.qrCodeDataUrl);
+    // If partner registration provided, generate partner's ticket too
+    let partnerQrDataUrl: string | undefined;
+    if (partnerRegistrationId) {
+      try {
+        // Also acquire lock for partner ticket
+        const partnerAcquired = await tryAcquireTicketLock(partnerRegistrationId);
+        if (partnerAcquired) {
+          const partnerTicket = await generateTicket(partnerRegistrationId);
+          partnerQrDataUrl = partnerTicket.qrCodeDataUrl;
+        } else {
+          // Partner ticket might already exist - try to get it
+          const existingPartnerTicket = await getExistingTicket(partnerRegistrationId);
+          if (existingPartnerTicket) {
+            partnerQrDataUrl = existingPartnerTicket.qrCodeDataUrl;
+          }
+        }
+      } catch (error) {
+        logError(`[TICKET] Error generating partner ticket for registration ${partnerRegistrationId}:`, error);
+      }
+    }
+
+    // Send confirmation email to main guest (with both QR codes if partner exists)
+    return await sendTicketEmail(
+      registrationId,
+      mainTicket.qrCodeDataUrl,
+      partnerQrDataUrl,
+      partnerRegistrationId
+    );
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     logError(`[TICKET] Error generating and sending ticket for registration ${registrationId}:`, errorMessage);
@@ -613,6 +885,87 @@ export async function generateAndSendTicket(registrationId: number): Promise<Ema
       error: errorMessage,
     };
   }
+}
+
+/**
+ * Generate and send paired confirmation emails (main guest + partner)
+ *
+ * This function handles the complete flow for paired registrations:
+ * 1. Generates both QR codes
+ * 2. Sends confirmation email to main guest (with both QRs)
+ * 3. Sends confirmation email to partner (with both QRs)
+ *
+ * @param mainRegistrationId - Main guest's registration ID
+ * @param partnerRegistrationId - Partner's registration ID
+ */
+export async function generateAndSendPairedTickets(
+  mainRegistrationId: number,
+  partnerRegistrationId: number
+): Promise<{ mainResult: EmailResult; partnerResult: EmailResult }> {
+  logInfo(`[PAIRED_TICKETS] Starting paired ticket generation for main=${mainRegistrationId}, partner=${partnerRegistrationId}`);
+
+  let mainQrDataUrl: string | undefined;
+  let partnerQrDataUrl: string | undefined;
+
+  // 1. Generate main guest's QR code
+  try {
+    const mainAcquired = await tryAcquireTicketLock(mainRegistrationId);
+    if (mainAcquired) {
+      const mainTicket = await generateTicket(mainRegistrationId);
+      mainQrDataUrl = mainTicket.qrCodeDataUrl;
+    } else {
+      const existing = await getExistingTicket(mainRegistrationId);
+      if (existing) {
+        mainQrDataUrl = existing.qrCodeDataUrl;
+        logInfo(`[PAIRED_TICKETS] Main guest ticket already exists, using existing QR`);
+      }
+    }
+  } catch (error) {
+    logError(`[PAIRED_TICKETS] Error generating main guest ticket:`, error);
+  }
+
+  // 2. Generate partner's QR code
+  try {
+    const partnerAcquired = await tryAcquireTicketLock(partnerRegistrationId);
+    if (partnerAcquired) {
+      const partnerTicket = await generateTicket(partnerRegistrationId);
+      partnerQrDataUrl = partnerTicket.qrCodeDataUrl;
+    } else {
+      const existing = await getExistingTicket(partnerRegistrationId);
+      if (existing) {
+        partnerQrDataUrl = existing.qrCodeDataUrl;
+        logInfo(`[PAIRED_TICKETS] Partner ticket already exists, using existing QR`);
+      }
+    }
+  } catch (error) {
+    logError(`[PAIRED_TICKETS] Error generating partner ticket:`, error);
+  }
+
+  // 3. Send confirmation email to main guest (with both QRs)
+  let mainResult: EmailResult = { success: false, guestId: 0, error: 'QR generation failed' };
+  if (mainQrDataUrl) {
+    mainResult = await sendTicketEmail(
+      mainRegistrationId,
+      mainQrDataUrl,
+      partnerQrDataUrl,
+      partnerRegistrationId
+    );
+  }
+
+  // 4. Send confirmation email to partner (with both QRs)
+  let partnerResult: EmailResult = { success: false, guestId: 0, error: 'QR generation failed' };
+  if (partnerQrDataUrl && mainQrDataUrl) {
+    partnerResult = await sendPartnerTicketEmail(
+      partnerRegistrationId,
+      mainRegistrationId,
+      partnerQrDataUrl,
+      mainQrDataUrl
+    );
+  }
+
+  logInfo(`[PAIRED_TICKETS] Completed: main=${mainResult.success}, partner=${partnerResult.success}`);
+
+  return { mainResult, partnerResult };
 }
 
 /**

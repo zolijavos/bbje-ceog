@@ -14,85 +14,183 @@ export const DEFAULT_TEMPLATES = {
   magic_link: {
     slug: 'magic_link',
     name: 'Magic Link Invitation',
-    subject: 'BBJ Events -Registration Invitation',
-    variables: ['guestName', 'magicLinkUrl'],
+    subject: 'Invitation to the CEO Gala 2026',
+    variables: ['guestName', 'magicLinkUrl', 'baseUrl'],
     html_body: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BBJ Events -Invitation</title>
+  <title>Invitation to the CEO Gala 2026</title>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
-    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-    .card { background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); padding: 40px; }
-    .header { text-align: center; margin-bottom: 30px; }
-    .header h1 { color: #1a1a2e; font-size: 28px; margin: 0; }
-    .content { margin-bottom: 30px; }
-    .greeting { font-size: 18px; margin-bottom: 20px; }
-    .event-info { background-color: #f8f9fa; border-left: 4px solid #4a5568; padding: 15px 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
-    .event-info h3 { margin: 0 0 10px 0; color: #1a1a2e; }
-    .cta-container { text-align: center; margin: 30px 0; }
-    .cta-button { display: inline-block; background-color: #2563eb; color: #ffffff !important; text-decoration: none; padding: 14px 32px; border-radius: 6px; font-size: 16px; font-weight: 600; }
-    .expiry-note { font-size: 14px; color: #6b7280; text-align: center; margin-top: 15px; }
-    .footer { text-align: center; padding-top: 30px; border-top: 1px solid #e5e7eb; margin-top: 30px; }
-    .footer p { font-size: 14px; color: #6b7280; margin: 5px 0; }
-    .link-fallback { font-size: 12px; color: #9ca3af; word-break: break-all; margin-top: 20px; }
+    body { font-family: Arial, Helvetica, sans-serif; line-height: 1.8; color: #333333; margin: 0; padding: 0; background-color: #ffffff; }
+    .container { max-width: 680px; margin: 0 auto; padding: 20px; background-color: #ffffff; }
+    .header-image { width: 100%; max-width: 680px; height: auto; display: block; margin: 0 auto 30px auto; }
+    .content { padding: 0 20px; text-align: center; }
+    p { margin: 0 0 20px 0; font-size: 15px; text-align: center; color: #333333; }
+    .greeting { font-size: 16px; margin-bottom: 25px; }
+    .event-title { font-size: 28px; font-weight: bold; text-align: center; color: #000000; margin: 25px 0; }
+    .details-section { margin: 35px 0; text-align: center; }
+    .details-section p { margin: 5px 0; font-size: 15px; }
+    .cta-container { text-align: center; margin: 35px 0 25px 0; }
+    .cta-button { display: inline-block; background-color: #c41e3a; color: #ffffff !important; text-decoration: none; padding: 12px 35px; font-size: 14px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; }
+    .cta-button:hover { background-color: #a01830; }
+    .signatures { margin: 50px 0 40px 0; text-align: center; }
+    .signatures-row { display: inline-block; width: 100%; }
+    .signature { display: inline-block; width: 45%; text-align: center; vertical-align: top; }
+    .signature-name { font-weight: bold; font-size: 15px; margin-bottom: 3px; color: #000000; }
+    .signature-title { font-size: 14px; color: #333333; }
+    .footer { text-align: center; padding: 20px 0; }
+    .footer p { font-size: 13px; color: #666666; margin: 5px 0; }
+    .footer a { color: #333333; text-decoration: underline; }
+    .link-fallback { font-size: 11px; color: #999999; word-break: break-all; margin-top: 30px; text-align: center; padding: 20px; background-color: #f5f5f5; }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="card">
-      <div class="header">
-        <h1>BBJ Events</h1>
+    <img src="{{baseUrl}}/email-assets/CEO_Gala_2026_invitation_header_709x213.jpg" alt="CEO Gala 2026 - March 27, 2026" class="header-image" />
+
+    <div class="content">
+      <p class="greeting">Dear {{guestName}},</p>
+
+      <p>The Budapest Business Journal is delighted to invite you to the official</p>
+
+      <div class="event-title">CEO Gala 2026</div>
+
+      <p>hosted at Corinthia Hotel Budapest on Friday, March 27, 2026.</p>
+
+      <p>As has now become a tradition of several years, two awards will be presented during the evening: the Expat CEO Award, granted to the most successful and innovative expatriate CEO working in Hungary; and the CEO Community Award, bestowed to a Hungarian executive who has been a role model by being successful in markets while demonstrating exceptional commitment to the community.</p>
+
+      <p>Two professional awards committees will choose the winners minutes before the gala starts from a shortlist of three candidates.</p>
+
+      <p>The Budapest Business Journal and our official event partner, the Hungarian Investment Promotion Agency (HIPA), are delighted to welcome you at our CEO Gala.</p>
+
+      <div class="details-section">
+        <p>Date:</p>
+        <p>Friday, March 27, 2026, 7 p.m.</p>
+        <br>
+        <p>Location:</p>
+        <p>The Grand Ballroom of the Corinthia Hotel Budapest</p>
+        <p>1073 Budapest, Erzsébet krt. 43-49</p>
+        <br>
+        <p>Dress Code:</p>
+        <p>Black tie for men, ball gown or cocktail dress for women</p>
       </div>
-      <div class="content">
-        <p class="greeting">Dear {{guestName}},</p>
-        <p>We are pleased to inform you that you have received an invitation to the BBJ Events gala.</p>
-        <div class="event-info">
-          <h3>Event Details</h3>
-          <p><strong>Event:</strong> BBJ Events 2026</p>
-          <p><strong>Venue:</strong> Budapest</p>
-          <p>You will find more details during registration.</p>
-        </div>
-        <p>Click the button below to start your registration:</p>
-        <div class="cta-container">
-          <a href="{{magicLinkUrl}}" class="cta-button">Start Registration</a>
-        </div>
-        <p class="expiry-note">This link is valid for 24 hours.</p>
+
+      <p>If you wish to reserve your place at the gala now, click the REGISTRATION button below.</p>
+
+      <div class="cta-container">
+        <a href="{{magicLinkUrl}}" class="cta-button">REGISTRATION</a>
       </div>
+
+      <p>Should you wish to reserve an exclusive table for yourself, your guests or your company, our team will be pleased to assist you upon request.</p>
+
+      <p>This personal invitation is dedicated to the addressee and is not transferable.</p>
+
+      <p>Due to the event's popularity and the limited seating, early registration is strongly recommended to ensure participation.</p>
+
+      <p>When you register, please let us know if you have any special dietary requirements.</p>
+
+      <p>We will send you a feedback email after successful registration.</p>
+
+      <p>Please kindly note that your registration will only be finalised after having the official confirmation received.</p>
+
+      <p>For more details about the event and the award, including previous winners, visit our website at <a href="https://www.ceogala.com" style="color: #333333;">www.ceogala.com</a>.</p>
+
+      <p>We remind you that any cancellations or changes to your registration must be made at least ten business days before the gala. Cancellations should be sent to <a href="mailto:event@bbj.hu" style="color: #333333;">event@bbj.hu</a>.</p>
+
+      <p>Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 per person.</p>
+
+      <p>We look forward to meeting you at the gala and celebrating our outstanding CEO Community.</p>
+
+      <div class="signatures">
+        <div class="signatures-row">
+          <div class="signature">
+            <div class="signature-name">Tamas Botka</div>
+            <div class="signature-title">Publisher, BBJ</div>
+          </div>
+          <div class="signature">
+            <div class="signature-name">Balazs Roman</div>
+            <div class="signature-title">CEO, BBJ</div>
+          </div>
+        </div>
+      </div>
+
       <div class="footer">
-        <p>If you have any questions, please contact us.</p>
-        <p>Best regards,<br>BBJ Events Organizing Team</p>
+        <p><u>Business Publishing Services Kft.</u></p>
+        <p>1075 Budapest, Madách Imre út 13–14., Hungary</p>
+        <p>Publisher of Budapest Business Journal</p>
+        <p>Event website: <a href="https://ceogala.com">ceogala.com</a></p>
       </div>
-      <p class="link-fallback">
+
+      <div class="link-fallback">
         If the button doesn't work, copy this link into your browser:<br>
         {{magicLinkUrl}}
-      </p>
+      </div>
     </div>
   </div>
 </body>
 </html>`,
-    text_body: `BBJ Events -Invitation
+    text_body: `Invitation to the CEO Gala 2026
 
 Dear {{guestName}},
 
-We are pleased to inform you that you have received an invitation to the BBJ Events gala.
+The Budapest Business Journal is delighted to invite you to the official
 
-Event details:
-- Event: BBJ Events 2026
-- Venue: Budapest
-- You will find more details during registration.
+CEO Gala 2026
 
-Click the link below to start your registration:
-{{magicLinkUrl}}
+hosted at Corinthia Hotel Budapest on Friday, March 27, 2026.
 
-This link is valid for 24 hours.
+As has now become a tradition of several years, two awards will be presented during the evening: the Expat CEO Award, granted to the most successful and innovative expatriate CEO working in Hungary; and the CEO Community Award, bestowed to a Hungarian executive who has been a role model by being successful in markets while demonstrating exceptional commitment to the community.
 
-If you have any questions, please contact us.
+Two professional awards committees will choose the winners minutes before the gala starts from a shortlist of three candidates.
 
-Best regards,
-BBJ Events Organizing Team`,
+The Budapest Business Journal and our official event partner, the Hungarian Investment Promotion Agency (HIPA), are delighted to welcome you at our CEO Gala.
+
+Date:
+Friday, March 27, 2026, 7 p.m.
+
+Location:
+The Grand Ballroom of the Corinthia Hotel Budapest
+1073 Budapest, Erzsébet krt. 43-49
+
+Dress Code:
+Black tie for men, ball gown or cocktail dress for women
+
+If you wish to reserve your place at the gala now, click the REGISTRATION link below.
+
+>>> REGISTRATION: {{magicLinkUrl}} <<<
+
+Should you wish to reserve an exclusive table for yourself, your guests or your company, our team will be pleased to assist you upon request.
+
+This personal invitation is dedicated to the addressee and is not transferable.
+
+Due to the event's popularity and the limited seating, early registration is strongly recommended to ensure participation.
+
+When you register, please let us know if you have any special dietary requirements.
+
+We will send you a feedback email after successful registration.
+
+Please kindly note that your registration will only be finalised after having the official confirmation received.
+
+For more details about the event and the award, including previous winners, visit our website at www.ceogala.com.
+
+We remind you that any cancellations or changes to your registration must be made at least ten business days before the gala. Cancellations should be sent to event@bbj.hu.
+
+Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 per person.
+
+We look forward to meeting you at the gala and celebrating our outstanding CEO Community.
+
+Tamas Botka                    Balazs Roman
+Publisher, BBJ                 CEO, BBJ
+
+---
+
+Business Publishing Services Kft.
+1075 Budapest, Madách Imre út 13–14., Hungary
+Publisher of Budapest Business Journal
+
+Event website: ceogala.com`,
   },
   applicant_approval: {
     slug: 'applicant_approval',
@@ -564,147 +662,577 @@ If you have any last-minute questions, please contact us.
 Best regards,
 BBJ Events Organizing Team`,
   },
-  ticket_delivery: {
-    slug: 'ticket_delivery',
-    name: 'E-Ticket Delivery',
-    subject: 'BBJ Events 2026 - E-ticket - {{guestName}}',
-    variables: ['guestName', 'ticketType', 'qrCodeDataUrl', 'partnerName', 'pwaAuthCode', 'pwaQrCodeDataUrl'],
+  event_reminder_e10: {
+    slug: 'event_reminder_e10',
+    name: 'Event Reminder (10 days)',
+    subject: 'BBJ Events 2026 - 10 Days to Go!',
+    variables: ['guestName', 'eventDate', 'eventTime', 'eventVenue', 'eventAddress', 'tableName'],
     html_body: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BBJ Events -E-ticket</title>
+  <title>BBJ Events - 10 Days to Go</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
     .card { background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); padding: 40px; }
     .header { text-align: center; margin-bottom: 30px; }
-    .header h1 { color: #1a1a2e; font-size: 28px; margin: 0 0 10px 0; }
-    .header .subtitle { color: #6b7280; font-size: 16px; margin: 0; }
-    .ticket-badge { display: inline-block; background-color: #10b981; color: #ffffff; font-size: 14px; font-weight: 600; padding: 6px 16px; border-radius: 20px; margin-top: 15px; }
+    .header h1 { color: #1a1a2e; font-size: 28px; margin: 0; }
+    .countdown { display: inline-block; background-color: #3b82f6; color: #ffffff; font-size: 16px; font-weight: 600; padding: 10px 24px; border-radius: 20px; margin-top: 15px; }
     .content { margin-bottom: 30px; }
     .greeting { font-size: 18px; margin-bottom: 20px; }
-    .event-info { background-color: #f8f9fa; border-left: 4px solid #2563eb; padding: 15px 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
-    .event-info h3 { margin: 0 0 10px 0; color: #1a1a2e; }
-    .event-info p { margin: 5px 0; }
-    .qr-container { text-align: center; margin: 30px 0; padding: 20px; background-color: #ffffff; border: 2px dashed #e5e7eb; border-radius: 12px; }
-    .qr-container img { max-width: 250px; height: auto; margin-bottom: 15px; }
-    .qr-instructions { font-size: 16px; font-weight: 600; color: #1a1a2e; margin: 10px 0; }
-    .qr-note { font-size: 14px; color: #6b7280; }
-    .guest-info { background-color: #f0fdf4; border: 1px solid #10b981; border-radius: 8px; padding: 15px 20px; margin: 20px 0; }
-    .guest-info h4 { margin: 0 0 10px 0; color: #166534; }
-    .guest-info p { margin: 5px 0; color: #15803d; }
-    .tips { background-color: #fffbeb; border: 1px solid #f59e0b; border-radius: 8px; padding: 15px 20px; margin: 20px 0; }
-    .tips h4 { margin: 0 0 10px 0; color: #b45309; }
-    .tips ul { margin: 0; padding-left: 20px; color: #92400e; }
-    .tips li { margin: 5px 0; }
+    .event-details { background-color: #eff6ff; border: 2px solid #3b82f6; border-radius: 12px; padding: 25px; margin: 20px 0; }
+    .event-details h3 { margin: 0 0 15px 0; color: #1d4ed8; text-align: center; }
+    .event-details p { margin: 10px 0; }
+    .preparation { background-color: #f8f9fa; border-radius: 8px; padding: 20px; margin: 20px 0; }
+    .preparation h4 { margin: 0 0 15px 0; color: #374151; }
+    .preparation ul { margin: 0; padding-left: 20px; }
+    .preparation li { margin: 8px 0; color: #4b5563; }
     .footer { text-align: center; padding-top: 30px; border-top: 1px solid #e5e7eb; margin-top: 30px; }
     .footer p { font-size: 14px; color: #6b7280; margin: 5px 0; }
-    .footer a { color: #2563eb; text-decoration: none; }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="card">
       <div class="header">
-        <h1>BBJ Events 2026</h1>
-        <p class="subtitle">E-ticket / Entry Pass</p>
-        <span class="ticket-badge">{{ticketType}}</span>
+        <h1>BBJ Events</h1>
+        <span class="countdown">10 Days to Go!</span>
       </div>
       <div class="content">
         <p class="greeting">Dear {{guestName}},</p>
-        <p>Thank you for registering! The QR code below is your entry pass to the BBJ Events gala.</p>
-        <div class="event-info">
-          <h3>Event Details</h3>
-          <p><strong>Event:</strong> BBJ Events 2026</p>
-          <p><strong>Date:</strong> Friday, March 27, 2026, 6:00 PM</p>
-          <p><strong>Venue:</strong> Budapest, Corinthia Hotel</p>
+        <p>The countdown is on! BBJ Events 2026 is just <strong>10 days away</strong>.</p>
+        <div class="event-details">
+          <h3>Mark Your Calendar</h3>
+          <p><strong>Date:</strong> {{eventDate}}</p>
+          <p><strong>Time:</strong> {{eventTime}}</p>
+          <p><strong>Venue:</strong> {{eventVenue}}</p>
+          {{#if eventAddress}}<p><strong>Address:</strong> {{eventAddress}}</p>{{/if}}
+          {{#if tableName}}<p><strong>Your Table:</strong> {{tableName}}</p>{{/if}}
         </div>
-        <div class="qr-container">
-          <img src="{{qrCodeDataUrl}}" alt="QR code entry pass" />
-          <p class="qr-instructions">Show this QR code at the entrance!</p>
-          <p class="qr-note">You can display the QR code on your phone screen.</p>
-        </div>
-        <div class="guest-info">
-          <h4>Ticket Details</h4>
-          <p><strong>Name:</strong> {{guestName}}</p>
-          <p><strong>Ticket Type:</strong> {{ticketType}}</p>
-          {{#if partnerName}}<p><strong>Partner:</strong> {{partnerName}}</p>{{/if}}
-        </div>
-        <div class="tips">
-          <h4>Helpful Information</h4>
+        <div class="preparation">
+          <h4>Get Ready</h4>
           <ul>
-            <li>Arrive by 5:30 PM for smooth registration</li>
-            <li>Save the QR code to your phone or print it out</li>
-            <li>Photo ID may be required</li>
+            <li>Download the Gala App for quick access to your ticket</li>
+            <li>Check your wardrobe - dress code is business formal</li>
+            <li>Let us know about any dietary requirements</li>
+            <li>Plan your transportation to the venue</li>
           </ul>
         </div>
-        <div style="background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%); border-radius: 12px; padding: 24px; margin: 24px 0; text-align: center;">
-          <p style="font-size: 14px; font-weight: 600; color: white; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 12px 0;">Download the Gala App</p>
-          <p style="color: rgba(255,255,255,0.9); font-size: 14px; margin: 0 0 16px 0;">Access your ticket, table info, and event updates anytime - even offline!</p>
-          {{#if pwaAuthCode}}
-          <div style="background: rgba(255,255,255,0.95); border-radius: 12px; padding: 20px; margin: 16px 0;">
-            <p style="font-size: 12px; font-weight: 600; color: #0D9488; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 8px 0;">Your Login Code</p>
-            <p style="font-size: 28px; font-weight: 700; color: #1F2937; letter-spacing: 3px; margin: 0; font-family: monospace;">{{pwaAuthCode}}</p>
-            {{#if pwaQrCodeDataUrl}}
-            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #E5E7EB;">
-              <p style="font-size: 12px; color: #6B7280; margin: 0 0 12px 0;">Or scan this QR code:</p>
-              <img src="{{pwaQrCodeDataUrl}}" alt="PWA Login QR Code" style="max-width: 150px; height: auto; border-radius: 8px;" />
-            </div>
-            {{/if}}
-          </div>
-          {{/if}}
-          <a href="https://ceogala.mflevents.space/pwa" style="display: inline-block; background: white; color: #0D9488; font-size: 14px; font-weight: 600; padding: 12px 28px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">Open Gala App</a>
-          <p style="color: rgba(255,255,255,0.7); font-size: 12px; margin: 12px 0 0 0;">Works on iPhone, Android &amp; Desktop</p>
-        </div>
+        <p>We're looking forward to seeing you!</p>
       </div>
       <div class="footer">
-        <p>If you have any questions, please contact us:</p>
-        <p><a href="mailto:info@ceogala.hu">info@ceogala.hu</a></p>
-        <p style="margin-top: 20px;">Best regards,<br>BBJ Events Organizing Team</p>
+        <p>Questions? Contact our support team.</p>
+        <p>Best regards,<br>BBJ Events Organizing Team</p>
       </div>
     </div>
   </div>
 </body>
 </html>`,
-    text_body: `BBJ Events 2026 - E-ticket
+    text_body: `BBJ Events - 10 Days to Go!
 
 Dear {{guestName}},
 
-Thank you for registering! This message contains your entry pass to the BBJ Events gala.
+The countdown is on! BBJ Events 2026 is just 10 DAYS AWAY.
 
 EVENT DETAILS
--------------------
-Event: BBJ Events 2026
-Date: Friday, March 27, 2026, 6:00 PM
-Venue: Budapest, Corinthia Hotel
+-------------
+Date: {{eventDate}}
+Time: {{eventTime}}
+Venue: {{eventVenue}}
+{{#if eventAddress}}Address: {{eventAddress}}{{/if}}
+{{#if tableName}}Your Table: {{tableName}}{{/if}}
 
-TICKET DETAILS
+GET READY
+---------
+- Download the Gala App for quick access to your ticket
+- Check your wardrobe - dress code is business formal
+- Let us know about any dietary requirements
+- Plan your transportation to the venue
+
+We're looking forward to seeing you!
+
+Questions? Contact our support team.
+
+Best regards,
+BBJ Events Organizing Team`,
+  },
+  event_reminder_e7: {
+    slug: 'event_reminder_e7',
+    name: 'Event Reminder (7 days)',
+    subject: 'BBJ Events 2026 - One Week to Go!',
+    variables: ['guestName', 'eventDate', 'eventTime', 'eventVenue', 'eventAddress', 'tableName', 'cancelUrl'],
+    html_body: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BBJ Events - One Week to Go</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .card { background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); padding: 40px; }
+    .header { text-align: center; margin-bottom: 30px; }
+    .header h1 { color: #1a1a2e; font-size: 28px; margin: 0; }
+    .countdown { display: inline-block; background-color: #f59e0b; color: #ffffff; font-size: 16px; font-weight: 600; padding: 10px 24px; border-radius: 20px; margin-top: 15px; }
+    .content { margin-bottom: 30px; }
+    .greeting { font-size: 18px; margin-bottom: 20px; }
+    .event-details { background-color: #fef3c7; border: 2px solid #f59e0b; border-radius: 12px; padding: 25px; margin: 20px 0; }
+    .event-details h3 { margin: 0 0 15px 0; color: #d97706; text-align: center; }
+    .event-details p { margin: 10px 0; }
+    .cancel-notice { background-color: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 15px; margin: 20px 0; }
+    .cancel-notice p { margin: 0; color: #b91c1c; font-size: 14px; }
+    .cancel-notice a { color: #b91c1c; }
+    .footer { text-align: center; padding-top: 30px; border-top: 1px solid #e5e7eb; margin-top: 30px; }
+    .footer p { font-size: 14px; color: #6b7280; margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <h1>BBJ Events</h1>
+        <span class="countdown">One Week to Go!</span>
+      </div>
+      <div class="content">
+        <p class="greeting">Dear {{guestName}},</p>
+        <p>BBJ Events 2026 is now just <strong>one week away</strong>! We hope you're as excited as we are.</p>
+        <div class="event-details">
+          <h3>Event Details</h3>
+          <p><strong>Date:</strong> {{eventDate}}</p>
+          <p><strong>Time:</strong> {{eventTime}}</p>
+          <p><strong>Venue:</strong> {{eventVenue}}</p>
+          {{#if eventAddress}}<p><strong>Address:</strong> {{eventAddress}}</p>{{/if}}
+          {{#if tableName}}<p><strong>Your Table:</strong> {{tableName}}</p>{{/if}}
+        </div>
+        <div class="cancel-notice">
+          <p><strong>Important:</strong> This is the last week to cancel your registration. If your plans have changed, please <a href="{{cancelUrl}}">cancel here</a> before the deadline.</p>
+        </div>
+        <p>We can't wait to welcome you!</p>
+      </div>
+      <div class="footer">
+        <p>Questions? Contact our support team.</p>
+        <p>Best regards,<br>BBJ Events Organizing Team</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`,
+    text_body: `BBJ Events - One Week to Go!
+
+Dear {{guestName}},
+
+BBJ Events 2026 is now just ONE WEEK AWAY! We hope you're as excited as we are.
+
+EVENT DETAILS
+-------------
+Date: {{eventDate}}
+Time: {{eventTime}}
+Venue: {{eventVenue}}
+{{#if eventAddress}}Address: {{eventAddress}}{{/if}}
+{{#if tableName}}Your Table: {{tableName}}{{/if}}
+
+IMPORTANT NOTICE
+----------------
+This is the last week to cancel your registration.
+If your plans have changed, please visit: {{cancelUrl}}
+
+We can't wait to welcome you!
+
+Questions? Contact our support team.
+
+Best regards,
+BBJ Events Organizing Team`,
+  },
+  ticket_delivery: {
+    slug: 'ticket_delivery',
+    name: 'Confirmation Email (Main Guest)',
+    subject: 'Confirmation of Your Attendance at the CEO Gala 2026',
+    variables: ['guestName', 'guestTitle', 'partnerName', 'guestQrCode', 'partnerQrCode', 'hasPartner', 'headerImage'],
+    html_body: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmation of Your Attendance at the CEO Gala 2026</title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; line-height: 1.8; color: #333333; margin: 0; padding: 0; background-color: #ffffff; }
+    .container { max-width: 680px; margin: 0 auto; padding: 20px; background-color: #ffffff; }
+    .header-image { width: 100%; max-width: 680px; height: auto; display: block; margin: 0 auto 30px auto; }
+    .content { padding: 0 20px; }
+    h2 { font-size: 20px; color: #333333; margin: 0 0 25px 0; }
+    p { margin: 0 0 18px 0; font-size: 15px; color: #333333; }
+    .greeting { font-size: 15px; margin-bottom: 20px; }
+    .highlight { font-weight: bold; }
+    .details-section { margin: 30px 0; }
+    .details-section .label { font-weight: bold; margin-bottom: 5px; }
+    .details-section .value { margin: 0 0 15px 0; }
+    .notice { background-color: #f8f8f8; border-left: 4px solid #c41e3a; padding: 15px 20px; margin: 25px 0; }
+    .notice p { margin: 0; font-size: 14px; }
+    .qr-section { margin: 40px 0; text-align: center; }
+    .qr-section h3 { font-size: 16px; color: #333333; margin: 0 0 25px 0; }
+    .qr-codes { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
+    .qr-item { text-align: center; }
+    .qr-item img { width: 180px; height: 180px; border: 1px solid #e0e0e0; border-radius: 8px; }
+    .qr-item .name { font-weight: bold; font-size: 14px; color: #333333; margin-top: 12px; }
+    .signature { margin-top: 40px; }
+    .footer { text-align: center; padding: 20px 0; border-top: 1px solid #e0e0e0; margin-top: 30px; }
+    .footer p { font-size: 13px; color: #666666; margin: 5px 0; }
+    .footer a { color: #333333; text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="{{headerImage}}" alt="CEO Gala 2026" class="header-image" />
+    <h2>Confirmation</h2>
+
+    <div class="content">
+      <p class="greeting">Dear {{guestTitle}} {{guestName}},</p>
+
+      <p><span class="highlight">Thank you for your registration!</span></p>
+
+      {{#if hasPartner}}
+      <p>We are pleased to confirm that you and your partner, <span class="highlight">{{partnerName}}</span>, have successfully registered for our 13th edition of the CEO Gala!</p>
+      {{/if}}
+      {{#if hasPartner}}{{else}}
+      <p>We are pleased to confirm that you have successfully registered for our 13th edition of the CEO Gala!</p>
+      {{/if}}
+
+      <p>The Budapest Business Journal and our esteemed event partner, the Hungarian Investment Promotion Agency (HIPA), are delighted to welcome you officially to this special occasion.</p>
+
+      <p>The event will take place on <span class="highlight">Friday, March 27, 2026</span>; be sure to mark your calendar!</p>
+
+      {{#if hasPartner}}
+      <p>Attached below are your and your partner's personal QR codes, which will grant you access to the gala. Kindly <span class="highlight">download our CEO Gala 2026 application</span> on your mobile device to find your personal QR code and more, or bring a printed copy to the event to ensure smooth entry. Please note that this <span class="highlight">personal invitation</span> is dedicated to the addressee and is <span class="highlight">not transferable</span>.</p>
+      {{/if}}
+      {{#if hasPartner}}{{else}}
+      <p>Attached below is your personal QR code, which will grant you access to the gala. Kindly <span class="highlight">download our CEO Gala 2026 application</span> on your mobile device to find your personal QR code and more, or bring a printed copy to the event to ensure smooth entry. Please note that this <span class="highlight">personal invitation</span> is dedicated to the addressee and is <span class="highlight">not transferable</span>.</p>
+      {{/if}}
+
+      <div class="details-section">
+        <p class="label">Date:</p>
+        <p class="value">Friday, March 27, 2026</p>
+
+        <p class="label">Location:</p>
+        <p class="value">Corinthia Hotel Budapest<br>1073 Budapest, Erzsébet krt. 43-49.</p>
+
+        <p class="label">Dress Code:</p>
+        <p class="value">Black tie for men, ballgown or cocktail dress for women</p>
+      </div>
+
+      <div class="notice">
+        <p>We kindly remind you that any <span class="highlight">cancellations</span> or changes to your registration must be made at least <span class="highlight">10 business days</span> prior to the gala. Cancellations should be sent to <a href="mailto:event@bbj.hu">event@bbj.hu</a>.</p>
+        <p style="margin-top: 10px;">Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a <span class="highlight">no-show fee</span> of HUF 99,000 per person.</p>
+      </div>
+
+      <p>We look forward to meeting you at the gala and celebrating this outstanding CEO Community with you.</p>
+
+      <p class="signature">The BBJ CEO Gala Team</p>
+
+      <div class="qr-section">
+        <h3>Your QR code(s) to access the gala</h3>
+        <div class="qr-codes">
+          <div class="qr-item">
+            <img src="{{guestQrCode}}" alt="Your QR Code" />
+            <p class="name">{{guestName}}</p>
+          </div>
+          {{#if hasPartner}}
+          <div class="qr-item">
+            <img src="{{partnerQrCode}}" alt="Partner QR Code" />
+            <p class="name">{{partnerName}}</p>
+          </div>
+          {{/if}}
+        </div>
+      </div>
+
+      <div class="footer">
+        <p><u>Business Publishing Services Kft.</u></p>
+        <p>1075 Budapest, Madách Imre út 13-14., Hungary</p>
+        <p>Publisher of Budapest Business Journal</p>
+        <p>Event website: <a href="https://ceogala.com">ceogala.com</a></p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`,
+    text_body: `Confirmation of Your Attendance at the CEO Gala 2026
+
+Dear {{guestTitle}} {{guestName}},
+
+Thank you for your registration!
+
+{{#if hasPartner}}We are pleased to confirm that you and your partner, {{partnerName}}, have successfully registered for our 13th edition of the CEO Gala!{{/if}}
+{{#if hasPartner}}{{else}}We are pleased to confirm that you have successfully registered for our 13th edition of the CEO Gala!{{/if}}
+
+The Budapest Business Journal and our esteemed event partner, the Hungarian Investment Promotion Agency (HIPA), are delighted to welcome you officially to this special occasion.
+
+The event will take place on Friday, March 27, 2026; be sure to mark your calendar!
+
+{{#if hasPartner}}Attached below are your and your partner's personal QR codes, which will grant you access to the gala.{{/if}}
+{{#if hasPartner}}{{else}}Attached below is your personal QR code, which will grant you access to the gala.{{/if}}
+
+Kindly download our CEO Gala 2026 application on your mobile device to find your personal QR code and more, or bring a printed copy to the event to ensure smooth entry.
+
+Please note that this personal invitation is dedicated to the addressee and is not transferable.
+
+Date:
+Friday, March 27, 2026
+
+Location:
+Corinthia Hotel Budapest
+1073 Budapest, Erzsébet krt. 43-49.
+
+Dress Code:
+Black tie for men, ballgown or cocktail dress for women
+
+We kindly remind you that any cancellations or changes to your registration must be made at least 10 business days prior to the gala. Cancellations should be sent to event@bbj.hu.
+
+Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 per person.
+
+We look forward to meeting you at the gala and celebrating this outstanding CEO Community with you.
+
+The BBJ CEO Gala Team
+
+---
+
+Business Publishing Services Kft.
+1075 Budapest, Madách Imre út 13-14., Hungary
+Publisher of Budapest Business Journal
+Event website: ceogala.com`,
+  },
+  partner_ticket_delivery: {
+    slug: 'partner_ticket_delivery',
+    name: 'Confirmation Email (Partner Guest)',
+    subject: 'Confirmation of Your Attendance at the CEO Gala 2026',
+    variables: ['partnerName', 'partnerTitle', 'mainGuestName', 'mainGuestTitle', 'partnerQrCode', 'mainGuestQrCode', 'headerImage'],
+    html_body: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmation of Your Attendance at the CEO Gala 2026</title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; line-height: 1.8; color: #333333; margin: 0; padding: 0; background-color: #ffffff; }
+    .container { max-width: 680px; margin: 0 auto; padding: 20px; background-color: #ffffff; }
+    .header-image { width: 100%; max-width: 680px; height: auto; display: block; margin: 0 auto 30px auto; }
+    .content { padding: 0 20px; }
+    h2 { font-size: 20px; color: #333333; margin: 0 0 25px 0; }
+    p { margin: 0 0 18px 0; font-size: 15px; color: #333333; }
+    .greeting { font-size: 15px; margin-bottom: 20px; }
+    .highlight { font-weight: bold; }
+    .details-section { margin: 30px 0; }
+    .details-section .label { font-weight: bold; margin-bottom: 5px; }
+    .details-section .value { margin: 0 0 15px 0; }
+    .notice { background-color: #f8f8f8; border-left: 4px solid #c41e3a; padding: 15px 20px; margin: 25px 0; }
+    .notice p { margin: 0; font-size: 14px; }
+    .qr-section { margin: 40px 0; text-align: center; }
+    .qr-section h3 { font-size: 16px; color: #333333; margin: 0 0 25px 0; }
+    .qr-codes { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
+    .qr-item { text-align: center; }
+    .qr-item img { width: 180px; height: 180px; border: 1px solid #e0e0e0; border-radius: 8px; }
+    .qr-item .name { font-weight: bold; font-size: 14px; color: #333333; margin-top: 12px; }
+    .signature { margin-top: 40px; }
+    .footer { text-align: center; padding: 20px 0; border-top: 1px solid #e0e0e0; margin-top: 30px; }
+    .footer p { font-size: 13px; color: #666666; margin: 5px 0; }
+    .footer a { color: #333333; text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="{{headerImage}}" alt="CEO Gala 2026" class="header-image" />
+    <h2>Confirmation</h2>
+
+    <div class="content">
+      <p class="greeting">Dear {{partnerTitle}} {{partnerName}},</p>
+
+      <p><span class="highlight">Thank you for your registration!</span></p>
+
+      <p>We are pleased to confirm your registration as a <span class="highlight">Partner guest</span> for the 13th CEO Gala.</p>
+
+      <p>Your attendance has been registered by <span class="highlight">{{mainGuestTitle}} {{mainGuestName}}</span>, and we are delighted to welcome you to this distinguished occasion organised by the Budapest Business Journal, together with its official event partner, the Hungarian Investment Promotion Agency (HIPA).</p>
+
+      <p>The event will take place on <span class="highlight">Friday, March 27, 2026</span>; be sure to mark your calendar!</p>
+
+      <p>Attached below are your and your partner's personal QR codes, which will grant you access to the gala. Kindly <span class="highlight">download our CEO Gala 2026 application</span> on your mobile device to find your personal QR code and more, or bring a printed copy to the event to ensure smooth entry. Please note that this <span class="highlight">personal invitation</span> is dedicated to the addressee and is <span class="highlight">not transferable</span>.</p>
+
+      <div class="details-section">
+        <p class="label">Date:</p>
+        <p class="value">Friday, March 27, 2026</p>
+
+        <p class="label">Location:</p>
+        <p class="value">Corinthia Hotel Budapest<br>1073 Budapest, Erzsébet krt. 43-49.</p>
+
+        <p class="label">Dress Code:</p>
+        <p class="value">Black tie for men, ballgown or cocktail dress for women</p>
+      </div>
+
+      <div class="notice">
+        <p>Should you be unable to attend, we kindly ask that any changes be communicated via <span class="highlight">{{mainGuestTitle}} {{mainGuestName}}</span>. We kindly remind you that any <span class="highlight">cancellations</span> or changes to your registration must be made at least <span class="highlight">10 business days</span> prior to the gala.</p>
+        <p style="margin-top: 10px;">Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a <span class="highlight">no-show fee</span> of HUF 99,000 per person.</p>
+      </div>
+
+      <p>We look forward to meeting you at the gala and celebrating this outstanding CEO Community with you.</p>
+
+      <p class="signature">The BBJ CEO Gala Team</p>
+
+      <div class="qr-section">
+        <h3>Your QR code(s) to access the gala</h3>
+        <div class="qr-codes">
+          <div class="qr-item">
+            <img src="{{partnerQrCode}}" alt="Your QR Code" />
+            <p class="name">{{partnerName}}</p>
+          </div>
+          <div class="qr-item">
+            <img src="{{mainGuestQrCode}}" alt="Partner QR Code" />
+            <p class="name">{{mainGuestName}}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p><u>Business Publishing Services Kft.</u></p>
+        <p>1075 Budapest, Madách Imre út 13-14., Hungary</p>
+        <p>Publisher of Budapest Business Journal</p>
+        <p>Event website: <a href="https://ceogala.com">ceogala.com</a></p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`,
+    text_body: `Confirmation of Your Attendance at the CEO Gala 2026
+
+Dear {{partnerTitle}} {{partnerName}},
+
+Thank you for your registration!
+
+We are pleased to confirm your registration as a Partner guest for the 13th CEO Gala.
+
+Your attendance has been registered by {{mainGuestTitle}} {{mainGuestName}}, and we are delighted to welcome you to this distinguished occasion organised by the Budapest Business Journal, together with its official event partner, the Hungarian Investment Promotion Agency (HIPA).
+
+The event will take place on Friday, March 27, 2026; be sure to mark your calendar!
+
+Attached below are your and your partner's personal QR codes, which will grant you access to the gala. Kindly download our CEO Gala 2026 application on your mobile device to find your personal QR code and more, or bring a printed copy to the event to ensure smooth entry.
+
+Please note that this personal invitation is dedicated to the addressee and is not transferable.
+
+Date:
+Friday, March 27, 2026
+
+Location:
+Corinthia Hotel Budapest
+1073 Budapest, Erzsébet krt. 43-49.
+
+Dress Code:
+Black tie for men, ballgown or cocktail dress for women
+
+Should you be unable to attend, we kindly ask that any changes be communicated via {{mainGuestTitle}} {{mainGuestName}}. We kindly remind you that any cancellations or changes to your registration must be made at least 10 business days prior to the gala.
+
+Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 per person.
+
+We look forward to meeting you at the gala and celebrating this outstanding CEO Community with you.
+
+The BBJ CEO Gala Team
+
+---
+
+Business Publishing Services Kft.
+1075 Budapest, Madách Imre út 13-14., Hungary
+Publisher of Budapest Business Journal
+Event website: ceogala.com`,
+  },
+  noshow_payment_request: {
+    slug: 'noshow_payment_request',
+    name: 'No-Show Payment Request',
+    subject: 'BBJ Events 2026 - No-Show Fee Notice',
+    variables: ['guestName', 'eventDate', 'ticketType', 'noShowFee', 'paymentDeadline', 'paymentUrl'],
+    html_body: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BBJ Events - No-Show Fee Notice</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .card { background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); padding: 40px; }
+    .header { text-align: center; margin-bottom: 30px; }
+    .header h1 { color: #1a1a2e; font-size: 28px; margin: 0; }
+    .notice-badge { display: inline-block; background-color: #dc2626; color: #ffffff; font-size: 14px; font-weight: 600; padding: 8px 20px; border-radius: 20px; margin-top: 15px; }
+    .content { margin-bottom: 30px; }
+    .greeting { font-size: 18px; margin-bottom: 20px; }
+    .notice-box { background-color: #fef2f2; border: 2px solid #dc2626; border-radius: 12px; padding: 25px; margin: 20px 0; }
+    .notice-box h3 { margin: 0 0 15px 0; color: #dc2626; text-align: center; }
+    .notice-box p { margin: 10px 0; }
+    .fee-amount { font-size: 32px; font-weight: bold; color: #dc2626; text-align: center; margin: 20px 0; }
+    .details { background-color: #f8f9fa; border-radius: 8px; padding: 20px; margin: 20px 0; }
+    .details h4 { margin: 0 0 15px 0; color: #374151; }
+    .details p { margin: 8px 0; color: #4b5563; }
+    .cta-container { text-align: center; margin: 30px 0; }
+    .cta-button { display: inline-block; background-color: #dc2626; color: #ffffff !important; text-decoration: none; padding: 14px 32px; border-radius: 6px; font-size: 16px; font-weight: 600; }
+    .deadline { font-size: 14px; color: #dc2626; text-align: center; font-weight: 600; margin-top: 15px; }
+    .footer { text-align: center; padding-top: 30px; border-top: 1px solid #e5e7eb; margin-top: 30px; }
+    .footer p { font-size: 14px; color: #6b7280; margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <h1>BBJ Events</h1>
+        <span class="notice-badge">Payment Required</span>
+      </div>
+      <div class="content">
+        <p class="greeting">Dear {{guestName}},</p>
+        <p>We noticed that you did not attend BBJ Events 2026 on {{eventDate}}, and you did not cancel your registration before the deadline.</p>
+        <div class="notice-box">
+          <h3>No-Show Fee</h3>
+          <p>According to our registration terms, a no-show fee is applicable for registered guests who do not attend without prior cancellation.</p>
+          <div class="fee-amount">{{noShowFee}}</div>
+          <p><strong>Ticket Type:</strong> {{ticketType}}</p>
+        </div>
+        <div class="details">
+          <h4>Payment Information</h4>
+          <p>Please settle this fee by the deadline below to avoid further action.</p>
+          <p>If you believe this notice was sent in error (e.g., you did attend), please contact us immediately.</p>
+        </div>
+        <div class="cta-container">
+          <a href="{{paymentUrl}}" class="cta-button">Pay Now</a>
+        </div>
+        <p class="deadline">Payment Deadline: {{paymentDeadline}}</p>
+      </div>
+      <div class="footer">
+        <p>If you have questions, please contact us at info@ceogala.hu</p>
+        <p>Best regards,<br>BBJ Events Organizing Team</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`,
+    text_body: `BBJ Events - No-Show Fee Notice
+
+Dear {{guestName}},
+
+We noticed that you did not attend BBJ Events 2026 on {{eventDate}}, and you did not cancel your registration before the deadline.
+
+NO-SHOW FEE
 -----------
-Name: {{guestName}}
+According to our registration terms, a no-show fee is applicable for registered guests who do not attend without prior cancellation.
+
+Fee Amount: {{noShowFee}}
 Ticket Type: {{ticketType}}
-{{#if partnerName}}Partner: {{partnerName}}{{/if}}
 
-IMPORTANT: To display the QR code, open this email in a modern email client.
+PAYMENT INFORMATION
+-------------------
+Please settle this fee by the deadline below to avoid further action.
 
-HELPFUL INFORMATION
-------------------
-- Arrive by 5:30 PM for smooth registration
-- Save the QR code to your phone or print it out
-- Photo ID may be required
+If you believe this notice was sent in error (e.g., you did attend), please contact us immediately.
 
-DOWNLOAD THE GALA APP
-----------------------
-Access your ticket, table info, and event updates anytime - even offline!
-{{#if pwaAuthCode}}
-YOUR LOGIN CODE: {{pwaAuthCode}}
-Enter this code in the app to access your ticket and event info.
-{{/if}}
-Open in browser: https://ceogala.mflevents.space/pwa
-Works on iPhone, Android & Desktop
+Pay here: {{paymentUrl}}
 
-If you have any questions, please contact us: info@ceogala.hu
+Payment Deadline: {{paymentDeadline}}
+
+If you have questions, please contact us at info@ceogala.hu
 
 Best regards,
 BBJ Events Organizing Team`,
@@ -923,11 +1451,16 @@ export async function renderTemplate(
   html: string;
   text: string;
 }> {
-  const template = await getTemplateWithFallback(slug);
+  try {
+    const template = await getTemplateWithFallback(slug);
 
-  return {
-    subject: interpolateTemplate(template.subject, variables, true),
-    html: interpolateTemplate(template.html_body, variables, true),
-    text: interpolateTemplate(template.text_body, variables, false),
-  };
+    return {
+      subject: interpolateTemplate(template.subject, variables, true),
+      html: interpolateTemplate(template.html_body, variables, true),
+      text: interpolateTemplate(template.text_body, variables, false),
+    };
+  } catch (error) {
+    logError(`[TEMPLATE-RENDER] Failed to render template ${slug}:`, error);
+    throw error;
+  }
 }

@@ -11,8 +11,6 @@ export interface TicketEmailParams {
   ticketType: TicketType;
   qrCodeDataUrl: string; // Base64 PNG data URL or CID reference
   partnerName?: string; // For paired tickets
-  pwaAuthCode?: string; // PWA login code (CEOG-XXXXXX)
-  pwaLoginUrl?: string; // Direct PWA login URL
 }
 
 /**
@@ -47,7 +45,7 @@ export function getTicketDeliveryEmailTemplate(params: TicketEmailParams): {
   text: string;
   subject: string;
 } {
-  const { guestName, ticketType, qrCodeDataUrl, partnerName, pwaAuthCode, pwaLoginUrl } = params;
+  const { guestName, ticketType, qrCodeDataUrl, partnerName } = params;
   const ticketLabel = getTicketTypeLabel(ticketType);
   const badgeColors = getTicketBadgeColor(ticketType);
 
@@ -306,33 +304,6 @@ export function getTicketDeliveryEmailTemplate(params: TicketEmailParams): {
           </ul>
         </div>
 
-        <div class="pwa-section" style="background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%); border-radius: 12px; padding: 24px; margin: 24px 0; text-align: center;">
-          <p style="font-size: 14px; font-weight: 600; color: white; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 12px 0;">
-            Download the Gala App
-          </p>
-          <p style="color: rgba(255,255,255,0.9); font-size: 14px; margin: 0 0 16px 0;">
-            Access your ticket, table info, and event updates anytime - even offline!
-          </p>
-          ${pwaAuthCode ? `
-          <div style="background: rgba(255,255,255,0.95); border-radius: 12px; padding: 20px; margin: 16px 0;">
-            <p style="font-size: 12px; font-weight: 600; color: #0D9488; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 8px 0;">
-              Your Login Code
-            </p>
-            <p style="font-size: 28px; font-weight: 700; color: #1F2937; letter-spacing: 3px; margin: 0; font-family: monospace;">
-              ${escapeHtml(pwaAuthCode)}
-            </p>
-            <p style="font-size: 12px; color: #6B7280; margin: 12px 0 0 0;">
-              Enter this code in the app to log in
-            </p>
-          </div>
-          ` : ''}
-          <a href="${pwaLoginUrl || 'https://ceogala.mflevents.space/pwa'}" style="display: inline-block; background: white; color: #0D9488; font-size: 14px; font-weight: 600; padding: 12px 28px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-            Open CEO Gala App
-          </a>
-          <p style="color: rgba(255,255,255,0.7); font-size: 12px; margin: 12px 0 0 0;">
-            Works on iPhone, Android &amp; Desktop
-          </p>
-        </div>
       </div>
 
       <div class="divider"></div>
@@ -340,10 +311,6 @@ export function getTicketDeliveryEmailTemplate(params: TicketEmailParams): {
       <div class="footer">
         <p>For questions, please contact us at:</p>
         <p><a href="mailto:info@ceogala.hu">info@ceogala.hu</a></p>
-        <p style="margin-top: 16px; font-size: 13px; color: #9CA3AF;">
-          Need to update your registration or request a new invitation link?<br>
-          <a href="${pwaLoginUrl?.replace('/pwa', '/register/request-link') || 'https://ceogala.mflevents.space/register/request-link'}" style="color: #14B8A6; text-decoration: none;">Request New Link</a>
-        </p>
         <p class="signature">Best regards,<br>CEO Gala Organizing Committee</p>
       </div>
     </div>
@@ -381,20 +348,7 @@ IMPORTANT INFORMATION
 - A valid photo ID may be required at entry
 ${ticketType === 'paid_paired' ? '- Both guests with paired tickets should arrive together' : ''}
 
-DOWNLOAD THE GALA APP
-----------------------
-Access your ticket, table info, and event updates anytime - even offline!
-${pwaAuthCode ? `
-YOUR LOGIN CODE: ${pwaAuthCode}
-Enter this code in the app to access your ticket and event info.
-` : ''}
-Open in browser: ${pwaLoginUrl || 'https://ceogala.mflevents.space/pwa'}
-Works on iPhone, Android & Desktop
-
 For questions, please contact us at: info@ceogala.hu
-
-Need to update your registration or request a new invitation link?
-Visit: ${pwaLoginUrl?.replace('/pwa', '/register/request-link') || 'https://ceogala.mflevents.space/register/request-link'}
 
 Best regards,
 CEO Gala Organizing Committee

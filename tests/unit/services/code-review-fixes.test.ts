@@ -2,9 +2,12 @@
  * Code Review Fixes - Unit Tests
  *
  * Tests for code review fixes from 2026-01-05:
- * - PWA deep link URL generation in ticket delivery email
  * - titleOptions consistency between schema and components
  * - maxLength validation for PWA auth code input
+ *
+ * Note: PWA deep link URL generation tests removed (2026-01-13)
+ *       - pwaAuthCode no longer included in ticket delivery emails
+ *       - PWA section removed from email templates
  *
  * Priority: P1 (regression prevention)
  */
@@ -15,73 +18,6 @@ import { describe, it, expect } from 'vitest';
 import { titleOptions } from '@/lib/validations/guest-profile';
 
 describe('Code Review Fixes - 2026-01-05', () => {
-  // ============================================
-  // Issue #1: PWA Deep Link URL Generation
-  // ============================================
-  describe('[P1] PWA Deep Link URL Generation', () => {
-    // This tests the logic that was fixed in lib/services/email.ts:463-465
-    // The fix ensures that ?code= parameter is included when pwaAuthCode is present
-
-    it('should generate URL with code parameter when pwaAuthCode is provided', () => {
-      // GIVEN: PWA auth code is available
-      const pwaAuthCode = 'CEOG-ABC123';
-      const appUrl = 'https://ceogala.mflevents.space';
-
-      // WHEN: Building the PWA login URL (matching email.ts logic)
-      const pwaLoginUrl = pwaAuthCode
-        ? `${appUrl}/pwa?code=${pwaAuthCode}`
-        : `${appUrl}/pwa`;
-
-      // THEN: URL should include the code parameter
-      expect(pwaLoginUrl).toBe('https://ceogala.mflevents.space/pwa?code=CEOG-ABC123');
-      expect(pwaLoginUrl).toContain('?code=');
-    });
-
-    it('should generate URL without code parameter when pwaAuthCode is null', () => {
-      // GIVEN: No PWA auth code (null)
-      const pwaAuthCode: string | null = null;
-      const appUrl = 'https://ceogala.mflevents.space';
-
-      // WHEN: Building the PWA login URL
-      const pwaLoginUrl = pwaAuthCode
-        ? `${appUrl}/pwa?code=${pwaAuthCode}`
-        : `${appUrl}/pwa`;
-
-      // THEN: URL should not have code parameter
-      expect(pwaLoginUrl).toBe('https://ceogala.mflevents.space/pwa');
-      expect(pwaLoginUrl).not.toContain('?code=');
-    });
-
-    it('should generate URL without code parameter when pwaAuthCode is undefined', () => {
-      // GIVEN: No PWA auth code (undefined)
-      const pwaAuthCode: string | undefined = undefined;
-      const appUrl = 'https://ceogala.mflevents.space';
-
-      // WHEN: Building the PWA login URL
-      const pwaLoginUrl = pwaAuthCode
-        ? `${appUrl}/pwa?code=${pwaAuthCode}`
-        : `${appUrl}/pwa`;
-
-      // THEN: URL should not have code parameter
-      expect(pwaLoginUrl).toBe('https://ceogala.mflevents.space/pwa');
-    });
-
-    it('should generate URL without code parameter when pwaAuthCode is empty string', () => {
-      // GIVEN: Empty string PWA auth code (edge case)
-      const pwaAuthCode = '';
-      const appUrl = 'https://ceogala.mflevents.space';
-
-      // WHEN: Building the PWA login URL
-      // Empty string is falsy, so should go to else branch
-      const pwaLoginUrl = pwaAuthCode
-        ? `${appUrl}/pwa?code=${pwaAuthCode}`
-        : `${appUrl}/pwa`;
-
-      // THEN: URL should not have code parameter (empty string is falsy)
-      expect(pwaLoginUrl).toBe('https://ceogala.mflevents.space/pwa');
-    });
-  });
-
   // ============================================
   // Issue #4: titleOptions Consistency
   // ============================================
