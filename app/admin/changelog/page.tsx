@@ -33,7 +33,7 @@ interface ChangelogEntry {
 
 const changelogData: ChangelogEntry[] = [
   {
-    version: '2.9.1',
+    version: '2.10.0',
     date: '2026-01-13',
     changes: [
       {
@@ -53,12 +53,52 @@ const changelogData: ChangelogEntry[] = [
         descriptionHu: 'Két új sablon: registration_feedback (fővendég adat összefoglaló) és registration_feedback_partner (partner értesítő). Mindkettő tartalmazza a CEO Gala 2026 fejlécet.',
       },
       {
+        type: 'feature',
+        category: 'ui',
+        titleEn: 'Docker Containerization',
+        titleHu: 'Docker Konténerizáció',
+        descriptionEn: 'Full Docker support with Dockerfile, docker-compose for dev/prod. Includes MySQL, Nginx configs and deployment scripts.',
+        descriptionHu: 'Teljes Docker támogatás Dockerfile-lal, docker-compose dev/prod-hoz. MySQL, Nginx konfigok és deployment scriptek.',
+      },
+      {
+        type: 'feature',
+        category: 'ui',
+        titleEn: 'Security Documentation',
+        titleHu: 'Biztonsági Dokumentáció',
+        descriptionEn: 'Comprehensive security architecture docs and Node.js/React security analysis for 2025 best practices.',
+        descriptionHu: 'Átfogó biztonsági architektúra dokumentáció és Node.js/React biztonsági elemzés 2025-ös best practice-ekkel.',
+      },
+      {
+        type: 'feature',
+        category: 'ui',
+        titleEn: 'RAG Knowledge Base v3.0.0',
+        titleHu: 'RAG Tudásbázis v3.0.0',
+        descriptionEn: 'Complete knowledge base update for AI development. Removed obsolete applicant docs. Updated with all current features.',
+        descriptionHu: 'Teljes tudásbázis frissítés AI fejlesztéshez. Elavult jelentkező doksik eltávolítva. Frissítve összes jelenlegi funkcióval.',
+      },
+      {
         type: 'improvement',
         category: 'registration',
         titleEn: 'VIP Registration Flow Enhanced',
         titleHu: 'VIP Regisztrációs Folyamat Bővítve',
         descriptionEn: 'VIP registration now sends feedback emails before ticket generation. Non-blocking - registration completes even if email fails.',
         descriptionHu: 'VIP regisztráció visszaigazoló emailt küld a jegy generálás előtt. Nem blokkoló - regisztráció befejeződik ha email sikertelen.',
+      },
+      {
+        type: 'improvement',
+        category: 'email',
+        titleEn: 'Ticket Email Template Cleanup',
+        titleHu: 'Jegy Email Sablon Tisztítás',
+        descriptionEn: 'Removed PWA deep link from ticket emails. Removed dead BBJ CSS from magic link template. Fixed hardcoded header paths.',
+        descriptionHu: 'PWA deep link eltávolítva jegy emailekből. Halott BBJ CSS törölve magic link sablonból. Hardcoded header útvonalak javítva.',
+      },
+      {
+        type: 'improvement',
+        category: 'ui',
+        titleEn: 'Deployment Guide & Tech Specs',
+        titleHu: 'Telepítési Útmutató & Tech Specek',
+        descriptionEn: 'New deployment guide for VPS/Docker setup. Added tech specs for attendance commitment and name split features.',
+        descriptionHu: 'Új telepítési útmutató VPS/Docker beállításhoz. Tech specek attendance commitment és név szétválasztás funkciókhoz.',
       },
     ],
   },

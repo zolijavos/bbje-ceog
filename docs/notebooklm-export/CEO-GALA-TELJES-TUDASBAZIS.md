@@ -1,6 +1,6 @@
 # CEO Gala 2026 - Teljes Tudásbázis
 
-> **NotebookLM Export** - Verzió: 3.0.0 (2026-01-12)
+> **NotebookLM Export** - Verzió: 3.1.0 (2026-01-13)
 > Részletes tudásbázis az összes folyamattal és művelettel.
 
 ---
@@ -173,7 +173,19 @@ Admin felhasználó
 > Amennyiben nem mondok le és nem jelenik meg (no-show), a szervezők jogosultak
 > a jegyár-egyenértékű díjat (100,000 HUF) felszámítani."
 
-#### 5. lépés: Azonnali jegykiadás
+#### 5. lépés: Automatikus visszaigazoló email (v2.10.0 újdonság)
+**Mi történik közvetlenül a regisztráció után:**
+1. "Automatic feedback" email kiküldése a fővendégnek:
+   - Tartalmazza az összes megadott adatot (név, cég, telefon, étrend, stb.)
+   - CEO Gala 2026 fejléc képpel
+   - Visszaigazolja a kapott adatokat
+2. Ha van partner megadva:
+   - Partner is kap értesítő emailt
+   - Tartalma: "XY regisztrálta Önt a CEO Gala 2026 eseményre"
+
+**Fontos:** Ez a visszaigazoló email a jegy email ELŐTT érkezik!
+
+#### 6. lépés: Azonnali jegykiadás
 **Mi történik a háttérben:**
 1. Registration rekord létrejön:
    - status = "approved"

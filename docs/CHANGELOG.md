@@ -4,7 +4,7 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
 
 ---
 
-## v2.9.1 (2026-01-13)
+## v2.10.0 (2026-01-13)
 
 ### New Features / Új funkciók
 
@@ -16,6 +16,18 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
   - EN: Two new email templates: `registration_feedback` (main guest - shows all data) and `registration_feedback_partner` (partner notification). Both templates include CEO Gala 2026 header image, elegant styling, and Hungarian/English content.
   - HU: Két új email sablon: `registration_feedback` (fővendég - összes adat megjelenítése) és `registration_feedback_partner` (partner értesítő). Mindkét sablon tartalmazza a CEO Gala 2026 fejléc képet, elegáns stílust, és magyar/angol tartalmat.
 
+- **Docker Containerization** / **Docker Konténerizáció**
+  - EN: Full Docker support added with Dockerfile, docker-compose.dev.yml (development), docker-compose.prod.yml (production). Includes MySQL and Nginx configurations. Deployment scripts for easy server setup.
+  - HU: Teljes Docker támogatás hozzáadva Dockerfile-lal, docker-compose.dev.yml (fejlesztés), docker-compose.prod.yml (éles). MySQL és Nginx konfigurációkat tartalmaz. Deployment scriptek az egyszerű szerver beállításhoz.
+
+- **Security Documentation** / **Biztonsági Dokumentáció**
+  - EN: Comprehensive security architecture documentation added (CEOGALA-SECURITY-ARCHITECTURE.md). Node.js/React security analysis for 2025 best practices (NODEJS-REACT-SECURITY-ANALYSIS-2025.md).
+  - HU: Átfogó biztonsági architektúra dokumentáció hozzáadva (CEOGALA-SECURITY-ARCHITECTURE.md). Node.js/React biztonsági elemzés 2025-ös best practice-ekkel (NODEJS-REACT-SECURITY-ANALYSIS-2025.md).
+
+- **RAG Knowledge Base v3.0.0** / **RAG Tudásbázis v3.0.0**
+  - EN: Complete knowledge base update for AI-assisted development. Removed obsolete applicant functionality documentation. Updated with all current features, API endpoints, and system capabilities.
+  - HU: Teljes tudásbázis frissítés AI-asszisztált fejlesztéshez. Elavult jelentkező funkció dokumentáció eltávolítva. Frissítve az összes jelenlegi funkcióval, API végpontokkal és rendszer képességekkel.
+
 ### Improvements / Javítások
 
 - **VIP Registration Flow Enhanced** / **VIP Regisztrációs Folyamat Bővítve**
@@ -25,6 +37,28 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
 - **Admin Email Template Preview** / **Admin Email Sablon Előnézet**
   - EN: Admin dashboard email template preview now supports the two new feedback templates with sample data.
   - HU: Admin dashboard email sablon előnézet mostantól támogatja a két új visszaigazoló sablont minta adatokkal.
+
+- **Ticket Email Template Cleanup** / **Jegy Email Sablon Tisztítás**
+  - EN: Removed PWA deep link section from ticket delivery emails - PWA auth code no longer included. Removed dead BBJ CSS from magic link template. Fixed hardcoded header image paths to use dynamic URLs.
+  - HU: PWA deep link szekció eltávolítva a jegy küldő emailekből - PWA auth kód már nem szerepel. Halott BBJ CSS eltávolítva a magic link sablonból. Hardcoded header kép útvonalak javítva dinamikus URL-ekre.
+
+- **Code Review Fixes** / **Kód Felülvizsgálat Javítások**
+  - EN: Unit tests updated - removed obsolete PWA deep link URL generation tests. Test documentation updated to reflect current email template structure.
+  - HU: Unit tesztek frissítve - elavult PWA deep link URL generálás tesztek eltávolítva. Teszt dokumentáció frissítve a jelenlegi email sablon struktúrának megfelelően.
+
+### Documentation / Dokumentáció
+
+- **Deployment Guide** / **Telepítési Útmutató**
+  - EN: New comprehensive deployment guide (DEPLOYMENT-GUIDE.md) covering VPS setup, Docker deployment, PM2 configuration, and Nginx setup.
+  - HU: Új átfogó telepítési útmutató (DEPLOYMENT-GUIDE.md) VPS beállítással, Docker telepítéssel, PM2 konfigurációval és Nginx beállítással.
+
+- **Tech Specs** / **Technikai Specifikációk**
+  - EN: Added tech-spec-attendance-commitment.md and tech-spec-first-last-name.md for sprint planning documentation.
+  - HU: Hozzáadva tech-spec-attendance-commitment.md és tech-spec-first-last-name.md sprint tervezés dokumentációhoz.
+
+- **Manual Test Procedures** / **Manuális Teszt Eljárások**
+  - EN: Added manual-test-cancel-noshow.md with step-by-step test procedures for cancellation and no-show features.
+  - HU: Hozzáadva manual-test-cancel-noshow.md lépésről-lépésre teszt eljárásokkal lemondás és no-show funkciókhoz.
 
 ---
 

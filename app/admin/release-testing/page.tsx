@@ -33,6 +33,71 @@ interface ReleaseTest {
 
 const releaseTests: ReleaseTest[] = [
   {
+    version: '2.10.0',
+    date: '2026-01-13',
+    features: [
+      {
+        nameEn: 'Automatic Registration Feedback Emails',
+        nameHu: 'Automatikus Regisztráció Visszaigazoló Emailek',
+        steps: [
+          { en: 'Create a new VIP guest in admin', hu: 'Hozz létre új VIP vendéget az adminban' },
+          { en: 'Send magic link to the VIP guest', hu: 'Küldj magic linket a VIP vendégnek' },
+          { en: 'Complete VIP registration with partner info', hu: 'Töltsd ki a VIP regisztrációt partner adatokkal' },
+          { en: 'Check main guest email for "Automatic feedback" email', hu: 'Ellenőrizd a fővendég emailjét az "Automatic feedback" emailért' },
+          { en: 'Verify email contains all registration data (name, company, phone, dietary)', hu: 'Ellenőrizd, hogy az email tartalmazza az összes regisztrációs adatot (név, cég, telefon, étrend)' },
+          { en: 'Check partner email for notification about registration', hu: 'Ellenőrizd a partner emailjét az értesítésért a regisztrációról' },
+          { en: 'Verify CEO Gala 2026 header image appears in both emails', hu: 'Ellenőrizd, hogy a CEO Gala 2026 fejléc kép megjelenik mindkét emailben' },
+        ],
+        expected: { en: 'Both main guest and partner receive feedback emails with registration data summary before ticket delivery', hu: 'Fővendég és partner is kap visszaigazoló emailt a regisztrációs adatok összefoglalójával a jegy küldés előtt' }
+      },
+      {
+        nameEn: 'Email Template Preview - Feedback Templates',
+        nameHu: 'Email Sablon Előnézet - Visszaigazoló Sablonok',
+        steps: [
+          { en: 'Navigate to /admin/email-templates', hu: 'Navigálj a /admin/email-templates oldalra' },
+          { en: 'Find "Registration Feedback (Main Guest)" template', hu: 'Keresd a "Registration Feedback (Main Guest)" sablont' },
+          { en: 'Click Preview button', hu: 'Kattints az Előnézet gombra' },
+          { en: 'Verify sample data is displayed correctly', hu: 'Ellenőrizd, hogy a minta adatok helyesen jelennek meg' },
+          { en: 'Find "Registration Feedback (Partner)" template', hu: 'Keresd a "Registration Feedback (Partner)" sablont' },
+          { en: 'Click Preview and verify partner notification content', hu: 'Kattints az Előnézetre és ellenőrizd a partner értesítő tartalmat' },
+        ],
+        expected: { en: 'Both new feedback templates have working preview with sample data', hu: 'Mindkét új visszaigazoló sablon működő előnézettel rendelkezik minta adatokkal' }
+      },
+      {
+        nameEn: 'Ticket Email Template Cleanup Verification',
+        nameHu: 'Jegy Email Sablon Tisztítás Ellenőrzés',
+        steps: [
+          { en: 'Complete a VIP registration to trigger ticket email', hu: 'Végezz el egy VIP regisztrációt a jegy email kiváltásához' },
+          { en: 'Check the ticket delivery email', hu: 'Ellenőrizd a jegy küldő emailt' },
+          { en: 'Verify NO PWA deep link section is present', hu: 'Ellenőrizd, hogy NINCS PWA deep link szekció' },
+          { en: 'Verify email displays correctly without old BBJ CSS artifacts', hu: 'Ellenőrizd, hogy az email helyesen jelenik meg régi BBJ CSS maradványok nélkül' },
+        ],
+        expected: { en: 'Ticket emails are clean without obsolete PWA deep link and BBJ CSS', hu: 'Jegy emailek tiszták elavult PWA deep link és BBJ CSS nélkül' }
+      },
+      {
+        nameEn: 'Docker Configuration Files',
+        nameHu: 'Docker Konfigurációs Fájlok',
+        steps: [
+          { en: 'Verify Dockerfile exists in project root', hu: 'Ellenőrizd, hogy a Dockerfile létezik a projekt gyökerében' },
+          { en: 'Verify docker-compose.dev.yml exists', hu: 'Ellenőrizd, hogy a docker-compose.dev.yml létezik' },
+          { en: 'Verify docker-compose.prod.yml exists', hu: 'Ellenőrizd, hogy a docker-compose.prod.yml létezik' },
+          { en: 'Verify docker/mysql/init.sql and docker/nginx/nginx.conf exist', hu: 'Ellenőrizd, hogy a docker/mysql/init.sql és docker/nginx/nginx.conf létezik' },
+        ],
+        expected: { en: 'All Docker configuration files are present and properly structured', hu: 'Minden Docker konfigurációs fájl jelen van és megfelelően strukturált' }
+      },
+      {
+        nameEn: 'Security Documentation',
+        nameHu: 'Biztonsági Dokumentáció',
+        steps: [
+          { en: 'Verify docs/security/CEOGALA-SECURITY-ARCHITECTURE.md exists', hu: 'Ellenőrizd, hogy a docs/security/CEOGALA-SECURITY-ARCHITECTURE.md létezik' },
+          { en: 'Verify docs/security/NODEJS-REACT-SECURITY-ANALYSIS-2025.md exists', hu: 'Ellenőrizd, hogy a docs/security/NODEJS-REACT-SECURITY-ANALYSIS-2025.md létezik' },
+          { en: 'Open files and verify content covers security topics', hu: 'Nyisd meg a fájlokat és ellenőrizd, hogy a tartalom lefedi a biztonsági témákat' },
+        ],
+        expected: { en: 'Security documentation is complete and comprehensive', hu: 'Biztonsági dokumentáció teljes és átfogó' }
+      },
+    ]
+  },
+  {
     version: '2.9.0',
     date: '2026-01-11',
     features: [
