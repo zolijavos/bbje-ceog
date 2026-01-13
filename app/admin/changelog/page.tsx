@@ -14,6 +14,7 @@ import {
   Tag,
   Bug,
   Sparkle,
+  TestTube,
 } from '@phosphor-icons/react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
@@ -31,6 +32,144 @@ interface ChangelogEntry {
 }
 
 const changelogData: ChangelogEntry[] = [
+  {
+    version: '2.9.1',
+    date: '2026-01-13',
+    changes: [
+      {
+        type: 'feature',
+        category: 'email',
+        titleEn: 'Automatic Registration Feedback Emails',
+        titleHu: 'Automatikus Regisztráció Visszaigazoló Emailek',
+        descriptionEn: 'New email templates sent after VIP registration to confirm received data. Main guest receives full registration summary. Partner receives notification about registration.',
+        descriptionHu: 'Új email sablonok VIP regisztráció után a kapott adatok visszaigazolására. Fővendég megkapja a teljes összefoglalót. Partner értesítést kap a regisztrációról.',
+      },
+      {
+        type: 'feature',
+        category: 'email',
+        titleEn: 'Registration Feedback Email Templates',
+        titleHu: 'Regisztráció Visszaigazoló Email Sablonok',
+        descriptionEn: 'Two new templates: registration_feedback (main guest data summary) and registration_feedback_partner (partner notification). Both include CEO Gala 2026 header.',
+        descriptionHu: 'Két új sablon: registration_feedback (fővendég adat összefoglaló) és registration_feedback_partner (partner értesítő). Mindkettő tartalmazza a CEO Gala 2026 fejlécet.',
+      },
+      {
+        type: 'improvement',
+        category: 'registration',
+        titleEn: 'VIP Registration Flow Enhanced',
+        titleHu: 'VIP Regisztrációs Folyamat Bővítve',
+        descriptionEn: 'VIP registration now sends feedback emails before ticket generation. Non-blocking - registration completes even if email fails.',
+        descriptionHu: 'VIP regisztráció visszaigazoló emailt küld a jegy generálás előtt. Nem blokkoló - regisztráció befejeződik ha email sikertelen.',
+      },
+    ],
+  },
+  {
+    version: '2.9.0',
+    date: '2026-01-11',
+    changes: [
+      {
+        type: 'feature',
+        category: 'pwa',
+        titleEn: 'PWA Cancel Page',
+        titleHu: 'PWA Lemondás Oldal',
+        descriptionEn: 'Guests can cancel registration via /pwa/cancel with reason selection (schedule conflict, illness, other). Available until 7 days before event.',
+        descriptionHu: 'Vendégek lemondhatják regisztrációjukat a /pwa/cancel oldalon ok választással (időpont ütközés, betegség, egyéb). Esemény előtt 7 napig elérhető.',
+      },
+      {
+        type: 'feature',
+        category: 'status',
+        titleEn: 'Cancelled Status & No-Show Statistics',
+        titleHu: 'Lemondott Státusz & No-Show Statisztikák',
+        descriptionEn: 'New "Cancelled" status with orange badge. Dashboard shows attendance stats: cancelled count, potential no-shows, cancellation reasons.',
+        descriptionHu: 'Új "Lemondott" státusz narancssárga badge-dzsel. Dashboard mutatja a részvételi statisztikákat: lemondottak, potenciális no-show-k, lemondási okok.',
+      },
+      {
+        type: 'improvement',
+        category: 'registration',
+        titleEn: 'Attendance Commitment Consent',
+        titleHu: 'Részvételi Kötelezettségvállalás',
+        descriptionEn: 'Updated consent text with no-show fee warning for VIP guests. Clear cancellation policy displayed.',
+        descriptionHu: 'Frissített consent szöveg no-show díj figyelmeztetéssel VIP vendégeknek. Egyértelmű lemondási szabályzat.',
+      },
+      {
+        type: 'feature',
+        category: 'email',
+        titleEn: 'E-10 Reminder Email Template',
+        titleHu: 'E-10 Emlékeztető Email Sablon',
+        descriptionEn: 'New template for 10-day event reminder with cancellation link.',
+        descriptionHu: 'Új sablon 10 napos esemény emlékeztetőhöz lemondási linkkel.',
+      },
+      {
+        type: 'improvement',
+        category: 'email',
+        titleEn: 'E-7 & No-Show Email Templates',
+        titleHu: 'E-7 & No-Show Email Sablonok',
+        descriptionEn: 'E-7 reminder (last chance to cancel) and No-Show payment request email templates added.',
+        descriptionHu: 'E-7 emlékeztető (utolsó esély lemondásra) és No-Show fizetési felszólítás email sablonok hozzáadva.',
+      },
+      {
+        type: 'feature',
+        category: 'email',
+        titleEn: 'Email Scheduler Automation',
+        titleHu: 'Email Ütemező Automatizálás',
+        descriptionEn: 'New scheduler configs for E-10, E-7 reminders and no-show payment requests. Event reminders include cancel URL. Automatic scheduling based on event date.',
+        descriptionHu: 'Új ütemező konfigurációk E-10, E-7 emlékeztetőkhöz és no-show fizetési felszólításokhoz. Esemény emlékeztetők tartalmazzák a lemondási linket. Automatikus ütemezés esemény dátum alapján.',
+      },
+      {
+        type: 'improvement',
+        category: 'checkin',
+        titleEn: 'Check-in Blocks Cancelled Guests',
+        titleHu: 'Beléptetés Blokkolja Lemondottakat',
+        descriptionEn: 'QR scanner shows error for cancelled registrations.',
+        descriptionHu: 'QR olvasó hibát jelez lemondott regisztrációknál.',
+      },
+      {
+        type: 'improvement',
+        category: 'registration',
+        titleEn: 'Sample GDPR Policy Text',
+        titleHu: 'Minta GDPR Szabályzat Szöveg',
+        descriptionEn: 'Detailed inline GDPR consent text with data collection details, retention period, and rights.',
+        descriptionHu: 'Részletes inline GDPR szöveg adatgyűjtés részletekkel, megőrzési idővel és jogokkal.',
+      },
+      {
+        type: 'improvement',
+        category: 'pwa',
+        titleEn: 'PWA Table Section Hidden',
+        titleHu: 'PWA Asztal Szekció Elrejtve',
+        descriptionEn: 'Table assignment temporarily hidden via feature flag until seating finalized.',
+        descriptionHu: 'Asztal hozzárendelés ideiglenesen elrejtve amíg az ültetés nem végleges.',
+      },
+      {
+        type: 'improvement',
+        category: 'email',
+        titleEn: 'Magic Link Invitation Email Redesign',
+        titleHu: 'Magic Link Meghívó Email Újratervezés',
+        descriptionEn: 'Complete redesign with CEO Gala 2026 branding, elegant typography, event details, awards section, and dual signatures.',
+        descriptionHu: 'Teljes újratervezés CEO Gala 2026 arculattal, elegáns tipográfiával, esemény részletekkel, díjak szekcióval és kettős aláírással.',
+      },
+    ],
+  },
+  {
+    version: '2.8.1',
+    date: '2026-01-11',
+    changes: [
+      {
+        type: 'feature',
+        category: 'ui',
+        titleEn: 'Release Testing Admin Page',
+        titleHu: 'Release Tesztelés Admin Oldal',
+        descriptionEn: 'New admin page at /admin/release-testing for manual test steps by version. Features: test status tracking, localStorage persistence, direct version linking via URL hash, bilingual support.',
+        descriptionHu: 'Új admin oldal a /admin/release-testing címen manuális teszt lépésekhez verziónként. Funkciók: teszt státusz követés, localStorage mentés, közvetlen verzió linkelés, kétnyelvű támogatás.',
+      },
+      {
+        type: 'improvement',
+        category: 'ui',
+        titleEn: 'Changelog Test Links',
+        titleHu: 'Változásnapló Teszt Linkek',
+        descriptionEn: 'Each version in the changelog now has a "Tesztelés" badge linking directly to its test steps.',
+        descriptionHu: 'A változásnaplóban minden verzió mellett mostantól "Tesztelés" badge található, ami a teszt lépésekre mutat.',
+      },
+    ],
+  },
   {
     version: '2.8.0',
     date: '2026-01-10',
@@ -364,6 +503,11 @@ export default function ChangelogPage() {
       : 'Latest updates and improvements',
     expandAll: language === 'hu' ? 'Összes kibontása' : 'Expand All',
     collapseAll: language === 'hu' ? 'Összes összezárása' : 'Collapse All',
+    testSteps: language === 'hu' ? 'Tesztelés' : 'Test Steps',
+  };
+
+  const getTestingUrl = (version: string) => {
+    return `/admin/release-testing#v${version.replace(/\./g, '-')}`;
   };
 
   const allExpanded = changelogData.every(entry => expandedVersions.has(entry.version));
@@ -420,10 +564,10 @@ export default function ChangelogPage() {
                 {/* Version Header */}
                 <button
                   onClick={() => toggleVersion(entry.version)}
-                  className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-neutral-700/50 rounded-xl transition-colors"
+                  className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-neutral-700/50 transition-colors"
                 >
                   <div className="flex items-center gap-4">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                    <div className={`w-10 h-10 flex items-center justify-center ${
                       isLatest
                         ? 'bg-purple-100 dark:bg-purple-900/30'
                         : 'bg-gray-100 dark:bg-neutral-700'
@@ -435,22 +579,31 @@ export default function ChangelogPage() {
                       )}
                     </div>
                     <div className="text-left">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <span className={`font-semibold ${isLatest ? 'text-purple-600 dark:text-purple-400' : 'text-gray-900 dark:text-white'}`}>
                           v{entry.version}
                         </span>
                         {isLatest && (
-                          <span className="px-2 py-0.5 text-xs font-medium bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 rounded-full">
+                          <span className="px-2 py-0.5 text-xs font-medium bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
                             {language === 'hu' ? 'Legfrissebb' : 'Latest'}
                           </span>
                         )}
+                        <a
+                          href={getTestingUrl(entry.version)}
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800/50 transition-colors border border-blue-300 dark:border-blue-600"
+                          title={ui.testSteps}
+                        >
+                          <TestTube className="w-3 h-3" weight="bold" />
+                          {ui.testSteps}
+                        </a>
                       </div>
                       <span className="text-sm text-gray-500 dark:text-gray-400">
                         {entry.date}
                       </span>
                     </div>
                   </div>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">
+                  <span className="text-sm text-gray-500 dark:text-gray-400 hidden sm:block">
                     {entry.changes.length} {language === 'hu' ? 'változás' : 'changes'}
                   </span>
                 </button>
