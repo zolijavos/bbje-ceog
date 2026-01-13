@@ -9,56 +9,26 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
 ### New Features / Új funkciók
 
 - **Automatic Registration Feedback Emails** / **Automatikus Regisztráció Visszaigazoló Emailek**
-  - EN: New email templates automatically sent after VIP registration to confirm received data. Main guest receives full registration summary (name, company, phone, dietary requirements, partner info). Partner receives notification that they were registered by the main guest. Emails sent BEFORE ticket delivery for immediate confirmation.
-  - HU: Új email sablonok automatikusan kiküldve VIP regisztráció után a kapott adatok visszaigazolására. A fővendég megkapja a teljes regisztrációs összefoglalót (név, cég, telefon, étrendi igények, partner adatok). A partner értesítést kap, hogy a fővendég regisztrálta. Az emailek a jegy küldés ELŐTT kerülnek kiküldésre azonnali visszaigazolásként.
+  - EN: New email templates automatically sent after VIP registration to confirm received data. Main guest receives full registration summary (name, company, phone, dietary requirements, partner info). Partner receives notification that they were registered by the main guest.
+  - HU: Új email sablonok automatikusan kiküldve VIP regisztráció után a kapott adatok visszaigazolására. A fővendég megkapja a teljes regisztrációs összefoglalót (név, cég, telefon, étrendi igények, partner adatok). A partner értesítést kap, hogy a fővendég regisztrálta.
 
-- **Registration Feedback Email Templates** / **Regisztráció Visszaigazoló Email Sablonok**
-  - EN: Two new email templates: `registration_feedback` (main guest - shows all data) and `registration_feedback_partner` (partner notification). Both templates include CEO Gala 2026 header image, elegant styling, and Hungarian/English content.
-  - HU: Két új email sablon: `registration_feedback` (fővendég - összes adat megjelenítése) és `registration_feedback_partner` (partner értesítő). Mindkét sablon tartalmazza a CEO Gala 2026 fejléc képet, elegáns stílust, és magyar/angol tartalmat.
-
-- **Docker Containerization** / **Docker Konténerizáció**
-  - EN: Full Docker support added with Dockerfile, docker-compose.dev.yml (development), docker-compose.prod.yml (production). Includes MySQL and Nginx configurations. Deployment scripts for easy server setup.
-  - HU: Teljes Docker támogatás hozzáadva Dockerfile-lal, docker-compose.dev.yml (fejlesztés), docker-compose.prod.yml (éles). MySQL és Nginx konfigurációkat tartalmaz. Deployment scriptek az egyszerű szerver beállításhoz.
-
-- **Security Documentation** / **Biztonsági Dokumentáció**
-  - EN: Comprehensive security architecture documentation added (CEOGALA-SECURITY-ARCHITECTURE.md). Node.js/React security analysis for 2025 best practices (NODEJS-REACT-SECURITY-ANALYSIS-2025.md).
-  - HU: Átfogó biztonsági architektúra dokumentáció hozzáadva (CEOGALA-SECURITY-ARCHITECTURE.md). Node.js/React biztonsági elemzés 2025-ös best practice-ekkel (NODEJS-REACT-SECURITY-ANALYSIS-2025.md).
-
-- **RAG Knowledge Base v3.0.0** / **RAG Tudásbázis v3.0.0**
-  - EN: Complete knowledge base update for AI-assisted development. Removed obsolete applicant functionality documentation. Updated with all current features, API endpoints, and system capabilities.
-  - HU: Teljes tudásbázis frissítés AI-asszisztált fejlesztéshez. Elavult jelentkező funkció dokumentáció eltávolítva. Frissítve az összes jelenlegi funkcióval, API végpontokkal és rendszer képességekkel.
+- **Paired Ticket Confirmation Emails** / **Páros Jegy Megerősítő Emailek**
+  - EN: Both guests in a paired ticket receive BOTH QR codes in their ticket email. Main guest gets their own QR + partner's QR. Partner gets their own QR + main guest's QR. Ensures both parties can check in if one forgets their phone.
+  - HU: Páros jegynél mindkét vendég megkapja MINDKÉT QR kódot a jegy emailben. A fővendég megkapja a sajátját + partner QR-jét. A partner megkapja a sajátját + fővendég QR-jét. Biztosítja, hogy mindketten be tudjanak lépni, ha egyikük otthon felejti a telefonját.
 
 ### Improvements / Javítások
 
-- **VIP Registration Flow Enhanced** / **VIP Regisztrációs Folyamat Bővítve**
-  - EN: VIP registration now sends feedback emails immediately after successful registration, before generating QR tickets. Non-blocking implementation - registration completes even if feedback email fails.
-  - HU: VIP regisztráció mostantól azonnal küld visszaigazoló emailt a sikeres regisztráció után, a QR jegyek generálása előtt. Nem blokkoló implementáció - a regisztráció akkor is befejeződik, ha a visszaigazoló email sikertelen.
+- **VIP Registration Email Order** / **VIP Regisztráció Email Sorrend**
+  - EN: VIP registration now sends feedback email FIRST, then ticket email. Previous order was reversed. This ensures guests receive immediate confirmation of their submitted data before the QR ticket.
+  - HU: VIP regisztráció most ELŐSZÖR küld visszaigazoló emailt, aztán jegy emailt. A korábbi sorrend fordított volt. Ez biztosítja, hogy a vendégek azonnal megkapják a beküldött adataik visszaigazolását a QR jegy előtt.
 
-- **Admin Email Template Preview** / **Admin Email Sablon Előnézet**
-  - EN: Admin dashboard email template preview now supports the two new feedback templates with sample data.
-  - HU: Admin dashboard email sablon előnézet mostantól támogatja a két új visszaigazoló sablont minta adatokkal.
+- **Partner Handling as Separate Guest** / **Partner Kezelés Külön Vendégként**
+  - EN: Partners are now created as separate Guest records with their own Registration and unique QR code. Previously partners were just additional data on the main guest's registration. Now both guests have independent check-in capability.
+  - HU: Partnerek most külön Guest rekordként jönnek létre saját Registrationnel és egyedi QR kóddal. Korábban a partnerek csak további adatok voltak a fővendég regisztrációján. Most mindkét vendég független beléptetési képességgel rendelkezik.
 
-- **Ticket Email Template Cleanup** / **Jegy Email Sablon Tisztítás**
-  - EN: Removed PWA deep link section from ticket delivery emails - PWA auth code no longer included. Removed dead BBJ CSS from magic link template. Fixed hardcoded header image paths to use dynamic URLs.
-  - HU: PWA deep link szekció eltávolítva a jegy küldő emailekből - PWA auth kód már nem szerepel. Halott BBJ CSS eltávolítva a magic link sablonból. Hardcoded header kép útvonalak javítva dinamikus URL-ekre.
-
-- **Code Review Fixes** / **Kód Felülvizsgálat Javítások**
-  - EN: Unit tests updated - removed obsolete PWA deep link URL generation tests. Test documentation updated to reflect current email template structure.
-  - HU: Unit tesztek frissítve - elavult PWA deep link URL generálás tesztek eltávolítva. Teszt dokumentáció frissítve a jelenlegi email sablon struktúrának megfelelően.
-
-### Documentation / Dokumentáció
-
-- **Deployment Guide** / **Telepítési Útmutató**
-  - EN: New comprehensive deployment guide (DEPLOYMENT-GUIDE.md) covering VPS setup, Docker deployment, PM2 configuration, and Nginx setup.
-  - HU: Új átfogó telepítési útmutató (DEPLOYMENT-GUIDE.md) VPS beállítással, Docker telepítéssel, PM2 konfigurációval és Nginx beállítással.
-
-- **Tech Specs** / **Technikai Specifikációk**
-  - EN: Added tech-spec-attendance-commitment.md and tech-spec-first-last-name.md for sprint planning documentation.
-  - HU: Hozzáadva tech-spec-attendance-commitment.md és tech-spec-first-last-name.md sprint tervezés dokumentációhoz.
-
-- **Manual Test Procedures** / **Manuális Teszt Eljárások**
-  - EN: Added manual-test-cancel-noshow.md with step-by-step test procedures for cancellation and no-show features.
-  - HU: Hozzáadva manual-test-cancel-noshow.md lépésről-lépésre teszt eljárásokkal lemondás és no-show funkciókhoz.
+- **Ticket Email Simplified** / **Jegy Email Egyszerűsítve**
+  - EN: Removed PWA deep link section from ticket delivery emails. The PWA auth code is no longer included in emails - guests access PWA directly via ceogala.hu/pwa with their code shown on the ticket.
+  - HU: PWA deep link szekció eltávolítva a jegy küldő emailekből. A PWA auth kód már nem szerepel az emailekben - vendégek közvetlenül a ceogala.hu/pwa oldalon érhetik el a PWA-t a jegyen megjelenített kóddal.
 
 ---
 

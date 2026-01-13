@@ -51,6 +51,56 @@ const releaseTests: ReleaseTest[] = [
         expected: { en: 'Both main guest and partner receive feedback emails with registration data summary before ticket delivery', hu: 'Fővendég és partner is kap visszaigazoló emailt a regisztrációs adatok összefoglalójával a jegy küldés előtt' }
       },
       {
+        nameEn: 'Paired Ticket Dual QR Code Test',
+        nameHu: 'Páros Jegy Dupla QR Kód Teszt',
+        steps: [
+          { en: 'Create a paying guest with paired ticket type', hu: 'Hozz létre fizető vendéget páros jegy típussal' },
+          { en: 'Complete registration with partner name and email', hu: 'Töltsd ki a regisztrációt partner névvel és email címmel' },
+          { en: 'Complete payment (card or manual approval for bank transfer)', hu: 'Fejezd be a fizetést (kártya vagy kézi jóváhagyás átutaláshoz)' },
+          { en: 'Check main guest ticket email', hu: 'Ellenőrizd a fővendég jegy emailjét' },
+          { en: 'Verify main guest email contains TWO QR codes (own + partner)', hu: 'Ellenőrizd, hogy a fővendég email KETTŐ QR kódot tartalmaz (saját + partner)' },
+          { en: 'Check partner ticket email', hu: 'Ellenőrizd a partner jegy emailjét' },
+          { en: 'Verify partner email contains TWO QR codes (own + main guest)', hu: 'Ellenőrizd, hogy a partner email KETTŐ QR kódot tartalmaz (saját + fővendég)' },
+        ],
+        expected: { en: 'Both guests in paired ticket receive both QR codes for backup check-in capability', hu: 'Páros jegynél mindkét vendég megkapja mindkét QR kódot a tartalék belépés érdekében' }
+      },
+      {
+        nameEn: 'Email Order Verification (Feedback → Ticket)',
+        nameHu: 'Email Sorrend Ellenőrzés (Visszaigazoló → Jegy)',
+        steps: [
+          { en: 'Complete a fresh VIP registration', hu: 'Végezz el egy új VIP regisztrációt' },
+          { en: 'Check email inbox or email logs', hu: 'Ellenőrizd az email postaládát vagy email naplókat' },
+          { en: 'Verify feedback email arrived BEFORE ticket email', hu: 'Ellenőrizd, hogy a visszaigazoló email ELŐBB érkezett a jegy emailnél' },
+          { en: 'Compare timestamps if checking via admin email log', hu: 'Hasonlítsd össze az időbélyegeket ha admin email naplón keresztül nézed' },
+        ],
+        expected: { en: 'Feedback email sent first, ticket email sent second (correct order)', hu: 'Visszaigazoló email először, jegy email másodszor (helyes sorrend)' }
+      },
+      {
+        nameEn: 'Partner as Separate Guest Record',
+        nameHu: 'Partner Külön Vendég Rekordként',
+        steps: [
+          { en: 'Complete a paired ticket registration with partner details', hu: 'Végezz el páros jegy regisztrációt partner adatokkal' },
+          { en: 'Navigate to /admin/guests', hu: 'Navigálj a /admin/guests oldalra' },
+          { en: 'Search for the partner by name or email', hu: 'Keress a partnerre név vagy email alapján' },
+          { en: 'Verify partner appears as separate row in guest list', hu: 'Ellenőrizd, hogy a partner külön sorként jelenik meg a vendéglistában' },
+          { en: 'Click on partner to view details', hu: 'Kattints a partnerre a részletek megtekintéséhez' },
+          { en: 'Verify partner has own Registration record and unique QR code', hu: 'Ellenőrizd, hogy a partnernek saját Registration rekordja és egyedi QR kódja van' },
+        ],
+        expected: { en: 'Partners are independent Guest records with separate Registration and QR - not just data on main guest', hu: 'Partnerek önálló Guest rekordok külön Registrationnel és QR-rel - nem csak adat a fővendégen' }
+      },
+      {
+        nameEn: 'Ticket Email PWA Link Removal',
+        nameHu: 'Jegy Email PWA Link Eltávolítás',
+        steps: [
+          { en: 'Complete any registration to trigger ticket email', hu: 'Végezz el bármilyen regisztrációt a jegy email kiváltásához' },
+          { en: 'Open the ticket delivery email', hu: 'Nyisd meg a jegy küldő emailt' },
+          { en: 'Scroll through entire email content', hu: 'Görgess végig az egész email tartalmon' },
+          { en: 'Verify NO "Open in Gala App" or PWA deep link section exists', hu: 'Ellenőrizd, hogy NINCS "Open in Gala App" vagy PWA deep link szekció' },
+          { en: 'Verify email contains only: QR code, event info, guest name', hu: 'Ellenőrizd, hogy az email csak ezt tartalmazza: QR kód, esemény info, vendég név' },
+        ],
+        expected: { en: 'Ticket emails are simplified without PWA promotional section', hu: 'Jegy emailek egyszerűsítve PWA promóciós szekció nélkül' }
+      },
+      {
         nameEn: 'Email Template Preview - Feedback Templates',
         nameHu: 'Email Sablon Előnézet - Visszaigazoló Sablonok',
         steps: [
@@ -62,38 +112,6 @@ const releaseTests: ReleaseTest[] = [
           { en: 'Click Preview and verify partner notification content', hu: 'Kattints az Előnézetre és ellenőrizd a partner értesítő tartalmat' },
         ],
         expected: { en: 'Both new feedback templates have working preview with sample data', hu: 'Mindkét új visszaigazoló sablon működő előnézettel rendelkezik minta adatokkal' }
-      },
-      {
-        nameEn: 'Ticket Email Template Cleanup Verification',
-        nameHu: 'Jegy Email Sablon Tisztítás Ellenőrzés',
-        steps: [
-          { en: 'Complete a VIP registration to trigger ticket email', hu: 'Végezz el egy VIP regisztrációt a jegy email kiváltásához' },
-          { en: 'Check the ticket delivery email', hu: 'Ellenőrizd a jegy küldő emailt' },
-          { en: 'Verify NO PWA deep link section is present', hu: 'Ellenőrizd, hogy NINCS PWA deep link szekció' },
-          { en: 'Verify email displays correctly without old BBJ CSS artifacts', hu: 'Ellenőrizd, hogy az email helyesen jelenik meg régi BBJ CSS maradványok nélkül' },
-        ],
-        expected: { en: 'Ticket emails are clean without obsolete PWA deep link and BBJ CSS', hu: 'Jegy emailek tiszták elavult PWA deep link és BBJ CSS nélkül' }
-      },
-      {
-        nameEn: 'Docker Configuration Files',
-        nameHu: 'Docker Konfigurációs Fájlok',
-        steps: [
-          { en: 'Verify Dockerfile exists in project root', hu: 'Ellenőrizd, hogy a Dockerfile létezik a projekt gyökerében' },
-          { en: 'Verify docker-compose.dev.yml exists', hu: 'Ellenőrizd, hogy a docker-compose.dev.yml létezik' },
-          { en: 'Verify docker-compose.prod.yml exists', hu: 'Ellenőrizd, hogy a docker-compose.prod.yml létezik' },
-          { en: 'Verify docker/mysql/init.sql and docker/nginx/nginx.conf exist', hu: 'Ellenőrizd, hogy a docker/mysql/init.sql és docker/nginx/nginx.conf létezik' },
-        ],
-        expected: { en: 'All Docker configuration files are present and properly structured', hu: 'Minden Docker konfigurációs fájl jelen van és megfelelően strukturált' }
-      },
-      {
-        nameEn: 'Security Documentation',
-        nameHu: 'Biztonsági Dokumentáció',
-        steps: [
-          { en: 'Verify docs/security/CEOGALA-SECURITY-ARCHITECTURE.md exists', hu: 'Ellenőrizd, hogy a docs/security/CEOGALA-SECURITY-ARCHITECTURE.md létezik' },
-          { en: 'Verify docs/security/NODEJS-REACT-SECURITY-ANALYSIS-2025.md exists', hu: 'Ellenőrizd, hogy a docs/security/NODEJS-REACT-SECURITY-ANALYSIS-2025.md létezik' },
-          { en: 'Open files and verify content covers security topics', hu: 'Nyisd meg a fájlokat és ellenőrizd, hogy a tartalom lefedi a biztonsági témákat' },
-        ],
-        expected: { en: 'Security documentation is complete and comprehensive', hu: 'Biztonsági dokumentáció teljes és átfogó' }
       },
     ]
   },
