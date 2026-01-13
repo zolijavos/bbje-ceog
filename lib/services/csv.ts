@@ -8,7 +8,7 @@
 import { z } from 'zod';
 import Papa from 'papaparse';
 import { prisma } from '@/lib/db/prisma';
-import { GuestType } from '@prisma/client';
+import { GuestType, RegistrationStatus } from '@prisma/client';
 
 // =============================================================================
 // Type Definitions
@@ -18,9 +18,10 @@ export interface CSVRow {
   email: string;
   name: string;
   guest_type: string;
-  phone?: string;
-  company?: string;
-  position?: string;
+  phone: string;
+  company: string;
+  position: string;
+  status?: string;
 }
 
 export interface ImportError {
@@ -46,6 +47,7 @@ export interface ParseResult {
 // =============================================================================
 
 const guestTypeValues = ['vip', 'paying_single', 'paying_paired'] as const;
+const statusValues = ['pending', 'invited', 'registered', 'approved'] as const;
 
 const csvRowSchema = z.object({
   email: z
@@ -63,16 +65,24 @@ const csvRowSchema = z.object({
   }),
   phone: z
     .string()
-    .optional()
-    .transform((val) => val?.trim() || undefined),
+    .min(1, 'Phone is required')
+    .transform((val) => val.trim()),
   company: z
     .string()
-    .optional()
-    .transform((val) => val?.trim() || undefined),
+    .min(1, 'Company is required')
+    .transform((val) => val.trim()),
   position: z
     .string()
+    .min(1, 'Position is required')
+    .transform((val) => val.trim()),
+  status: z
+    .enum(statusValues, {
+      errorMap: () => ({
+        message: `Invalid status (must be pending, invited, registered, or approved)`,
+      }),
+    })
     .optional()
-    .transform((val) => val?.trim() || undefined),
+    .default('invited'),
 });
 
 // =============================================================================
@@ -122,9 +132,10 @@ export function parseCSV(content: string): ParseResult {
         row['guest type'] ||
         row['type'] ||
         '',
-      phone: row.phone || row['telephone'] || row['tel'] || undefined,
-      company: row.company || row['organization'] || row['cég'] || undefined,
-      position: row.position || row['beosztás'] || row['title'] || undefined,
+      phone: row.phone || row['telephone'] || row['tel'] || '',
+      company: row.company || row['organization'] || row['cég'] || '',
+      position: row.position || row['beosztás'] || row['title'] || '',
+      status: row.status || row['státusz'] || row['állapot'] || undefined,
     };
 
     rows.push(mappedRow);
@@ -340,10 +351,10 @@ export async function bulkInsertGuests(rows: CSVRow[]): Promise<number> {
       email: row.email.toLowerCase().trim(),
       name: row.name.trim(),
       guest_type: row.guest_type as GuestType,
-      registration_status: 'pending' as const,
-      phone: row.phone || null,
-      company: row.company || null,
-      position: row.position || null,
+      registration_status: (row.status || 'invited') as RegistrationStatus,
+      phone: row.phone,
+      company: row.company,
+      position: row.position,
     })),
     skipDuplicates: false, // We want to catch duplicates explicitly
   });

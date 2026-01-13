@@ -1572,6 +1572,29 @@ Please provide:
 • Or look it up in the guest details (pwa_auth_code field)`,
     keywords: ['pwa', 'auth', 'code', 'login', 'ticket', 'email', 'ceog'],
   },
+  {
+    id: 'release-testing',
+    category: 'System & Technical',
+    question: 'What is the Release Testing page?',
+    answer: `The **Release Testing** page at **/admin/release-testing** provides manual test steps for each software version.
+
+**Features**:
+• **Version-by-version test steps** - Each release has documented manual test procedures
+• **Test status tracking** - Mark tests as Passed, Failed, or Not Tested (saved in localStorage)
+• **Bilingual** - Available in Hungarian and English
+• **Direct linking** - Jump to specific version using URL hash (e.g., #v2-8-0)
+
+**How to access**:
+• From Changelog page → Click "Tesztelés" badge on any version
+• From Testing Hub → Click "Release Testing" card
+• Direct URL: /admin/release-testing
+
+**Test status persistence**:
+• Your test results are saved locally in your browser
+• Each feature can be marked individually
+• Status persists across sessions`,
+    keywords: ['release', 'testing', 'test', 'version', 'manual', 'changelog'],
+  },
 ];
 
 // Guide content - Hungarian version
@@ -3039,6 +3062,29 @@ Kérlek add meg:
 • Kérhet új jegy emailt
 • Vagy megkeresheted a vendég adataiban (pwa_auth_code mező)`,
     keywords: ['pwa', 'auth', 'kód', 'bejelentkezés', 'jegy', 'email', 'ceog'],
+  },
+  {
+    id: 'release-testing-hu',
+    category: 'System & Technical',
+    question: 'Mi az a Release Tesztelés oldal?',
+    answer: `A **Release Tesztelés** oldal az **/admin/release-testing** címen manuális tesztelési lépéseket biztosít minden szoftver verzióhoz.
+
+**Funkciók**:
+• **Verziónkénti teszt lépések** - Minden kiadáshoz dokumentált manuális teszteljárások
+• **Teszt státusz követés** - Jelöld a teszteket Sikeresként, Sikertelenként vagy Nem teszteltként (localStorage-ban tárolva)
+• **Kétnyelvű** - Magyarul és angolul elérhető
+• **Közvetlen linkelés** - Ugrás konkrét verzióra URL hash-sel (pl. #v2-8-0)
+
+**Elérés**:
+• Változásnapló oldalról → Kattints a "Tesztelés" badge-re bármelyik verziónál
+• Testing Hub-ból → Kattints a "Release Tesztelés" kártyára
+• Közvetlen URL: /admin/release-testing
+
+**Teszt státusz mentés**:
+• A teszt eredményeid helyben mentődnek a böngésződben
+• Minden funkció külön jelölhető
+• A státusz megmarad a munkamenetek között`,
+    keywords: ['release', 'tesztelés', 'teszt', 'verzió', 'manuális', 'changelog'],
   },
 ];
 

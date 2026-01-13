@@ -21,6 +21,7 @@ import {
   AppleLogo,
   MicrosoftOutlookLogo,
   Question,
+  XCircle,
 } from '@phosphor-icons/react';
 import {
   EVENT_CONFIG,
@@ -38,6 +39,9 @@ import Button3D from '../components/ui/Button3D';
 import { CalendarBottomSheet } from '../components/ui/BottomSheet';
 import { useHaptic } from '../hooks/useHaptic';
 import { addToCalendar } from '../utils/calendar';
+
+// Feature flags - table section hidden for now, can be re-enabled later
+const SHOW_TABLE_SECTION = false;
 
 interface CheckinEventData {
   type: 'CHECKED_IN' | 'CONNECTED' | 'HEARTBEAT';
@@ -312,37 +316,39 @@ export default function PWADashboardPage() {
           </Card>
         </Link>
 
-        {/* Table Assignment Card */}
-        <Card variant="static">
-          <CardHeader title="Table Number" icon={<Chair size={20} weight="fill" />} />
-          {data.table ? (
-            <div className="flex items-center gap-4">
-              <div
-                className="w-16 h-16 flex items-center justify-center text-2xl font-bold rounded-lg"
-                style={{
-                  background: 'var(--color-btn-primary-bg)',
-                  color: 'var(--color-btn-primary-text)',
-                }}
-              >
-                {/* Extract just the number from table name */}
-                {data.table.name.match(/\d+/)?.[0] || '#'}
+        {/* Table Assignment Card - Hidden for now, can be re-enabled */}
+        {SHOW_TABLE_SECTION && (
+          <Card variant="static">
+            <CardHeader title="Table Number" icon={<Chair size={20} weight="fill" />} />
+            {data.table ? (
+              <div className="flex items-center gap-4">
+                <div
+                  className="w-16 h-16 flex items-center justify-center text-2xl font-bold rounded-lg"
+                  style={{
+                    background: 'var(--color-btn-primary-bg)',
+                    color: 'var(--color-btn-primary-text)',
+                  }}
+                >
+                  {/* Extract just the number from table name */}
+                  {data.table.name.match(/\d+/)?.[0] || '#'}
+                </div>
+                <div>
+                  <p className="font-medium text-lg pwa-text-primary">{data.table.name}</p>
+                  <p className="text-sm pwa-text-secondary">
+                    {data.table.table_type === 'vip' ? 'VIP table' : 'Standard table'}
+                    {data.table.seat_number && ` • Seat ${data.table.seat_number}`}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="font-medium text-lg pwa-text-primary">{data.table.name}</p>
-                <p className="text-sm pwa-text-secondary">
-                  {data.table.table_type === 'vip' ? 'VIP table' : 'Standard table'}
-                  {data.table.seat_number && ` • Seat ${data.table.seat_number}`}
-                </p>
+            ) : data.tableNumbersHidden ? (
+              <div className="pwa-text-tertiary text-sm py-2">
+                Table assignment will be revealed soon
               </div>
-            </div>
-          ) : data.tableNumbersHidden ? (
-            <div className="pwa-text-tertiary text-sm py-2">
-              Table assignment will be revealed soon
-            </div>
-          ) : (
-            <div className="pwa-text-tertiary text-sm py-2">Table not yet assigned</div>
-          )}
-        </Card>
+            ) : (
+              <div className="pwa-text-tertiary text-sm py-2">Table not yet assigned</div>
+            )}
+          </Card>
+        )}
 
         {/* Profile Summary Card */}
         <Link href="/pwa/profile" className="block">
@@ -518,6 +524,18 @@ export default function PWADashboardPage() {
             </div>
           </Card>
         </Link>
+
+        {/* Cancel Attendance Link - Show only if registered and not cancelled */}
+        {data.registration && !isEventToday() && (
+          <Link href="/pwa/cancel" className="block mt-2">
+            <Card variant="static" className="text-center">
+              <div className="flex items-center justify-center gap-2 text-red-500 dark:text-red-400">
+                <XCircle size={18} weight="fill" />
+                <span className="text-sm font-medium">Cancel Attendance</span>
+              </div>
+            </Card>
+          </Link>
+        )}
       </div>
     </div>
   );

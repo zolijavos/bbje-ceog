@@ -130,4 +130,9 @@ export const RATE_LIMITS = {
     maxAttempts: 10,
     windowMs: 60 * 60 * 1000, // 1 hour - max 10 requests per IP per hour
   },
+  // Rate limit for cancellation API (prevent abuse)
+  CANCEL: {
+    maxAttempts: 3,
+    windowMs: 60 * 60 * 1000, // 1 hour - max 3 cancellation attempts per hour
+  },
 } as const;

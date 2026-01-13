@@ -14,6 +14,8 @@ import {
   Armchair,
   UserCheck,
   ForkKnife,
+  UserMinus,
+  Warning,
 } from '@phosphor-icons/react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
@@ -25,6 +27,7 @@ interface Statistics {
       registered: number;
       approved: number;
       declined: number;
+      cancelled: number;
     };
     byType: {
       vip: number;
@@ -32,6 +35,12 @@ interface Statistics {
       paying_paired: number;
     };
     registrationRate: number;
+  };
+  attendance: {
+    cancelled: number;
+    recentCancellations: number;
+    potentialNoShows: number;
+    cancelledWithReason: number;
   };
   payments: {
     totalRevenue: number;
@@ -250,6 +259,10 @@ export default function StatisticsContent() {
               <span className="text-sm font-sans text-neutral-500 dark:text-neutral-400">{t('declined')}</span>
               <span className="font-semibold text-red-600 dark:text-red-400">{stats.registration.byStatus.declined}</span>
             </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-sans text-neutral-500 dark:text-neutral-400">{t('cancelled')}</span>
+              <span className="font-semibold text-orange-600 dark:text-orange-400">{stats.registration.byStatus.cancelled}</span>
+            </div>
           </div>
 
           <div className="mt-6 pt-6 border-t border-neutral-300/20 dark:border-neutral-700">
@@ -426,6 +439,57 @@ export default function StatisticsContent() {
               </div>
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Attendance & No-Show Statistics */}
+      <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-300/20 dark:border-neutral-700 p-6">
+        <h2 className="font-display text-xl font-semibold text-neutral-800 dark:text-neutral-100 mb-4 flex items-center gap-2">
+          <UserMinus weight="light" size={24} className="text-orange-600 dark:text-orange-400" />
+          {t('attendanceStats')}
+        </h2>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {/* Cancelled */}
+          <div className="text-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800/30">
+            <div className="font-display text-3xl font-semibold text-orange-600 dark:text-orange-400">
+              {stats.attendance.cancelled}
+            </div>
+            <div className="text-sm font-sans text-orange-700 dark:text-orange-300 mt-1">{t('totalCancelled')}</div>
+          </div>
+
+          {/* Recent Cancellations (last 7 days) */}
+          <div className="text-center p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800/30">
+            <div className="font-display text-3xl font-semibold text-yellow-600 dark:text-yellow-400">
+              {stats.attendance.recentCancellations}
+            </div>
+            <div className="text-sm font-sans text-yellow-700 dark:text-yellow-300 mt-1">{t('recentCancellations')}</div>
+          </div>
+
+          {/* Potential No-Shows */}
+          <div className="text-center p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800/30">
+            <div className="flex items-center justify-center gap-1">
+              <Warning weight="fill" size={20} className="text-red-500" />
+              <span className="font-display text-3xl font-semibold text-red-600 dark:text-red-400">
+                {stats.attendance.potentialNoShows}
+              </span>
+            </div>
+            <div className="text-sm font-sans text-red-700 dark:text-red-300 mt-1">{t('potentialNoShows')}</div>
+          </div>
+
+          {/* Cancelled with Reason */}
+          <div className="text-center p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
+            <div className="font-display text-3xl font-semibold text-neutral-800 dark:text-neutral-100">
+              {stats.attendance.cancelledWithReason}
+            </div>
+            <div className="text-sm font-sans text-neutral-500 dark:text-neutral-400 mt-1">{t('withReason')}</div>
+          </div>
+        </div>
+
+        <div className="mt-4 p-3 bg-neutral-100 dark:bg-neutral-700/50 rounded-lg">
+          <p className="text-xs font-sans text-neutral-500 dark:text-neutral-400">
+            {t('noShowExplanation')}
+          </p>
         </div>
       </div>
 

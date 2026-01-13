@@ -578,3 +578,225 @@ test.describe('PWA Logout', () => {
     await cleanup();
   });
 });
+
+test.describe('PWA Cancel Attendance', () => {
+  test('should display cancel link on dashboard', async ({ page, seedGuest, db, cleanup }) => {
+    const guest = await seedGuest(createGuestWithPWACode({
+      email: 'pwa-cancel-link@test.ceog',
+      name: 'Cancel Link Guest',
+    }));
+
+    await db.registration.create({
+      data: {
+        guest_id: guest.id,
+        ticket_type: 'vip_free',
+        gdpr_consent: true,
+        cancellation_accepted: true,
+      },
+    });
+
+    await loginToPWA(page, guest.pwa_auth_code!);
+    await page.goto('/pwa/dashboard');
+
+    // Should show cancel link - use proper CSS selector, first() to handle multiple matches
+    await expect(page.locator('a[href="/pwa/cancel"]').first()).toBeVisible();
+
+    await cleanup();
+  });
+
+  test('should navigate to cancel page', async ({ page, seedGuest, db, cleanup }) => {
+    const guest = await seedGuest(createGuestWithPWACode({
+      email: 'pwa-cancel-nav@test.ceog',
+      name: 'Cancel Nav Guest',
+    }));
+
+    await db.registration.create({
+      data: {
+        guest_id: guest.id,
+        ticket_type: 'vip_free',
+        gdpr_consent: true,
+        cancellation_accepted: true,
+      },
+    });
+
+    await loginToPWA(page, guest.pwa_auth_code!);
+    await page.goto('/pwa/cancel');
+
+    // Should show cancel page with warning
+    await expect(page.getByText('Are you sure you want to cancel?')).toBeVisible();
+    await expect(page.getByText('Confirm Cancellation')).toBeVisible();
+
+    await cleanup();
+  });
+
+  test('should show already cancelled state', async ({ page, seedGuest, db, cleanup }) => {
+    const guest = await seedGuest(createGuestWithPWACode({
+      email: 'pwa-already-cancelled@test.ceog',
+      name: 'Already Cancelled Guest',
+    }));
+
+    await db.registration.create({
+      data: {
+        guest_id: guest.id,
+        ticket_type: 'vip_free',
+        gdpr_consent: true,
+        cancellation_accepted: true,
+        cancelled_at: new Date(),
+        cancellation_reason: 'Test cancellation',
+      },
+    });
+
+    // Note: Don't change registration_status as it may affect dashboard navigation
+    // The cancelled_at field is what matters for the cancel page
+
+    // Login directly by going to code entry
+    await page.goto('/pwa');
+    const enterCodeBtn = page.locator('button:has-text("Enter Code"), button:has-text("Kód megadása")');
+    if (await enterCodeBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await enterCodeBtn.click();
+    }
+    await page.fill('[name="code"], [data-testid="auth-code-input"]', guest.pwa_auth_code!);
+    await page.click('button[type="submit"]');
+
+    // Wait for auth to complete, then navigate to cancel
+    await page.waitForURL(/\/pwa\//, { timeout: 10000 });
+    await page.goto('/pwa/cancel');
+
+    // Should show already cancelled message
+    await expect(page.getByText('Already Cancelled')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('Return to Dashboard')).toBeVisible();
+
+    await cleanup();
+  });
+
+  test('should allow entering cancellation reason', async ({ page, seedGuest, db, cleanup }) => {
+    const guest = await seedGuest(createGuestWithPWACode({
+      email: 'pwa-cancel-reason@test.ceog',
+      name: 'Cancel Reason Guest',
+    }));
+
+    await db.registration.create({
+      data: {
+        guest_id: guest.id,
+        ticket_type: 'vip_free',
+        gdpr_consent: true,
+        cancellation_accepted: true,
+      },
+    });
+
+    await loginToPWA(page, guest.pwa_auth_code!);
+    await page.goto('/pwa/cancel');
+
+    // Find reason textarea and fill it
+    const reasonField = page.locator('textarea');
+    await expect(reasonField).toBeVisible();
+    await reasonField.fill('Schedule conflict - cannot attend');
+
+    // Check character counter updates
+    await expect(page.getByText('/500')).toBeVisible();
+
+    await cleanup();
+  });
+
+  test('should successfully cancel registration', async ({ page, seedGuest, db, cleanup }) => {
+    const guest = await seedGuest(createGuestWithPWACode({
+      email: 'pwa-cancel-success@test.ceog',
+      name: 'Cancel Success Guest',
+    }));
+
+    await db.registration.create({
+      data: {
+        guest_id: guest.id,
+        ticket_type: 'vip_free',
+        gdpr_consent: true,
+        cancellation_accepted: true,
+      },
+    });
+
+    await loginToPWA(page, guest.pwa_auth_code!);
+    await page.goto('/pwa/cancel');
+
+    // Fill reason
+    await page.locator('textarea').fill('Cannot attend due to business trip');
+
+    // Click confirm cancellation
+    await page.click('button:has-text("Confirm Cancellation")');
+
+    // Should show success message
+    await expect(page.getByText('Attendance Cancelled')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('Return to Dashboard')).toBeVisible();
+
+    // Verify in database
+    const updatedReg = await db.registration.findFirst({
+      where: { guest_id: guest.id },
+    });
+    expect(updatedReg?.cancelled_at).not.toBeNull();
+    expect(updatedReg?.cancellation_reason).toBe('Cannot attend due to business trip');
+
+    await cleanup();
+  });
+
+  test('should show already cancelled state when navigating from dashboard', async ({ page, seedGuest, db, cleanup }) => {
+    const guest = await seedGuest(createGuestWithPWACode({
+      email: 'pwa-hide-cancel@test.ceog',
+      name: 'Hide Cancel Guest',
+    }));
+
+    await db.registration.create({
+      data: {
+        guest_id: guest.id,
+        ticket_type: 'vip_free',
+        gdpr_consent: true,
+        cancellation_accepted: true,
+        cancelled_at: new Date(),
+      },
+    });
+
+    // Login directly by going to code entry
+    await page.goto('/pwa');
+    const enterCodeBtn = page.locator('button:has-text("Enter Code"), button:has-text("Kód megadása")');
+    if (await enterCodeBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await enterCodeBtn.click();
+    }
+    await page.fill('[name="code"], [data-testid="auth-code-input"]', guest.pwa_auth_code!);
+    await page.click('button[type="submit"]');
+
+    // Wait for auth to complete
+    await page.waitForURL(/\/pwa\//, { timeout: 10000 });
+
+    // Navigate to cancel page
+    await page.goto('/pwa/cancel');
+
+    // Should show already cancelled state
+    await expect(page.getByText('Already Cancelled')).toBeVisible({ timeout: 10000 });
+
+    await cleanup();
+  });
+
+  test('should show "Keep Registration" button to go back', async ({ page, seedGuest, db, cleanup }) => {
+    const guest = await seedGuest(createGuestWithPWACode({
+      email: 'pwa-keep-reg@test.ceog',
+      name: 'Keep Registration Guest',
+    }));
+
+    await db.registration.create({
+      data: {
+        guest_id: guest.id,
+        ticket_type: 'vip_free',
+        gdpr_consent: true,
+        cancellation_accepted: true,
+      },
+    });
+
+    await loginToPWA(page, guest.pwa_auth_code!);
+    await page.goto('/pwa/cancel');
+
+    // Click Keep Registration button
+    await page.click('text="Keep Registration"');
+
+    // Should navigate back to dashboard
+    await expect(page).toHaveURL('/pwa/dashboard');
+
+    await cleanup();
+  });
+});

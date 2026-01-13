@@ -17,7 +17,7 @@ import { broadcastToGuest, CheckinEvent } from './event-broadcaster';
  */
 export interface CheckinValidationResponse {
   valid: boolean;
-  error?: 'INVALID_TOKEN' | 'EXPIRED_TOKEN' | 'REGISTRATION_NOT_FOUND' | 'TOKEN_MISMATCH';
+  error?: 'INVALID_TOKEN' | 'EXPIRED_TOKEN' | 'REGISTRATION_NOT_FOUND' | 'TOKEN_MISMATCH' | 'CANCELLED';
   guest?: {
     id: number;
     name: string;
@@ -70,7 +70,12 @@ export async function validateCheckinToken(qrToken: string): Promise<CheckinVali
     // Load registration with guest and check-in data
     const registration = await prisma.registration.findUnique({
       where: { id: payload.registration_id },
-      include: {
+      select: {
+        id: true,
+        qr_code_hash: true,
+        ticket_type: true,
+        partner_name: true,
+        cancelled_at: true,
         guest: {
           select: {
             id: true,
@@ -91,6 +96,11 @@ export async function validateCheckinToken(qrToken: string): Promise<CheckinVali
 
     if (!registration) {
       return { valid: false, error: 'REGISTRATION_NOT_FOUND', alreadyCheckedIn: false };
+    }
+
+    // Check if registration was cancelled
+    if (registration.cancelled_at) {
+      return { valid: false, error: 'CANCELLED', alreadyCheckedIn: false };
     }
 
     // Verify token matches stored token
@@ -147,7 +157,10 @@ export async function submitCheckin(
         guest: true,
         checkin: true,
       },
+      // Include cancelled_at for validation
     });
+
+    // Note: cancelled_at is included via default select (not using select here)
 
     if (!registration) {
       return { success: false, error: 'REGISTRATION_NOT_FOUND' };
@@ -155,6 +168,11 @@ export async function submitCheckin(
 
     if (!registration.guest) {
       return { success: false, error: 'GUEST_NOT_FOUND' };
+    }
+
+    // Check if registration was cancelled
+    if (registration.cancelled_at) {
+      return { success: false, error: 'REGISTRATION_CANCELLED' };
     }
 
     // Check for existing check-in

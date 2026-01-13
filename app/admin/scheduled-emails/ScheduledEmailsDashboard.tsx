@@ -127,7 +127,7 @@ export default function ScheduledEmailsDashboard() {
     processing: { ...STATUS_CONFIG_BASE.processing, label: t('processing') },
     sent: { ...STATUS_CONFIG_BASE.sent, label: t('sent') },
     failed: { ...STATUS_CONFIG_BASE.failed, label: t('failed') },
-    cancelled: { ...STATUS_CONFIG_BASE.cancelled, label: t('cancelled') },
+    cancelled: { ...STATUS_CONFIG_BASE.cancelled, label: t('emailCancelled') },
   };
 
   // Schedule form state
@@ -597,7 +597,7 @@ export default function ScheduledEmailsDashboard() {
                 <option value="pending">{t('pending')}</option>
                 <option value="sent">{t('sent')}</option>
                 <option value="failed">{t('failed')}</option>
-                <option value="cancelled">{t('cancelled')}</option>
+                <option value="cancelled">{t('emailCancelled')}</option>
               </select>
             </div>
 

@@ -76,6 +76,11 @@ interface Guest {
   pairedWithId?: number | null;
   pairedWith?: { id: number; name: string; email: string } | null;
   partnerGuest?: PartnerGuestInfo | null;
+  // Attendance tracking
+  cancelledAt?: string | null;
+  cancellationReason?: string | null;
+  hasCheckedIn?: boolean;
+  checkedInAt?: string | null;
 }
 
 interface SendResult {
@@ -190,9 +195,21 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
       result = result.filter(g => g.guestType === typeFilter);
     }
 
-    // Status filter
+    // Status filter (including special cancelled and no-show filters)
     if (statusFilter !== 'all') {
-      result = result.filter(g => g.status === statusFilter);
+      if (statusFilter === 'cancelled') {
+        result = result.filter(g => g.cancelledAt !== null);
+      } else if (statusFilter === 'no-show') {
+        // No-show = registered + has registration + not cancelled + not checked in
+        // Note: This is a client-side approximation; actual no-show is only after event
+        result = result.filter(g =>
+          g.hasRegistration &&
+          !g.cancelledAt &&
+          !g.hasCheckedIn
+        );
+      } else {
+        result = result.filter(g => g.status === statusFilter);
+      }
     }
 
     // VIP filter
@@ -627,6 +644,8 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
             <option value="declined">{t('declined')}</option>
             <option value="pending_approval">{t('pendingApproval')}</option>
             <option value="rejected">{t('rejected')}</option>
+            <option value="cancelled">{t('cancelled')}</option>
+            <option value="no-show">{t('noShow')}</option>
           </select>
         </div>
 

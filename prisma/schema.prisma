@@ -78,6 +78,10 @@ model Registration {
   cancellation_accepted    Boolean   @default(false)
   cancellation_accepted_at DateTime?
 
+  // Attendance commitment - guest cancellation
+  cancelled_at             DateTime?
+  cancellation_reason      String?   @db.VarChar(500)
+
   // Relations
   guest        Guest        @relation(fields: [guest_id], references: [id], onDelete: Cascade)
   payment      Payment?
@@ -393,6 +397,7 @@ enum RegistrationStatus {
   declined          // Guest declined invitation
   pending_approval  // Applicant waiting for admin approval
   rejected          // Applicant rejected by admin
+  cancelled         // Guest cancelled their registration
 }
 
 enum TicketType {

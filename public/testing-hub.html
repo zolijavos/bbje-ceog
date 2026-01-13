@@ -30,7 +30,9 @@
         viewAll: 'Összes Teszteset',
         testInfo: '6 kritikus teszt (mind kötelező) + 4 fontos teszt (3/4 kötelező)',
         allDiagrams: 'Mind a 28 diagram',
-        openDashboard: 'Diagram Dashboard megnyitása'
+        openDashboard: 'Diagram Dashboard megnyitása',
+        releaseTesting: 'Release Tesztelés',
+        releaseTestingDesc: 'Manuális tesztelési lépések verziónként'
       },
       en: {
         title: 'Testing Hub',
@@ -52,7 +54,9 @@
         viewAll: 'All Test Cases',
         testInfo: '6 critical tests (all required) + 4 important tests (3/4 required)',
         allDiagrams: 'All 28 diagrams',
-        openDashboard: 'Open Diagram Dashboard'
+        openDashboard: 'Open Diagram Dashboard',
+        releaseTesting: 'Release Testing',
+        releaseTestingDesc: 'Manual test steps by version'
       }
     };
 
@@ -205,8 +209,9 @@
     .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
 
     /* Dashboard Cards */
-    .dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
-    @media (max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } }
+    .dashboard-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    @media (max-width: 900px) { .dashboard-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 500px) { .dashboard-grid { grid-template-columns: 1fr; } }
 
     .dashboard-card {
       background: var(--neutral-800);
@@ -403,6 +408,13 @@
         <div class="card-title" x-text="t.testVideos"></div>
         <div class="card-count">11</div>
         <div class="card-desc" x-text="t.testVideosDesc"></div>
+      </div>
+
+      <div class="dashboard-card" @click="window.location.href='/admin/release-testing'">
+        <div class="card-icon">🧪</div>
+        <div class="card-title" x-text="t.releaseTesting"></div>
+        <div class="card-count">10</div>
+        <div class="card-desc" x-text="t.releaseTestingDesc"></div>
       </div>
     </div>
 

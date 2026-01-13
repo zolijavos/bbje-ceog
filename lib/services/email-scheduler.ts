@@ -131,9 +131,14 @@ export async function processScheduledEmails(): Promise<{
         variables
       );
 
-      // Send email
+      // Send email - guest may have been deleted after scheduling
       if (!guest) {
-        throw new Error('Cannot send email without guest');
+        await prisma.scheduledEmail.update({
+          where: { id: scheduled.id },
+          data: { status: 'failed', error_message: 'Guest no longer exists' },
+        });
+        stats.failed++;
+        continue;
       }
 
       const result = await sendEmail({
@@ -204,7 +209,12 @@ export async function runAutomaticSchedulers(): Promise<{
           scheduled = await schedulePaymentReminders(config);
           break;
         case 'event_reminder':
+        case 'event_reminder_e10':
+        case 'event_reminder_e7':
           scheduled = await scheduleEventReminders(config);
+          break;
+        case 'noshow_payment_request':
+          scheduled = await scheduleNoShowPaymentRequests(config);
           break;
         default:
           // Generic scheduler for custom configs
@@ -368,6 +378,10 @@ export async function scheduleEventReminders(config?: {
 
     if (existing) continue;
 
+    // Build cancel URL for last-chance cancellation reminder
+    const appUrl = process.env.APP_URL || 'https://ceogala.mflevents.space';
+    const cancelUrl = `${appUrl}/pwa/cancel`;
+
     await scheduleEmail({
       guestId: guest.id,
       templateSlug: 'event_reminder',
@@ -387,6 +401,7 @@ export async function scheduleEventReminders(config?: {
         eventVenue: EVENT_VENUE,
         eventAddress: EVENT_ADDRESS,
         tableName: guest.table_assignment?.table?.name,
+        cancelUrl: cancelUrl,
       },
       scheduleType: 'event_reminder',
     });
@@ -396,6 +411,118 @@ export async function scheduleEventReminders(config?: {
 
   if (scheduled > 0) {
     logInfo(`[SCHEDULER] Scheduled ${scheduled} event reminder emails`);
+  }
+
+  return scheduled;
+}
+
+/**
+ * Schedule no-show payment requests for guests who didn't attend
+ * Runs only after the event date
+ */
+export async function scheduleNoShowPaymentRequests(config?: {
+  days_after?: number | null;
+  send_time?: string;
+  no_show_fee?: string;
+}): Promise<number> {
+  const daysAfter = config?.days_after ?? 1;
+  const sendTime = config?.send_time || '10:00';
+  const noShowFee = config?.no_show_fee || '50,000 HUF';
+  const [hours, minutes] = sendTime.split(':').map(Number);
+
+  const eventDate = EVENT_DATE;
+  const now = new Date();
+
+  // Only run after the event
+  if (now < eventDate) {
+    return 0;
+  }
+
+  // Calculate when to send (days after event)
+  const scheduledFor = new Date(eventDate);
+  scheduledFor.setDate(scheduledFor.getDate() + daysAfter);
+  scheduledFor.setHours(hours, minutes, 0, 0);
+
+  // Don't schedule if we've already passed the scheduled time
+  if (now > scheduledFor) {
+    // Check if we're within 24 hours after scheduled time (grace period)
+    const gracePeriodEnd = new Date(scheduledFor);
+    gracePeriodEnd.setHours(gracePeriodEnd.getHours() + 24);
+    if (now > gracePeriodEnd) {
+      return 0;
+    }
+    // Set to send immediately
+    scheduledFor.setTime(Date.now() + 60000); // 1 minute from now
+  }
+
+  // Find no-show guests: registered/approved + has ticket + not checked in + not cancelled
+  const noShowGuests = await prisma.guest.findMany({
+    where: {
+      registration_status: { in: ['registered', 'approved'] },
+      registration: {
+        qr_code_hash: { not: null }, // Has ticket
+        cancelled_at: null, // Not cancelled
+      },
+      checkin: null, // Not checked in
+    },
+    include: {
+      registration: true,
+    },
+  });
+
+  let scheduled = 0;
+
+  for (const guest of noShowGuests) {
+    // Check if already scheduled
+    const existing = await prisma.scheduledEmail.findFirst({
+      where: {
+        guest_id: guest.id,
+        template_slug: 'noshow_payment_request',
+        status: { in: ['pending', 'sent'] },
+      },
+    });
+
+    if (existing) continue;
+
+    const ticketLabels: Record<string, string> = {
+      paid_single: 'Single Ticket',
+      paid_paired: 'Paired Ticket',
+      vip_free: 'VIP Ticket',
+    };
+
+    const paymentDeadline = new Date(eventDate);
+    paymentDeadline.setDate(paymentDeadline.getDate() + 14); // 2 weeks to pay
+
+    await scheduleEmail({
+      guestId: guest.id,
+      templateSlug: 'noshow_payment_request',
+      scheduledFor,
+      variables: {
+        guestName: guest.name,
+        eventDate: eventDate.toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+        ticketType: ticketLabels[guest.registration?.ticket_type || ''] || 'Standard Ticket',
+        noShowFee: noShowFee,
+        paymentDeadline: paymentDeadline.toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+        paymentUrl: `${process.env.APP_URL || 'https://ceogala.mflevents.space'}/noshow-payment?guestId=${guest.id}`,
+      },
+      scheduleType: 'noshow_payment_request',
+    });
+
+    scheduled++;
+  }
+
+  if (scheduled > 0) {
+    logInfo(`[SCHEDULER] Scheduled ${scheduled} no-show payment request emails`);
   }
 
   return scheduled;
@@ -626,6 +753,33 @@ export async function initializeDefaultConfigs(): Promise<void> {
       days_before: 1,
       send_time: '09:00',
       enabled: true,
+    },
+    {
+      config_key: 'event_reminder_e10',
+      name: 'Event Reminder (10 days before)',
+      description: 'First reminder sent 10 days before the event',
+      template_slug: 'event_reminder_e10',
+      days_before: 10,
+      send_time: '09:00',
+      enabled: true,
+    },
+    {
+      config_key: 'event_reminder_e7',
+      name: 'Event Reminder (7 days before)',
+      description: 'Second reminder sent 7 days before the event',
+      template_slug: 'event_reminder_e7',
+      days_before: 7,
+      send_time: '09:00',
+      enabled: true,
+    },
+    {
+      config_key: 'noshow_payment_request',
+      name: 'No-Show Payment Request',
+      description: 'Payment request sent to guests who did not attend or cancel',
+      template_slug: 'noshow_payment_request',
+      days_after: 1, // 1 day after event
+      send_time: '10:00',
+      enabled: false, // Disabled by default - admin must enable
     },
   ];
 

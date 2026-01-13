@@ -344,6 +344,46 @@ test.describe('Check-in Validation - Red Card (Invalid)', () => {
 
     expect(result.data.valid).toBe(false);
   });
+
+  test('should reject QR for cancelled registration', async ({ page, seedGuest, db, cleanup }) => {
+    const guest = await seedGuest(createVIPGuest({
+      email: 'cancelled-checkin@test.ceog',
+      name: 'Cancelled Guest',
+      registration_status: 'declined',
+    }));
+
+    const registration = await db.registration.create({
+      data: {
+        guest_id: guest.id,
+        ticket_type: 'vip_free',
+        gdpr_consent: true,
+        cancellation_accepted: true,
+        cancelled_at: new Date(),
+        cancellation_reason: 'Guest cancelled attendance',
+      },
+    });
+
+    // Generate valid token for the registration
+    const qrToken = generateTestQRToken({
+      registration_id: registration.id,
+      guest_id: guest.id,
+      ticket_type: 'vip_free',
+    });
+
+    await db.registration.update({
+      where: { id: registration.id },
+      data: { qr_code_hash: qrToken },
+    });
+
+    // Try to validate the cancelled registration
+    const result = await apiPost(page, '/api/checkin/validate', { qrToken: qrToken });
+
+    // Should return invalid/cancelled status
+    expect(result.data.valid).toBe(false);
+    expect(result.data.error).toBe('CANCELLED');
+
+    await cleanup();
+  });
 });
 
 test.describe('Check-in Submit', () => {

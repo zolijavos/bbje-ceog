@@ -117,4 +117,14 @@ teszt-[tipus]-[datum]@ceogala.hu
 
 ---
 
+## Online Tesztelési Eszközök
+
+| Eszköz | URL | Leírás |
+|--------|-----|--------|
+| **Release Tesztelés** | /admin/release-testing | Manuális teszt lépések verziónként |
+| **Testing Hub** | /testing-hub.html | Diagramok, tesztesetek, videók |
+| **Diagram Dashboard** | /admin/diagrams | 28 interaktív rendszer diagram |
+
+---
+
 *Részletes útmutató: [FUNCTIONAL-TEST-GUIDE.md](./FUNCTIONAL-TEST-GUIDE.md)*

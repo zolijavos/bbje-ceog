@@ -55,6 +55,10 @@ export const REGISTRATION_STATUS_INFO: Record<RegistrationStatus, StatusInfo> = 
     label: 'Rejected',
     color: 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300',
   },
+  cancelled: {
+    label: 'Cancelled',
+    color: 'bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300',
+  },
 } as const;
 
 // ========================================

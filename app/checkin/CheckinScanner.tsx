@@ -246,6 +246,8 @@ export default function CheckinScanner() {
       NETWORK_ERROR: 'Network Error',
       ALREADY_CHECKED_IN: 'Already Checked In',
       ADMIN_AUTH_REQUIRED: 'Admin Login Required',
+      CANCELLED: 'Registration Cancelled',
+      REGISTRATION_CANCELLED: 'Registration Cancelled',
     };
     return messages[error || ''] || error || 'Unknown Error';
   };

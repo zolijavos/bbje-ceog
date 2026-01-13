@@ -494,6 +494,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
             onGdprChange={(checked) => setFormData((prev) => ({ ...prev, gdprConsent: checked }))}
             onCancellationChange={(checked) => setFormData((prev) => ({ ...prev, cancellationAccepted: checked }))}
             errors={errors}
+            guestType={guest.guest_type as 'vip' | 'paying_single' | 'paying_paired' | 'applicant'}
           />
         </div>
 

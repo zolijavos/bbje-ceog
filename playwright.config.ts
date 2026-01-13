@@ -85,6 +85,7 @@ export default defineConfig({
       name: 'video-journey',
       use: {
         ...devices['Desktop Chrome'],
+        storageState: 'tests/e2e/.auth/admin.json',
         video: 'on',
         trace: 'on',
         screenshot: 'on',

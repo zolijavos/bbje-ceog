@@ -59,6 +59,8 @@ export const translations = {
     registered: 'Registered',
     approved: 'Approved',
     declined: 'Declined',
+    cancelled: 'Cancelled',
+    noShow: 'No-Show',
     pendingReview: 'Pending Review',
     rejected: 'Rejected',
     pendingApproval: 'Pending Approval',
@@ -130,6 +132,14 @@ export const translations = {
     successful: 'Successful',
     deliveryRate: 'Delivery Rate',
     byEmailType: 'By Email Type',
+
+    // Attendance & No-Show Statistics
+    attendanceStats: 'Attendance & Cancellations',
+    totalCancelled: 'Total Cancelled',
+    recentCancellations: 'Last 7 Days',
+    potentialNoShows: 'Potential No-Shows',
+    withReason: 'With Reason',
+    noShowExplanation: 'Potential no-shows are guests with tickets who haven\'t checked in and haven\'t cancelled. This count is accurate only after the event.',
 
     // Payments page
     allMethods: 'All Methods',
@@ -457,7 +467,6 @@ export const translations = {
     address: 'Address',
 
     // Scheduled Emails page
-    cancelled: 'Cancelled',
     searchByRecipient: 'Search by recipient...',
     recipient: 'Recipient',
     scheduled: 'Scheduled',
@@ -546,6 +555,8 @@ export const translations = {
     registered: 'Regisztrált',
     approved: 'Jóváhagyott',
     declined: 'Lemondta',
+    cancelled: 'Lemondott',
+    noShow: 'Nem jelent meg',
     pendingReview: 'Jóváhagyásra vár',
     rejected: 'Elutasítva',
     pendingApproval: 'Jóváhagyásra vár',
@@ -617,6 +628,14 @@ export const translations = {
     successful: 'Sikeres',
     deliveryRate: 'Kézbesítési arány',
     byEmailType: 'Email típus szerint',
+
+    // Attendance & No-Show Statistics
+    attendanceStats: 'Részvétel és lemondások',
+    totalCancelled: 'Lemondások',
+    recentCancellations: 'Elmúlt 7 nap',
+    potentialNoShows: 'Lehetséges no-show',
+    withReason: 'Indoklással',
+    noShowExplanation: 'A lehetséges no-show vendégek azok, akik jeggyel rendelkeznek, de nem léptek be és nem mondták le. Ez a szám csak az esemény után pontos.',
 
     // Payments page
     allMethods: 'Összes módszer',
@@ -913,7 +932,6 @@ export const translations = {
     address: 'Cím',
 
     // Scheduled Emails page
-    cancelled: 'Megszakítva',
     searchByRecipient: 'Keresés címzett alapján...',
     recipient: 'Címzett',
     scheduled: 'Ütemezve',

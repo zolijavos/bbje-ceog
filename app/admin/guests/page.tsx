@@ -77,6 +77,8 @@ export default async function GuestsPage() {
           ticket_type: true,
           partner_name: true,
           partner_email: true,
+          cancelled_at: true,
+          cancellation_reason: true,
           payment: {
             select: {
               payment_status: true,
@@ -95,6 +97,12 @@ export default async function GuestsPage() {
               country: true,
             },
           },
+        },
+      },
+      checkin: {
+        select: {
+          id: true,
+          checked_in_at: true,
         },
       },
     },
@@ -158,6 +166,11 @@ export default async function GuestsPage() {
       : null,
     // VIP Reception flag
     isVipReception: g.is_vip_reception ?? false,
+    // Attendance tracking
+    cancelledAt: g.registration?.cancelled_at?.toISOString() || null,
+    cancellationReason: g.registration?.cancellation_reason || null,
+    hasCheckedIn: !!g.checkin,
+    checkedInAt: g.checkin?.checked_in_at?.toISOString() || null,
   }));
 
   return (

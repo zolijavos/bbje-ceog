@@ -17,7 +17,9 @@ import {
   CaretDown,
   Code,
   TextT,
+  Image,
 } from '@phosphor-icons/react';
+import html2canvas from 'html2canvas';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 interface EmailTemplate {
@@ -71,6 +73,7 @@ export default function EmailTemplatesDashboard() {
   const [activeTab, setActiveTab] = useState<EditorTab>('html');
   const [hasChanges, setHasChanges] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [generatingImage, setGeneratingImage] = useState(false);
 
   // Fetch templates list
   const fetchTemplates = useCallback(async () => {
@@ -202,6 +205,69 @@ export default function EmailTemplatesDashboard() {
       }
     } catch {
       setMessage({ type: 'error', text: t('templateSaveFailed') });
+    }
+  };
+
+  // Generate and download PNG
+  const handleDownloadPng = async () => {
+    if (!preview || !selectedSlug) return;
+
+    setGeneratingImage(true);
+    try {
+      // Create a temporary container to render the HTML
+      const container = document.createElement('div');
+      container.style.cssText = 'position: absolute; left: -9999px; top: 0; width: 680px; background: white;';
+      container.innerHTML = preview.preview.html;
+      document.body.appendChild(container);
+
+      // Wait for images to load
+      const images = container.querySelectorAll('img');
+      await Promise.all(
+        Array.from(images).map(
+          (img) =>
+            new Promise((resolve) => {
+              if (img.complete) {
+                resolve(null);
+              } else {
+                img.onload = () => resolve(null);
+                img.onerror = () => resolve(null);
+              }
+            })
+        )
+      );
+
+      // Convert to canvas
+      const canvas = await html2canvas(container, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        width: 680,
+        windowWidth: 680,
+      });
+
+      // Remove temporary container
+      document.body.removeChild(container);
+
+      // Convert canvas to PNG and download
+      const imgData = canvas.toDataURL('image/png');
+
+      // Generate filename with template slug and date
+      const date = new Date().toISOString().split('T')[0];
+      const filename = `email-template-${selectedSlug}-${date}.png`;
+
+      // Create download link
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = imgData;
+      link.click();
+
+      setMessage({ type: 'success', text: 'PNG letöltve' });
+    } catch (error) {
+      console.error('PNG generation error:', error);
+      setMessage({ type: 'error', text: 'PNG generálás sikertelen' });
+    } finally {
+      setGeneratingImage(false);
     }
   };
 
@@ -442,12 +508,23 @@ export default function EmailTemplatesDashboard() {
                         <h3 className="text-lg font-semibold text-gray-900">{t('preview')}</h3>
                         <p className="text-sm text-gray-500">{t('subject')}: {preview.preview.subject}</p>
                       </div>
-                      <button
-                        onClick={() => setShowPreview(false)}
-                        className="p-2 text-gray-400 hover:text-gray-600 rounded-lg"
-                      >
-                        <X size={24} />
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={handleDownloadPng}
+                          disabled={generatingImage}
+                          className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                          title="Letöltés PNG-ként"
+                        >
+                          <Image size={20} weight="fill" />
+                          {generatingImage ? 'Generálás...' : 'PNG'}
+                        </button>
+                        <button
+                          onClick={() => setShowPreview(false)}
+                          className="p-2 text-gray-400 hover:text-gray-600 rounded-lg"
+                        >
+                          <X size={24} />
+                        </button>
+                      </div>
                     </div>
                     <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
                       <div className="border border-gray-200 rounded-lg overflow-hidden">

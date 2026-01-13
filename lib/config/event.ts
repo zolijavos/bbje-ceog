@@ -19,7 +19,11 @@ export const EVENT_CONFIG = {
   // Venue
   venue: {
     name: 'Corinthia Hotel Budapest',
-    address: 'Budapest, Apáczai Csere János u. 4, 1052',
+    address: 'Budapest, Erzsébet krt. 43-49, 1073',
+    coordinates: {
+      latitude: 47.4993,
+      longitude: 19.0694,
+    },
   },
 
   // Dress code

@@ -71,7 +71,7 @@ prisma/
 ```
 app/                        # Next.js App Router
 ├── (auth)/                # Authentication grouped routes
-├── admin/                 # Admin dashboard (10 sections)
+├── admin/                 # Admin dashboard (12 sections)
 │   ├── guests/           # Guest CRUD, import, bulk actions
 │   ├── tables/           # Table management
 │   ├── seating/          # Drag-drop seating map
@@ -79,7 +79,9 @@ app/                        # Next.js App Router
 │   ├── checkin/          # Check-in dashboard
 │   ├── checkin-log/      # Check-in history
 │   ├── applicants/       # Applicant approval
-│   └── email/            # Email sending
+│   ├── email/            # Email sending
+│   ├── changelog/        # Version changelog with test links
+│   └── release-testing/  # Manual release test steps by version
 ├── apply/                 # Public applicant registration
 ├── checkin/              # Mobile QR scanner
 ├── pwa/                  # Progressive Web App for guests

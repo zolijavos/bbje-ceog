@@ -28,6 +28,7 @@ export async function GET() {
     const registeredCount = guestStats.find((s) => s.registration_status === 'registered')?._count || 0;
     const approvedCount = guestStats.find((s) => s.registration_status === 'approved')?._count || 0;
     const declinedCount = guestStats.find((s) => s.registration_status === 'declined')?._count || 0;
+    const cancelledCount = guestStats.find((s) => s.registration_status === 'cancelled')?._count || 0;
 
     const vipCount = guestTypeStats.find((s) => s.guest_type === 'vip')?._count || 0;
     const singleCount = guestTypeStats.find((s) => s.guest_type === 'paying_single')?._count || 0;
@@ -103,6 +104,36 @@ export async function GET() {
       by: ['staff_user_id'],
       _count: true,
     });
+
+    // 4b. No-show & Cancellation Statistics
+    // No-show = registered/approved + has ticket + not checked in + not cancelled
+    const potentialNoShows = await prisma.guest.count({
+      where: {
+        registration_status: { in: ['registered', 'approved'] },
+        registration: {
+          qr_code_hash: { not: null }, // Has ticket
+          cancelled_at: null, // Not cancelled
+        },
+        checkin: null, // Not checked in
+      },
+    });
+
+    // Cancelled with reasons breakdown
+    const cancelledRegistrations = await prisma.registration.findMany({
+      where: {
+        cancelled_at: { not: null },
+      },
+      select: {
+        cancelled_at: true,
+        cancellation_reason: true,
+      },
+    });
+
+    const recentCancellations = cancelledRegistrations.filter((r) => {
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+      return r.cancelled_at && r.cancelled_at > sevenDaysAgo;
+    }).length;
 
     // 5. Email Statistics
     const emailStats = await prisma.emailLog.groupBy({
@@ -183,6 +214,7 @@ export async function GET() {
           registered: registeredCount,
           approved: approvedCount,
           declined: declinedCount,
+          cancelled: cancelledCount,
         },
         byType: {
           vip: vipCount,
@@ -190,6 +222,12 @@ export async function GET() {
           paying_paired: pairedCount,
         },
         registrationRate: Math.round(registrationRate * 10) / 10,
+      },
+      attendance: {
+        cancelled: cancelledCount,
+        recentCancellations: recentCancellations,
+        potentialNoShows: potentialNoShows,
+        cancelledWithReason: cancelledRegistrations.filter((r) => r.cancellation_reason).length,
       },
       payments: {
         totalRevenue,
