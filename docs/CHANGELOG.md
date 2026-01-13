@@ -4,6 +4,110 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
 
 ---
 
+## v2.9.1 (2026-01-13)
+
+### New Features / Új funkciók
+
+- **Automatic Registration Feedback Emails** / **Automatikus Regisztráció Visszaigazoló Emailek**
+  - EN: New email templates automatically sent after VIP registration to confirm received data. Main guest receives full registration summary (name, company, phone, dietary requirements, partner info). Partner receives notification that they were registered by the main guest. Emails sent BEFORE ticket delivery for immediate confirmation.
+  - HU: Új email sablonok automatikusan kiküldve VIP regisztráció után a kapott adatok visszaigazolására. A fővendég megkapja a teljes regisztrációs összefoglalót (név, cég, telefon, étrendi igények, partner adatok). A partner értesítést kap, hogy a fővendég regisztrálta. Az emailek a jegy küldés ELŐTT kerülnek kiküldésre azonnali visszaigazolásként.
+
+- **Registration Feedback Email Templates** / **Regisztráció Visszaigazoló Email Sablonok**
+  - EN: Two new email templates: `registration_feedback` (main guest - shows all data) and `registration_feedback_partner` (partner notification). Both templates include CEO Gala 2026 header image, elegant styling, and Hungarian/English content.
+  - HU: Két új email sablon: `registration_feedback` (fővendég - összes adat megjelenítése) és `registration_feedback_partner` (partner értesítő). Mindkét sablon tartalmazza a CEO Gala 2026 fejléc képet, elegáns stílust, és magyar/angol tartalmat.
+
+### Improvements / Javítások
+
+- **VIP Registration Flow Enhanced** / **VIP Regisztrációs Folyamat Bővítve**
+  - EN: VIP registration now sends feedback emails immediately after successful registration, before generating QR tickets. Non-blocking implementation - registration completes even if feedback email fails.
+  - HU: VIP regisztráció mostantól azonnal küld visszaigazoló emailt a sikeres regisztráció után, a QR jegyek generálása előtt. Nem blokkoló implementáció - a regisztráció akkor is befejeződik, ha a visszaigazoló email sikertelen.
+
+- **Admin Email Template Preview** / **Admin Email Sablon Előnézet**
+  - EN: Admin dashboard email template preview now supports the two new feedback templates with sample data.
+  - HU: Admin dashboard email sablon előnézet mostantól támogatja a két új visszaigazoló sablont minta adatokkal.
+
+---
+
+## v2.9.0 (2026-01-11)
+
+### New Features / Új funkciók
+
+- **PWA Cancel Page** / **PWA Lemondás Oldal**
+  - EN: Guests can now cancel their registration via `/pwa/cancel`. Includes cancellation reason selection (schedule conflict, illness, other) with optional comment. Available until 7 days before the event.
+  - HU: Vendégek mostantól lemondhatják regisztrációjukat a `/pwa/cancel` oldalon. Lemondási ok választás (időpont ütközés, betegség, egyéb) opcionális megjegyzéssel. Az esemény előtt 7 napig elérhető.
+
+- **Cancel API Endpoints** / **Lemondás API Végpontok**
+  - EN: New `/api/registration/cancel` POST endpoint for cancellation. New `/api/registration/cancel-status` GET endpoint for checking cancellation eligibility.
+  - HU: Új `/api/registration/cancel` POST végpont lemondáshoz. Új `/api/registration/cancel-status` GET végpont a lemondási jogosultság ellenőrzéséhez.
+
+- **Cancelled Status** / **Lemondott Státusz**
+  - EN: New "Cancelled" registration status with orange badge. Cancelled guests appear in guest list with filter support.
+  - HU: Új "Lemondott" regisztrációs státusz narancssárga badge-dzsel. Lemondott vendégek megjelennek a vendéglistában szűrő támogatással.
+
+- **No-Show Statistics** / **No-Show Statisztikák**
+  - EN: Admin dashboard now shows attendance statistics: cancelled count, potential no-shows (registered but not checked in), recent cancellations, and cancellation reasons breakdown.
+  - HU: Admin dashboard mostantól mutatja a részvételi statisztikákat: lemondottak száma, potenciális no-show-k (regisztrált de nem jelent meg), friss lemondások, lemondási okok megoszlása.
+
+### Improvements / Javítások
+
+- **Attendance Commitment Consent** / **Részvételi Kötelezettségvállalás**
+  - EN: Updated consent checkbox text to include no-show fee warning for VIP and applicant guests. Clear policy: cancellation possible until 7 days before event, no-show may result in fee equivalent to ticket price.
+  - HU: Frissített consent checkbox szöveg no-show díj figyelmeztetéssel VIP és jelentkező vendégeknek. Egyértelmű szabály: lemondás lehetséges az esemény előtt 7 napig, no-show esetén jegyár-egyenértékű díj számítható fel.
+
+- **E-10 Reminder Email Template** / **E-10 Emlékeztető Email Sablon**
+  - EN: New email template for 10-day event reminder with cancellation link and attendance confirmation request.
+  - HU: Új email sablon 10 napos esemény emlékeztetőhöz lemondási linkkel és részvétel megerősítés kéréssel.
+
+- **E-7 Reminder Email Template** / **E-7 Emlékeztető Email Sablon**
+  - EN: New email template for 7-day reminder - last chance to cancel without penalty.
+  - HU: Új email sablon 7 napos emlékeztetőhöz - utolsó esély lemondásra büntetés nélkül.
+
+- **No-Show Payment Request Email** / **No-Show Fizetési Felszólítás Email**
+  - EN: Post-event email template for requesting payment from no-show guests. Includes invoice details and payment deadline.
+  - HU: Esemény utáni email sablon no-show vendégek felszólításához. Tartalmazza a számla adatokat és fizetési határidőt.
+
+- **Email Scheduler Automation** / **Email Ütemező Automatizálás**
+  - EN: New automatic scheduler configurations for E-10 (10 days before), E-7 (7 days before) event reminders and post-event no-show payment requests. All event reminder emails now include cancellation URL. Scheduler supports bulk scheduling with configurable date offsets.
+  - HU: Új automatikus ütemező konfigurációk E-10 (10 nappal előtte), E-7 (7 nappal előtte) esemény emlékeztetőkhöz és esemény utáni no-show fizetési felszólításokhoz. Minden esemény emlékeztető email mostantól tartalmazza a lemondási linket. Ütemező támogatja a tömeges ütemezést konfigurálható dátum eltolásokkal.
+
+- **Check-in Validation for Cancelled Guests** / **Lemondott Vendégek Beléptetés Blokkolása**
+  - EN: QR code scanner now shows error for cancelled registrations. Prevents accidental check-in of guests who cancelled.
+  - HU: QR kód olvasó mostantól hibát jelez lemondott regisztrációknál. Megakadályozza a lemondott vendégek véletlen beléptetését.
+
+- **Sample GDPR Consent Text** / **Minta GDPR Hozzájárulás Szöveg**
+  - EN: Registration consent checkbox now includes detailed inline GDPR text explaining data collection (name, email, phone, company, position, dietary requirements), processing purposes, retention period (12 months), and data subject rights.
+  - HU: Regisztrációs consent checkbox mostantól részletes inline GDPR szöveget tartalmaz az adatgyűjtésről (név, email, telefon, cég, beosztás, étrendi igények), feldolgozási célokról, megőrzési időről (12 hónap), és érintetti jogokról.
+
+- **PWA Table Section Hidden** / **PWA Asztal Szekció Elrejtve**
+  - EN: Table assignment card temporarily hidden on PWA dashboard via feature flag. Can be re-enabled when seating is finalized.
+  - HU: Asztal hozzárendelés kártya ideiglenesen elrejtve a PWA dashboardon feature flag-gel. Újra engedélyezhető amikor az ültetés végleges.
+
+- **Magic Link Invitation Email Redesign** / **Magic Link Meghívó Email Újratervezés**
+  - EN: Complete redesign of magic link invitation email. New elegant typography (Georgia serif), CEO Gala 2026 branding, detailed event description (12th edition, Corinthia Hotel Budapest, March 27 2026), awards section (Expat CEO of the Year, CEO Community Award), dual signatures (Tamas Botka - Publisher, Balazs Roman - CEO), navy button styling, and professional footer with website link.
+  - HU: Magic link meghívó email teljes újratervezése. Új elegáns tipográfia (Georgia serif), CEO Gala 2026 arculat, részletes esemény leírás (12. kiadás, Corinthia Hotel Budapest, 2026. március 27.), díjak szekció (Expat CEO of the Year, CEO Community Award), kettős aláírás (Botka Tamás - Publisher, Roman Balázs - CEO), navy gomb stílus, és professzionális lábléc weboldal linkkel.
+
+---
+
+## v2.8.1 (2026-01-11)
+
+### New Features / Új funkciók
+
+- **Release Testing Admin Page** / **Release Tesztelés Admin Oldal**
+  - EN: New admin page at `/admin/release-testing` for manual test steps by version. Features include: version-by-version test procedures, test status tracking (Passed/Failed/Not Tested), localStorage persistence, direct version linking via URL hash, and bilingual support (HU/EN).
+  - HU: Új admin oldal a `/admin/release-testing` címen manuális teszt lépésekhez verziónként. Funkciók: verziónkénti teszteljárások, teszt státusz követés (Sikeres/Sikertelen/Nem tesztelt), localStorage mentés, közvetlen verzió linkelés URL hash-sel, és kétnyelvű támogatás (HU/EN).
+
+### Improvements / Javítások
+
+- **Changelog Test Links** / **Változásnapló Teszt Linkek**
+  - EN: Each version in the changelog now has a "Tesztelés" badge linking directly to its test steps.
+  - HU: A változásnaplóban minden verzió mellett mostantól "Tesztelés" badge található, ami a teszt lépésekre mutat.
+
+- **Testing Hub Integration** / **Testing Hub Integráció**
+  - EN: Release Testing added as 4th card in Testing Hub dashboard.
+  - HU: Release Tesztelés hozzáadva 4. kártyaként a Testing Hub dashboardhoz.
+
+---
+
 ## v2.8.0 (2026-01-10)
 
 ### New Features / Új funkciók
