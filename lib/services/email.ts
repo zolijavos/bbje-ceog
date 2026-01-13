@@ -1195,3 +1195,206 @@ export async function sendEventReminderEmail(params: {
     return { success: false, guestId: params.guestId, error: errorMessage };
   }
 }
+
+/**
+ * Send registration feedback email to main guest (immediately after registration)
+ * Shows all submitted data for review before official confirmation
+ */
+export async function sendRegistrationFeedbackEmail(params: {
+  guestId: number;
+  guestEmail: string;
+  guestTitle?: string;
+  guestName: string;
+  guestCompany?: string;
+  guestPhone?: string;
+  guestDiet?: string;
+  hasPartner: boolean;
+  partnerTitle?: string;
+  partnerName?: string;
+  partnerPhone?: string;
+  partnerEmail?: string;
+  partnerDiet?: string;
+}): Promise<EmailResult> {
+  try {
+    const appUrl = process.env.APP_URL || 'https://ceogala.mflevents.space';
+    const headerImageUrl = `${appUrl}/email-assets/CEO_Gala_2026_invitation_header_709x213.jpg`;
+
+    const rendered = await renderTemplate('registration_feedback', {
+      guestTitle: params.guestTitle || '',
+      guestName: params.guestName,
+      guestCompany: params.guestCompany || '-',
+      guestPhone: params.guestPhone || '-',
+      guestEmail: params.guestEmail,
+      guestDiet: params.guestDiet || 'No special requirements',
+      hasPartner: params.hasPartner ? 'Yes' : 'No',
+      partnerTitle: params.partnerTitle || '',
+      partnerName: params.partnerName || '',
+      partnerPhone: params.partnerPhone || '-',
+      partnerEmail: params.partnerEmail || '-',
+      partnerDiet: params.partnerDiet || 'No special requirements',
+      headerImage: headerImageUrl,
+      baseUrl: appUrl,
+    });
+
+    const result = await sendEmail({
+      to: params.guestEmail,
+      subject: rendered.subject,
+      html: rendered.html,
+      text: rendered.text,
+    });
+
+    await logEmailDelivery({
+      guestId: params.guestId,
+      recipient: params.guestEmail,
+      subject: rendered.subject,
+      success: result.success,
+      errorMessage: result.error,
+      emailType: 'registration_feedback',
+      htmlBody: rendered.html,
+      textBody: rendered.text,
+    });
+
+    if (result.success) {
+      logInfo(`[REGISTRATION_FEEDBACK] Email sent to ${params.guestEmail}`);
+    } else {
+      logError(`[REGISTRATION_FEEDBACK] Failed to send email to ${params.guestEmail}: ${result.error}`);
+    }
+
+    return {
+      success: result.success,
+      guestId: params.guestId,
+      error: result.error,
+    };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    logError(`[REGISTRATION_FEEDBACK] Error sending email:`, errorMessage);
+    return { success: false, guestId: params.guestId, error: errorMessage };
+  }
+}
+
+/**
+ * Send registration feedback email to partner (immediately after main guest registration)
+ * Informs partner they've been registered by main guest
+ */
+export async function sendRegistrationFeedbackPartnerEmail(params: {
+  partnerId?: number; // May not have a guest record yet
+  partnerEmail: string;
+  partnerTitle?: string;
+  partnerName: string;
+  partnerCompany?: string;
+  partnerPhone?: string;
+  partnerDiet?: string;
+  mainGuestTitle?: string;
+  mainGuestName: string;
+  mainGuestId: number;
+}): Promise<EmailResult> {
+  try {
+    const appUrl = process.env.APP_URL || 'https://ceogala.mflevents.space';
+    const headerImageUrl = `${appUrl}/email-assets/CEO_Gala_2026_invitation_header_709x213.jpg`;
+
+    const rendered = await renderTemplate('registration_feedback_partner', {
+      partnerTitle: params.partnerTitle || '',
+      partnerName: params.partnerName,
+      partnerCompany: params.partnerCompany || '-',
+      partnerPhone: params.partnerPhone || '-',
+      partnerEmail: params.partnerEmail,
+      partnerDiet: params.partnerDiet || 'No special requirements',
+      mainGuestTitle: params.mainGuestTitle || '',
+      mainGuestName: params.mainGuestName,
+      headerImage: headerImageUrl,
+      baseUrl: appUrl,
+    });
+
+    const result = await sendEmail({
+      to: params.partnerEmail,
+      subject: rendered.subject,
+      html: rendered.html,
+      text: rendered.text,
+    });
+
+    // Log with main guest ID if partner doesn't have their own guest record
+    await logEmailDelivery({
+      guestId: params.partnerId || params.mainGuestId,
+      recipient: params.partnerEmail,
+      subject: rendered.subject,
+      success: result.success,
+      errorMessage: result.error,
+      emailType: 'registration_feedback_partner',
+      htmlBody: rendered.html,
+      textBody: rendered.text,
+    });
+
+    if (result.success) {
+      logInfo(`[REGISTRATION_FEEDBACK_PARTNER] Email sent to ${params.partnerEmail} (registered by ${params.mainGuestName})`);
+    } else {
+      logError(`[REGISTRATION_FEEDBACK_PARTNER] Failed to send email to ${params.partnerEmail}: ${result.error}`);
+    }
+
+    return {
+      success: result.success,
+      guestId: params.partnerId || params.mainGuestId,
+      error: result.error,
+    };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    logError(`[REGISTRATION_FEEDBACK_PARTNER] Error sending email:`, errorMessage);
+    return { success: false, guestId: params.partnerId || params.mainGuestId, error: errorMessage };
+  }
+}
+
+/**
+ * Send both registration feedback emails (main guest + partner if applicable)
+ * Call this after VIP registration to send acknowledgment emails
+ */
+export async function sendRegistrationFeedbackEmails(params: {
+  guestId: number;
+  guestEmail: string;
+  guestTitle?: string;
+  guestName: string;
+  guestCompany?: string;
+  guestPhone?: string;
+  guestDiet?: string;
+  hasPartner: boolean;
+  partnerGuestId?: number;
+  partnerTitle?: string;
+  partnerName?: string;
+  partnerPhone?: string;
+  partnerEmail?: string;
+  partnerDiet?: string;
+}): Promise<{ mainResult: EmailResult; partnerResult?: EmailResult }> {
+  // Send feedback to main guest
+  const mainResult = await sendRegistrationFeedbackEmail({
+    guestId: params.guestId,
+    guestEmail: params.guestEmail,
+    guestTitle: params.guestTitle,
+    guestName: params.guestName,
+    guestCompany: params.guestCompany,
+    guestPhone: params.guestPhone,
+    guestDiet: params.guestDiet,
+    hasPartner: params.hasPartner,
+    partnerTitle: params.partnerTitle,
+    partnerName: params.partnerName,
+    partnerPhone: params.partnerPhone,
+    partnerEmail: params.partnerEmail,
+    partnerDiet: params.partnerDiet,
+  });
+
+  // Send feedback to partner if they have an email
+  let partnerResult: EmailResult | undefined;
+  if (params.hasPartner && params.partnerEmail && params.partnerName) {
+    partnerResult = await sendRegistrationFeedbackPartnerEmail({
+      partnerId: params.partnerGuestId,
+      partnerEmail: params.partnerEmail,
+      partnerTitle: params.partnerTitle,
+      partnerName: params.partnerName,
+      partnerCompany: params.guestCompany, // Partner typically shares company with main guest
+      partnerPhone: params.partnerPhone,
+      partnerDiet: params.partnerDiet,
+      mainGuestTitle: params.guestTitle,
+      mainGuestName: params.guestName,
+      mainGuestId: params.guestId,
+    });
+  }
+
+  return { mainResult, partnerResult };
+}

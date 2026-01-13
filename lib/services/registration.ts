@@ -7,7 +7,7 @@ import { prisma } from '@/lib/db/prisma';
 import { TicketType, RegistrationStatus, PaymentStatus, PaymentMethod } from '@prisma/client';
 import { getErrorMessage } from '@/lib/utils/errors';
 import { logError, logInfo } from '@/lib/utils/logger';
-import { generateAndSendTicket } from '@/lib/services/email';
+import { generateAndSendTicket, generateAndSendPairedTickets, sendRegistrationFeedbackEmails } from '@/lib/services/email';
 import crypto from 'crypto';
 
 /**
@@ -54,6 +54,65 @@ async function generateTicketWithRetry(
         await new Promise(resolve => setTimeout(resolve, delayMs));
       } else {
         logError(`[VIP_REGISTRATION] CRITICAL: All ${maxRetries} attempts crashed for registration ${registrationId}. Manual intervention required!`, err);
+      }
+    }
+  }
+}
+
+/**
+ * Generate paired tickets with retry mechanism
+ * Sends confirmation emails to BOTH main guest and partner with BOTH QR codes
+ *
+ * @param mainRegistrationId - Main guest's registration ID
+ * @param partnerRegistrationId - Partner's registration ID
+ * @param maxRetries - Maximum number of retry attempts (default: 3)
+ */
+async function generatePairedTicketsWithRetry(
+  mainRegistrationId: number,
+  partnerRegistrationId: number,
+  maxRetries: number = 3
+): Promise<void> {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const result = await generateAndSendPairedTickets(mainRegistrationId, partnerRegistrationId);
+
+      // Check if both emails were sent successfully
+      if (result.mainResult.success && result.partnerResult.success) {
+        logInfo(`[VIP_REGISTRATION] Paired tickets sent successfully for main=${mainRegistrationId}, partner=${partnerRegistrationId} (attempt ${attempt})`);
+        return;
+      }
+
+      // Partial success - at least one email sent
+      if (result.mainResult.success || result.partnerResult.success) {
+        logInfo(`[VIP_REGISTRATION] Partial success for paired tickets: main=${result.mainResult.success}, partner=${result.partnerResult.success}`);
+        // Don't retry if main guest email was sent
+        if (result.mainResult.success) {
+          logError(`[VIP_REGISTRATION] Partner email failed: ${result.partnerResult.error}. Manual intervention may be required.`);
+          return;
+        }
+      }
+
+      // Both failed - check for idempotent cases
+      if (result.mainResult.error === 'TICKET_ALREADY_EXISTS' || result.partnerResult.error === 'TICKET_ALREADY_EXISTS') {
+        logInfo(`[VIP_REGISTRATION] Tickets already exist for paired registration (idempotent)`);
+        return;
+      }
+
+      // Log failure and retry if not last attempt
+      if (attempt < maxRetries) {
+        const delayMs = Math.pow(2, attempt) * 1000;
+        logError(`[VIP_REGISTRATION] Attempt ${attempt}/${maxRetries} failed for paired tickets. main: ${result.mainResult.error}, partner: ${result.partnerResult.error}. Retrying in ${delayMs}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delayMs));
+      } else {
+        logError(`[VIP_REGISTRATION] CRITICAL: All ${maxRetries} attempts failed for paired tickets main=${mainRegistrationId}, partner=${partnerRegistrationId}. Manual intervention required!`);
+      }
+    } catch (err) {
+      if (attempt < maxRetries) {
+        const delayMs = Math.pow(2, attempt) * 1000;
+        logError(`[VIP_REGISTRATION] Unexpected error on attempt ${attempt}/${maxRetries} for paired tickets:`, err);
+        await new Promise(resolve => setTimeout(resolve, delayMs));
+      } else {
+        logError(`[VIP_REGISTRATION] CRITICAL: All ${maxRetries} attempts crashed for paired tickets. Manual intervention required!`, err);
       }
     }
   }
@@ -287,15 +346,53 @@ export async function processVIPRegistration(
       return { registration, partnerRegistrationId };
     });
 
-    // Generate QR ticket and send email for VIP with retry mechanism
-    // Async with exponential backoff to ensure VIP guests receive their tickets
-    logInfo(`[VIP_REGISTRATION] Generating ticket for registration ${result.registration.id}`);
-    void generateTicketWithRetry(result.registration.id, 3);
+    // Send registration feedback emails (confirmation of received data)
+    // These are sent BEFORE the ticket emails to confirm the registration data
+    try {
+      const feedbackResult = await sendRegistrationFeedbackEmails({
+        guestId: guestId,
+        guestEmail: guest.email,
+        guestTitle: data.title || undefined,
+        guestName: guest.name,
+        guestCompany: data.company || undefined,
+        guestPhone: data.phone || undefined,
+        guestDiet: data.dietary_requirements || undefined,
+        hasPartner: data.has_partner || false,
+        partnerTitle: undefined, // VIP partners don't have title in current flow
+        partnerName: data.partner_name || undefined,
+        partnerPhone: undefined, // VIP partners don't have phone in current flow
+        partnerEmail: data.partner_email || undefined,
+        partnerDiet: undefined, // VIP partners don't have diet in current flow
+      });
 
-    // Generate ticket for partner if they registered
+      if (feedbackResult.mainResult.success) {
+        logInfo(`[VIP_REGISTRATION] Feedback email sent to main guest ${guestId}`);
+      } else {
+        logError(`[VIP_REGISTRATION] Failed to send feedback email to main guest: ${feedbackResult.mainResult.error}`);
+      }
+
+      if (data.has_partner && feedbackResult.partnerResult) {
+        if (feedbackResult.partnerResult.success) {
+          logInfo(`[VIP_REGISTRATION] Feedback email sent to partner ${data.partner_email}`);
+        } else {
+          logError(`[VIP_REGISTRATION] Failed to send feedback email to partner: ${feedbackResult.partnerResult.error}`);
+        }
+      }
+    } catch (feedbackError) {
+      // Log error but don't fail registration - feedback email is not critical
+      logError('[VIP_REGISTRATION] Error sending feedback emails:', feedbackError);
+    }
+
+    // Generate QR ticket and send confirmation email(s)
+    // For paired registrations: both guests get emails with BOTH QR codes
     if (result.partnerRegistrationId) {
-      logInfo(`[VIP_REGISTRATION] Generating ticket for partner registration ${result.partnerRegistrationId}`);
-      void generateTicketWithRetry(result.partnerRegistrationId, 3);
+      // Paired registration - send both confirmation emails with both QR codes
+      logInfo(`[VIP_REGISTRATION] Generating paired tickets for main=${result.registration.id}, partner=${result.partnerRegistrationId}`);
+      void generatePairedTicketsWithRetry(result.registration.id, result.partnerRegistrationId, 3);
+    } else {
+      // Single registration - send confirmation email with just their QR code
+      logInfo(`[VIP_REGISTRATION] Generating ticket for registration ${result.registration.id}`);
+      void generateTicketWithRetry(result.registration.id, 3);
     }
 
     return {

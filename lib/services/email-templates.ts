@@ -1237,6 +1237,286 @@ If you have questions, please contact us at info@ceogala.hu
 Best regards,
 BBJ Events Organizing Team`,
   },
+  registration_feedback: {
+    slug: 'registration_feedback',
+    name: 'Registration Feedback (Main Guest)',
+    subject: 'Automatic feedback message CEO Gala 2026',
+    variables: [
+      'guestTitle', 'guestName', 'guestCompany', 'guestPhone', 'guestEmail', 'guestDiet',
+      'hasPartner', 'partnerTitle', 'partnerName', 'partnerPhone', 'partnerEmail', 'partnerDiet',
+      'headerImage', 'baseUrl'
+    ],
+    html_body: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automatic feedback message CEO Gala 2026</title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; line-height: 1.8; color: #333333; margin: 0; padding: 0; background-color: #ffffff; }
+    .container { max-width: 680px; margin: 0 auto; padding: 20px; background-color: #ffffff; }
+    .header-image { width: 100%; max-width: 680px; height: auto; display: block; margin: 0 auto 30px auto; }
+    .content { padding: 0 20px; }
+    p { margin: 0 0 15px 0; font-size: 15px; color: #333333; }
+    .greeting { font-size: 16px; margin-bottom: 20px; }
+    .highlight { font-weight: bold; }
+    .order-details { background-color: #f8f8f8; border-left: 4px solid #c41e3a; padding: 20px; margin: 25px 0; }
+    .order-details h3 { margin: 0 0 15px 0; font-size: 16px; color: #333333; }
+    .detail-row { margin: 8px 0; font-size: 14px; }
+    .detail-label { font-style: italic; color: #666666; display: inline-block; min-width: 140px; }
+    .detail-value { color: #333333; }
+    .partner-section { margin-top: 20px; padding-top: 15px; border-top: 1px dashed #ccc; }
+    .partner-section h4 { margin: 0 0 10px 0; font-size: 14px; color: #c41e3a; }
+    .consents { background-color: #f0f0f0; padding: 15px 20px; margin: 20px 0; font-size: 13px; font-style: italic; color: #555555; }
+    .consents p { margin: 8px 0; font-size: 13px; }
+    .notice { background-color: #fff8e6; border-left: 4px solid #f0ad4e; padding: 15px 20px; margin: 25px 0; }
+    .notice p { margin: 0; font-size: 14px; }
+    .footer { text-align: center; padding: 20px 0; border-top: 1px solid #e0e0e0; margin-top: 30px; }
+    .footer p { font-size: 13px; color: #666666; margin: 5px 0; }
+    .footer a { color: #333333; text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="{{headerImage}}" alt="CEO Gala 2026" class="header-image" />
+
+    <div class="content">
+      <p class="greeting">Dear {{guestTitle}} {{guestName}},</p>
+
+      <p>Thank you for your registration!</p>
+
+      <p><span class="highlight">Hereby, we confirm that your data has been received.</span> Kindly take a moment to review the information provided below.</p>
+
+      <p>Our team will now review your registration. Please note that <span class="highlight">your registration will only be finalized after having the official confirmation received.</span> Your confirmation email will include a personalised QR code granting access to the event.</p>
+
+      <div class="order-details">
+        <h3>Order details:</h3>
+        <div class="detail-row"><span class="detail-label">Prefix:</span> <span class="detail-value">{{guestTitle}}</span></div>
+        <div class="detail-row"><span class="detail-label">Name:</span> <span class="detail-value">{{guestName}}</span></div>
+        <div class="detail-row"><span class="detail-label">Company name:</span> <span class="detail-value">{{guestCompany}}</span></div>
+        <div class="detail-row"><span class="detail-label">Phone number:</span> <span class="detail-value">{{guestPhone}}</span></div>
+        <div class="detail-row"><span class="detail-label">Email address:</span> <span class="detail-value">{{guestEmail}}</span></div>
+        <div class="detail-row"><span class="detail-label">Special diet:</span> <span class="detail-value">{{guestDiet}}</span></div>
+        <div class="detail-row"><span class="detail-label">Partner:</span> <span class="detail-value">{{hasPartner}}</span></div>
+
+        {{#if hasPartner}}
+        <div class="partner-section">
+          <h4>Partner details:</h4>
+          <div class="detail-row"><span class="detail-label">Partner's prefix:</span> <span class="detail-value">{{partnerTitle}}</span></div>
+          <div class="detail-row"><span class="detail-label">Partner's name:</span> <span class="detail-value">{{partnerName}}</span></div>
+          <div class="detail-row"><span class="detail-label">Partner's phone:</span> <span class="detail-value">{{partnerPhone}}</span></div>
+          <div class="detail-row"><span class="detail-label">Partner's email:</span> <span class="detail-value">{{partnerEmail}}</span></div>
+          <div class="detail-row"><span class="detail-label">Partner's special diet:</span> <span class="detail-value">{{partnerDiet}}</span></div>
+        </div>
+        {{/if}}
+      </div>
+
+      <div class="consents">
+        <p>I agree to have photos and videos taken of me at the gala.</p>
+        <p>I accept the Terms and Conditions and the Privacy Policy.</p>
+        <p>Keep me updated on more events and news from the event organizer.</p>
+        <p>By submitting this application, I consent to the program's organizers managing my personal information. Personal data is controlled very carefully and is not disclosed to third parties.</p>
+        <p><em>The CEO Gala is open to the press. I consent to any photos and/or videos taken of me at the event being used by Business Publishing Services Ltd. for publicity purposes.</em></p>
+      </div>
+
+      <div class="notice">
+        <p>Should you notice any inaccuracies in the information above, please contact us at <a href="mailto:event@bbj.hu">event@bbj.hu</a>.</p>
+      </div>
+
+      <p><span class="highlight">Thank you for your registration! Please kindly await our official confirmation letter, which will be sent to you shortly.</span></p>
+
+      <p>Kind regards,<br>The BBJ CEO Gala Team</p>
+    </div>
+
+    <div class="footer">
+      <p><u>Business Publishing Services Kft.</u></p>
+      <p>1075 Budapest, Madách Imre út 13-14., Hungary</p>
+      <p>Publisher of Budapest Business Journal</p>
+      <p>Event website: <a href="https://ceogala.com">ceogala.com</a></p>
+    </div>
+  </div>
+</body>
+</html>`,
+    text_body: `Automatic feedback message CEO Gala 2026
+
+Dear {{guestTitle}} {{guestName}},
+
+Thank you for your registration!
+
+Hereby, we confirm that your data has been received. Kindly take a moment to review the information provided below.
+
+Our team will now review your registration. Please note that your registration will only be finalized after having the official confirmation received. Your confirmation email will include a personalised QR code granting access to the event.
+
+ORDER DETAILS
+-------------
+Prefix: {{guestTitle}}
+Name: {{guestName}}
+Company name: {{guestCompany}}
+Phone number: {{guestPhone}}
+Email address: {{guestEmail}}
+Special diet: {{guestDiet}}
+Partner: {{hasPartner}}
+
+{{#if hasPartner}}
+PARTNER DETAILS
+---------------
+Partner's prefix: {{partnerTitle}}
+Partner's name: {{partnerName}}
+Partner's phone: {{partnerPhone}}
+Partner's email: {{partnerEmail}}
+Partner's special diet: {{partnerDiet}}
+{{/if}}
+
+DECLARATIONS ACCEPTED
+---------------------
+- I agree to have photos and videos taken of me at the gala.
+- I accept the Terms and Conditions and the Privacy Policy.
+- Keep me updated on more events and news from the event organizer.
+- By submitting this application, I consent to the program's organizers managing my personal information.
+- The CEO Gala is open to the press. I consent to any photos and/or videos taken of me at the event being used by Business Publishing Services Ltd. for publicity purposes.
+
+Should you notice any inaccuracies in the information above, please contact us at event@bbj.hu.
+
+Thank you for your registration! Please kindly await our official confirmation letter, which will be sent to you shortly.
+
+Kind regards,
+The BBJ CEO Gala Team
+
+---
+
+Business Publishing Services Kft.
+1075 Budapest, Madách Imre út 13-14., Hungary
+Publisher of Budapest Business Journal
+Event website: ceogala.com`,
+  },
+  registration_feedback_partner: {
+    slug: 'registration_feedback_partner',
+    name: 'Registration Feedback (Partner)',
+    subject: 'Registration details received: CEO Gala 2026',
+    variables: [
+      'partnerTitle', 'partnerName', 'partnerCompany', 'partnerPhone', 'partnerEmail', 'partnerDiet',
+      'mainGuestTitle', 'mainGuestName', 'headerImage', 'baseUrl'
+    ],
+    html_body: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration details received: CEO Gala 2026</title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; line-height: 1.8; color: #333333; margin: 0; padding: 0; background-color: #ffffff; }
+    .container { max-width: 680px; margin: 0 auto; padding: 20px; background-color: #ffffff; }
+    .header-image { width: 100%; max-width: 680px; height: auto; display: block; margin: 0 auto 30px auto; }
+    .content { padding: 0 20px; }
+    p { margin: 0 0 15px 0; font-size: 15px; color: #333333; }
+    .greeting { font-size: 16px; margin-bottom: 20px; }
+    .highlight { font-weight: bold; }
+    .order-details { background-color: #f8f8f8; border-left: 4px solid #c41e3a; padding: 20px; margin: 25px 0; }
+    .order-details h3 { margin: 0 0 15px 0; font-size: 16px; color: #333333; }
+    .detail-row { margin: 8px 0; font-size: 14px; }
+    .detail-label { font-style: italic; color: #666666; display: inline-block; min-width: 140px; }
+    .detail-value { color: #333333; }
+    .consents { background-color: #f0f0f0; padding: 15px 20px; margin: 20px 0; font-size: 13px; font-style: italic; color: #555555; }
+    .consents p { margin: 8px 0; font-size: 13px; }
+    .consents-intro { font-style: italic; color: #666666; margin-bottom: 10px; }
+    .notice { background-color: #fff8e6; border-left: 4px solid #f0ad4e; padding: 15px 20px; margin: 25px 0; }
+    .notice p { margin: 0 0 10px 0; font-size: 14px; }
+    .notice p:last-child { margin: 0; }
+    .footer { text-align: center; padding: 20px 0; border-top: 1px solid #e0e0e0; margin-top: 30px; }
+    .footer p { font-size: 13px; color: #666666; margin: 5px 0; }
+    .footer a { color: #333333; text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="{{headerImage}}" alt="CEO Gala 2026" class="header-image" />
+
+    <div class="content">
+      <p class="greeting">Dear {{partnerTitle}} {{partnerName}},</p>
+
+      <p>You are receiving this message because you have been registered as an accompanying guest for the CEO Gala 2026 by <span class="highlight">{{mainGuestTitle}} {{mainGuestName}}</span>.</p>
+
+      <p>We confirm receipt of the details provided in connection with your participation. Please take a moment to review the information below to ensure its accuracy.</p>
+
+      <p>Our team will now review your registration. Please note that <span class="highlight">your registration will only be finalized after having the official confirmation received.</span> Your confirmation email will include a personalised QR code granting access to the event.</p>
+
+      <div class="order-details">
+        <h3>Registration details (as provided):</h3>
+        <div class="detail-row"><span class="detail-label">Prefix:</span> <span class="detail-value">{{partnerTitle}}</span></div>
+        <div class="detail-row"><span class="detail-label">Name:</span> <span class="detail-value">{{partnerName}}</span></div>
+        <div class="detail-row"><span class="detail-label">Company name:</span> <span class="detail-value">{{partnerCompany}}</span></div>
+        <div class="detail-row"><span class="detail-label">Phone number:</span> <span class="detail-value">{{partnerPhone}}</span></div>
+        <div class="detail-row"><span class="detail-label">Email address:</span> <span class="detail-value">{{partnerEmail}}</span></div>
+        <div class="detail-row"><span class="detail-label">Special diet:</span> <span class="detail-value">{{partnerDiet}}</span></div>
+      </div>
+
+      <div class="consents">
+        <p class="consents-intro">The following declarations were accepted at the time of registration on your behalf:</p>
+        <p>I agree to have photos and videos taken of me at the gala.</p>
+        <p>I accept the Terms and Conditions and the Privacy Policy.</p>
+        <p><em>The CEO Gala is open to the press. I consent to any photos and/or videos taken of me at the event being used by Business Publishing Services Ltd. for publicity purposes.</em></p>
+      </div>
+
+      <div class="notice">
+        <p>Should you notice any inaccuracies in the information above, or if you have any questions regarding the declarations listed, please contact us at <a href="mailto:event@bbj.hu">event@bbj.hu</a>.</p>
+        <p>Please note that attendance-related administration, including cancellations, is handled through the guest who completed the registration on your behalf.</p>
+      </div>
+
+      <p><span class="highlight">Please kindly await our official confirmation letter, which will be sent to you shortly.</span></p>
+
+      <p>Kind regards,<br>The BBJ CEO Gala Team</p>
+    </div>
+
+    <div class="footer">
+      <p><u>Business Publishing Services Kft.</u></p>
+      <p>1075 Budapest, Madách Imre út 13-14., Hungary</p>
+      <p>Publisher of Budapest Business Journal</p>
+      <p>Event website: <a href="https://ceogala.com">ceogala.com</a></p>
+    </div>
+  </div>
+</body>
+</html>`,
+    text_body: `Registration details received: CEO Gala 2026
+
+Dear {{partnerTitle}} {{partnerName}},
+
+You are receiving this message because you have been registered as an accompanying guest for the CEO Gala 2026 by {{mainGuestTitle}} {{mainGuestName}}.
+
+We confirm receipt of the details provided in connection with your participation. Please take a moment to review the information below to ensure its accuracy.
+
+Our team will now review your registration. Please note that your registration will only be finalized after having the official confirmation received. Your confirmation email will include a personalised QR code granting access to the event.
+
+REGISTRATION DETAILS (AS PROVIDED)
+----------------------------------
+Prefix: {{partnerTitle}}
+Name: {{partnerName}}
+Company name: {{partnerCompany}}
+Phone number: {{partnerPhone}}
+Email address: {{partnerEmail}}
+Special diet: {{partnerDiet}}
+
+The following declarations were accepted at the time of registration on your behalf:
+
+- I agree to have photos and videos taken of me at the gala.
+- I accept the Terms and Conditions and the Privacy Policy.
+- The CEO Gala is open to the press. I consent to any photos and/or videos taken of me at the event being used by Business Publishing Services Ltd. for publicity purposes.
+
+Should you notice any inaccuracies in the information above, or if you have any questions regarding the declarations listed, please contact us at event@bbj.hu.
+
+Please note that attendance-related administration, including cancellations, is handled through the guest who completed the registration on your behalf.
+
+Please kindly await our official confirmation letter, which will be sent to you shortly.
+
+Kind regards,
+The BBJ CEO Gala Team
+
+---
+
+Business Publishing Services Kft.
+1075 Budapest, Madách Imre út 13-14., Hungary
+Publisher of Budapest Business Journal
+Event website: ceogala.com`,
+  },
 } as const;
 
 export type TemplateSlug = keyof typeof DEFAULT_TEMPLATES;
