@@ -17,7 +17,7 @@ import { z } from 'zod';
 const createGuestSchema = z.object({
   email: z.string().email('Invalid email address'),
   name: z.string().min(1, 'Name is required'),
-  guest_type: z.enum(['vip', 'paying_single', 'paying_paired', 'applicant']),
+  guest_type: z.enum(['vip', 'invited', 'paying_single', 'paying_paired', 'applicant']),
   title: z.string().nullable().optional(),
   phone: z.string().nullable().optional(),
   company: z.string().min(1, 'Company is required'),
@@ -44,18 +44,46 @@ export async function GET(request: NextRequest) {
     const statusParam = searchParams.get('status') || 'all';
     const includeStats = searchParams.get('includeStats') === 'true';
 
-    // Validate guest type
+    // Support array filters (comma-separated)
+    const guestTypesParam = searchParams.get('guest_types');
+    const registrationStatusesParam = searchParams.get('registration_statuses');
+    const isVipReceptionParam = searchParams.get('is_vip_reception');
+    const hasTicketParam = searchParams.get('has_ticket');
+    const hasTableParam = searchParams.get('has_table');
+
+    // Parse array filters
+    const validGuestTypes = ['vip', 'invited', 'paying_single', 'paying_paired', 'applicant'];
+    const validStatuses = ['invited', 'registered', 'approved', 'declined', 'pending', 'pending_approval', 'rejected'];
+
+    let guestTypes: GuestType[] | undefined;
+    if (guestTypesParam) {
+      guestTypes = guestTypesParam.split(',').filter(t => validGuestTypes.includes(t)) as GuestType[];
+      if (guestTypes.length === 0) guestTypes = undefined;
+    }
+
+    let registrationStatuses: RegistrationStatus[] | undefined;
+    if (registrationStatusesParam) {
+      registrationStatuses = registrationStatusesParam.split(',').filter(s => validStatuses.includes(s)) as RegistrationStatus[];
+      if (registrationStatuses.length === 0) registrationStatuses = undefined;
+    }
+
+    // Parse boolean filters
+    const isVipReception = isVipReceptionParam === 'true' ? true : isVipReceptionParam === 'false' ? false : undefined;
+    const hasTicket = hasTicketParam === 'true' ? true : hasTicketParam === 'false' ? false : undefined;
+    const hasTable = hasTableParam === 'true' ? true : hasTableParam === 'false' ? false : undefined;
+
+    // Validate single guest type (legacy support)
     let type: GuestType | 'all' = 'all';
-    if (typeParam !== 'all') {
-      if (['vip', 'paying_single', 'paying_paired'].includes(typeParam)) {
+    if (typeParam !== 'all' && !guestTypes) {
+      if (validGuestTypes.includes(typeParam)) {
         type = typeParam as GuestType;
       }
     }
 
-    // Validate registration status
+    // Validate single registration status (legacy support)
     let status: RegistrationStatus | 'all' = 'all';
-    if (statusParam !== 'all') {
-      if (['invited', 'registered', 'approved', 'declined'].includes(statusParam)) {
+    if (statusParam !== 'all' && !registrationStatuses) {
+      if (validStatuses.includes(statusParam)) {
         status = statusParam as RegistrationStatus;
       }
     }
@@ -63,10 +91,15 @@ export async function GET(request: NextRequest) {
     // Get guest list
     const result = await getGuestList({
       page,
-      limit: Math.min(limit, 100), // Max 100 per page
+      limit: Math.min(limit, 500), // Max 500 per page for bulk operations
       search,
       type,
       status,
+      guestTypes,
+      registrationStatuses,
+      isVipReception,
+      hasTicket,
+      hasTable,
     });
 
     // Optionally include stats

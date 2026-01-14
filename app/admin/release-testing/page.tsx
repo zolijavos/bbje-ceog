@@ -33,6 +33,123 @@ interface ReleaseTest {
 
 const releaseTests: ReleaseTest[] = [
   {
+    version: '2.11.0',
+    date: '2026-01-14',
+    features: [
+      {
+        nameEn: 'Bulk Email Guest Preview',
+        nameHu: 'Tömeges Email Vendég Előnézet',
+        steps: [
+          { en: 'Navigate to /admin/scheduled-emails', hu: 'Navigálj a /admin/scheduled-emails oldalra' },
+          { en: 'Click "Schedule Bulk Email" tab', hu: 'Kattints a "Tömeges Email Ütemezés" fülre' },
+          { en: 'Select any guest filters (type, status, VIP)', hu: 'Válassz vendég szűrőket (típus, státusz, VIP)' },
+          { en: 'Verify filtered guest list table appears below filters', hu: 'Ellenőrizd, hogy a szűrt vendéglista táblázat megjelenik a szűrők alatt' },
+          { en: 'Verify max 50 guests shown with "X more guests..." indicator', hu: 'Ellenőrizd, hogy max 50 vendég jelenik meg "X további vendég..." jelzéssel' },
+          { en: 'Verify schedule button shows total guest count', hu: 'Ellenőrizd, hogy az ütemezés gomb mutatja az összes vendégszámot' },
+        ],
+        expected: { en: 'Guest preview table shows filtered recipients before scheduling bulk emails', hu: 'Vendég előnézet táblázat mutatja a szűrt címzetteket tömeges email ütemezés előtt' }
+      },
+      {
+        nameEn: 'Array-Based Guest Filtering API',
+        nameHu: 'Tömb-Alapú Vendég Szűrő API',
+        steps: [
+          { en: 'Open browser DevTools Network tab', hu: 'Nyisd meg a böngésző DevTools Hálózat fület' },
+          { en: 'Select multiple guest types in bulk email filters', hu: 'Válassz több vendég típust a tömeges email szűrőkben' },
+          { en: 'Verify API call uses guest_types=vip,paying_single format', hu: 'Ellenőrizd, hogy az API hívás guest_types=vip,paying_single formátumot használ' },
+          { en: 'Select multiple registration statuses', hu: 'Válassz több regisztrációs státuszt' },
+          { en: 'Verify API call uses registration_statuses=invited,registered format', hu: 'Ellenőrizd, hogy az API hívás registration_statuses=invited,registered formátumot használ' },
+          { en: 'Check limit parameter is 500', hu: 'Ellenőrizd, hogy a limit paraméter 500' },
+        ],
+        expected: { en: 'API correctly processes comma-separated array filters', hu: 'API helyesen dolgozza fel a vesszővel elválasztott tömb szűrőket' }
+      },
+      {
+        nameEn: 'VIP Registration Status Fix',
+        nameHu: 'VIP Regisztráció Státusz Javítás',
+        steps: [
+          { en: 'Create a new VIP guest in admin', hu: 'Hozz létre új VIP vendéget az adminban' },
+          { en: 'Send magic link to the guest', hu: 'Küldj magic linket a vendégnek' },
+          { en: 'Complete VIP registration', hu: 'Töltsd ki a VIP regisztrációt' },
+          { en: 'Navigate to /admin/guests and find the guest', hu: 'Navigálj a /admin/guests oldalra és keresd meg a vendéget' },
+          { en: 'Verify status shows "Registered" (not "Approved")', hu: 'Ellenőrizd, hogy a státusz "Regisztrált" (nem "Jóváhagyott")' },
+        ],
+        expected: { en: 'VIP registration correctly sets status to "registered"', hu: 'VIP regisztráció helyesen állítja a státuszt "registered"-re' }
+      },
+      {
+        nameEn: 'Invited Guests in Seating List',
+        nameHu: 'Meghívott Vendégek az Ültetési Listában',
+        steps: [
+          { en: 'Create a new guest with "invited" status (no registration yet)', hu: 'Hozz létre új vendéget "invited" státusszal (még nincs regisztráció)' },
+          { en: 'Navigate to /admin/seating', hu: 'Navigálj a /admin/seating oldalra' },
+          { en: 'Look at the "Unassigned Guests" panel', hu: 'Nézd meg a "Nem hozzárendelt vendégek" panelt' },
+          { en: 'Verify the invited guest appears in the list', hu: 'Ellenőrizd, hogy a meghívott vendég megjelenik a listában' },
+          { en: 'Drag guest to a table to assign seat', hu: 'Húzd a vendéget egy asztalhoz ülőhely hozzárendeléséhez' },
+        ],
+        expected: { en: 'Invited guests are visible and assignable in seating list', hu: 'Meghívott vendégek láthatók és hozzárendelhetők az ültetési listában' }
+      },
+      {
+        nameEn: 'Partner Detection on Seating Tables',
+        nameHu: 'Partner Detektálás az Ültetési Táblákban',
+        steps: [
+          { en: 'Create a paired ticket registration (paying_paired type)', hu: 'Hozz létre páros jegy regisztrációt (paying_paired típus)' },
+          { en: 'Navigate to /admin/seating (Tables view)', hu: 'Navigálj a /admin/seating oldalra (Táblák nézet)' },
+          { en: 'Find the paired guest in unassigned list', hu: 'Keresd meg a páros vendéget a nem hozzárendelt listában' },
+          { en: 'Verify partner indicator is shown (icon or label)', hu: 'Ellenőrizd, hogy a partner jelző megjelenik (ikon vagy címke)' },
+          { en: 'Assign to table and verify both seats reserved', hu: 'Rendelj asztalhoz és ellenőrizd, hogy mindkét hely lefoglalódik' },
+        ],
+        expected: { en: 'Partners correctly detected via guest_type, ticket_type, partner_of, or registration partner_name', hu: 'Partnerek helyesen detektálva guest_type, ticket_type, partner_of vagy registration partner_name alapján' }
+      },
+      {
+        nameEn: 'Date/Time Input Visibility',
+        nameHu: 'Dátum/Idő Input Láthatóság',
+        steps: [
+          { en: 'Navigate to /admin/scheduled-emails', hu: 'Navigálj a /admin/scheduled-emails oldalra' },
+          { en: 'Verify date picker text is dark and readable', hu: 'Ellenőrizd, hogy a dátum választó szöveg sötét és olvasható' },
+          { en: 'Verify time picker text is dark and readable', hu: 'Ellenőrizd, hogy az idő választó szöveg sötét és olvasható' },
+          { en: 'Navigate to /admin/checkin-log and check date inputs', hu: 'Navigálj a /admin/checkin-log oldalra és ellenőrizd a dátum inputokat' },
+          { en: 'Navigate to /admin/audit-log and check date inputs', hu: 'Navigálj a /admin/audit-log oldalra és ellenőrizd a dátum inputokat' },
+          { en: 'Navigate to /admin/payments and check date inputs', hu: 'Navigálj a /admin/payments oldalra és ellenőrizd a dátum inputokat' },
+        ],
+        expected: { en: 'All date/time inputs have visible dark text on white background', hu: 'Minden dátum/idő input sötét szöveget mutat fehér háttéren' }
+      },
+      {
+        nameEn: 'MyForge Labs Logo in Footers',
+        nameHu: 'MyForge Labs Logo a Láblécekben',
+        steps: [
+          { en: 'Navigate to /checkin (QR scanner)', hu: 'Navigálj a /checkin oldalra (QR olvasó)' },
+          { en: 'Scroll to footer area', hu: 'Görgess a lábléc területre' },
+          { en: 'Verify MyForge Labs logo appears before "Built By MyForge Labs" text', hu: 'Ellenőrizd, hogy a MyForge Labs logo megjelenik a "Built By MyForge Labs" szöveg előtt' },
+          { en: 'Login to PWA at /pwa', hu: 'Jelentkezz be a PWA-ba a /pwa címen' },
+          { en: 'Check footer on any PWA page', hu: 'Ellenőrizd a láblécet bármely PWA oldalon' },
+          { en: 'Verify logo appears in PWA footer too', hu: 'Ellenőrizd, hogy a logo megjelenik a PWA láblécben is' },
+        ],
+        expected: { en: 'MyForge Labs logo visible in both Check-in Scanner and PWA footers', hu: 'MyForge Labs logo látható a Check-in Scanner és PWA láblécekben egyaránt' }
+      },
+      {
+        nameEn: 'Partner Registration Error Handling',
+        nameHu: 'Partner Regisztráció Hibakezelés',
+        steps: [
+          { en: 'Create a paid guest with paired ticket type', hu: 'Hozz létre fizető vendéget páros jegy típussal' },
+          { en: 'Complete registration with partner email', hu: 'Töltsd ki a regisztrációt partner email címmel' },
+          { en: 'Try to register the same partner email again for a different guest', hu: 'Próbáld regisztrálni ugyanazt a partner email címet egy másik vendégnek' },
+          { en: 'Verify friendly error message appears (not database error)', hu: 'Ellenőrizd, hogy barátságos hibaüzenet jelenik meg (nem adatbázis hiba)' },
+        ],
+        expected: { en: 'System gracefully handles duplicate partner registration attempts', hu: 'Rendszer elegánsan kezeli a duplikált partner regisztrációs kísérleteket' }
+      },
+      {
+        nameEn: 'AlreadyRegistered Page Contrast',
+        nameHu: 'AlreadyRegistered Oldal Kontraszt',
+        steps: [
+          { en: 'Register a VIP guest successfully', hu: 'Regisztrálj egy VIP vendéget sikeresen' },
+          { en: 'Try to access the same magic link again', hu: 'Próbáld újra elérni ugyanazt a magic linket' },
+          { en: 'Verify AlreadyRegistered page is displayed', hu: 'Ellenőrizd, hogy az AlreadyRegistered oldal jelenik meg' },
+          { en: 'Check that green box has good text contrast', hu: 'Ellenőrizd, hogy a zöld dobozban jól látható a szöveg' },
+          { en: 'Verify border is visible around the box', hu: 'Ellenőrizd, hogy keret látható a doboz körül' },
+        ],
+        expected: { en: 'AlreadyRegistered page has improved text visibility with darker colors', hu: 'AlreadyRegistered oldalon javított szöveg láthatóság sötétebb színekkel' }
+      },
+    ]
+  },
+  {
     version: '2.10.0',
     date: '2026-01-13',
     features: [

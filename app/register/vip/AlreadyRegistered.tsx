@@ -96,11 +96,11 @@ export default function AlreadyRegistered({
               Your registration has been recorded. Your QR ticket will arrive
               via email shortly.
             </p>
-            <div className="bg-green-50 rounded-lg p-4 mb-6">
-              <h3 className="font-semibold text-green-800 mb-2">
+            <div className="bg-green-100 rounded-lg p-4 mb-6 border border-green-300">
+              <h3 className="font-semibold text-green-900 mb-2">
                 Registration Status
               </h3>
-              <p className="text-green-700 text-sm">
+              <p className="text-green-900 text-sm">
                 ✓ Attendance confirmed
                 <br />✓ VIP guest status
               </p>
@@ -129,15 +129,6 @@ export default function AlreadyRegistered({
               className="text-amber-600 hover:underline"
             >
               View Registration Guide
-            </Link>
-          </p>
-          <p>
-            <Link
-              href="/"
-              aria-label="Back to home page"
-              className="text-slate-500 hover:text-slate-700 transition-colors"
-            >
-              ← Back to Home
             </Link>
           </p>
         </div>

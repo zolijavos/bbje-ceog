@@ -7,11 +7,16 @@ export interface Guest {
   id: number;
   name: string;
   email: string;
-  guest_type: 'vip' | 'paying_single' | 'paying_paired';
+  guest_type: 'vip' | 'invited' | 'paying_single' | 'paying_paired';
   registration?: {
     ticket_type: string;
     partner_name: string | null;
-    partner_email: string | null;
+    partner_email?: string | null;
+  } | null;
+  // Partner relation - if this guest has a partner linked via paired_with_id
+  partner_of?: {
+    id: number;
+    name: string;
   } | null;
 }
 
@@ -64,7 +69,7 @@ export interface DraggableGuest {
   guestId: number;
   name: string;
   email: string;
-  guestType: 'vip' | 'paying_single' | 'paying_paired';
+  guestType: 'vip' | 'invited' | 'paying_single' | 'paying_paired';
   type: 'single' | 'paired';
   partner?: {
     name: string;
@@ -104,8 +109,18 @@ export function toDraggableGuest(
   assignmentId?: number,
   tableId?: number
 ): DraggableGuest {
-  const isPaired = guest.guest_type === 'paying_paired' ||
-    guest.registration?.ticket_type === 'paid_paired';
+  // Check if guest has a partner:
+  // 1. paying_paired guest type
+  // 2. paid_paired ticket type
+  // 3. Has partner_of relation (VIP/invited with linked partner)
+  // 4. Has registration.partner_name (VIP registration with partner info)
+  const hasPartner = guest.guest_type === 'paying_paired' ||
+    guest.registration?.ticket_type === 'paid_paired' ||
+    !!guest.partner_of ||
+    !!guest.registration?.partner_name;
+
+  // Get partner name from registration or partner_of relation
+  const partnerName = guest.registration?.partner_name || guest.partner_of?.name;
 
   return {
     id: createDraggableId(guest.id),
@@ -113,12 +128,12 @@ export function toDraggableGuest(
     name: guest.name,
     email: guest.email,
     guestType: guest.guest_type,
-    type: isPaired ? 'paired' : 'single',
-    partner: isPaired && guest.registration?.partner_name ? {
-      name: guest.registration.partner_name,
-      email: guest.registration.partner_email,
+    type: hasPartner ? 'paired' : 'single',
+    partner: hasPartner && partnerName ? {
+      name: partnerName,
+      email: guest.registration?.partner_email || null,
     } : undefined,
-    seatsRequired: isPaired ? 2 : 1,
+    seatsRequired: hasPartner ? 2 : 1,
     assignmentId,
     tableId,
   };
@@ -132,8 +147,12 @@ export function assignmentToDraggableGuest(
   tableId: number
 ): DraggableGuest {
   const guest = assignment.guest;
-  const isPaired = guest.guest_type === 'paying_paired' ||
-    guest.registration?.ticket_type === 'paid_paired';
+
+  // Check if guest has a partner (same logic as toDraggableGuest)
+  const hasPartner = guest.guest_type === 'paying_paired' ||
+    guest.registration?.ticket_type === 'paid_paired' ||
+    !!guest.partner_of ||
+    !!guest.registration?.partner_name;
 
   // Get partner name from either registration.partner_name or partner_of relation
   const partnerName = guest.registration?.partner_name || guest.partner_of?.name;
@@ -143,13 +162,13 @@ export function assignmentToDraggableGuest(
     guestId: guest.id,
     name: guest.name,
     email: guest.email,
-    guestType: guest.guest_type as 'vip' | 'paying_single' | 'paying_paired',
-    type: isPaired ? 'paired' : 'single',
-    partner: isPaired && partnerName ? {
+    guestType: guest.guest_type as 'vip' | 'invited' | 'paying_single' | 'paying_paired',
+    type: hasPartner ? 'paired' : 'single',
+    partner: hasPartner && partnerName ? {
       name: partnerName,
       email: null,
     } : undefined,
-    seatsRequired: isPaired ? 2 : 1,
+    seatsRequired: hasPartner ? 2 : 1,
     assignmentId: assignment.id,
     tableId,
   };

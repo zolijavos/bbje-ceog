@@ -4,6 +4,60 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
 
 ---
 
+## v2.11.0 (2026-01-14)
+
+### New Features / Új funkciók
+
+- **Bulk Email Guest Preview** / **Tömeges Email Vendég Előnézet**
+  - EN: Guest list table now displays before bulk email scheduling. Shows filtered guests (max 50) with "X more guests..." indicator. Schedule button shows total guest count.
+  - HU: Vendéglista táblázat mostantól megjelenik a tömeges email ütemezés előtt. Szűrt vendégeket mutat (max 50) "X további vendég..." jelzéssel. Ütemezés gomb mutatja az összes vendégszámot.
+
+- **Array-Based Guest Filtering API** / **Tömb-Alapú Vendég Szűrő API**
+  - EN: New API parameters for bulk operations: `guest_types` (comma-separated), `registration_statuses` (comma-separated), `is_vip_reception`, `has_ticket`, `has_table`. Limit increased from 100 to 500.
+  - HU: Új API paraméterek tömeges műveletekhez: `guest_types` (vesszővel elválasztott), `registration_statuses` (vesszővel elválasztott), `is_vip_reception`, `has_ticket`, `has_table`. Limit növelve 100-ról 500-ra.
+
+### Improvements / Javítások
+
+- **VIP Registration Status Fix** / **VIP Regisztráció Státusz Javítás**
+  - EN: VIP registration now correctly sets status to 'registered' instead of 'approved'. Fixed in 4 locations within registration service.
+  - HU: VIP regisztráció most helyesen állítja a státuszt 'registered'-re 'approved' helyett. Javítva 4 helyen a regisztrációs szolgáltatásban.
+
+- **AlreadyRegistered Page Contrast** / **AlreadyRegistered Oldal Kontraszt**
+  - EN: Improved text visibility on VIP AlreadyRegistered page. Changed background from green-50 to green-100, added border, and darkened text color.
+  - HU: Javított szöveg láthatóság a VIP AlreadyRegistered oldalon. Háttér módosítva green-50-ről green-100-ra, keret hozzáadva, szöveg színe sötétítve.
+
+- **Seating - Invited Guests Visible** / **Ültetés - Meghívott Vendégek Láthatóak**
+  - EN: Invited guests (status 'invited') now appear in the unassigned guests list for seating assignment. Previously only registered/approved guests were shown.
+  - HU: Meghívott vendégek ('invited' státusz) mostantól megjelennek a nem hozzárendelt vendégek listájában ültetéshez. Korábban csak regisztrált/jóváhagyott vendégek jelentek meg.
+
+- **Partner Detection Improvements** / **Partner Detektálás Javítások**
+  - EN: Improved partner detection on seating tables page. Now detects partners via: guest_type 'paying_paired', ticket_type 'paid_paired', partner_of field, and registration partner_name.
+  - HU: Javított partner detektálás az ültetési táblák oldalon. Partnerek felismerése: guest_type 'paying_paired', ticket_type 'paid_paired', partner_of mező, és registration partner_name alapján.
+
+- **Date/Time Input Visibility** / **Dátum/Idő Input Láthatóság**
+  - EN: Fixed date and time input visibility across all admin pages. Applied `bg-white text-gray-900` and `colorScheme: 'light'` styling to scheduled emails, check-in log, audit log, and payments pages.
+  - HU: Javított dátum és idő input láthatóság minden admin oldalon. `bg-white text-gray-900` és `colorScheme: 'light'` stílus alkalmazva ütemezett emailek, check-in napló, audit napló és fizetések oldalakon.
+
+- **Date/Time Input Split** / **Dátum/Idő Input Szétbontás**
+  - EN: Separated datetime-local input into separate date and time inputs for better usability. Default time set to 10:00.
+  - HU: datetime-local input szétbontva külön dátum és idő inputokra a jobb használhatóságért. Alapértelmezett idő 10:00-ra állítva.
+
+- **MyForge Labs Logo Added** / **MyForge Labs Logo Hozzáadva**
+  - EN: Added MyForge Labs logo to Check-in Scanner footer and PWA layout footer. Logo appears before "Built By MyForge Labs" text.
+  - HU: MyForge Labs logo hozzáadva a Check-in Scanner és PWA layout lábléchez. Logo megjelenik a "Built By MyForge Labs" szöveg előtt.
+
+### Bug Fixes / Hibajavítások
+
+- **Partner Registration Unique Constraint** / **Partner Regisztráció Egyediség Hiba**
+  - EN: Fixed "Unique constraint failed on registrations.guest_id_key" error during paired ticket registration. Added check for existing partner registration and friendly error handling.
+  - HU: Javítva a "Unique constraint failed on registrations.guest_id_key" hiba páros jegy regisztrációkor. Ellenőrzés hozzáadva létező partner regisztrációra és barátságos hibakezelés.
+
+- **Feedback Email Seating Preferences** / **Visszaigazoló Email Ültetési Preferenciák**
+  - EN: Added guestSeating and partnerSeating fields to automatic feedback email templates. Previously these fields were missing from the email content.
+  - HU: guestSeating és partnerSeating mezők hozzáadva az automatikus visszaigazoló email sablonokhoz. Korábban ezek a mezők hiányoztak az email tartalomból.
+
+---
+
 ## v2.10.0 (2026-01-13)
 
 ### New Features / Új funkciók

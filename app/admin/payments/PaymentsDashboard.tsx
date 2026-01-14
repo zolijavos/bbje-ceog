@@ -441,7 +441,8 @@ export default function PaymentsDashboard() {
               setDateFrom(e.target.value);
               setPage(0);
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
+            style={{ colorScheme: 'light' }}
             placeholder="From date"
           />
           <input
@@ -451,7 +452,8 @@ export default function PaymentsDashboard() {
               setDateTo(e.target.value);
               setPage(0);
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
+            style={{ colorScheme: 'light' }}
             placeholder="To date"
           />
           <button

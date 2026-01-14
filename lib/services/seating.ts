@@ -630,7 +630,8 @@ async function updateTableStatus(tableId: number) {
 export async function getUnassignedGuests() {
   return prisma.guest.findMany({
     where: {
-      registration_status: { in: ['registered', 'approved'] },
+      // Include invited guests (newly imported) as well as registered/approved
+      registration_status: { in: ['invited', 'registered', 'approved'] },
       table_assignment: null,
       // Only show "main" guests - partners (with paired_with_id) are shown via partner_of relation
       paired_with_id: null,
@@ -644,6 +645,7 @@ export async function getUnassignedGuests() {
         select: {
           ticket_type: true,
           partner_name: true,
+          partner_email: true,
         },
       },
       // Partner relation info for drag & drop UI
@@ -664,10 +666,10 @@ export async function getUnassignedGuests() {
         },
       },
     },
-    orderBy: [
-      { guest_type: 'asc' },
-      { name: 'asc' },
-    ],
+    // Sort alphabetically by name (ABC order)
+    orderBy: {
+      name: 'asc',
+    },
   });
 }
 

@@ -187,6 +187,11 @@ export interface VIPRegistrationInput {
   has_partner?: boolean;
   partner_name?: string | null;
   partner_email?: string | null;
+  partner_phone?: string | null;
+  partner_company?: string | null;
+  partner_position?: string | null;
+  partner_dietary_requirements?: string | null;
+  partner_seating_preferences?: string | null;
   partner_gdpr_consent?: boolean | null;
 }
 
@@ -218,10 +223,11 @@ export async function processVIPRegistration(
       };
     }
 
-    if (guest.guest_type !== 'vip') {
+    // Both 'vip' and 'invited' are free ticket guests
+    if (guest.guest_type !== 'vip' && guest.guest_type !== 'invited') {
       return {
         success: false,
-        error: 'This page is only accessible to VIP guests',
+        error: 'This page is only accessible to invited guests',
       };
     }
 
@@ -267,7 +273,7 @@ export async function processVIPRegistration(
           position: data.position || null,
           dietary_requirements: data.dietary_requirements || null,
           seating_preferences: data.seating_preferences || null,
-          registration_status: 'approved',
+          registration_status: 'registered',
           pwa_auth_code: pwaAuthCode,
         },
       });
@@ -296,51 +302,75 @@ export async function processVIPRegistration(
         const trimmedPartnerName = data.partner_name.trim();
         const trimmedPartnerEmail = data.partner_email.trim().toLowerCase();
 
-        // Check if partner already exists as guest
+        // Check if partner already exists as guest (include registration to check if already registered)
         const existingPartner = await tx.guest.findUnique({
           where: { email: trimmedPartnerEmail },
+          include: { registration: true },
         });
 
         let partnerId: number;
+        let partnerAlreadyRegistered = false;
 
         if (!existingPartner) {
-          // Create new partner guest linked to main VIP guest
+          // Create new partner guest linked to main guest
           const newPartner = await tx.guest.create({
             data: {
               email: trimmedPartnerEmail,
               name: trimmedPartnerName,
-              guest_type: 'vip', // Partner is also VIP (free)
-              registration_status: 'approved', // Auto-approved through main guest
+              guest_type: guest.guest_type, // Partner inherits same guest type (vip/invited)
+              registration_status: 'registered', // Auto-registered through main guest
               paired_with_id: guestId, // Link to main guest
               pwa_auth_code: partnerPwaAuthCode,
+              // Partner profile fields
+              phone: data.partner_phone || null,
+              company: data.partner_company || null,
+              position: data.partner_position || null,
+              dietary_requirements: data.partner_dietary_requirements || null,
+              seating_preferences: data.partner_seating_preferences || null,
             },
           });
           partnerId = newPartner.id;
         } else {
-          // Link existing guest as partner
+          // Link existing guest as partner and update their profile if provided
+          // Check if partner already has a registration
+          partnerAlreadyRegistered = !!existingPartner.registration;
+
           await tx.guest.update({
             where: { id: existingPartner.id },
             data: {
               paired_with_id: guestId,
-              registration_status: 'approved',
+              registration_status: 'registered',
               pwa_auth_code: existingPartner.pwa_auth_code || partnerPwaAuthCode,
+              // Update partner profile fields if provided (don't overwrite existing data)
+              phone: data.partner_phone || existingPartner.phone,
+              company: data.partner_company || existingPartner.company,
+              position: data.partner_position || existingPartner.position,
+              dietary_requirements: data.partner_dietary_requirements || existingPartner.dietary_requirements,
+              seating_preferences: data.partner_seating_preferences || existingPartner.seating_preferences,
             },
           });
           partnerId = existingPartner.id;
+
+          // If partner already has registration, use their existing registration ID
+          if (partnerAlreadyRegistered && existingPartner.registration) {
+            partnerRegistrationId = existingPartner.registration.id;
+          }
         }
 
-        // Create Registration for partner so they get their own ticket
-        const partnerRegistration = await tx.registration.create({
-          data: {
-            guest_id: partnerId,
-            ticket_type: 'vip_free',
-            gdpr_consent: data.partner_gdpr_consent ?? false,
-            gdpr_consent_at: data.partner_gdpr_consent ? new Date() : null,
-            partner_name: null,
-            partner_email: null,
-          },
-        });
-        partnerRegistrationId = partnerRegistration.id;
+        // Create Registration for partner only if they don't already have one
+        if (!partnerAlreadyRegistered) {
+          const partnerRegistration = await tx.registration.create({
+            data: {
+              guest_id: partnerId,
+              ticket_type: 'vip_free',
+              gdpr_consent: data.partner_gdpr_consent ?? false,
+              gdpr_consent_at: data.partner_gdpr_consent ? new Date() : null,
+              partner_name: null,
+              partner_email: null,
+            },
+          });
+          partnerRegistrationId = partnerRegistration.id;
+        }
       }
 
       return { registration, partnerRegistrationId };
@@ -357,12 +387,14 @@ export async function processVIPRegistration(
         guestCompany: data.company || undefined,
         guestPhone: data.phone || undefined,
         guestDiet: data.dietary_requirements || undefined,
+        guestSeating: data.seating_preferences || undefined,
         hasPartner: data.has_partner || false,
         partnerTitle: undefined, // VIP partners don't have title in current flow
         partnerName: data.partner_name || undefined,
-        partnerPhone: undefined, // VIP partners don't have phone in current flow
+        partnerPhone: data.partner_phone || undefined,
         partnerEmail: data.partner_email || undefined,
-        partnerDiet: undefined, // VIP partners don't have diet in current flow
+        partnerDiet: data.partner_dietary_requirements || undefined,
+        partnerSeating: data.partner_seating_preferences || undefined,
       });
 
       if (feedbackResult.mainResult.success) {
@@ -398,10 +430,31 @@ export async function processVIPRegistration(
     return {
       success: true,
       registrationId: result.registration.id,
-      status: 'approved',
+      status: 'registered',
     };
   } catch (error) {
     logError('VIP registration error:', error);
+
+    // Handle Prisma unique constraint error (guest already has registration)
+    if (
+      error instanceof Error &&
+      error.message.includes('Unique constraint failed') &&
+      error.message.includes('guest_id')
+    ) {
+      // Try to get existing registration ID
+      const existingReg = await prisma.registration.findUnique({
+        where: { guest_id: guestId },
+        select: { id: true },
+      });
+
+      return {
+        success: false,
+        error: 'Already registered for this event',
+        status: 'registered',
+        registrationId: existingReg?.id,
+      };
+    }
+
     return {
       success: false,
       error: getErrorMessage(error),
@@ -484,6 +537,12 @@ export interface PaidRegistrationData {
   billing_info: BillingInfoData;
   partner_name?: string | null;
   partner_email?: string | null;
+  partner_phone?: string | null;
+  partner_company?: string | null;
+  partner_position?: string | null;
+  partner_dietary_requirements?: string | null;
+  partner_seating_preferences?: string | null;
+  partner_gdpr_consent?: boolean | null;
   // Profile fields
   title?: string | null;
   phone?: string | null;
@@ -618,7 +677,7 @@ export async function processPaidRegistration(
         });
 
         if (!existingPartner) {
-          // Create new partner guest linked to main guest
+          // Create new partner guest linked to main guest with profile fields
           await tx.guest.create({
             data: {
               email: data.partner_email,
@@ -626,15 +685,27 @@ export async function processPaidRegistration(
               guest_type: 'paying_paired',
               registration_status: 'registered', // Auto-registered through main guest
               paired_with_id: data.guest_id, // Link to main guest
+              // Partner profile fields
+              phone: data.partner_phone || null,
+              company: data.partner_company || null,
+              position: data.partner_position || null,
+              dietary_requirements: data.partner_dietary_requirements || null,
+              seating_preferences: data.partner_seating_preferences || null,
             },
           });
         } else {
-          // Link existing guest as partner
+          // Link existing guest as partner and update their profile if provided
           await tx.guest.update({
             where: { id: existingPartner.id },
             data: {
               paired_with_id: data.guest_id,
               registration_status: 'registered',
+              // Update partner profile fields if provided (don't overwrite existing data)
+              phone: data.partner_phone || existingPartner.phone,
+              company: data.partner_company || existingPartner.company,
+              position: data.partner_position || existingPartner.position,
+              dietary_requirements: data.partner_dietary_requirements || existingPartner.dietary_requirements,
+              seating_preferences: data.partner_seating_preferences || existingPartner.seating_preferences,
             },
           });
         }
@@ -729,7 +800,8 @@ export async function getGuestStatus(guestId: number): Promise<GuestStatusResult
     }
 
     // Determine ticket availability
-    const isVIP = guest.guest_type === 'vip';
+    // Both 'vip' and 'invited' are free ticket guests
+    const isVIP = guest.guest_type === 'vip' || guest.guest_type === 'invited';
     const isPaid = guest.registration?.payment?.payment_status === 'paid';
     const hasQRCode = !!guest.registration?.qr_code_hash;
     const ticketAvailable = isVIP || (isPaid && hasQRCode);

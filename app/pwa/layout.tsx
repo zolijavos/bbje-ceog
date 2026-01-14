@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { WifiSlash, DownloadSimple, X } from '@phosphor-icons/react';
 import { ThemeProvider } from './providers/ThemeProvider';
 import { useThemeInit } from './hooks/useTheme';
@@ -121,18 +122,27 @@ function PWALayoutInner({ children }: { children: React.ReactNode }) {
       <main className="min-h-screen pb-14">{children}</main>
 
       {/* Footer branding - blur effect */}
-      <footer className="fixed bottom-0 left-0 right-0 py-2 text-center border-t border-white/20 dark:border-neutral-700/30 bg-white/60 dark:bg-neutral-900/60 backdrop-blur-md transition-colors duration-300">
-        <span className="text-[15px] text-neutral-500/80 dark:text-neutral-400/80">
-          Built By{' '}
-          <a
-            href="https://www.myforgelabs.com/#kapcsolat"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-neutral-600/80 dark:text-neutral-300/80 hover:text-neutral-800 dark:hover:text-white transition-colors underline"
-          >
-            MyForge Labs
-          </a>
-        </span>
+      <footer className="fixed bottom-0 left-0 right-0 py-2 border-t border-white/20 dark:border-neutral-700/30 bg-white/60 dark:bg-neutral-900/60 backdrop-blur-md transition-colors duration-300">
+        <div className="flex items-center justify-center gap-2">
+          <Image
+            src="/myforgelabs-logo.png"
+            alt="MyForge Labs"
+            width={21}
+            height={21}
+            className="opacity-80"
+          />
+          <span className="text-[15px] text-neutral-500/80 dark:text-neutral-400/80">
+            Built By{' '}
+            <a
+              href="https://www.myforgelabs.com/#kapcsolat"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-neutral-600/80 dark:text-neutral-300/80 hover:text-neutral-800 dark:hover:text-white transition-colors underline"
+            >
+              MyForge Labs
+            </a>
+          </span>
+        </div>
       </footer>
     </div>
   );

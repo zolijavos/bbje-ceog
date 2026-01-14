@@ -67,8 +67,8 @@ interface SchedulerConfig {
   days_after: number | null;
   interval_days: number | null;
   send_time: string;
-  target_status: string | null;
-  target_types: string | null;
+  target_status: string[] | null;  // Parsed from JSON
+  target_types: string[] | null;   // Parsed from JSON
 }
 
 interface EmailLog {
@@ -146,6 +146,8 @@ export default function ScheduledEmailsDashboard() {
     has_ticket: null as boolean | null,
     has_table: null as boolean | null,
   });
+  const [bulkPreviewGuests, setBulkPreviewGuests] = useState<Guest[]>([]);
+  const [loadingPreview, setLoadingPreview] = useState(false);
 
   // Localized type labels
   const getLocalizedTypeLabel = (type: string): string => {
@@ -172,7 +174,8 @@ export default function ScheduledEmailsDashboard() {
     return statusMap[status] || status;
   };
   const [bulkTemplate, setBulkTemplate] = useState('');
-  const [bulkScheduledFor, setBulkScheduledFor] = useState('');
+  const [bulkScheduledDate, setBulkScheduledDate] = useState('');
+  const [bulkScheduledTime, setBulkScheduledTime] = useState('10:00');
   const [bulkScheduling, setBulkScheduling] = useState(false);
 
   // Automation config state
@@ -222,7 +225,13 @@ export default function ScheduledEmailsDashboard() {
       const res = await fetch('/api/admin/scheduler-config');
       const data = await res.json();
       if (data.configs) {
-        setConfigs(data.configs);
+        // Parse JSON strings to arrays for target fields
+        const parsedConfigs = data.configs.map((c: SchedulerConfig & { target_status: string | null; target_types: string | null }) => ({
+          ...c,
+          target_status: c.target_status ? JSON.parse(c.target_status) : null,
+          target_types: c.target_types ? JSON.parse(c.target_types) : null,
+        }));
+        setConfigs(parsedConfigs);
       }
     } catch {
       console.error('Failed to load scheduler configs');
@@ -254,6 +263,47 @@ export default function ScheduledEmailsDashboard() {
     fetchConfigs();
     fetchEmailLogs();
   }, [fetchEmails, fetchGuests, fetchConfigs, fetchEmailLogs]);
+
+  // Fetch preview of guests matching bulk filters
+  const fetchBulkPreview = useCallback(async () => {
+    setLoadingPreview(true);
+    try {
+      const params = new URLSearchParams();
+      if (bulkFilters.guest_types.length > 0) {
+        params.set('guest_types', bulkFilters.guest_types.join(','));
+      }
+      if (bulkFilters.registration_statuses.length > 0) {
+        params.set('registration_statuses', bulkFilters.registration_statuses.join(','));
+      }
+      if (bulkFilters.is_vip_reception !== null) {
+        params.set('is_vip_reception', bulkFilters.is_vip_reception.toString());
+      }
+      if (bulkFilters.has_ticket !== null) {
+        params.set('has_ticket', bulkFilters.has_ticket.toString());
+      }
+      if (bulkFilters.has_table !== null) {
+        params.set('has_table', bulkFilters.has_table.toString());
+      }
+      params.set('limit', '500');
+
+      const res = await fetch(`/api/admin/guests?${params.toString()}`);
+      const data = await res.json();
+      if (data.guests) {
+        setBulkPreviewGuests(data.guests);
+      }
+    } catch {
+      console.error('Failed to load preview');
+    } finally {
+      setLoadingPreview(false);
+    }
+  }, [bulkFilters]);
+
+  // Auto-fetch preview when filters change
+  useEffect(() => {
+    if (activeTab === 'bulk') {
+      fetchBulkPreview();
+    }
+  }, [activeTab, fetchBulkPreview]);
 
   const handleCancel = async (id: number) => {
     if (!confirm('Are you sure you want to cancel this scheduled email?')) return;
@@ -332,10 +382,13 @@ export default function ScheduledEmailsDashboard() {
   };
 
   const handleBulkSchedule = async () => {
-    if (!bulkTemplate || !bulkScheduledFor) {
-      setMessage({ type: 'error', text: 'Please select template and schedule time' });
+    if (!bulkTemplate || !bulkScheduledDate || !bulkScheduledTime) {
+      setMessage({ type: 'error', text: 'Please select template, date and time' });
       return;
     }
+
+    // Combine date and time
+    const scheduledDateTime = new Date(`${bulkScheduledDate}T${bulkScheduledTime}`);
 
     setBulkScheduling(true);
     try {
@@ -351,7 +404,7 @@ export default function ScheduledEmailsDashboard() {
             has_table: bulkFilters.has_table,
           },
           template_slug: bulkTemplate,
-          scheduled_for: new Date(bulkScheduledFor).toISOString(),
+          scheduled_for: scheduledDateTime.toISOString(),
         }),
       });
 
@@ -363,7 +416,8 @@ export default function ScheduledEmailsDashboard() {
         });
         setBulkFilters({ guest_types: [], registration_statuses: [], is_vip_reception: null, has_ticket: null, has_table: null });
         setBulkTemplate('');
-        setBulkScheduledFor('');
+        setBulkScheduledDate('');
+        setBulkScheduledTime('10:00');
         fetchEmails();
         setActiveTab('emails');
       } else {
@@ -410,6 +464,12 @@ export default function ScheduledEmailsDashboard() {
           interval_days: editingConfig.interval_days,
           send_time: editingConfig.send_time,
           enabled: editingConfig.enabled,
+          target_status: editingConfig.target_status && editingConfig.target_status.length > 0
+            ? editingConfig.target_status
+            : null,
+          target_types: editingConfig.target_types && editingConfig.target_types.length > 0
+            ? editingConfig.target_types
+            : null,
         }),
       });
 
@@ -919,7 +979,8 @@ export default function ScheduledEmailsDashboard() {
                 value={scheduledFor}
                 onChange={(e) => setScheduledFor(e.target.value)}
                 min={getDefaultDateTime()}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white text-gray-900"
+                style={{ colorScheme: 'light' }}
               />
             </div>
 
@@ -1122,7 +1183,7 @@ export default function ScheduledEmailsDashboard() {
             </div>
 
             {/* Template and time */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Email Template
@@ -1142,24 +1203,87 @@ export default function ScheduledEmailsDashboard() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Send At</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Send Date</label>
                 <input
-                  type="datetime-local"
-                  value={bulkScheduledFor}
-                  onChange={(e) => setBulkScheduledFor(e.target.value)}
-                  min={getDefaultDateTime()}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  type="date"
+                  value={bulkScheduledDate}
+                  onChange={(e) => setBulkScheduledDate(e.target.value)}
+                  min={new Date().toISOString().split('T')[0]}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
+                  style={{ colorScheme: 'light' }}
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Send Time</label>
+                <input
+                  type="time"
+                  value={bulkScheduledTime}
+                  onChange={(e) => setBulkScheduledTime(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
+                  style={{ colorScheme: 'light' }}
+                />
+              </div>
+            </div>
+
+            {/* Preview of filtered guests */}
+            <div className="border border-gray-200 rounded-lg">
+              <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                <h3 className="text-sm font-medium text-gray-700">
+                  {loadingPreview ? (
+                    'Loading...'
+                  ) : (
+                    <>Filtered Guests ({bulkPreviewGuests.length})</>
+                  )}
+                </h3>
+              </div>
+              <div className="max-h-64 overflow-y-auto">
+                {bulkPreviewGuests.length === 0 ? (
+                  <div className="px-4 py-8 text-center text-gray-500">
+                    <Users size={32} className="mx-auto text-gray-300 mb-2" />
+                    <p className="text-sm">No guests match the selected filters</p>
+                  </div>
+                ) : (
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50 sticky top-0">
+                      <tr>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {bulkPreviewGuests.slice(0, 50).map((guest) => (
+                        <tr key={guest.id} className="hover:bg-gray-50">
+                          <td className="px-4 py-2 text-sm font-medium text-gray-900">{guest.name}</td>
+                          <td className="px-4 py-2 text-sm text-gray-500">{guest.email}</td>
+                          <td className="px-4 py-2 text-xs">
+                            <span className="px-2 py-1 bg-gray-100 rounded">{getLocalizedTypeLabel(guest.guest_type)}</span>
+                          </td>
+                          <td className="px-4 py-2 text-xs">
+                            <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded">{getLocalizedStatusLabel(guest.registration_status)}</span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+                {bulkPreviewGuests.length > 50 && (
+                  <div className="px-4 py-2 bg-gray-50 text-center text-sm text-gray-500">
+                    + {bulkPreviewGuests.length - 50} more guests...
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Submit */}
             <button
               onClick={handleBulkSchedule}
-              disabled={bulkScheduling || !bulkTemplate || !bulkScheduledFor}
+              disabled={bulkScheduling || !bulkTemplate || !bulkScheduledDate || !bulkScheduledTime || bulkPreviewGuests.length === 0}
               className="w-full px-4 py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
             >
-              {bulkScheduling ? 'Scheduling...' : 'Schedule Bulk Emails'}
+              {bulkScheduling ? 'Scheduling...' : `Schedule Bulk Emails (${bulkPreviewGuests.length} guests)`}
             </button>
           </div>
         </div>
@@ -1374,7 +1498,8 @@ export default function ScheduledEmailsDashboard() {
                   onChange={(e) =>
                     setEditingConfig({ ...editingConfig, send_time: e.target.value })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900"
+                  style={{ colorScheme: 'light' }}
                 />
               </div>
 
@@ -1388,6 +1513,102 @@ export default function ScheduledEmailsDashboard() {
                   className="mr-2"
                 />
                 <label className="text-sm font-medium text-gray-700">Enabled</label>
+              </div>
+
+              {/* Target Audience Filters */}
+              <div className="border-t pt-4 mt-4">
+                <h4 className="text-sm font-medium text-gray-900 mb-2">
+                  Target Audience (Optional)
+                </h4>
+                <p className="text-xs text-gray-500 mb-4">
+                  Leave empty to use default rule logic. Selected filters combine with AND.
+                </p>
+
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Guest Types */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Guest Types
+                    </label>
+                    <div className="space-y-2">
+                      {['vip', 'paying_single', 'paying_paired', 'applicant'].map((type) => (
+                        <label key={type} className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={editingConfig.target_types?.includes(type) || false}
+                            onChange={(e) => {
+                              const current = editingConfig.target_types || [];
+                              if (e.target.checked) {
+                                setEditingConfig({
+                                  ...editingConfig,
+                                  target_types: [...current, type],
+                                });
+                              } else {
+                                setEditingConfig({
+                                  ...editingConfig,
+                                  target_types: current.filter((t) => t !== type),
+                                });
+                              }
+                            }}
+                            className="mr-2"
+                          />
+                          <span className="text-sm">{getLocalizedTypeLabel(type)}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Registration Status */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Registration Status
+                    </label>
+                    <div className="space-y-2">
+                      {['invited', 'registered', 'approved', 'declined', 'pending_approval', 'rejected'].map((status) => (
+                        <label key={status} className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={editingConfig.target_status?.includes(status) || false}
+                            onChange={(e) => {
+                              const current = editingConfig.target_status || [];
+                              if (e.target.checked) {
+                                setEditingConfig({
+                                  ...editingConfig,
+                                  target_status: [...current, status],
+                                });
+                              } else {
+                                setEditingConfig({
+                                  ...editingConfig,
+                                  target_status: current.filter((s) => s !== status),
+                                });
+                              }
+                            }}
+                            className="mr-2"
+                          />
+                          <span className="text-sm">{getLocalizedStatusLabel(status)}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Clear filters button */}
+                {((editingConfig.target_types && editingConfig.target_types.length > 0) ||
+                  (editingConfig.target_status && editingConfig.target_status.length > 0)) && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setEditingConfig({
+                        ...editingConfig,
+                        target_types: null,
+                        target_status: null,
+                      })
+                    }
+                    className="mt-3 text-sm text-red-600 hover:underline"
+                  >
+                    Clear all filters
+                  </button>
+                )}
               </div>
             </div>
 

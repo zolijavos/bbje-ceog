@@ -16,6 +16,12 @@ export interface GuestListParams {
   search?: string;
   type?: GuestType | 'all';
   status?: RegistrationStatus | 'all';
+  // Array filters for bulk operations
+  guestTypes?: GuestType[];
+  registrationStatuses?: RegistrationStatus[];
+  isVipReception?: boolean;
+  hasTicket?: boolean;
+  hasTable?: boolean;
 }
 
 /**
@@ -68,6 +74,11 @@ export async function getGuestList(
     search = '',
     type = 'all',
     status = 'all',
+    guestTypes,
+    registrationStatuses,
+    isVipReception,
+    hasTicket,
+    hasTable,
   } = params;
 
   // Build where clause
@@ -81,14 +92,37 @@ export async function getGuestList(
     ];
   }
 
-  // Guest type filter
-  if (type !== 'all') {
+  // Array guest type filter (takes precedence)
+  if (guestTypes && guestTypes.length > 0) {
+    where.guest_type = { in: guestTypes };
+  } else if (type !== 'all') {
     where.guest_type = type;
   }
 
-  // Registration status filter
-  if (status !== 'all') {
+  // Array registration status filter (takes precedence)
+  if (registrationStatuses && registrationStatuses.length > 0) {
+    where.registration_status = { in: registrationStatuses };
+  } else if (status !== 'all') {
     where.registration_status = status;
+  }
+
+  // VIP reception filter
+  if (isVipReception !== undefined) {
+    where.is_vip_reception = isVipReception;
+  }
+
+  // Has ticket filter (registration exists with ticket)
+  if (hasTicket === true) {
+    where.registration = { isNot: null };
+  } else if (hasTicket === false) {
+    where.registration = null;
+  }
+
+  // Has table filter (table assignment exists)
+  if (hasTable === true) {
+    where.table_assignment = { isNot: null };
+  } else if (hasTable === false) {
+    where.table_assignment = null;
   }
 
   // Calculate pagination

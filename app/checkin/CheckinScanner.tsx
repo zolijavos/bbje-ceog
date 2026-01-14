@@ -9,6 +9,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Html5Qrcode } from 'html5-qrcode';
 import { TICKET_TYPE_LABELS } from '@/lib/constants';
 import { logError } from '@/lib/utils/logger';
@@ -231,9 +232,9 @@ export default function CheckinScanner() {
   // Get card color based on result
   const getCardColor = () => {
     if (!result) return 'bg-gray-800';
-    if (!result.valid) return 'bg-red-600';
-    if (result.alreadyCheckedIn) return 'bg-yellow-500';
-    return 'bg-green-600';
+    if (!result.valid) return 'bg-red-700';
+    if (result.alreadyCheckedIn) return 'bg-amber-600';
+    return 'bg-emerald-700';
   };
 
   // Get error message
@@ -393,7 +394,7 @@ export default function CheckinScanner() {
 
                 <button
                   onClick={scanAgain}
-                  className="mt-3 w-full py-2 bg-white/20 text-white rounded-lg font-medium"
+                  className="mt-3 w-full py-2 bg-red-800 text-white rounded-lg font-medium hover:bg-red-900"
                 >
                   Cancel
                 </button>
@@ -506,18 +507,27 @@ export default function CheckinScanner() {
       </footer>
 
       {/* MyForge Labs branding - blur effect */}
-      <div className="fixed bottom-0 left-0 right-0 py-2 text-center bg-gray-900/60 backdrop-blur-md border-t border-gray-700/30 z-50">
-        <span className="text-[15px] text-gray-400/80">
-          Built By{' '}
-          <a
-            href="https://www.myforgelabs.com/#kapcsolat"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-300/80 hover:text-white transition-colors underline"
-          >
-            MyForge Labs
-          </a>
-        </span>
+      <div className="fixed bottom-0 left-0 right-0 py-2 bg-gray-900/60 backdrop-blur-md border-t border-gray-700/30 z-50">
+        <div className="flex items-center justify-center gap-2">
+          <Image
+            src="/myforgelabs-logo.png"
+            alt="MyForge Labs"
+            width={21}
+            height={21}
+            className="opacity-80"
+          />
+          <span className="text-[15px] text-gray-400/80">
+            Built By{' '}
+            <a
+              href="https://www.myforgelabs.com/#kapcsolat"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-300/80 hover:text-white transition-colors underline"
+            >
+              MyForge Labs
+            </a>
+          </span>
+        </div>
       </div>
     </div>
   );

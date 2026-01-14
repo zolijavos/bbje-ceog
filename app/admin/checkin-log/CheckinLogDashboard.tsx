@@ -190,7 +190,8 @@ export default function CheckinLogDashboard() {
                 setDateFrom(e.target.value);
                 setPage(1);
               }}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white text-gray-900"
+              style={{ colorScheme: 'light' }}
             />
           </div>
 
@@ -207,7 +208,8 @@ export default function CheckinLogDashboard() {
                 setDateTo(e.target.value);
                 setPage(1);
               }}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white text-gray-900"
+              style={{ colorScheme: 'light' }}
             />
           </div>
         </div>
