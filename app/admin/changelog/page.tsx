@@ -53,6 +53,14 @@ const changelogData: ChangelogEntry[] = [
         descriptionHu: 'Új API paraméterek tömeges műveletekhez: guest_types, registration_statuses (vesszővel elválasztott), is_vip_reception, has_ticket, has_table. Limit 500-ra növelve.',
       },
       {
+        type: 'feature',
+        category: 'testing',
+        titleEn: 'Release Testing Database Persistence',
+        titleHu: 'Release Tesztelés Adatbázis Perzisztencia',
+        descriptionEn: 'Release testing page saves results to database. Features: checkbox per test step, comment section per feature, tester name tracking, CSV export (per version or all).',
+        descriptionHu: 'Release tesztelés oldal adatbázisba menti az eredményeket. Funkciók: checkbox lépésenként, megjegyzés szekció, tesztelő nyilvántartás, CSV export.',
+      },
+      {
         type: 'fix',
         category: 'registration',
         titleEn: 'VIP Registration Status Fix',

@@ -16,6 +16,10 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
   - EN: New API parameters for bulk operations: `guest_types` (comma-separated), `registration_statuses` (comma-separated), `is_vip_reception`, `has_ticket`, `has_table`. Limit increased from 100 to 500.
   - HU: Új API paraméterek tömeges műveletekhez: `guest_types` (vesszővel elválasztott), `registration_statuses` (vesszővel elválasztott), `is_vip_reception`, `has_ticket`, `has_table`. Limit növelve 100-ról 500-ra.
 
+- **Release Testing Database Persistence** / **Release Tesztelés Adatbázis Perzisztencia**
+  - EN: Release testing page now saves results to database. Features: checkbox per test step, comment section per feature, tester name tracking, CSV export (per version or all). New TestResult model in Prisma schema.
+  - HU: Release tesztelés oldal mostantól adatbázisba menti az eredményeket. Funkciók: checkbox minden teszt lépéshez, megjegyzés szekció minden funkcióhoz, tesztelő név nyilvántartás, CSV export (verziónként vagy összes). Új TestResult model a Prisma sémában.
+
 ### Improvements / Javítások
 
 - **VIP Registration Status Fix** / **VIP Regisztráció Státusz Javítás**

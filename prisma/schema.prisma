@@ -192,7 +192,8 @@ model User {
   updated_at    DateTime  @updatedAt
 
   // Relations
-  checkins Checkin[]
+  checkins     Checkin[]
+  test_results TestResult[]
 
   @@index([email])
   @@map("users")
@@ -384,6 +385,7 @@ model AuditLog {
 
 enum GuestType {
   vip
+  invited         // Free ticket guest (meghívott vendég)
   paying_single
   paying_paired
   applicant       // Non-invited guest who applied to attend
@@ -427,4 +429,37 @@ enum TableStatus {
 enum UserRole {
   admin
   staff
+}
+
+// ==================================
+// RELEASE TESTING
+// ==================================
+
+model TestResult {
+  id              Int      @id @default(autoincrement())
+  version         String   @db.VarChar(20)     // e.g., "2.11.0"
+  feature_index   Int                          // Index of feature in version
+  feature_name    String   @db.VarChar(255)    // Feature name for reference
+  status          TestStatus @default(not_tested)
+  comment         String?  @db.Text            // Tester's comment
+  tester_id       Int                          // User who tested
+  tester_name     String   @db.VarChar(255)    // Cached for export
+  step_results    String?  @db.Text            // JSON: { stepIndex: boolean }
+  tested_at       DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  // Relations
+  tester User @relation(fields: [tester_id], references: [id])
+
+  @@unique([version, feature_index])
+  @@index([version])
+  @@index([tester_id])
+  @@index([status])
+  @@map("test_results")
+}
+
+enum TestStatus {
+  passed
+  failed
+  not_tested
 }
