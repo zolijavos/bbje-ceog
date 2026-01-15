@@ -33,6 +33,44 @@ interface ChangelogEntry {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: '2.12.0',
+    date: '2026-01-15',
+    changes: [
+      {
+        type: 'feature',
+        category: 'registration',
+        titleEn: 'Partner Title Field',
+        titleHu: 'Partner Címzés Mező',
+        descriptionEn: 'VIP registration form now includes a title dropdown for partners (Mr., Ms., Mrs., Dr., Prof., Prof. Dr.). Title is stored and displayed with partner name.',
+        descriptionHu: 'VIP regisztrációs űrlap mostantól tartalmaz címzés választót partnerekhez (Mr., Ms., Mrs., Dr., Prof., Prof. Dr.). A címzés tárolásra kerül és megjelenik a partner névvel.',
+      },
+      {
+        type: 'improvement',
+        category: 'ui',
+        titleEn: 'AlreadyRegistered Contrast Enhancement',
+        titleHu: 'AlreadyRegistered Kontraszt Javítás',
+        descriptionEn: 'Further improved text visibility on VIP AlreadyRegistered page with lighter backgrounds (green-50, slate-50) and proper borders.',
+        descriptionHu: 'További javított szöveg láthatóság a VIP AlreadyRegistered oldalon világosabb háttérszínekkel és megfelelő keretekkel.',
+      },
+      {
+        type: 'improvement',
+        category: 'email',
+        titleEn: 'BBJ Logo Size in Email',
+        titleHu: 'BBJ Logo Méret Emailben',
+        descriptionEn: 'Increased BBJ logo size in invitation emails from 200px to 300px per client request.',
+        descriptionHu: 'BBJ logo méret növelve a meghívó emailekben 200px-ről 300px-re ügyfél kérésre.',
+      },
+      {
+        type: 'improvement',
+        category: 'testing',
+        titleEn: 'Font Comparison Tool',
+        titleHu: 'Font Összehasonlító Eszköz',
+        descriptionEn: 'HTML comparison tool (docs/font-comparison.html) to evaluate Helvetica alternatives against ceogala.com design.',
+        descriptionHu: 'HTML összehasonlító eszköz (docs/font-comparison.html) Helvetica alternatívák kiértékeléséhez a ceogala.com dizájnhoz.',
+      },
+    ],
+  },
+  {
     version: '2.11.0',
     date: '2026-01-14',
     changes: [

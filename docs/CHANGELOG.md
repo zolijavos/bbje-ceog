@@ -4,6 +4,36 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
 
 ---
 
+## v2.12.0 (2026-01-15)
+
+### New Features / Új funkciók
+
+- **Partner Title Field** / **Partner Címzés Mező**
+  - EN: VIP registration form now includes a title dropdown for partners (Mr., Ms., Mrs., Dr., Prof., Prof. Dr.). Title is stored and displayed with partner name.
+  - HU: VIP regisztrációs űrlap mostantól tartalmaz címzés választót partnerekhez (Mr., Ms., Mrs., Dr., Prof., Prof. Dr.). A címzés tárolásra kerül és megjelenik a partner névvel.
+
+### Improvements / Javítások
+
+- **AlreadyRegistered Contrast Enhancement** / **AlreadyRegistered Kontraszt Javítás**
+  - EN: Further improved text visibility on VIP AlreadyRegistered page. Changed backgrounds to lighter shades (green-50, slate-50) with proper borders for better readability.
+  - HU: További javított szöveg láthatóság a VIP AlreadyRegistered oldalon. Világosabb háttérszínek (green-50, slate-50) megfelelő keretekkel a jobb olvashatóságért.
+
+- **BBJ Logo Size in Email** / **BBJ Logo Méret Emailben**
+  - EN: Increased BBJ logo size in invitation emails from 200px to 300px per client request.
+  - HU: BBJ logo méret növelve a meghívó emailekben 200px-ről 300px-re ügyfél kérésre.
+
+### Developer Tools / Fejlesztői Eszközök
+
+- **Font Comparison Tool** / **Font Összehasonlító Eszköz**
+  - EN: Created HTML comparison tool (`docs/font-comparison.html`) to evaluate Helvetica alternatives (Arimo, Open Sans, Arial) against ceogala.com design. Includes original screenshot reference with exact #000d38 navy background.
+  - HU: HTML összehasonlító eszköz készült (`docs/font-comparison.html`) Helvetica alternatívák kiértékeléséhez (Arimo, Open Sans, Arial) a ceogala.com dizájnhoz. Tartalmazza az eredeti screenshotot #000d38 navy háttérrel.
+
+- **Test Data CSV Files** / **Teszt Adat CSV Fájlok**
+  - EN: Added test CSV files with sample guests (20 and 35 records) in various guest types (invited, paying_single, paying_paired) for testing imports.
+  - HU: Teszt CSV fájlok hozzáadva minta vendégekkel (20 és 35 rekord) különböző vendég típusokkal (invited, paying_single, paying_paired) import teszteléshez.
+
+---
+
 ## v2.11.0 (2026-01-14)
 
 ### New Features / Új funkciók
