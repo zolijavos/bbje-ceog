@@ -96,11 +96,11 @@ export default function AlreadyRegistered({
               Your registration has been recorded. Your QR ticket will arrive
               via email shortly.
             </p>
-            <div className="bg-green-100 rounded-lg p-4 mb-6 border border-green-300">
-              <h3 className="font-semibold text-green-900 mb-2">
+            <div className="bg-green-50 rounded-lg p-4 mb-6 border border-green-400">
+              <h3 className="font-semibold text-green-800 mb-2">
                 Registration Status
               </h3>
-              <p className="text-green-900 text-sm">
+              <p className="text-green-700 text-sm">
                 ✓ Attendance confirmed
                 <br />✓ VIP guest status
               </p>
@@ -109,11 +109,11 @@ export default function AlreadyRegistered({
         )}
 
         {/* Event Info */}
-        <div className="bg-slate-100 rounded-lg p-4 mb-6">
-          <h2 className="text-lg font-semibold text-slate-900 mb-2">
+        <div className="bg-slate-50 rounded-lg p-4 mb-6 border border-slate-200">
+          <h2 className="text-lg font-semibold text-slate-800 mb-2">
             BBJ Events 2026
           </h2>
-          <p className="text-slate-700 text-sm">
+          <p className="text-slate-600 text-sm">
             Friday, March 27, 2026 • 6:00 PM
             <br />
             Budapest, Corinthia Hotel

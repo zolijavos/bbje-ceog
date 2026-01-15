@@ -185,6 +185,7 @@ export interface VIPRegistrationInput {
   cancellation_accepted?: boolean;
   // Partner fields (optional for VIP - free partner)
   has_partner?: boolean;
+  partner_title?: string | null;
   partner_name?: string | null;
   partner_email?: string | null;
   partner_phone?: string | null;
@@ -322,6 +323,7 @@ export async function processVIPRegistration(
               paired_with_id: guestId, // Link to main guest
               pwa_auth_code: partnerPwaAuthCode,
               // Partner profile fields
+              title: data.partner_title || null,
               phone: data.partner_phone || null,
               company: data.partner_company || null,
               position: data.partner_position || null,
@@ -389,7 +391,7 @@ export async function processVIPRegistration(
         guestDiet: data.dietary_requirements || undefined,
         guestSeating: data.seating_preferences || undefined,
         hasPartner: data.has_partner || false,
-        partnerTitle: undefined, // VIP partners don't have title in current flow
+        partnerTitle: data.partner_title || undefined,
         partnerName: data.partner_name || undefined,
         partnerPhone: data.partner_phone || undefined,
         partnerEmail: data.partner_email || undefined,

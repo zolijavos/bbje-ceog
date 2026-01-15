@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Font Összehasonlítás - CEO Gala 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@300;400;500;700&family=Open+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #f5f5f5;
+      padding: 20px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-family: Arial, sans-serif;
+    }
+    .controls {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .controls label {
+      margin-right: 20px;
+      cursor: pointer;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 20px;
+    }
+    .font-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .font-card h2 {
+      background: #1a365d;
+      color: white;
+      padding: 15px 20px;
+      font-size: 18px;
+    }
+    .font-card h2 span {
+      font-weight: normal;
+      opacity: 0.7;
+      font-size: 14px;
+    }
+    .preview-dark {
+      background: #000d38;
+      color: #ffffff;
+      padding: 30px;
+      text-align: center;
+    }
+    .preview-light {
+      background: white;
+      color: #333;
+      padding: 30px;
+      border-top: 1px solid #eee;
+    }
+    .title-text {
+      font-size: 28px;
+      font-weight: 400;
+      letter-spacing: 3px;
+      margin-bottom: 15px;
+    }
+    .title-text-light {
+      font-size: 28px;
+      font-weight: 300;
+      letter-spacing: 4px;
+      margin-bottom: 15px;
+    }
+    .date-text {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+    .location-text {
+      font-size: 14px;
+      opacity: 0.85;
+    }
+    .note-text {
+      font-size: 13px;
+      opacity: 0.75;
+      margin-top: 20px;
+      line-height: 1.6;
+    }
+    .body-text {
+      font-size: 15px;
+      line-height: 1.8;
+      text-align: left;
+    }
+    .signature {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-around;
+    }
+    .signature-item {
+      text-align: center;
+    }
+    .signature-name {
+      font-weight: bold;
+      font-size: 15px;
+    }
+    .signature-title {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    /* Font families */
+    .font-arial { font-family: Arial, sans-serif; }
+    .font-helvetica { font-family: Helvetica, Arial, sans-serif; }
+    .font-opensans { font-family: 'Open Sans', sans-serif; }
+    .font-arimo { font-family: 'Arimo', sans-serif; }
+    .font-system { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+
+    .winner-badge {
+      display: inline-block;
+      background: #22c55e;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      margin-left: 10px;
+    }
+
+    .note {
+      background: #fef3c7;
+      border: 1px solid #f59e0b;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-family: Arial, sans-serif;
+    }
+    .note strong { color: #92400e; }
+
+    .original-reference {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      font-family: Arial, sans-serif;
+    }
+    .original-reference h2 {
+      color: #1a365d;
+      margin-bottom: 10px;
+    }
+    .original-reference p {
+      margin-bottom: 15px;
+      color: #333;
+    }
+    .original-reference a {
+      color: #2563eb;
+    }
+    .original-image {
+      background: #000d38;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .original-image img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .original-note {
+      background: #e0f2fe;
+      padding: 12px 15px;
+      border-radius: 6px;
+      font-size: 14px;
+      border-left: 4px solid #0284c7;
+    }
+    .original-note strong {
+      color: #0369a1;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔤 Font Összehasonlítás - CEO Gala 2026</h1>
+
+  <div class="note">
+    <strong>⚠️ Megjegyzés:</strong> A Helvetica NEM web-safe font. Az ügyfél által javasolt alternatívák:
+    <strong>Arimo</strong>, Nimbus Sans, <strong>Open Sans</strong>, és végső esetben <strong>Arial</strong>.
+  </div>
+
+  <!-- Original Reference -->
+  <div class="original-reference">
+    <h2>📸 Eredeti Dizájn (ceogala.com)</h2>
+    <p>Ez a cél - a <a href="https://bbj.hu/events/ceogala/" target="_blank">bbj.hu/events/ceogala/</a> oldal stílusa:</p>
+    <div class="original-image">
+      <img src="1. kör - Principal Guests (nem fizetős vendégek)/Screenshot_20260115_100803.png" alt="Eredeti CEO Gala dizájn" />
+    </div>
+    <p class="original-note">
+      <strong>Megfigyelhető:</strong> Vékony (light weight) sans-serif font, nagy letter-spacing a címnél,
+      elegáns, letisztult megjelenés sötét háttéren.
+    </p>
+  </div>
+
+  <div class="grid">
+    <!-- Arial -->
+    <div class="font-card">
+      <h2>Arial <span>- Web Safe ✅</span></h2>
+      <div class="preview-dark font-arial">
+        <div class="title-text">CEO GALA 2026</div>
+        <div class="date-text">Friday, March 27, 2026</div>
+        <div class="location-text">Grand Ballroom of the <strong>Corinthia Hotel Budapest</strong><br>(Erzsébet körút 43-49, Budapest 1073)</div>
+        <div class="note-text">Please note that this event is by invitation only.<br>Only those who have received email confirmation and a QR code<br>will be able to attend the Gala. No tickets will be available at the door.</div>
+      </div>
+      <div class="preview-light font-arial">
+        <div class="body-text">
+          The Budapest Business Journal is delighted to invite you to the official CEO Gala 2026 hosted at Corinthia Hotel Budapest.
+        </div>
+        <div class="signature">
+          <div class="signature-item">
+            <div class="signature-name">Tamas Botka</div>
+            <div class="signature-title">Publisher, BBJ</div>
+          </div>
+          <div class="signature-item">
+            <div class="signature-name">Balazs Roman</div>
+            <div class="signature-title">CEO, BBJ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Arimo Light (Google Font - Helvetica replacement, thin weight) -->
+    <div class="font-card">
+      <h2>Arimo Light (300) <span>- Google Font</span> <span class="winner-badge">LEGJOBB EGYEZÉS</span></h2>
+      <div class="preview-dark font-arimo">
+        <div class="title-text-light">CEO GALA 2026</div>
+        <div class="date-text" style="font-weight: 400;">Friday, March 27, 2026</div>
+        <div class="location-text" style="font-weight: 300;">Grand Ballroom of the <strong>Corinthia Hotel Budapest</strong><br>(Erzsébet körút 43-49, Budapest 1073)</div>
+      </div>
+      <div class="preview-light font-arimo">
+        <div class="body-text" style="font-weight: 300;">
+          The Budapest Business Journal is delighted to invite you to the official CEO Gala 2026 hosted at Corinthia Hotel Budapest.
+        </div>
+        <div class="signature">
+          <div class="signature-item">
+            <div class="signature-name" style="font-weight: 500;">Tamas Botka</div>
+            <div class="signature-title" style="font-weight: 300;">Publisher, BBJ</div>
+          </div>
+          <div class="signature-item">
+            <div class="signature-name" style="font-weight: 500;">Balazs Roman</div>
+            <div class="signature-title" style="font-weight: 300;">CEO, BBJ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Open Sans Light -->
+    <div class="font-card">
+      <h2>Open Sans Light (300) <span>- Google Font</span></h2>
+      <div class="preview-dark font-opensans">
+        <div class="title-text-light">CEO GALA 2026</div>
+        <div class="date-text" style="font-weight: 400;">Friday, March 27, 2026</div>
+        <div class="location-text" style="font-weight: 300;">Grand Ballroom of the <strong>Corinthia Hotel Budapest</strong><br>(Erzsébet körút 43-49, Budapest 1073)</div>
+      </div>
+      <div class="preview-light font-opensans">
+        <div class="body-text" style="font-weight: 300;">
+          The Budapest Business Journal is delighted to invite you to the official CEO Gala 2026 hosted at Corinthia Hotel Budapest.
+        </div>
+        <div class="signature">
+          <div class="signature-item">
+            <div class="signature-name" style="font-weight: 500;">Tamas Botka</div>
+            <div class="signature-title" style="font-weight: 300;">Publisher, BBJ</div>
+          </div>
+          <div class="signature-item">
+            <div class="signature-name" style="font-weight: 500;">Balazs Roman</div>
+            <div class="signature-title" style="font-weight: 300;">CEO, BBJ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Arimo Regular (Google Font - Helvetica replacement) -->
+    <div class="font-card">
+      <h2>Arimo Regular (400) <span>- Google Font (Helvetica helyettesítő)</span></h2>
+      <div class="preview-dark font-arimo">
+        <div class="title-text">CEO GALA 2026</div>
+        <div class="date-text">Friday, March 27, 2026</div>
+        <div class="location-text">Grand Ballroom of the <strong>Corinthia Hotel Budapest</strong><br>(Erzsébet körút 43-49, Budapest 1073)</div>
+        <div class="note-text">Please note that this event is by invitation only.<br>Only those who have received email confirmation and a QR code<br>will be able to attend the Gala. No tickets will be available at the door.</div>
+      </div>
+      <div class="preview-light font-arimo">
+        <div class="body-text">
+          The Budapest Business Journal is delighted to invite you to the official CEO Gala 2026 hosted at Corinthia Hotel Budapest.
+        </div>
+        <div class="signature">
+          <div class="signature-item">
+            <div class="signature-name">Tamas Botka</div>
+            <div class="signature-title">Publisher, BBJ</div>
+          </div>
+          <div class="signature-item">
+            <div class="signature-name">Balazs Roman</div>
+            <div class="signature-title">CEO, BBJ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Open Sans -->
+    <div class="font-card">
+      <h2>Open Sans <span>- Google Font (Modern)</span></h2>
+      <div class="preview-dark font-opensans">
+        <div class="title-text">CEO GALA 2026</div>
+        <div class="date-text">Friday, March 27, 2026</div>
+        <div class="location-text">Grand Ballroom of the <strong>Corinthia Hotel Budapest</strong><br>(Erzsébet körút 43-49, Budapest 1073)</div>
+        <div class="note-text">Please note that this event is by invitation only.<br>Only those who have received email confirmation and a QR code<br>will be able to attend the Gala. No tickets will be available at the door.</div>
+      </div>
+      <div class="preview-light font-opensans">
+        <div class="body-text">
+          The Budapest Business Journal is delighted to invite you to the official CEO Gala 2026 hosted at Corinthia Hotel Budapest.
+        </div>
+        <div class="signature">
+          <div class="signature-item">
+            <div class="signature-name">Tamas Botka</div>
+            <div class="signature-title">Publisher, BBJ</div>
+          </div>
+          <div class="signature-item">
+            <div class="signature-name">Balazs Roman</div>
+            <div class="signature-title">CEO, BBJ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Helvetica (for reference - not web safe) -->
+    <div class="font-card">
+      <h2>Helvetica <span>- ⚠️ NEM Web Safe (csak Mac-en)</span></h2>
+      <div class="preview-dark font-helvetica">
+        <div class="title-text">CEO GALA 2026</div>
+        <div class="date-text">Friday, March 27, 2026</div>
+        <div class="location-text">Grand Ballroom of the <strong>Corinthia Hotel Budapest</strong><br>(Erzsébet körút 43-49, Budapest 1073)</div>
+        <div class="note-text">Please note that this event is by invitation only.<br>Only those who have received email confirmation and a QR code<br>will be able to attend the Gala. No tickets will be available at the door.</div>
+      </div>
+      <div class="preview-light font-helvetica">
+        <div class="body-text">
+          The Budapest Business Journal is delighted to invite you to the official CEO Gala 2026 hosted at Corinthia Hotel Budapest.
+        </div>
+        <div class="signature">
+          <div class="signature-item">
+            <div class="signature-name">Tamas Botka</div>
+            <div class="signature-title">Publisher, BBJ</div>
+          </div>
+          <div class="signature-item">
+            <div class="signature-name">Balazs Roman</div>
+            <div class="signature-title">CEO, BBJ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- System UI -->
+    <div class="font-card">
+      <h2>System UI <span>- Rendszer alapértelmezett</span></h2>
+      <div class="preview-dark font-system">
+        <div class="title-text">CEO GALA 2026</div>
+        <div class="date-text">Friday, March 27, 2026</div>
+        <div class="location-text">Grand Ballroom of the <strong>Corinthia Hotel Budapest</strong><br>(Erzsébet körút 43-49, Budapest 1073)</div>
+        <div class="note-text">Please note that this event is by invitation only.<br>Only those who have received email confirmation and a QR code<br>will be able to attend the Gala. No tickets will be available at the door.</div>
+      </div>
+      <div class="preview-light font-system">
+        <div class="body-text">
+          The Budapest Business Journal is delighted to invite you to the official CEO Gala 2026 hosted at Corinthia Hotel Budapest.
+        </div>
+        <div class="signature">
+          <div class="signature-item">
+            <div class="signature-name">Tamas Botka</div>
+            <div class="signature-title">Publisher, BBJ</div>
+          </div>
+          <div class="signature-item">
+            <div class="signature-name">Balazs Roman</div>
+            <div class="signature-title">CEO, BBJ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top: 30px;">
+    <strong>📧 Email kliens kompatibilitás:</strong><br><br>
+    <strong>Arial</strong> - 100% kompatibilis minden email kliensben, nincs font betöltés szükséges<br>
+    <strong>Arimo/Open Sans</strong> - Google Font, de emailben fallback Arial-ra ha nem töltődik be<br>
+    <strong>Helvetica</strong> - Csak macOS/iOS eszközökön jelenik meg, Windows-on Arial-ra fallback-el<br><br>
+    <strong>Javaslat emailhez:</strong> <code>font-family: Arial, sans-serif;</code> - egyszerű és megbízható
+  </div>
+</body>
+</html>

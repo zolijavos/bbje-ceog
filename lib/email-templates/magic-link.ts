@@ -44,8 +44,6 @@ export function getMagicLinkEmailTemplate(params: MagicLinkEmailParams): {
     .signature-name { font-weight: bold; font-size: 15px; margin-bottom: 3px; color: #000000; }
     .signature-title { font-size: 14px; color: #333333; }
     .bbj-logo { text-align: center; margin: 50px 0 30px 0; }
-    .bbj-budapest { font-family: Georgia, 'Times New Roman', serif; font-size: 14px; color: #8b0000; letter-spacing: 3px; margin-bottom: 0; text-transform: uppercase; }
-    .bbj-business-journal { font-family: Georgia, 'Times New Roman', serif; font-size: 32px; color: #1a2a4a; letter-spacing: 1px; margin-top: 0; text-transform: uppercase; font-weight: normal; }
     .footer { text-align: center; padding: 20px 0; }
     .footer p { font-size: 13px; color: #666666; margin: 5px 0; }
     .footer a { color: #333333; text-decoration: underline; }
@@ -123,8 +121,7 @@ export function getMagicLinkEmailTemplate(params: MagicLinkEmailParams): {
       </div>
 
       <div class="bbj-logo">
-        <p class="bbj-budapest">Budapest</p>
-        <p class="bbj-business-journal">Business Journal</p>
+        <img src="${escapeHtml(baseUrl)}/email-assets/bbj-logo.png" alt="Budapest Business Journal" style="max-width: 300px; height: auto; display: block; margin: 0 auto;" />
       </div>
 
       <div class="footer">

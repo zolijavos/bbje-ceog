@@ -24,8 +24,14 @@ interface ConfirmBody {
   cancellation_accepted?: boolean;
   // Partner fields (optional for VIP)
   has_partner?: boolean;
+  partner_title?: string | null;
   partner_name?: string | null;
   partner_email?: string | null;
+  partner_phone?: string | null;
+  partner_company?: string | null;
+  partner_position?: string | null;
+  partner_dietary_requirements?: string | null;
+  partner_seating_preferences?: string | null;
   partner_gdpr_consent?: boolean | null;
 }
 
@@ -51,7 +57,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body: ConfirmBody = await request.json();
-    const { guest_id, attendance, title, phone, company, position, dietary_requirements, seating_preferences, gdpr_consent, cancellation_accepted, has_partner, partner_name, partner_email, partner_gdpr_consent } = body;
+    const { guest_id, attendance, title, phone, company, position, dietary_requirements, seating_preferences, gdpr_consent, cancellation_accepted, has_partner, partner_title, partner_name, partner_email, partner_phone, partner_company, partner_position, partner_dietary_requirements, partner_seating_preferences, partner_gdpr_consent } = body;
 
     // Validate required fields
     if (!guest_id || typeof guest_id !== 'number') {
@@ -150,8 +156,14 @@ export async function POST(request: NextRequest) {
       cancellation_accepted,
       // Partner info (optional for VIP)
       has_partner,
+      partner_title: has_partner ? partner_title : null,
       partner_name: has_partner ? partner_name : null,
       partner_email: has_partner ? partner_email : null,
+      partner_phone: has_partner ? partner_phone : null,
+      partner_company: has_partner ? partner_company : null,
+      partner_position: has_partner ? partner_position : null,
+      partner_dietary_requirements: has_partner ? partner_dietary_requirements : null,
+      partner_seating_preferences: has_partner ? partner_seating_preferences : null,
       partner_gdpr_consent: has_partner ? partner_gdpr_consent : null,
     });
 
@@ -169,8 +181,8 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // Return 403 for non-VIP
-      if (result.error === 'This page is only accessible to VIP guests') {
+      // Return 403 for non-invited guests
+      if (result.error === 'This page is only accessible to invited guests') {
         return NextResponse.json(
           { success: false, error: result.error },
           { status: 403 }

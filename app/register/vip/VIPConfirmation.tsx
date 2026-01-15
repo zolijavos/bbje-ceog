@@ -44,8 +44,14 @@ interface FormData {
   cancellationAccepted: boolean;
   // Partner fields (optional for VIP)
   hasPartner: boolean;
+  partnerTitle: string;
   partnerName: string;
   partnerEmail: string;
+  partnerPhone: string;
+  partnerCompany: string;
+  partnerPosition: string;
+  partnerDietaryRequirements: string;
+  partnerSeatingPreferences: string;
   partnerGdprConsent: boolean;
 }
 
@@ -80,8 +86,14 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
     gdprConsent: false,
     cancellationAccepted: false,
     hasPartner: false,
+    partnerTitle: '',
     partnerName: '',
     partnerEmail: '',
+    partnerPhone: '',
+    partnerCompany: '',
+    partnerPosition: '',
+    partnerDietaryRequirements: '',
+    partnerSeatingPreferences: '',
     partnerGdprConsent: false,
   });
 
@@ -167,6 +179,12 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
           has_partner: formData.hasPartner,
           partner_name: formData.hasPartner ? formData.partnerName : null,
           partner_email: formData.hasPartner ? formData.partnerEmail : null,
+          partner_title: formData.hasPartner ? (formData.partnerTitle || null) : null,
+          partner_phone: formData.hasPartner ? (formData.partnerPhone || null) : null,
+          partner_company: formData.hasPartner ? (formData.partnerCompany || null) : null,
+          partner_position: formData.hasPartner ? (formData.partnerPosition || null) : null,
+          partner_dietary_requirements: formData.hasPartner ? (formData.partnerDietaryRequirements || null) : null,
+          partner_seating_preferences: formData.hasPartner ? (formData.partnerSeatingPreferences || null) : null,
           partner_gdpr_consent: formData.hasPartner ? formData.partnerGdprConsent : null,
         }),
       });
@@ -405,7 +423,17 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
                   ...prev,
                   hasPartner: checked,
                   // Clear partner fields when unchecked
-                  ...(checked ? {} : { partnerName: '', partnerEmail: '', partnerGdprConsent: false }),
+                  ...(checked ? {} : {
+                    partnerTitle: '',
+                    partnerName: '',
+                    partnerEmail: '',
+                    partnerPhone: '',
+                    partnerCompany: '',
+                    partnerPosition: '',
+                    partnerDietaryRequirements: '',
+                    partnerSeatingPreferences: '',
+                    partnerGdprConsent: false
+                  }),
                 }));
                 // Clear partner errors when unchecked
                 if (!checked) {
@@ -425,6 +453,26 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
           {/* Partner Details (shown when checkbox is checked) */}
           {formData.hasPartner && (
             <div className="space-y-4 p-4 bg-neutral-50 rounded-lg border border-neutral-200">
+              {/* Partner Title */}
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
+                  Partner Title (optional)
+                </label>
+                <select
+                  value={formData.partnerTitle}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, partnerTitle: e.target.value }))}
+                  className="input w-full"
+                >
+                  <option value="">-- Please select --</option>
+                  <option value="Mr.">Mr.</option>
+                  <option value="Ms.">Ms.</option>
+                  <option value="Mrs.">Mrs.</option>
+                  <option value="Dr.">Dr.</option>
+                  <option value="Prof.">Prof.</option>
+                  <option value="Prof. Dr.">Prof. Dr.</option>
+                </select>
+              </div>
+
               {/* Partner Name */}
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-1">
@@ -460,6 +508,86 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
                 <p className="text-xs text-neutral-600 mt-1">
                   Your partner will receive their own ticket via email.
                 </p>
+              </div>
+
+              {/* Partner Phone */}
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
+                  Partner Phone (optional)
+                </label>
+                <input
+                  type="tel"
+                  value={formData.partnerPhone}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, partnerPhone: e.target.value }))}
+                  placeholder="+36 30 123 4567"
+                  className="input w-full"
+                />
+              </div>
+
+              {/* Partner Company */}
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
+                  Partner Company / Organization (optional)
+                </label>
+                <input
+                  type="text"
+                  value={formData.partnerCompany}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, partnerCompany: e.target.value }))}
+                  placeholder="Company Ltd."
+                  maxLength={255}
+                  className="input w-full"
+                />
+              </div>
+
+              {/* Partner Position */}
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
+                  Partner Position (optional)
+                </label>
+                <input
+                  type="text"
+                  value={formData.partnerPosition}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, partnerPosition: e.target.value }))}
+                  placeholder="CEO"
+                  maxLength={100}
+                  className="input w-full"
+                />
+              </div>
+
+              {/* Partner Dietary Requirements */}
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
+                  Partner Dietary Requirements (optional)
+                </label>
+                <textarea
+                  value={formData.partnerDietaryRequirements}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, partnerDietaryRequirements: e.target.value }))}
+                  maxLength={500}
+                  rows={2}
+                  className="input w-full"
+                  placeholder="E.g., vegetarian, gluten-free, lactose-free, nut allergy..."
+                />
+                <div className="flex justify-end mt-1">
+                  <span className="text-xs text-neutral-500">{formData.partnerDietaryRequirements.length}/500</span>
+                </div>
+              </div>
+
+              {/* Partner Seating Preferences */}
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
+                  Partner Seating Preferences (optional)
+                </label>
+                <textarea
+                  value={formData.partnerSeatingPreferences}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, partnerSeatingPreferences: e.target.value }))}
+                  maxLength={500}
+                  rows={2}
+                  className="input w-full"
+                  placeholder="Who would you like to sit with?"
+                />
+                <div className="flex justify-end mt-1">
+                  <span className="text-xs text-neutral-500">{formData.partnerSeatingPreferences.length}/500</span>
+                </div>
               </div>
 
               {/* Partner GDPR Consent */}
