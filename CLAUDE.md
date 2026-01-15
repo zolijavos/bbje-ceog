@@ -479,8 +479,11 @@ pm2 restart ceog                             # Restart application
 pm2 logs ceog                                # View application logs
 pm2 logs ceog --lines 100                    # View last 100 log lines
 
-# Deploy Changes
-npm run build                                # Build Next.js (required before restart)
+# Deploy Changes (RECOMMENDED)
+npm run deploy                               # Build + auto-copy static + PM2 restart
+
+# Manual Deploy (alternative)
+npm run build                                # Build Next.js + postbuild copies static files
 pm2 restart ceog                             # Apply changes
 
 # Database Operations
@@ -491,6 +494,15 @@ npx prisma db seed                           # Seed/reset test data
 sudo nginx -t                                # Test nginx config
 sudo systemctl reload nginx                  # Apply nginx changes
 ```
+
+### Standalone Build Architecture
+A projekt Next.js `output: 'standalone'` módot használ (kisebb footprint, gyorsabb cold start).
+
+**Static fájlok kiszolgálása (dual approach):**
+1. **Nginx** közvetlenül szolgálja a `/_next/static/*` fájlokat az `.next/static/` mappából
+2. **postbuild script** automatikusan másolja a static fájlokat a standalone mappába (backup)
+
+Ez biztosítja, hogy a static fájlok mindig elérhetők legyenek build után.
 
 ### Test Credentials (Seed Data)
 ```

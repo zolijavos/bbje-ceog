@@ -11,7 +11,8 @@ import { GuestType, RegistrationStatus, PaymentStatus } from '@prisma/client';
 // ========================================
 
 export const GUEST_TYPE_LABELS: Record<GuestType, string> = {
-  vip: 'Invited',
+  vip: 'VIP (Free)',
+  invited: 'Invited (Free)',
   paying_single: 'Paying (Single)',
   paying_paired: 'Paying (Paired)',
   applicant: 'Applicant',
@@ -157,8 +158,8 @@ export function getPaymentStatusInfo(
   paymentStatus: PaymentStatus | null,
   guestType: GuestType
 ): StatusInfo {
-  // VIP guests don't need payment
-  if (guestType === 'vip') {
+  // VIP and invited guests don't need payment
+  if (guestType === 'vip' || guestType === 'invited') {
     return VIP_PAYMENT_STATUS_INFO;
   }
 

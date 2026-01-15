@@ -27,6 +27,12 @@ interface SubmitBody {
   billing_info: BillingInfoInput;
   partner_name?: string | null;
   partner_email?: string | null;
+  partner_phone?: string | null;
+  partner_company?: string | null;
+  partner_position?: string | null;
+  partner_dietary_requirements?: string | null;
+  partner_seating_preferences?: string | null;
+  partner_gdpr_consent?: boolean | null;
   // Profile fields
   title?: string | null;
   phone?: string | null;
@@ -48,6 +54,12 @@ export async function POST(request: NextRequest) {
       billing_info,
       partner_name,
       partner_email,
+      partner_phone,
+      partner_company,
+      partner_position,
+      partner_dietary_requirements,
+      partner_seating_preferences,
+      partner_gdpr_consent,
       title,
       phone,
       company,
@@ -177,6 +189,14 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
+
+      // Partner GDPR consent validation
+      if (!partner_gdpr_consent) {
+        return NextResponse.json(
+          { success: false, error: 'Partner GDPR consent is required' },
+          { status: 400 }
+        );
+      }
     }
 
     // Process paid registration
@@ -195,6 +215,12 @@ export async function POST(request: NextRequest) {
       },
       partner_name: partner_name || null,
       partner_email: partner_email || null,
+      partner_phone: partner_phone || null,
+      partner_company: partner_company || null,
+      partner_position: partner_position || null,
+      partner_dietary_requirements: partner_dietary_requirements || null,
+      partner_seating_preferences: partner_seating_preferences || null,
+      partner_gdpr_consent: partner_gdpr_consent || null,
       title: title || null,
       phone: phone || null,
       company: company || null,

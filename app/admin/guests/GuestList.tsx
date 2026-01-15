@@ -49,6 +49,7 @@ interface Guest {
   name: string;
   email: string;
   title: string | null;
+  phone: string | null;
   company: string | null;
   position: string | null;
   guestType: string;
@@ -360,6 +361,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
       email?: string;
       name?: string;
       title?: string | null;
+      phone?: string | null;
       company?: string | null;
       position?: string | null;
       guest_type?: string;
@@ -374,6 +376,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
           name: data.name,
           guest_type: data.guest_type,
           title: data.title,
+          phone: data.phone,
           company: data.company,
           position: data.position,
           dietary_requirements: data.dietary_requirements,
@@ -399,6 +402,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
       email?: string;
       name?: string;
       title?: string | null;
+      phone?: string | null;
       company?: string | null;
       position?: string | null;
       guest_type?: string;
@@ -415,6 +419,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
         body: JSON.stringify({
           name: data.name,
           title: data.title,
+          phone: data.phone,
           company: data.company,
           position: data.position,
           guest_type: data.guest_type,
@@ -1036,9 +1041,10 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                 email: editingGuest.email,
                 name: editingGuest.name,
                 title: editingGuest.title,
+                phone: editingGuest.phone,
                 company: editingGuest.company,
                 position: editingGuest.position,
-                guest_type: editingGuest.guestType as 'vip' | 'paying_single' | 'paying_paired',
+                guest_type: editingGuest.guestType as 'vip' | 'invited' | 'paying_single' | 'paying_paired',
                 status: editingGuest.status as 'pending' | 'invited' | 'registered' | 'approved' | 'declined',
                 dietary_requirements: editingGuest.dietaryRequirements,
                 seating_preferences: editingGuest.seatingPreferences,

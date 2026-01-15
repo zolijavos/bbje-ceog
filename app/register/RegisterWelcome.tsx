@@ -17,7 +17,8 @@ interface RegisterWelcomeProps {
 
 // Determine next step URL based on guest type - using guest_id for proper routing
 function getRegistrationUrl(guestId: number, guestType: string): string {
-  if (guestType === 'vip') {
+  // Both 'vip' and 'invited' are free ticket guests
+  if (guestType === 'vip' || guestType === 'invited') {
     return `/register/vip?guest_id=${guestId}`;
   }
   return `/register/paid?guest_id=${guestId}`;
@@ -27,6 +28,7 @@ function getRegistrationUrl(guestId: number, guestType: string): string {
 function formatGuestType(type: string): { label: string; color: string } {
   const types: Record<string, { label: string; color: string }> = {
     vip: { label: 'VIP Guest', color: 'bg-accent-teal text-white' },
+    invited: { label: 'Invited Guest', color: 'bg-accent-gold text-white' },
     paying_single: { label: 'Paying Guest', color: 'bg-neutral-800/10 text-neutral-800' },
     paying_paired: {
       label: 'Paying Guest (Paired)',
@@ -79,15 +81,6 @@ export default function RegisterWelcome({ guest }: RegisterWelcomeProps) {
             Your invitation has been validated. Please continue with registration.
           </p>
 
-          {/* Guest Type Badge */}
-          <div className="flex justify-center mb-6">
-            <span
-              className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold font-sans uppercase tracking-wider ${guestTypeInfo.color}`}
-            >
-              {guestTypeInfo.label}
-            </span>
-          </div>
-
           {/* Guest Info */}
           <div className="bg-neutral-50 rounded-lg p-4 mb-6 border-l-4 border-accent-teal">
             <div className="text-sm text-neutral-500 font-sans uppercase tracking-wider">Email</div>
@@ -97,9 +90,9 @@ export default function RegisterWelcome({ guest }: RegisterWelcomeProps) {
           {/* Continue Button - High contrast for visibility */}
           <Link
             href={nextStepUrl}
-            className="block w-full text-center py-4 px-6 bg-neutral-800 hover:bg-neutral-700 text-white font-semibold uppercase tracking-wider transition-all"
+            className="block w-full text-center py-5 px-6 bg-accent-teal hover:bg-accent-teal-dark text-white font-bold text-lg uppercase tracking-wider transition-all shadow-lg hover:shadow-xl rounded-lg"
           >
-            Continue to Registration
+            Continue to Registration →
           </Link>
 
           {/* Info text */}
@@ -121,15 +114,6 @@ export default function RegisterWelcome({ guest }: RegisterWelcomeProps) {
               className="text-accent-teal hover:text-accent-teal-light"
             >
               View Registration Guide
-            </Link>
-          </p>
-          <p>
-            <Link
-              href="/"
-              aria-label="Back to home page"
-              className="text-sm text-white/60 hover:text-white/80 transition-colors"
-            >
-              ← Back to Home
             </Link>
           </p>
         </div>

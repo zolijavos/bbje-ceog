@@ -109,15 +109,6 @@ export default async function DeclinedPage({ searchParams }: DeclinedPageProps) 
               View Registration Guide
             </Link>
           </p>
-          <p>
-            <Link
-              href="/"
-              aria-label="Back to home page"
-              className="text-slate-500 hover:text-slate-700 transition-colors"
-            >
-              ← Back to Home
-            </Link>
-          </p>
         </div>
       </div>
     </div>

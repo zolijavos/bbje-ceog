@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X, Warning, PaperPlaneTilt, SpinnerGap, ArrowCounterClockwise } from '@phosphor-icons/react';
+import { X, Warning, PaperPlaneTilt, SpinnerGap } from '@phosphor-icons/react';
 
 interface EmailRecipient {
   id: number;
@@ -17,27 +17,33 @@ interface EmailPreviewModalProps {
   isSending: boolean;
 }
 
-// Default email template (matches the actual email template)
-const DEFAULT_SUBJECT = 'BBJ Events - Registration Invitation';
+// Default email template - matches the actual CEO Gala 2026 invitation
+const DEFAULT_SUBJECT = 'Invitation to the CEO Gala 2026';
 
 const DEFAULT_BODY = `Dear {guestName},
 
-We are pleased to inform you that you have received an invitation to the BBJ Events.
+The Budapest Business Journal is delighted to invite you to the official
 
-Event details:
-- Event: BBJ Events 2026
-- Location: Budapest
-- You will find more details during registration.
+CEO Gala 2026
 
-Click the link below to start your registration:
+hosted at Corinthia Hotel Budapest on Friday, March 27, 2026.
+
+As has now become a tradition of several years, two awards will be presented during the evening: the Expat CEO Award and the CEO Community Award.
+
+Date: Friday, March 27, 2026, 7 p.m.
+Location: The Grand Ballroom of the Corinthia Hotel Budapest
+Dress Code: Black tie for men, ball gown or cocktail dress for women
+
+If you wish to reserve your place at the gala now, click the REGISTRATION button in the email.
+
+Registration link:
 {magicLinkUrl}
 
-This link is valid for 24 hours.
-
-If you have any questions, please contact us.
+Please note that any failure to provide due cancellation notice may result in a no-show fee of HUF 99,000 per person.
 
 Best regards,
-BBJ Events Organizing Committee`;
+Tamas Botka, Publisher, BBJ
+Balazs Roman, CEO, BBJ`;
 
 export default function EmailPreviewModal({
   isOpen,
@@ -46,15 +52,11 @@ export default function EmailPreviewModal({
   onSend,
   isSending,
 }: EmailPreviewModalProps) {
-  const [subject, setSubject] = useState(DEFAULT_SUBJECT);
-  const [body, setBody] = useState(DEFAULT_BODY);
   const [showAllRecipients, setShowAllRecipients] = useState(false);
 
   // Reset form when modal opens
   useEffect(() => {
     if (isOpen) {
-      setSubject(DEFAULT_SUBJECT);
-      setBody(DEFAULT_BODY);
       setShowAllRecipients(false);
     }
   }, [isOpen]);
@@ -66,12 +68,12 @@ export default function EmailPreviewModal({
 
   // Preview with first recipient's name
   const previewName = recipients[0]?.name || 'Guest';
-  const previewBody = body
+  const previewBody = DEFAULT_BODY
     .replace(/{guestName}/g, previewName)
     .replace(/{magicLinkUrl}/g, 'https://ceogala.hu/register?code=xxx&email=xxx');
 
   const handleSend = () => {
-    onSend(subject, body);
+    onSend(DEFAULT_SUBJECT, DEFAULT_BODY);
   };
 
   return (
@@ -84,11 +86,11 @@ export default function EmailPreviewModal({
 
       {/* Modal */}
       <div className="flex min-h-full items-center justify-center p-4">
-        <div className="relative bg-white w-full max-w-4xl shadow-xl">
+        <div className="relative bg-white w-full max-w-2xl shadow-xl">
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-neutral-800">
             <h2 className="text-xl font-display font-semibold text-white">
-              Email előnézet és szerkesztés
+              Email előnézet
             </h2>
             <button
               onClick={onClose}
@@ -132,66 +134,33 @@ export default function EmailPreviewModal({
               </div>
             </div>
 
-            {/* Subject */}
-            <div className="mb-6">
+            {/* Email Preview */}
+            <div className="mb-4">
               <label className="block text-sm font-semibold text-neutral-800 mb-2">
-                Tárgy
+                Email előnézet ({previewName} példájával)
               </label>
-              <input
-                type="text"
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 focus:border-neutral-800 focus:ring-2 focus:ring-neutral-800/20"
-                disabled={isSending}
-              />
-            </div>
-
-            {/* Body Editor and Preview */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Editor */}
-              <div>
-                <label className="block text-sm font-semibold text-neutral-800 mb-2">
-                  Email szöveg (szerkeszthető)
-                </label>
-                <p className="text-xs text-gray-500 mb-2">
-                  Használható változók: <code className="bg-gray-100 px-1">{'{guestName}'}</code>, <code className="bg-gray-100 px-1">{'{magicLinkUrl}'}</code>
-                </p>
-                <textarea
-                  value={body}
-                  onChange={(e) => setBody(e.target.value)}
-                  rows={15}
-                  className="w-full px-4 py-2 border border-gray-300 focus:border-neutral-800 focus:ring-2 focus:ring-neutral-800/20 font-mono text-sm"
-                  disabled={isSending}
-                />
-              </div>
-
-              {/* Preview */}
-              <div>
-                <label className="block text-sm font-semibold text-neutral-800 mb-2">
-                  Előnézet ({previewName} példájával)
-                </label>
-                <div className="bg-gray-50 border border-gray-200 p-4 h-[340px] overflow-y-auto">
-                  <div className="text-sm font-medium text-neutral-800 mb-2">
-                    Tárgy: {subject}
-                  </div>
-                  <hr className="my-2" />
-                  <pre className="whitespace-pre-wrap text-sm text-gray-700 font-sans">
-                    {previewBody}
-                  </pre>
+              <div className="bg-gray-50 border border-gray-200 p-4">
+                <div className="text-sm font-medium text-neutral-800 mb-2">
+                  <span className="text-gray-500">Tárgy:</span> {DEFAULT_SUBJECT}
                 </div>
+                <hr className="my-3" />
+                <pre className="whitespace-pre-wrap text-sm text-gray-700 font-sans leading-relaxed">
+                  {previewBody}
+                </pre>
               </div>
             </div>
 
             {/* Info box */}
-            <div className="mt-4 bg-amber-50 border-l-4 border-amber-500 p-4">
+            <div className="bg-amber-50 border-l-4 border-amber-500 p-4">
               <div className="flex">
                 <div className="flex-shrink-0">
                   <Warning size={20} weight="duotone" className="text-amber-600" />
                 </div>
                 <div className="ml-3">
                   <p className="text-sm text-amber-700">
-                    <strong>Megjegyzés:</strong> A magic link URL automatikusan generálódik minden vendéghez egyedileg.
-                    A link 24 óráig érvényes. A küldés után a rendszer logolja az email küldést.
+                    <strong>Megjegyzés:</strong> A tényleges email a teljes HTML sablont használja
+                    CEO Gala 2026 fejléc képpel és formázással. A magic link URL automatikusan
+                    generálódik minden vendéghez egyedileg.
                   </p>
                 </div>
               </div>
@@ -199,44 +168,31 @@ export default function EmailPreviewModal({
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 bg-gray-50">
+          <div className="flex items-center justify-end px-6 py-4 border-t border-gray-200 bg-gray-50 gap-3">
             <button
-              onClick={() => {
-                setSubject(DEFAULT_SUBJECT);
-                setBody(DEFAULT_BODY);
-              }}
-              className="btn btn-ghost inline-flex items-center gap-2"
+              onClick={onClose}
+              className="btn btn-ghost"
               disabled={isSending}
             >
-              <ArrowCounterClockwise size={18} weight="duotone" />
-              Alapértelmezés visszaállítása
+              Mégse
             </button>
-            <div className="flex gap-3">
-              <button
-                onClick={onClose}
-                className="btn btn-ghost"
-                disabled={isSending}
-              >
-                Mégse
-              </button>
-              <button
-                onClick={handleSend}
-                disabled={isSending || !subject.trim() || !body.trim()}
-                className="btn btn-primary inline-flex items-center gap-2"
-              >
-                {isSending ? (
-                  <>
-                    <SpinnerGap size={20} weight="duotone" className="animate-spin" />
-                    Küldés folyamatban...
-                  </>
-                ) : (
-                  <>
-                    <PaperPlaneTilt size={20} weight="duotone" />
-                    Küldés ({recipients.length} fő)
-                  </>
-                )}
-              </button>
-            </div>
+            <button
+              onClick={handleSend}
+              disabled={isSending}
+              className="btn btn-primary inline-flex items-center gap-2"
+            >
+              {isSending ? (
+                <>
+                  <SpinnerGap size={20} weight="duotone" className="animate-spin" />
+                  Küldés folyamatban...
+                </>
+              ) : (
+                <>
+                  <PaperPlaneTilt size={20} weight="duotone" />
+                  Küldés ({recipients.length} fő)
+                </>
+              )}
+            </button>
           </div>
         </div>
       </div>

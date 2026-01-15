@@ -118,13 +118,6 @@ export default function RequestLinkForm({
         <p className="text-sm landing-text-tertiary font-sans mb-4">
           Please check your spam folder as well.
         </p>
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 py-2 px-4 landing-btn border rounded-lg font-medium transition-colors font-sans"
-        >
-          <ArrowLeft weight="regular" size={18} />
-          Back to Home
-        </Link>
       </div>
     );
   }

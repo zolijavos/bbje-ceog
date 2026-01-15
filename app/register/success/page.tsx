@@ -168,8 +168,8 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
           )}
         </div>
 
-        {/* PWA Download Section - Show for VIP guests who already have tickets */}
-        {isVIP && (
+        {/* PWA Download Section - Hidden for now */}
+        {/* {isVIP && (
           <div className="bg-gradient-to-r from-teal-600 to-teal-700 rounded-lg p-4 mb-6 text-center">
             <div className="flex items-center justify-center gap-2 mb-2">
               <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -187,7 +187,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
               Open Gala App
             </Link>
           </div>
-        )}
+        )} */}
 
         {/* Contact Info */}
         <div className="text-xs font-sans space-y-2">
@@ -198,15 +198,6 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
               className="text-accent-teal hover:text-accent-teal-dark"
             >
               View Registration Guide
-            </Link>
-          </p>
-          <p>
-            <Link
-              href="/"
-              aria-label="Back to home page"
-              className="text-neutral-500 hover:text-neutral-700 transition-colors"
-            >
-              ← Back to Home
             </Link>
           </p>
         </div>

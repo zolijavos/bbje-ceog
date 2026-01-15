@@ -179,13 +179,6 @@ export default function RegisterError({
             </Link>
           )}
 
-          {/* Back to Home */}
-          <Link
-            href="/"
-            className="btn btn-ghost w-full text-center"
-          >
-            Back to Home
-          </Link>
         </div>
 
         {/* Footer */}

@@ -52,6 +52,12 @@ interface FormData {
   // Partner fields
   partnerName: string;
   partnerEmail: string;
+  partnerPhone: string;
+  partnerCompany: string;
+  partnerPosition: string;
+  partnerDietaryRequirements: string;
+  partnerSeatingPreferences: string;
+  partnerGdprConsent: boolean;
   // Consent fields
   gdprConsent: boolean;
   cancellationAccepted: boolean;
@@ -74,6 +80,7 @@ interface FormErrors {
   country?: string;
   partnerName?: string;
   partnerEmail?: string;
+  partner_gdpr_consent?: string;
   gdpr_consent?: string;
   cancellation_accepted?: string;
 }
@@ -111,6 +118,12 @@ export default function PaidRegistrationForm({
     // Partner
     partnerName: '',
     partnerEmail: '',
+    partnerPhone: '',
+    partnerCompany: '',
+    partnerPosition: '',
+    partnerDietaryRequirements: '',
+    partnerSeatingPreferences: '',
+    partnerGdprConsent: false,
     // Consent
     gdprConsent: false,
     cancellationAccepted: false,
@@ -198,6 +211,10 @@ export default function PaidRegistrationForm({
         if (!emailRegex.test(formData.partnerEmail)) {
           newErrors.partnerEmail = 'Invalid email format';
         }
+      }
+      // Partner GDPR consent required
+      if (!formData.partnerGdprConsent) {
+        newErrors.partner_gdpr_consent = 'Partner GDPR consent is required';
       }
     }
 
@@ -290,6 +307,12 @@ export default function PaidRegistrationForm({
           // Partner info (if paired)
           partner_name: formData.ticketType === 'paid_paired' ? formData.partnerName : null,
           partner_email: formData.ticketType === 'paid_paired' ? formData.partnerEmail : null,
+          partner_phone: formData.ticketType === 'paid_paired' ? (formData.partnerPhone || null) : null,
+          partner_company: formData.ticketType === 'paid_paired' ? (formData.partnerCompany || null) : null,
+          partner_position: formData.ticketType === 'paid_paired' ? (formData.partnerPosition || null) : null,
+          partner_dietary_requirements: formData.ticketType === 'paid_paired' ? (formData.partnerDietaryRequirements || null) : null,
+          partner_seating_preferences: formData.ticketType === 'paid_paired' ? (formData.partnerSeatingPreferences || null) : null,
+          partner_gdpr_consent: formData.ticketType === 'paid_paired' ? formData.partnerGdprConsent : null,
           // Consent
           gdpr_consent: formData.gdprConsent,
           cancellation_accepted: formData.cancellationAccepted,
@@ -389,6 +412,7 @@ export default function PaidRegistrationForm({
               {errors.taxNumber && <li>Tax Number: {errors.taxNumber}</li>}
               {errors.partnerName && <li>Partner Name: {errors.partnerName}</li>}
               {errors.partnerEmail && <li>Partner Email: {errors.partnerEmail}</li>}
+              {errors.partner_gdpr_consent && <li>Partner GDPR: {errors.partner_gdpr_consent}</li>}
               {errors.gdpr_consent && <li>GDPR: {errors.gdpr_consent}</li>}
               {errors.cancellation_accepted && <li>Cancellation: {errors.cancellation_accepted}</li>}
             </ul>
@@ -515,9 +539,10 @@ export default function PaidRegistrationForm({
               Partner information is required to issue the personalized QR ticket.
             </p>
             <div className="space-y-4">
+              {/* Partner Name */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Partner Name *
+                  Partner Name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -534,9 +559,10 @@ export default function PaidRegistrationForm({
                 )}
               </div>
 
+              {/* Partner Email */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Partner Email Address *
+                  Partner Email Address <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="email"
@@ -550,6 +576,107 @@ export default function PaidRegistrationForm({
                 />
                 {errors.partnerEmail && (
                   <p className="text-red-600 text-sm mt-1">{errors.partnerEmail}</p>
+                )}
+                <p className="text-xs text-slate-500 mt-1">
+                  Your partner will receive their own ticket via email.
+                </p>
+              </div>
+
+              {/* Partner Phone */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Partner Phone (optional)
+                </label>
+                <input
+                  type="tel"
+                  value={formData.partnerPhone}
+                  onChange={(e) => updateFormData('partnerPhone', e.target.value)}
+                  className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 border-slate-300"
+                  placeholder="+36 30 123 4567"
+                />
+              </div>
+
+              {/* Partner Company */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Partner Company / Organization (optional)
+                </label>
+                <input
+                  type="text"
+                  value={formData.partnerCompany}
+                  onChange={(e) => updateFormData('partnerCompany', e.target.value)}
+                  className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 border-slate-300"
+                  placeholder="Company Ltd."
+                  maxLength={255}
+                />
+              </div>
+
+              {/* Partner Position */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Partner Position (optional)
+                </label>
+                <input
+                  type="text"
+                  value={formData.partnerPosition}
+                  onChange={(e) => updateFormData('partnerPosition', e.target.value)}
+                  className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 border-slate-300"
+                  placeholder="CEO"
+                  maxLength={100}
+                />
+              </div>
+
+              {/* Partner Dietary Requirements */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Partner Dietary Requirements (optional)
+                </label>
+                <textarea
+                  value={formData.partnerDietaryRequirements}
+                  onChange={(e) => updateFormData('partnerDietaryRequirements', e.target.value)}
+                  className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 border-slate-300"
+                  placeholder="E.g., vegetarian, gluten-free, lactose-free, nut allergy..."
+                  rows={2}
+                  maxLength={500}
+                />
+                <div className="flex justify-end mt-1">
+                  <span className="text-xs text-slate-500">{formData.partnerDietaryRequirements.length}/500</span>
+                </div>
+              </div>
+
+              {/* Partner Seating Preferences */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Partner Seating Preferences (optional)
+                </label>
+                <textarea
+                  value={formData.partnerSeatingPreferences}
+                  onChange={(e) => updateFormData('partnerSeatingPreferences', e.target.value)}
+                  className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 border-slate-300"
+                  placeholder="Who would you like to sit with?"
+                  rows={2}
+                  maxLength={500}
+                />
+                <div className="flex justify-end mt-1">
+                  <span className="text-xs text-slate-500">{formData.partnerSeatingPreferences.length}/500</span>
+                </div>
+              </div>
+
+              {/* Partner GDPR Consent */}
+              <div className="pt-2">
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.partnerGdprConsent}
+                    onChange={(e) => updateFormData('partnerGdprConsent', e.target.checked)}
+                    className={`w-5 h-5 mt-0.5 rounded border-slate-300 text-amber-500 focus:ring-amber-500 ${errors.partner_gdpr_consent ? 'border-red-500' : ''}`}
+                  />
+                  <span className="text-sm text-slate-700">
+                    I confirm that my partner has consented to the processing of their personal data according to the <a href="/privacy" target="_blank" className="text-amber-600 hover:underline">Privacy Policy</a>. <span className="text-red-500">*</span>
+                  </span>
+                </label>
+                {errors.partner_gdpr_consent && (
+                  <p className="text-red-600 text-sm mt-1 ml-8">{errors.partner_gdpr_consent}</p>
                 )}
               </div>
             </div>

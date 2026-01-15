@@ -46,7 +46,7 @@ export interface ParseResult {
 // Validation Schemas
 // =============================================================================
 
-const guestTypeValues = ['vip', 'paying_single', 'paying_paired'] as const;
+const guestTypeValues = ['vip', 'invited', 'paying_single', 'paying_paired'] as const;
 const statusValues = ['pending', 'invited', 'registered', 'approved'] as const;
 
 const csvRowSchema = z.object({
@@ -60,7 +60,7 @@ const csvRowSchema = z.object({
     .transform((val) => val.trim()),
   guest_type: z.enum(guestTypeValues, {
     errorMap: () => ({
-      message: `Invalid guest type (must be vip, paying_single, or paying_paired)`,
+      message: `Invalid guest type (must be vip, invited, paying_single, or paying_paired)`,
     }),
   }),
   phone: z

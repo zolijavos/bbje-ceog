@@ -1,8 +1,7 @@
 module.exports = {
   apps: [{
     name: 'ceog',
-    script: 'npm',
-    args: 'start',
+    script: '.next/standalone/server.js',
     cwd: '/var/www/ceog',
     env: {
       NODE_ENV: 'production',

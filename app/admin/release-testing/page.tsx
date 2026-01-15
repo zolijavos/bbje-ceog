@@ -52,6 +52,62 @@ interface TestResultData {
 
 const releaseTests: ReleaseTest[] = [
   {
+    version: '2.12.0',
+    date: '2026-01-15',
+    features: [
+      {
+        nameEn: 'Partner Title Field',
+        nameHu: 'Partner Címzés Mező',
+        steps: [
+          { en: 'Navigate to VIP registration page with magic link', hu: 'Navigálj a VIP regisztrációs oldalra magic link-kel' },
+          { en: 'Check "I would like to bring a partner" checkbox', hu: 'Jelöld be a "Szeretnék partnert hozni" checkboxot' },
+          { en: 'Verify Partner Title dropdown appears', hu: 'Ellenőrizd, hogy megjelenik a Partner Címzés dropdown' },
+          { en: 'Select a title (Mr., Ms., Mrs., Dr., Prof., Prof. Dr.)', hu: 'Válassz egy címzést (Mr., Ms., Mrs., Dr., Prof., Prof. Dr.)' },
+          { en: 'Fill partner details and submit registration', hu: 'Töltsd ki a partner adatait és küldd el a regisztrációt' },
+          { en: 'Check admin guest list - verify partner title is saved', hu: 'Ellenőrizd az admin vendéglistát - a partner címzés mentve van' },
+        ],
+        expected: { en: 'Partner title dropdown works and saves correctly', hu: 'Partner címzés dropdown működik és helyesen ment' }
+      },
+      {
+        nameEn: 'AlreadyRegistered Contrast Enhancement',
+        nameHu: 'AlreadyRegistered Kontraszt Javítás',
+        steps: [
+          { en: 'Register a VIP guest through magic link', hu: 'Regisztrálj egy VIP vendéget magic link-kel' },
+          { en: 'Click the same magic link again', hu: 'Kattints újra ugyanarra a magic linkre' },
+          { en: 'Verify "Already Registered" page appears', hu: 'Ellenőrizd, hogy megjelenik az "Már Regisztráltál" oldal' },
+          { en: 'Check text visibility - all text should be readable', hu: 'Ellenőrizd a szöveg láthatóságát - minden szöveg olvasható legyen' },
+          { en: 'Verify green status box has proper contrast', hu: 'Ellenőrizd, hogy a zöld státusz doboz megfelelő kontraszttal rendelkezik' },
+          { en: 'Verify event info box has proper contrast', hu: 'Ellenőrizd, hogy az esemény info doboz megfelelő kontraszttal rendelkezik' },
+        ],
+        expected: { en: 'All text is clearly visible with proper contrast on AlreadyRegistered page', hu: 'Minden szöveg jól látható megfelelő kontraszttal az AlreadyRegistered oldalon' }
+      },
+      {
+        nameEn: 'BBJ Logo Size in Email',
+        nameHu: 'BBJ Logo Méret Emailben',
+        steps: [
+          { en: 'Create a new VIP guest in admin', hu: 'Hozz létre új VIP vendéget az adminban' },
+          { en: 'Send magic link email to the guest', hu: 'Küldj magic link emailt a vendégnek' },
+          { en: 'Open the received email', hu: 'Nyisd meg a kapott emailt' },
+          { en: 'Scroll to the BBJ logo at the bottom', hu: 'Görgess le a BBJ logóhoz az email alján' },
+          { en: 'Verify logo is larger (300px width)', hu: 'Ellenőrizd, hogy a logo nagyobb (300px széles)' },
+        ],
+        expected: { en: 'BBJ logo displays at 300px width in invitation emails', hu: 'BBJ logo 300px szélességben jelenik meg a meghívó emailekben' }
+      },
+      {
+        nameEn: 'Font Comparison Tool',
+        nameHu: 'Font Összehasonlító Eszköz',
+        steps: [
+          { en: 'Navigate to /docs/font-comparison.html', hu: 'Navigálj a /docs/font-comparison.html oldalra' },
+          { en: 'Verify original ceogala.com screenshot is displayed', hu: 'Ellenőrizd, hogy az eredeti ceogala.com screenshot megjelenik' },
+          { en: 'Compare Arial, Arimo Light, Open Sans Light samples', hu: 'Hasonlítsd össze az Arial, Arimo Light, Open Sans Light mintákat' },
+          { en: 'Verify all samples use #000d38 navy background', hu: 'Ellenőrizd, hogy minden minta #000d38 navy hátteret használ' },
+          { en: 'Check that Arimo Light (300) is marked as "LEGJOBB EGYEZÉS"', hu: 'Ellenőrizd, hogy az Arimo Light (300) "LEGJOBB EGYEZÉS" jelzéssel van ellátva' },
+        ],
+        expected: { en: 'Font comparison tool displays all font options for client review', hu: 'Font összehasonlító eszköz megjeleníti az összes font opciót ügyfél áttekintéshez' }
+      },
+    ],
+  },
+  {
     version: '2.11.0',
     date: '2026-01-14',
     features: [

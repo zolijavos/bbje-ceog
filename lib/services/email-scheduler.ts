@@ -237,22 +237,37 @@ export async function runAutomaticSchedulers(): Promise<{
 export async function schedulePaymentReminders(config?: {
   interval_days?: number | null;
   send_time?: string;
+  target_status?: string | null;
+  target_types?: string | null;
 }): Promise<number> {
   const intervalDays = config?.interval_days || 3;
   const sendTime = config?.send_time || '09:00';
   const [hours, minutes] = sendTime.split(':').map(Number);
 
+  // Parse target filters from config
+  const targetStatuses = config?.target_status ? JSON.parse(config.target_status) : null;
+  const targetTypes = config?.target_types ? JSON.parse(config.target_types) : null;
+
   // Find guests with pending payments who haven't received a reminder recently
   const intervalAgo = new Date(Date.now() - intervalDays * 24 * 60 * 60 * 1000);
+
+  // Build guest where clause with target filters (AND with default logic)
+  const guestWhere: Record<string, unknown> = {
+    registration_status: targetStatuses?.length > 0
+      ? { in: targetStatuses }
+      : 'registered',
+  };
+
+  if (targetTypes?.length > 0) {
+    guestWhere.guest_type = { in: targetTypes };
+  }
 
   const pendingPayments = await prisma.registration.findMany({
     where: {
       payment: {
         payment_status: 'pending',
       },
-      guest: {
-        registration_status: 'registered',
-      },
+      guest: guestWhere,
     },
     include: {
       guest: true,
@@ -328,10 +343,16 @@ export async function schedulePaymentReminders(config?: {
 export async function scheduleEventReminders(config?: {
   days_before?: number | null;
   send_time?: string;
+  target_status?: string | null;
+  target_types?: string | null;
 }): Promise<number> {
   const daysBefore = config?.days_before ?? 1;
   const sendTime = config?.send_time || '09:00';
   const [hours, minutes] = sendTime.split(':').map(Number);
+
+  // Parse target filters from config
+  const targetStatuses = config?.target_status ? JSON.parse(config.target_status) : null;
+  const targetTypes = config?.target_types ? JSON.parse(config.target_types) : null;
 
   const eventDate = EVENT_DATE;
   const reminderDate = new Date(eventDate);
@@ -348,14 +369,23 @@ export async function scheduleEventReminders(config?: {
     return 0; // Not time to schedule yet, or already past
   }
 
+  // Build where clause with target filters (AND with default logic)
+  const guestWhere: Record<string, unknown> = {
+    registration_status: targetStatuses?.length > 0
+      ? { in: targetStatuses }
+      : { in: ['registered', 'approved'] },
+    registration: {
+      qr_code_hash: { not: null }, // Has a ticket
+    },
+  };
+
+  if (targetTypes?.length > 0) {
+    guestWhere.guest_type = { in: targetTypes };
+  }
+
   // Find all registered guests with tickets
   const registeredGuests = await prisma.guest.findMany({
-    where: {
-      registration_status: { in: ['registered', 'approved'] },
-      registration: {
-        qr_code_hash: { not: null }, // Has a ticket
-      },
-    },
+    where: guestWhere,
     include: {
       registration: true,
       table_assignment: {
@@ -424,11 +454,17 @@ export async function scheduleNoShowPaymentRequests(config?: {
   days_after?: number | null;
   send_time?: string;
   no_show_fee?: string;
+  target_status?: string | null;
+  target_types?: string | null;
 }): Promise<number> {
   const daysAfter = config?.days_after ?? 1;
   const sendTime = config?.send_time || '10:00';
   const noShowFee = config?.no_show_fee || '50,000 HUF';
   const [hours, minutes] = sendTime.split(':').map(Number);
+
+  // Parse target filters from config
+  const targetStatuses = config?.target_status ? JSON.parse(config.target_status) : null;
+  const targetTypes = config?.target_types ? JSON.parse(config.target_types) : null;
 
   const eventDate = EVENT_DATE;
   const now = new Date();
@@ -455,16 +491,25 @@ export async function scheduleNoShowPaymentRequests(config?: {
     scheduledFor.setTime(Date.now() + 60000); // 1 minute from now
   }
 
+  // Build where clause with target filters (AND with default logic)
+  const guestWhere: Record<string, unknown> = {
+    registration_status: targetStatuses?.length > 0
+      ? { in: targetStatuses }
+      : { in: ['registered', 'approved'] },
+    registration: {
+      qr_code_hash: { not: null }, // Has ticket
+      cancelled_at: null, // Not cancelled
+    },
+    checkin: null, // Not checked in
+  };
+
+  if (targetTypes?.length > 0) {
+    guestWhere.guest_type = { in: targetTypes };
+  }
+
   // Find no-show guests: registered/approved + has ticket + not checked in + not cancelled
   const noShowGuests = await prisma.guest.findMany({
-    where: {
-      registration_status: { in: ['registered', 'approved'] },
-      registration: {
-        qr_code_hash: { not: null }, // Has ticket
-        cancelled_at: null, // Not cancelled
-      },
-      checkin: null, // Not checked in
-    },
+    where: guestWhere,
     include: {
       registration: true,
     },

@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "cp -r .next/static .next/standalone/.next/ && cp -r public .next/standalone/",
+    "deploy": "npm run build && pm2 restart ceog",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",

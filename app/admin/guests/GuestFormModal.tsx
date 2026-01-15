@@ -18,9 +18,10 @@ interface GuestFormData {
   email: string;
   name: string;
   title: string | null;
+  phone: string | null;
   company: string | null;
   position: string | null;
-  guest_type: 'vip' | 'paying_single' | 'paying_paired';
+  guest_type: 'vip' | 'invited' | 'paying_single' | 'paying_paired';
   status: 'pending' | 'invited' | 'registered' | 'approved' | 'declined';
   dietary_requirements: string | null;
   seating_preferences: string | null;
@@ -64,6 +65,7 @@ export default function GuestFormModal({
     email: '',
     name: '',
     title: null,
+    phone: null,
     company: null,
     position: null,
     guest_type: 'vip',
@@ -82,6 +84,7 @@ export default function GuestFormModal({
         email: initialData?.email || '',
         name: initialData?.name || '',
         title: initialData?.title || null,
+        phone: (initialData as { phone?: string | null })?.phone || null,
         company: initialData?.company || null,
         position: initialData?.position || null,
         guest_type: initialData?.guest_type || 'vip',
@@ -297,6 +300,26 @@ export default function GuestFormModal({
                 </select>
               </div>
 
+              {/* Phone */}
+              <div>
+                <label
+                  htmlFor="phone"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Phone
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone || ''}
+                  onChange={handleChange}
+                  placeholder="+36 30 123 4567"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  data-testid="guest-phone-input"
+                />
+              </div>
+
               {/* Guest Type */}
               <div>
                 <label
@@ -313,7 +336,8 @@ export default function GuestFormModal({
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   data-testid="guest-type-select"
                 >
-                  <option value="vip">Invited</option>
+                  <option value="vip">VIP (Free)</option>
+                  <option value="invited">Invited (Free)</option>
                   <option value="paying_single">Paying (Single)</option>
                   <option value="paying_paired">Paying (Paired)</option>
                 </select>

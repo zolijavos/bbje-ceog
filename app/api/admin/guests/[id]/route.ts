@@ -17,9 +17,10 @@ import { z } from 'zod';
 const updateGuestSchema = z.object({
   name: z.string().min(1, 'Name is required').optional(),
   title: z.string().max(50).optional().nullable(),
+  phone: z.string().optional().nullable(),
   company: z.string().optional().nullable(),
   position: z.string().optional().nullable(),
-  guest_type: z.enum(['vip', 'paying_single', 'paying_paired', 'applicant']).optional(),
+  guest_type: z.enum(['vip', 'invited', 'paying_single', 'paying_paired', 'applicant']).optional(),
   registration_status: z
     .enum(['pending', 'invited', 'registered', 'approved', 'declined', 'pending_approval', 'rejected'])
     .optional(),
@@ -96,6 +97,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       oldValues: oldGuest ? {
         name: oldGuest.name,
         title: oldGuest.title,
+        phone: oldGuest.phone,
         company: oldGuest.company,
         position: oldGuest.position,
         guest_type: oldGuest.guest_type,
@@ -154,6 +156,7 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
         oldValues: {
           email: guest.email,
           name: guest.name,
+          phone: guest.phone,
           guest_type: guest.guest_type,
           registration_status: guest.registration_status,
         },

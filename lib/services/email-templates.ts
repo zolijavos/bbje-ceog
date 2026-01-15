@@ -1242,8 +1242,8 @@ BBJ Events Organizing Team`,
     name: 'Registration Feedback (Main Guest)',
     subject: 'Automatic feedback message CEO Gala 2026',
     variables: [
-      'guestTitle', 'guestName', 'guestCompany', 'guestPhone', 'guestEmail', 'guestDiet',
-      'hasPartner', 'partnerTitle', 'partnerName', 'partnerPhone', 'partnerEmail', 'partnerDiet',
+      'guestTitle', 'guestName', 'guestCompany', 'guestPhone', 'guestEmail', 'guestDiet', 'guestSeating',
+      'hasPartner', 'partnerTitle', 'partnerName', 'partnerPhone', 'partnerEmail', 'partnerDiet', 'partnerSeating',
       'headerImage', 'baseUrl'
     ],
     html_body: `<!DOCTYPE html>
@@ -1297,6 +1297,7 @@ BBJ Events Organizing Team`,
         <div class="detail-row"><span class="detail-label">Phone number:</span> <span class="detail-value">{{guestPhone}}</span></div>
         <div class="detail-row"><span class="detail-label">Email address:</span> <span class="detail-value">{{guestEmail}}</span></div>
         <div class="detail-row"><span class="detail-label">Special diet:</span> <span class="detail-value">{{guestDiet}}</span></div>
+        <div class="detail-row"><span class="detail-label">Seating preferences:</span> <span class="detail-value">{{guestSeating}}</span></div>
         <div class="detail-row"><span class="detail-label">Partner:</span> <span class="detail-value">{{hasPartner}}</span></div>
 
         {{#if hasPartner}}
@@ -1307,6 +1308,7 @@ BBJ Events Organizing Team`,
           <div class="detail-row"><span class="detail-label">Partner's phone:</span> <span class="detail-value">{{partnerPhone}}</span></div>
           <div class="detail-row"><span class="detail-label">Partner's email:</span> <span class="detail-value">{{partnerEmail}}</span></div>
           <div class="detail-row"><span class="detail-label">Partner's special diet:</span> <span class="detail-value">{{partnerDiet}}</span></div>
+          <div class="detail-row"><span class="detail-label">Partner's seating pref:</span> <span class="detail-value">{{partnerSeating}}</span></div>
         </div>
         {{/if}}
       </div>
@@ -1355,6 +1357,7 @@ Company name: {{guestCompany}}
 Phone number: {{guestPhone}}
 Email address: {{guestEmail}}
 Special diet: {{guestDiet}}
+Seating preferences: {{guestSeating}}
 Partner: {{hasPartner}}
 
 {{#if hasPartner}}
@@ -1365,6 +1368,7 @@ Partner's name: {{partnerName}}
 Partner's phone: {{partnerPhone}}
 Partner's email: {{partnerEmail}}
 Partner's special diet: {{partnerDiet}}
+Partner's seating pref: {{partnerSeating}}
 {{/if}}
 
 DECLARATIONS ACCEPTED
@@ -1394,7 +1398,7 @@ Event website: ceogala.com`,
     name: 'Registration Feedback (Partner)',
     subject: 'Registration details received: CEO Gala 2026',
     variables: [
-      'partnerTitle', 'partnerName', 'partnerCompany', 'partnerPhone', 'partnerEmail', 'partnerDiet',
+      'partnerTitle', 'partnerName', 'partnerCompany', 'partnerPhone', 'partnerEmail', 'partnerDiet', 'partnerSeating',
       'mainGuestTitle', 'mainGuestName', 'headerImage', 'baseUrl'
     ],
     html_body: `<!DOCTYPE html>
@@ -1448,6 +1452,7 @@ Event website: ceogala.com`,
         <div class="detail-row"><span class="detail-label">Phone number:</span> <span class="detail-value">{{partnerPhone}}</span></div>
         <div class="detail-row"><span class="detail-label">Email address:</span> <span class="detail-value">{{partnerEmail}}</span></div>
         <div class="detail-row"><span class="detail-label">Special diet:</span> <span class="detail-value">{{partnerDiet}}</span></div>
+        <div class="detail-row"><span class="detail-label">Seating preferences:</span> <span class="detail-value">{{partnerSeating}}</span></div>
       </div>
 
       <div class="consents">
@@ -1494,6 +1499,7 @@ Company name: {{partnerCompany}}
 Phone number: {{partnerPhone}}
 Email address: {{partnerEmail}}
 Special diet: {{partnerDiet}}
+Seating preferences: {{partnerSeating}}
 
 The following declarations were accepted at the time of registration on your behalf:
 

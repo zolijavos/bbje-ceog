@@ -98,7 +98,7 @@ export async function validateMagicLink(
     };
   }
 
-  if (!guest.magic_link_hash || !guest.magic_link_expires_at) {
+  if (!guest.magic_link_hash) {
     return {
       valid: false,
       errorType: 'no_link',
@@ -106,14 +106,8 @@ export async function validateMagicLink(
     };
   }
 
-  // Check expiry first (before hash comparison for better UX)
-  if (new Date() > guest.magic_link_expires_at) {
-    return {
-      valid: false,
-      errorType: 'expired',
-      error: `The invitation link has expired (invalid after ${MAGIC_LINK.EXPIRY_HOURS} hours)`,
-    };
-  }
+  // Magic links never expire - expiry check removed per business requirement
+  // The magic_link_expires_at field is still stored for reference but not validated
 
   // Compare hash (timing-safe comparison)
   // SHA-256 hex hash is always 64 characters - check length first to avoid timing side-channel
