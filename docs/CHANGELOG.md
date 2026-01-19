@@ -4,6 +4,28 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
 
 ---
 
+## v2.13.2 (2026-01-19)
+
+### Deployment Fixes / Telepítési Javítások
+
+- **Smart Database Setup** / **Intelligens Adatbázis Beállítás**
+  - EN: `start.sh` now automatically detects fresh vs. existing database. Uses `prisma db push` for clean installs and `prisma migrate deploy` for existing databases.
+  - HU: `start.sh` mostantól automatikusan felismeri a friss vs. létező adatbázist. Friss telepítéshez `prisma db push`-t, létező adatbázishoz `prisma migrate deploy`-t használ.
+
+- **Prisma CLI Installation** / **Prisma CLI Telepítés**
+  - EN: Fixed issue where `npm install --omit=dev` excluded Prisma CLI. Now explicitly installs `prisma` package after dependencies.
+  - HU: Javítva a probléma, hogy `npm install --omit=dev` kizárta a Prisma CLI-t. Mostantól explicit telepíti a `prisma` csomagot a függőségek után.
+
+- **Node.js Version Check** / **Node.js Verzió Ellenőrzés**
+  - EN: Added Node.js 18+ version check at startup. Deployment fails with clear error message if older Node.js version detected.
+  - HU: Node.js 18+ verzió ellenőrzés hozzáadva induláskor. Telepítés érthetően hibaüzenettel leáll, ha régebbi Node.js verzió van.
+
+- **npmrc Inclusion** / **npmrc Beépítés** (v2.13.1)
+  - EN: Release package now includes `.npmrc` with `legacy-peer-deps=true` to resolve nodemailer peer dependency conflicts.
+  - HU: Release csomag mostantól tartalmazza az `.npmrc` fájlt `legacy-peer-deps=true` beállítással a nodemailer peer dependency konfliktusok megoldásához.
+
+---
+
 ## v2.13.0 (2026-01-16)
 
 ### New Features / Új funkciók

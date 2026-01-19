@@ -59,6 +59,11 @@ if ! command -v node &> /dev/null; then
     print_error "Node.js nincs telepítve!"
     exit 1
 fi
+NODE_VERSION=$(node -v | sed 's/v//' | cut -d. -f1)
+if [ "$NODE_VERSION" -lt 18 ]; then
+    print_error "Node.js 18+ szükséges! Telepített verzió: $(node -v)"
+    exit 1
+fi
 print_success "Node.js: $(node -v)"
 
 # npm
@@ -83,6 +88,10 @@ print_header "Függőségek telepítése"
 echo "npm install futtatása..."
 npm install --omit=dev 2>&1 | tail -5
 
+# Prisma CLI explicit telepítése (--omit=dev után szükséges)
+echo "Prisma CLI telepítése..."
+npm install prisma --save-dev 2>&1 | tail -3
+
 print_success "Függőségek telepítve"
 
 # ============================================
@@ -94,9 +103,9 @@ npx prisma generate
 print_success "Prisma client kész"
 
 # ============================================
-# Adatbázis migrációk
+# Adatbázis beállítása
 # ============================================
-print_header "Adatbázis migrációk futtatása"
+print_header "Adatbázis beállítása"
 
 # Ellenőrizzük az adatbázis kapcsolatot
 echo "Adatbázis kapcsolat ellenőrzése..."
@@ -107,9 +116,19 @@ if ! npx prisma db execute --stdin <<< "SELECT 1" 2>/dev/null; then
 fi
 print_success "Adatbázis elérhető"
 
-echo "Migrációk futtatása..."
-npx prisma migrate deploy
-print_success "Migrációk sikeresen lefutottak"
+# Ellenőrizzük, hogy friss telepítés-e (nincs Guest tábla)
+echo "Adatbázis állapot ellenőrzése..."
+if npx prisma db execute --stdin <<< "SELECT 1 FROM Guest LIMIT 1" 2>/dev/null; then
+    # Létező adatbázis - migrate deploy
+    echo "Létező adatbázis, migrációk futtatása..."
+    npx prisma migrate deploy
+    print_success "Migrációk sikeresen lefutottak"
+else
+    # Friss adatbázis - db push
+    echo "Friss adatbázis, séma létrehozása..."
+    npx prisma db push --accept-data-loss
+    print_success "Adatbázis séma létrehozva"
+fi
 
 # ============================================
 # Alkalmazás buildelése
