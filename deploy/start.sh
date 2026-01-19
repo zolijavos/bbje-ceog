@@ -88,11 +88,7 @@ print_header "Függőségek telepítése"
 echo "npm install futtatása..."
 npm install --omit=dev 2>&1 | tail -5
 
-# Prisma CLI explicit telepítése (--omit=dev után szükséges)
-echo "Prisma CLI telepítése..."
-npm install prisma --save-dev 2>&1 | tail -3
-
-print_success "Függőségek telepítve"
+print_success "Függőségek telepítve (prisma CLI a dependencies-ben)"
 
 # ============================================
 # Prisma client generálása

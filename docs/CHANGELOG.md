@@ -4,23 +4,27 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
 
 ---
 
-## v2.13.2 (2026-01-19)
+## v2.13.5 (2026-01-19)
 
 ### Deployment Fixes / Telepítési Javítások
+
+- **Build Dependencies in Production** / **Build Függőségek Production-ben**
+  - EN: Moved build-time dependencies from devDependencies to dependencies for `npm install --omit=dev` compatibility: `prisma`, `tailwindcss`, `postcss`, `autoprefixer`, `typescript`, and all `@types/*` packages (7 packages).
+  - HU: Build idejű függőségek átkerültek a devDependencies-ből a dependencies-be az `npm install --omit=dev` kompatibilitásért: `prisma`, `tailwindcss`, `postcss`, `autoprefixer`, `typescript` és az összes `@types/*` csomag (7 csomag).
 
 - **Smart Database Setup** / **Intelligens Adatbázis Beállítás**
   - EN: `start.sh` now automatically detects fresh vs. existing database. Uses `prisma db push` for clean installs and `prisma migrate deploy` for existing databases.
   - HU: `start.sh` mostantól automatikusan felismeri a friss vs. létező adatbázist. Friss telepítéshez `prisma db push`-t, létező adatbázishoz `prisma migrate deploy`-t használ.
 
-- **Prisma CLI Installation** / **Prisma CLI Telepítés**
-  - EN: Fixed issue where `npm install --omit=dev` excluded Prisma CLI. Now explicitly installs `prisma` package after dependencies.
-  - HU: Javítva a probléma, hogy `npm install --omit=dev` kizárta a Prisma CLI-t. Mostantól explicit telepíti a `prisma` csomagot a függőségek után.
-
 - **Node.js Version Check** / **Node.js Verzió Ellenőrzés**
   - EN: Added Node.js 18+ version check at startup. Deployment fails with clear error message if older Node.js version detected.
   - HU: Node.js 18+ verzió ellenőrzés hozzáadva induláskor. Telepítés érthetően hibaüzenettel leáll, ha régebbi Node.js verzió van.
 
-- **npmrc Inclusion** / **npmrc Beépítés** (v2.13.1)
+- **Environment Validation** / **Környezeti Változók Validálása**
+  - EN: `NEXTAUTH_SECRET` must be at least 64 characters. Build will fail with clear error if shorter.
+  - HU: `NEXTAUTH_SECRET` minimum 64 karakter kell legyen. Build világos hibaüzenettel leáll, ha rövidebb.
+
+- **npmrc Inclusion** / **npmrc Beépítés**
   - EN: Release package now includes `.npmrc` with `legacy-peer-deps=true` to resolve nodemailer peer dependency conflicts.
   - HU: Release csomag mostantól tartalmazza az `.npmrc` fájlt `legacy-peer-deps=true` beállítással a nodemailer peer dependency konfliktusok megoldásához.
 
