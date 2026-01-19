@@ -101,7 +101,6 @@ rsync -av --progress \
     --exclude='send-qr*.js' \
     --exclude='*.tsbuildinfo' \
     --exclude='.workflow-init-temp.yaml' \
-    --exclude='.npmrc' \
     --exclude='playwright.config.ts' \
     --exclude='vitest.config.ts' \
     --exclude='scripts/capture-*.mjs' \
