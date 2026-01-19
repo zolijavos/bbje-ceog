@@ -362,30 +362,35 @@ A tanúsítvány automatikusan megújul (certbot timer).
 
 ### Admin felhasználó létrehozása
 
-Az első alkalmazás indítás után hozz létre egy admin felhasználót:
+Az első alkalmazás indítás után hozz létre egy admin felhasználót az interaktív szkripttel:
 
 ```bash
 cd /var/www/ceog
-npx prisma db seed
+node scripts/create-admin.js
 ```
 
-Ez létrehozza a teszt felhasználókat:
-- **Admin**: `admin@ceogala.test` / `Admin123!`
-- **Staff**: `staff@ceogala.test` / `Staff123!`
+A szkript interaktívan bekéri:
+- Email cím
+- Jelszó (minimum 8 karakter)
+- Név (opcionális)
 
-### Jelszó módosítása
+Példa:
+```
+Admin email: admin@ceogala.hu
+Password (min 8 chars): TitkosJelszo123
+Name (optional): Gála Admin
 
-Az admin felületen módosítsd a jelszavakat, vagy közvetlenül az adatbázisban:
-
-```bash
-node -e "
-const bcrypt = require('bcryptjs');
-console.log(bcrypt.hashSync('UJ_JELSZO', 12));
-"
+Admin user created successfully!
+  Email: admin@ceogala.hu
+  Role:  admin
 ```
 
-```sql
-UPDATE User SET password_hash = 'HASH' WHERE email = 'admin@ceogala.hu';
+### Belépés
+
+Az admin felületet a `/admin/login` URL-en éred el:
+
+```
+https://DOMAIN/admin/login
 ```
 
 ---

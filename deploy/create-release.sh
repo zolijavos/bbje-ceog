@@ -139,7 +139,7 @@ cd "$RELEASE_DIR"
 find . -type d -empty -delete 2>/dev/null || true
 
 # Felesleges fájlok törlése
-rm -f .npmrc .workflow-init-temp.yaml 2>/dev/null || true
+rm -f .workflow-init-temp.yaml 2>/dev/null || true
 rm -f *.tsbuildinfo next-env.d.ts 2>/dev/null || true
 
 print_success "Tisztítás kész"

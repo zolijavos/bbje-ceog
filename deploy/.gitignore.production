@@ -114,7 +114,6 @@ yarn-error.log*
 # IDEIGLENES FÁJLOK
 # =============================================
 .workflow-init-temp.yaml
-.npmrc
 next-env.d.ts
 
 # =============================================

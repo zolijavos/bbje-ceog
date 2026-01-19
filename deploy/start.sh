@@ -132,7 +132,10 @@ fi
 print_header "Alkalmazás buildelése"
 
 echo "Next.js build futtatása (ez eltarthat pár percig)..."
-npm run build 2>&1 | tail -10
+if ! npm run build; then
+    print_error "Build sikertelen! Ellenőrizd a hibaüzenetet fentebb."
+    exit 1
+fi
 
 print_success "Build sikeres"
 
