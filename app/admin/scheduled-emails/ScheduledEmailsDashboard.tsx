@@ -107,6 +107,7 @@ const TEMPLATE_LABELS: Record<string, string> = {
   payment_confirmation: 'Payment Confirm',
   table_assignment: 'Table Assignment',
   event_reminder: 'Event Reminder',
+  principal_invitation: 'Principal Invitation',
 };
 
 const TEMPLATES = Object.entries(TEMPLATE_LABELS);

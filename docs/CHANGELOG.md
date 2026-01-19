@@ -4,6 +4,42 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
 
 ---
 
+## v2.13.0 (2026-01-16)
+
+### New Features / Új funkciók
+
+- **Checked-In Registration Status** / **Checked-In Regisztrációs Státusz**
+  - EN: New `checked_in` registration status added. When a guest checks in at the event, their status automatically updates to `checked_in`. Displayed with emerald green badge in admin guest list.
+  - HU: Új `checked_in` regisztrációs státusz. Amikor a vendég belép az eseményre, státusza automatikusan `checked_in`-re változik. Smaragdzöld badge-dzsel jelenik meg az admin vendéglistában.
+
+- **Not Checked In Filter (No-Show)** / **Nem Bejelentkezett Szűrő (No-Show)**
+  - EN: New "Not Checked In (No-Show)" filter option in admin guest list. Shows guests with `approved` status who haven't checked in yet. Useful for sending follow-up emails to no-show guests.
+  - HU: Új "Not Checked In (No-Show)" szűrő opció az admin vendéglistában. Azokat a vendégeket mutatja, akik `approved` státuszúak de még nem jelentkeztek be. Hasznos no-show vendégeknek küldendő emailekhez.
+
+### Improvements / Javítások
+
+- **Guest Name Highlighting** / **Vendég Név Kiemelés**
+  - EN: Guest name is now prominently displayed on all registration pages (RegisterWelcome, VIP, Paid). Large bold text with accent color for easy identification.
+  - HU: Vendég neve mostantól kiemelten jelenik meg minden regisztrációs oldalon (RegisterWelcome, VIP, Paid). Nagy, félkövér szöveg akcentszínnel a könnyű azonosítás érdekében.
+
+- **Partner Title Required** / **Partner Címzés Kötelező**
+  - EN: Partner title field is now required on both VIP and Paid registration forms. Validation error shown if not selected when bringing a partner.
+  - HU: Partner címzés mező mostantól kötelező mind a VIP, mind a Paid regisztrációs űrlapokon. Validációs hiba jelenik meg ha nincs kiválasztva partner hozásakor.
+
+- **CEO Gála 2026 Branding** / **CEO Gála 2026 Márkajelzés**
+  - EN: Updated branding from "BBJ Events 2026" to "CEO Gála 2026" across all guest-facing pages, email templates, and payment flows.
+  - HU: Márkajelzés frissítve "BBJ Events 2026"-ról "CEO Gála 2026"-ra minden vendég-oldali oldalon, email sablonokban és fizetési folyamatokban.
+
+- **Partner Seating Preferences Removed** / **Partner Ültetési Preferenciák Eltávolítva**
+  - EN: Partner seating preferences field removed from registration forms. Main guest seating preferences still available.
+  - HU: Partner ültetési preferenciák mező eltávolítva a regisztrációs űrlapokból. Fő vendég ültetési preferenciái továbbra is elérhetőek.
+
+- **Email Greeting Punctuation** / **Email Megszólítás Írásjel**
+  - EN: Changed email greeting punctuation from exclamation mark to comma. Example: "Dear Dr. Kovács," instead of "Dear Dr. Kovács!"
+  - HU: Email megszólítás írásjele felkiáltójelről vesszőre változott. Példa: "Dear Dr. Kovács," a "Dear Dr. Kovács!" helyett.
+
+---
+
 ## v2.12.0 (2026-01-15)
 
 ### New Features / Új funkciók

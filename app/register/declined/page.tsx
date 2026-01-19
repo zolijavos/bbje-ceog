@@ -75,13 +75,13 @@ export default async function DeclinedPage({ searchParams }: DeclinedPageProps) 
         {/* Guest Name */}
         <p className="text-slate-500 mb-6">
           Dear <span className="font-medium">{guest.name}</span>, we are sorry
-          that you cannot attend the BBJ Events 2026 event.
+          that you cannot attend the CEO Gála 2026 event.
         </p>
 
         {/* Event Details */}
         <div className="bg-slate-100 rounded-lg p-4 mb-6">
           <h2 className="text-lg font-semibold text-slate-900 mb-2">
-            BBJ Events 2026
+            CEO Gála 2026
           </h2>
           <p className="text-slate-700 text-sm">
             Friday, March 27, 2026 • 6:00 PM

@@ -76,6 +76,7 @@ export default function GuestFilters({
           data-testid="status-filter"
         >
           <option value="all">Minden statusz</option>
+          <option value="not_checked_in">Not Checked In (No-Show)</option>
           {Object.entries(REGISTRATION_STATUS_INFO).map(([value, info]) => (
             <option key={value} value={value}>
               {info.label}

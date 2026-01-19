@@ -94,7 +94,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
           guest_id: guestId,
           email_type: 'application_rejected',
           recipient: applicant.email,
-          subject: 'BBJ Events 2026 - Application Status',
+          subject: 'CEO Gála 2026 - Application Status',
           status: 'failed',
           error_message: emailError instanceof Error ? emailError.message : 'Unknown error',
         },

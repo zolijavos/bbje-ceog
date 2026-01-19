@@ -7,6 +7,13 @@
 import { GuestType, RegistrationStatus, PaymentStatus } from '@prisma/client';
 
 // ========================================
+// EVENT CONFIGURATION
+// ========================================
+
+export const EVENT_NAME = 'CEO Gála 2026';
+export const EVENT_NAME_EN = 'CEO Gala 2026';
+
+// ========================================
 // GUEST TYPE LABELS
 // ========================================
 
@@ -59,6 +66,10 @@ export const REGISTRATION_STATUS_INFO: Record<RegistrationStatus, StatusInfo> = 
   cancelled: {
     label: 'Cancelled',
     color: 'bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300',
+  },
+  checked_in: {
+    label: 'Checked In',
+    color: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300',
   },
 } as const;
 

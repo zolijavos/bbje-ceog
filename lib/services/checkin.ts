@@ -190,15 +190,21 @@ export async function submitCheckin(
       });
     }
 
-    // Create check-in record
-    const checkin = await prisma.checkin.create({
-      data: {
-        registration_id: registrationId,
-        guest_id: registration.guest.id,
-        staff_user_id: staffUserId || null,
-        is_override: override,
-      },
-    });
+    // Create check-in record and update guest status to checked_in
+    const [checkin] = await prisma.$transaction([
+      prisma.checkin.create({
+        data: {
+          registration_id: registrationId,
+          guest_id: registration.guest.id,
+          staff_user_id: staffUserId || null,
+          is_override: override,
+        },
+      }),
+      prisma.guest.update({
+        where: { id: registration.guest.id },
+        data: { registration_status: 'checked_in' },
+      }),
+    ]);
 
     // Fetch table assignment for the guest
     const tableAssignment = await prisma.tableAssignment.findUnique({

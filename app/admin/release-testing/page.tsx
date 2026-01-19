@@ -52,6 +52,103 @@ interface TestResultData {
 
 const releaseTests: ReleaseTest[] = [
   {
+    version: '2.13.0',
+    date: '2026-01-16',
+    features: [
+      {
+        nameEn: 'Checked-In Registration Status',
+        nameHu: 'Checked-In Regisztrációs Státusz',
+        steps: [
+          { en: 'Navigate to admin guest list', hu: 'Navigálj az admin vendéglistához' },
+          { en: 'Note an approved guest\'s current status', hu: 'Jegyezd fel egy approved vendég jelenlegi státuszát' },
+          { en: 'Go to check-in scanner (/checkin)', hu: 'Menj a check-in szkennerhez (/checkin)' },
+          { en: 'Scan or manually check in the guest', hu: 'Szkenneld vagy manuálisan jelentkeztesd be a vendéget' },
+          { en: 'Return to admin guest list', hu: 'Térj vissza az admin vendéglistához' },
+          { en: 'Verify guest status changed to "Checked In" with emerald badge', hu: 'Ellenőrizd, hogy a vendég státusza "Checked In"-re változott smaragdzöld badge-dzsel' },
+        ],
+        expected: { en: 'Guest status automatically updates to checked_in with emerald green badge after check-in', hu: 'Vendég státusz automatikusan checked_in-re változik smaragdzöld badge-dzsel belépés után' }
+      },
+      {
+        nameEn: 'Not Checked In Filter (No-Show)',
+        nameHu: 'Nem Bejelentkezett Szűrő (No-Show)',
+        steps: [
+          { en: 'Navigate to admin guest list (/admin/guests)', hu: 'Navigálj az admin vendéglistához (/admin/guests)' },
+          { en: 'Click on the Status filter dropdown', hu: 'Kattints a Státusz szűrő dropdownra' },
+          { en: 'Verify "Not Checked In (No-Show)" option appears', hu: 'Ellenőrizd, hogy megjelenik a "Not Checked In (No-Show)" opció' },
+          { en: 'Select "Not Checked In (No-Show)"', hu: 'Válaszd a "Not Checked In (No-Show)" opciót' },
+          { en: 'Verify only approved guests without check-in are shown', hu: 'Ellenőrizd, hogy csak approved státuszú, be nem jelentkezett vendégek jelennek meg' },
+          { en: 'Verify the list can be used for bulk email to no-show guests', hu: 'Ellenőrizd, hogy a lista használható no-show vendégeknek küldendő tömeges emailhez' },
+        ],
+        expected: { en: 'Filter shows only approved guests who have not checked in yet', hu: 'Szűrő csak azokat az approved vendégeket mutatja, akik még nem jelentkeztek be' }
+      },
+      {
+        nameEn: 'Guest Name Highlighting',
+        nameHu: 'Vendég Név Kiemelés',
+        steps: [
+          { en: 'Open a VIP registration magic link', hu: 'Nyiss meg egy VIP regisztrációs magic linket' },
+          { en: 'Verify guest name is prominently displayed (large, bold, accent color)', hu: 'Ellenőrizd, hogy a vendég neve kiemelten jelenik meg (nagy, félkövér, akcentszín)' },
+          { en: 'Open a Paid registration magic link', hu: 'Nyiss meg egy Paid regisztrációs magic linket' },
+          { en: 'Verify guest name is prominently displayed', hu: 'Ellenőrizd, hogy a vendég neve kiemelten jelenik meg' },
+          { en: 'Check RegisterWelcome page if applicable', hu: 'Ellenőrizd a RegisterWelcome oldalt ha alkalmazható' },
+        ],
+        expected: { en: 'Guest name is large, bold and visually prominent on all registration pages', hu: 'Vendég neve nagy, félkövér és vizuálisan kiemelt minden regisztrációs oldalon' }
+      },
+      {
+        nameEn: 'Partner Title Required Validation',
+        nameHu: 'Partner Címzés Kötelező Validáció',
+        steps: [
+          { en: 'Open VIP registration with magic link', hu: 'Nyiss meg VIP regisztrációt magic linkkel' },
+          { en: 'Check "I would like to bring a partner"', hu: 'Jelöld be a "Szeretnék partnert hozni" opciót' },
+          { en: 'Fill in partner name and email but leave title empty', hu: 'Töltsd ki a partner nevét és emailjét de hagyd üresen a címzést' },
+          { en: 'Try to submit the form', hu: 'Próbáld elküldeni az űrlapot' },
+          { en: 'Verify validation error appears for partner title', hu: 'Ellenőrizd, hogy validációs hiba jelenik meg a partner címzéshez' },
+          { en: 'Select a partner title and verify form submits successfully', hu: 'Válassz partner címzést és ellenőrizd, hogy az űrlap sikeresen elküldhető' },
+          { en: 'Repeat for Paid registration form', hu: 'Ismételd meg a Paid regisztrációs űrlapon' },
+        ],
+        expected: { en: 'Partner title is required and shows validation error when missing', hu: 'Partner címzés kötelező és validációs hibát mutat ha hiányzik' }
+      },
+      {
+        nameEn: 'CEO Gála 2026 Branding',
+        nameHu: 'CEO Gála 2026 Márkajelzés',
+        steps: [
+          { en: 'Visit homepage (/)', hu: 'Látogasd meg a főoldalt (/)' },
+          { en: 'Verify "CEO Gála 2026" appears (not "BBJ Events 2026")', hu: 'Ellenőrizd, hogy "CEO Gála 2026" jelenik meg (nem "BBJ Events 2026")' },
+          { en: 'Visit /apply page', hu: 'Látogasd meg az /apply oldalt' },
+          { en: 'Verify "CEO Gála 2026" branding', hu: 'Ellenőrizd a "CEO Gála 2026" márkajelzést' },
+          { en: 'Open VIP registration page via magic link', hu: 'Nyisd meg a VIP regisztrációs oldalt magic linkkel' },
+          { en: 'Verify "CEO Gála 2026" appears in event details', hu: 'Ellenőrizd, hogy "CEO Gála 2026" jelenik meg az esemény részletekben' },
+          { en: 'Check registration success page', hu: 'Ellenőrizd a regisztráció sikeres oldalt' },
+          { en: 'Check PWA pages (/pwa)', hu: 'Ellenőrizd a PWA oldalakat (/pwa)' },
+        ],
+        expected: { en: '"CEO Gála 2026" appears everywhere instead of "BBJ Events 2026"', hu: '"CEO Gála 2026" jelenik meg mindenhol "BBJ Events 2026" helyett' }
+      },
+      {
+        nameEn: 'Partner Seating Preferences Removed',
+        nameHu: 'Partner Ültetési Preferenciák Eltávolítva',
+        steps: [
+          { en: 'Open VIP registration with partner option', hu: 'Nyiss meg VIP regisztrációt partner opcióval' },
+          { en: 'Check "I would like to bring a partner"', hu: 'Jelöld be a "Szeretnék partnert hozni" opciót' },
+          { en: 'Verify NO "Partner Seating Preferences" field exists', hu: 'Ellenőrizd, hogy NINCS "Partner Ültetési Preferenciák" mező' },
+          { en: 'Verify main guest "Seating Preferences" field DOES exist', hu: 'Ellenőrizd, hogy a fő vendég "Ültetési Preferenciák" mezője LÉTEZIK' },
+          { en: 'Repeat for Paid registration with paired ticket', hu: 'Ismételd meg Paid regisztrációnál páros jeggyel' },
+        ],
+        expected: { en: 'Partner seating preferences removed, main guest seating preferences retained', hu: 'Partner ültetési preferenciák eltávolítva, fő vendég preferenciái megmaradtak' }
+      },
+      {
+        nameEn: 'Email Greeting Punctuation',
+        nameHu: 'Email Megszólítás Írásjel',
+        steps: [
+          { en: 'Create a new VIP guest in admin', hu: 'Hozz létre új VIP vendéget az adminban' },
+          { en: 'Send magic link email to the guest', hu: 'Küldj magic link emailt a vendégnek' },
+          { en: 'Open the received email', hu: 'Nyisd meg a kapott emailt' },
+          { en: 'Verify greeting uses comma: "Dear Dr. Kovács," (not "!")', hu: 'Ellenőrizd, hogy a megszólítás vesszőt használ: "Dear Dr. Kovács," (nem "!")' },
+          { en: 'Check other email types (ticket, confirmation)', hu: 'Ellenőrizd a többi email típust (jegy, visszaigazolás)' },
+        ],
+        expected: { en: 'All email greetings use comma instead of exclamation mark', hu: 'Minden email megszólítás vesszőt használ felkiáltójel helyett' }
+      },
+    ],
+  },
+  {
     version: '2.12.0',
     date: '2026-01-15',
     features: [

@@ -29,6 +29,7 @@ export const DEFAULT_TEMPLATES = {
     .content { padding: 0 20px; text-align: center; }
     p { margin: 0 0 20px 0; font-size: 15px; text-align: center; color: #333333; }
     .greeting { font-size: 16px; margin-bottom: 25px; }
+    .guest-name { font-size: 22px; font-weight: 700; color: #1a1a2e; display: block; margin-top: 8px; }
     .event-title { font-size: 28px; font-weight: bold; text-align: center; color: #000000; margin: 25px 0; }
     .details-section { margin: 35px 0; text-align: center; }
     .details-section p { margin: 5px 0; font-size: 15px; }
@@ -51,7 +52,7 @@ export const DEFAULT_TEMPLATES = {
     <img src="{{baseUrl}}/email-assets/CEO_Gala_2026_invitation_header_709x213.jpg" alt="CEO Gala 2026 - March 27, 2026" class="header-image" />
 
     <div class="content">
-      <p class="greeting">Dear {{guestName}},</p>
+      <p class="greeting">Dear<span class="guest-name">{{guestName}}</span></p>
 
       <p>The Budapest Business Journal is delighted to invite you to the official</p>
 
@@ -195,14 +196,14 @@ Event website: ceogala.com`,
   applicant_approval: {
     slug: 'applicant_approval',
     name: 'Applicant Approval',
-    subject: 'BBJ Events 2026 - Application Approved',
+    subject: 'CEO Gála 2026 - Application Approved',
     variables: ['guestName', 'magicLinkUrl'],
     html_body: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BBJ Events -Application Approved</title>
+  <title>CEO Gála -Application Approved</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -212,6 +213,7 @@ Event website: ceogala.com`,
     .success-badge { display: inline-block; background-color: #10b981; color: #ffffff; font-size: 14px; font-weight: 600; padding: 8px 20px; border-radius: 20px; margin-top: 15px; }
     .content { margin-bottom: 30px; }
     .greeting { font-size: 18px; margin-bottom: 20px; }
+    .guest-name { font-size: 24px; font-weight: 700; color: #1a1a2e; display: block; margin-top: 8px; }
     .cta-container { text-align: center; margin: 30px 0; }
     .cta-button { display: inline-block; background-color: #2563eb; color: #ffffff !important; text-decoration: none; padding: 14px 32px; border-radius: 6px; font-size: 16px; font-weight: 600; }
     .expiry-note { font-size: 14px; color: #6b7280; text-align: center; margin-top: 15px; }
@@ -224,12 +226,12 @@ Event website: ceogala.com`,
   <div class="container">
     <div class="card">
       <div class="header">
-        <h1>BBJ Events</h1>
+        <h1>CEO Gála</h1>
         <span class="success-badge">- Application Approved</span>
       </div>
       <div class="content">
-        <p class="greeting">Dear {{guestName}},</p>
-        <p>Great news! Your application to attend the BBJ Events 2026 has been <strong>approved</strong>.</p>
+        <p class="greeting">Dear<span class="guest-name">{{guestName}}</span></p>
+        <p>Great news! Your application to attend the CEO Gála 2026 has been <strong>approved</strong>.</p>
         <p>You can now complete your registration by clicking the button below:</p>
         <div class="cta-container">
           <a href="{{magicLinkUrl}}" class="cta-button">Complete Registration</a>
@@ -238,7 +240,7 @@ Event website: ceogala.com`,
       </div>
       <div class="footer">
         <p>If you have any questions, please contact us.</p>
-        <p>Best regards,<br>BBJ Events Organizing Team</p>
+        <p>Best regards,<br>CEO Gála Organizing Team</p>
       </div>
       <p class="link-fallback">
         If the button doesn't work, copy this link into your browser:<br>
@@ -248,11 +250,11 @@ Event website: ceogala.com`,
   </div>
 </body>
 </html>`,
-    text_body: `BBJ Events -Application Approved
+    text_body: `CEO Gála -Application Approved
 
 Dear {{guestName}},
 
-Great news! Your application to attend the BBJ Events 2026 has been APPROVED.
+Great news! Your application to attend the CEO Gála 2026 has been APPROVED.
 
 You can now complete your registration by clicking the link below:
 {{magicLinkUrl}}
@@ -262,19 +264,19 @@ This link is valid for 72 hours.
 If you have any questions, please contact us.
 
 Best regards,
-BBJ Events Organizing Team`,
+CEO Gála Organizing Team`,
   },
   applicant_rejection: {
     slug: 'applicant_rejection',
     name: 'Applicant Rejection',
-    subject: 'BBJ Events 2026 - Application Status',
+    subject: 'CEO Gála 2026 - Application Status',
     variables: ['guestName', 'rejectionReason'],
     html_body: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BBJ Events -Application Status</title>
+  <title>CEO Gála -Application Status</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -283,6 +285,7 @@ BBJ Events Organizing Team`,
     .header h1 { color: #1a1a2e; font-size: 28px; margin: 0; }
     .content { margin-bottom: 30px; }
     .greeting { font-size: 18px; margin-bottom: 20px; }
+    .guest-name { font-size: 24px; font-weight: 700; color: #1a1a2e; display: block; margin-top: 8px; }
     .reason-box { background-color: #f8f9fa; border-left: 4px solid #6b7280; padding: 15px 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
     .footer { text-align: center; padding-top: 30px; border-top: 1px solid #e5e7eb; margin-top: 30px; }
     .footer p { font-size: 14px; color: #6b7280; margin: 5px 0; }
@@ -292,11 +295,11 @@ BBJ Events Organizing Team`,
   <div class="container">
     <div class="card">
       <div class="header">
-        <h1>BBJ Events</h1>
+        <h1>CEO Gála</h1>
       </div>
       <div class="content">
-        <p class="greeting">Dear {{guestName}},</p>
-        <p>Thank you for your interest in attending the BBJ Events 2026.</p>
+        <p class="greeting">Dear<span class="guest-name">{{guestName}}</span></p>
+        <p>Thank you for your interest in attending the CEO Gála 2026.</p>
         <p>After careful consideration, we regret to inform you that we are unable to accommodate your application at this time.</p>
         {{#if rejectionReason}}
         <div class="reason-box">
@@ -307,17 +310,17 @@ BBJ Events Organizing Team`,
       </div>
       <div class="footer">
         <p>If you have any questions, please contact us.</p>
-        <p>Best regards,<br>BBJ Events Organizing Team</p>
+        <p>Best regards,<br>CEO Gála Organizing Team</p>
       </div>
     </div>
   </div>
 </body>
 </html>`,
-    text_body: `BBJ Events -Application Status
+    text_body: `CEO Gála -Application Status
 
 Dear {{guestName}},
 
-Thank you for your interest in attending the BBJ Events 2026.
+Thank you for your interest in attending the CEO Gála 2026.
 
 After careful consideration, we regret to inform you that we are unable to accommodate your application at this time.
 
@@ -328,19 +331,19 @@ We appreciate your understanding and hope to welcome you at future events.
 If you have any questions, please contact us.
 
 Best regards,
-BBJ Events Organizing Team`,
+CEO Gála Organizing Team`,
   },
   payment_reminder: {
     slug: 'payment_reminder',
     name: 'Payment Reminder',
-    subject: 'BBJ Events 2026 - Payment Reminder',
+    subject: 'CEO Gála 2026 - Payment Reminder',
     variables: ['guestName', 'ticketType', 'amount', 'paymentUrl', 'dueDate'],
     html_body: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BBJ Events -Payment Reminder</title>
+  <title>CEO Gála -Payment Reminder</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -350,6 +353,7 @@ BBJ Events Organizing Team`,
     .reminder-badge { display: inline-block; background-color: #f59e0b; color: #ffffff; font-size: 14px; font-weight: 600; padding: 8px 20px; border-radius: 20px; margin-top: 15px; }
     .content { margin-bottom: 30px; }
     .greeting { font-size: 18px; margin-bottom: 20px; }
+    .guest-name { font-size: 24px; font-weight: 700; color: #1a1a2e; display: block; margin-top: 8px; }
     .payment-info { background-color: #fffbeb; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 20px 0; }
     .payment-info h3 { margin: 0 0 15px 0; color: #b45309; }
     .payment-info p { margin: 8px 0; }
@@ -363,12 +367,12 @@ BBJ Events Organizing Team`,
   <div class="container">
     <div class="card">
       <div class="header">
-        <h1>BBJ Events</h1>
+        <h1>CEO Gála</h1>
         <span class="reminder-badge">Payment Reminder</span>
       </div>
       <div class="content">
-        <p class="greeting">Dear {{guestName}},</p>
-        <p>This is a friendly reminder that your registration payment for BBJ Events 2026 is still pending.</p>
+        <p class="greeting">Dear<span class="guest-name">{{guestName}}</span></p>
+        <p>This is a friendly reminder that your registration payment for CEO Gála 2026 is still pending.</p>
         <div class="payment-info">
           <h3>Payment Details</h3>
           <p><strong>Ticket Type:</strong> {{ticketType}}</p>
@@ -382,17 +386,17 @@ BBJ Events Organizing Team`,
       </div>
       <div class="footer">
         <p>If you have already completed the payment, please disregard this email.</p>
-        <p>Best regards,<br>BBJ Events Organizing Team</p>
+        <p>Best regards,<br>CEO Gála Organizing Team</p>
       </div>
     </div>
   </div>
 </body>
 </html>`,
-    text_body: `BBJ Events -Payment Reminder
+    text_body: `CEO Gála -Payment Reminder
 
 Dear {{guestName}},
 
-This is a friendly reminder that your registration payment for BBJ Events 2026 is still pending.
+This is a friendly reminder that your registration payment for CEO Gála 2026 is still pending.
 
 PAYMENT DETAILS
 ---------------
@@ -406,19 +410,19 @@ Please complete your payment to secure your spot at the event:
 If you have already completed the payment, please disregard this email.
 
 Best regards,
-BBJ Events Organizing Team`,
+CEO Gála Organizing Team`,
   },
   payment_confirmation: {
     slug: 'payment_confirmation',
     name: 'Payment Confirmation',
-    subject: 'BBJ Events 2026 - Payment Confirmed',
+    subject: 'CEO Gála 2026 - Payment Confirmed',
     variables: ['guestName', 'ticketType', 'amount', 'paymentDate', 'transactionId'],
     html_body: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BBJ Events -Payment Confirmed</title>
+  <title>CEO Gála -Payment Confirmed</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -428,6 +432,7 @@ BBJ Events Organizing Team`,
     .success-badge { display: inline-block; background-color: #10b981; color: #ffffff; font-size: 14px; font-weight: 600; padding: 8px 20px; border-radius: 20px; margin-top: 15px; }
     .content { margin-bottom: 30px; }
     .greeting { font-size: 18px; margin-bottom: 20px; }
+    .guest-name { font-size: 24px; font-weight: 700; color: #1a1a2e; display: block; margin-top: 8px; }
     .payment-info { background-color: #f0fdf4; border: 1px solid #10b981; border-radius: 8px; padding: 20px; margin: 20px 0; }
     .payment-info h3 { margin: 0 0 15px 0; color: #166534; }
     .payment-info p { margin: 8px 0; color: #15803d; }
@@ -440,12 +445,12 @@ BBJ Events Organizing Team`,
   <div class="container">
     <div class="card">
       <div class="header">
-        <h1>BBJ Events</h1>
+        <h1>CEO Gála</h1>
         <span class="success-badge">- Payment Confirmed</span>
       </div>
       <div class="content">
-        <p class="greeting">Dear {{guestName}},</p>
-        <p>Thank you! Your payment for BBJ Events 2026 has been successfully processed.</p>
+        <p class="greeting">Dear<span class="guest-name">{{guestName}}</span></p>
+        <p>Thank you! Your payment for CEO Gála 2026 has been successfully processed.</p>
         <div class="payment-info">
           <h3>Payment Receipt</h3>
           <p><strong>Ticket Type:</strong> {{ticketType}}</p>
@@ -460,17 +465,17 @@ BBJ Events Organizing Team`,
       </div>
       <div class="footer">
         <p>Please keep this email for your records.</p>
-        <p>Best regards,<br>BBJ Events Organizing Team</p>
+        <p>Best regards,<br>CEO Gála Organizing Team</p>
       </div>
     </div>
   </div>
 </body>
 </html>`,
-    text_body: `BBJ Events -Payment Confirmed
+    text_body: `CEO Gála -Payment Confirmed
 
 Dear {{guestName}},
 
-Thank you! Your payment for BBJ Events 2026 has been successfully processed.
+Thank you! Your payment for CEO Gála 2026 has been successfully processed.
 
 PAYMENT RECEIPT
 ---------------
@@ -485,19 +490,19 @@ Your e-ticket with QR code will be sent to you in a separate email shortly.
 Please keep this email for your records.
 
 Best regards,
-BBJ Events Organizing Team`,
+CEO Gála Organizing Team`,
   },
   table_assignment: {
     slug: 'table_assignment',
     name: 'Table Assignment Notification',
-    subject: 'BBJ Events 2026 - Your Table Assignment',
+    subject: 'CEO Gála 2026 - Your Table Assignment',
     variables: ['guestName', 'tableName', 'seatNumber', 'tablemates'],
     html_body: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BBJ Events -Table Assignment</title>
+  <title>CEO Gála -Table Assignment</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -507,6 +512,7 @@ BBJ Events Organizing Team`,
     .table-badge { display: inline-block; background-color: #8b5cf6; color: #ffffff; font-size: 14px; font-weight: 600; padding: 8px 20px; border-radius: 20px; margin-top: 15px; }
     .content { margin-bottom: 30px; }
     .greeting { font-size: 18px; margin-bottom: 20px; }
+    .guest-name { font-size: 24px; font-weight: 700; color: #1a1a2e; display: block; margin-top: 8px; }
     .table-info { background-color: #f5f3ff; border: 2px solid #8b5cf6; border-radius: 12px; padding: 25px; margin: 20px 0; text-align: center; }
     .table-info .table-name { font-size: 32px; font-weight: 700; color: #5b21b6; margin: 0; }
     .table-info .seat-number { font-size: 18px; color: #7c3aed; margin-top: 10px; }
@@ -521,12 +527,12 @@ BBJ Events Organizing Team`,
   <div class="container">
     <div class="card">
       <div class="header">
-        <h1>BBJ Events</h1>
+        <h1>CEO Gála</h1>
         <span class="table-badge">Table Assignment</span>
       </div>
       <div class="content">
-        <p class="greeting">Dear {{guestName}},</p>
-        <p>Your table assignment for BBJ Events 2026 has been confirmed!</p>
+        <p class="greeting">Dear<span class="guest-name">{{guestName}}</span></p>
+        <p>Your table assignment for CEO Gála 2026 has been confirmed!</p>
         <div class="table-info">
           <p class="table-name">{{tableName}}</p>
           {{#if seatNumber}}<p class="seat-number">Seat {{seatNumber}}</p>{{/if}}
@@ -541,17 +547,17 @@ BBJ Events Organizing Team`,
       </div>
       <div class="footer">
         <p>If you have any questions about your seating, please contact us.</p>
-        <p>Best regards,<br>BBJ Events Organizing Team</p>
+        <p>Best regards,<br>CEO Gála Organizing Team</p>
       </div>
     </div>
   </div>
 </body>
 </html>`,
-    text_body: `BBJ Events -Table Assignment
+    text_body: `CEO Gála -Table Assignment
 
 Dear {{guestName}},
 
-Your table assignment for BBJ Events 2026 has been confirmed!
+Your table assignment for CEO Gála 2026 has been confirmed!
 
 TABLE: {{tableName}}
 {{#if seatNumber}}SEAT: {{seatNumber}}{{/if}}
@@ -564,19 +570,19 @@ We look forward to seeing you at the event!
 If you have any questions about your seating, please contact us.
 
 Best regards,
-BBJ Events Organizing Team`,
+CEO Gála Organizing Team`,
   },
   event_reminder: {
     slug: 'event_reminder',
     name: 'Event Reminder',
-    subject: 'BBJ Events 2026 - Event Tomorrow!',
+    subject: 'CEO Gála 2026 - Event Tomorrow!',
     variables: ['guestName', 'eventDate', 'eventTime', 'eventVenue', 'eventAddress', 'tableName'],
     html_body: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BBJ Events -Event Reminder</title>
+  <title>CEO Gála -Event Reminder</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -586,6 +592,7 @@ BBJ Events Organizing Team`,
     .reminder-badge { display: inline-block; background-color: #ef4444; color: #ffffff; font-size: 14px; font-weight: 600; padding: 8px 20px; border-radius: 20px; margin-top: 15px; }
     .content { margin-bottom: 30px; }
     .greeting { font-size: 18px; margin-bottom: 20px; }
+    .guest-name { font-size: 24px; font-weight: 700; color: #1a1a2e; display: block; margin-top: 8px; }
     .event-details { background-color: #fef2f2; border: 2px solid #ef4444; border-radius: 12px; padding: 25px; margin: 20px 0; }
     .event-details h3 { margin: 0 0 15px 0; color: #dc2626; text-align: center; }
     .event-details p { margin: 10px 0; }
@@ -601,12 +608,12 @@ BBJ Events Organizing Team`,
   <div class="container">
     <div class="card">
       <div class="header">
-        <h1>BBJ Events</h1>
+        <h1>CEO Gála</h1>
         <span class="reminder-badge">Tomorrow!</span>
       </div>
       <div class="content">
-        <p class="greeting">Dear {{guestName}},</p>
-        <p>We're excited to remind you that BBJ Events 2026 is <strong>tomorrow</strong>!</p>
+        <p class="greeting">Dear<span class="guest-name">{{guestName}}</span></p>
+        <p>We're excited to remind you that CEO Gála 2026 is <strong>tomorrow</strong>!</p>
         <div class="event-details">
           <h3>Event Details</h3>
           <p><strong>Date:</strong> {{eventDate}}</p>
@@ -628,17 +635,17 @@ BBJ Events Organizing Team`,
       </div>
       <div class="footer">
         <p>If you have any last-minute questions, please contact us.</p>
-        <p>Best regards,<br>BBJ Events Organizing Team</p>
+        <p>Best regards,<br>CEO Gála Organizing Team</p>
       </div>
     </div>
   </div>
 </body>
 </html>`,
-    text_body: `BBJ Events -Event Tomorrow!
+    text_body: `CEO Gála -Event Tomorrow!
 
 Dear {{guestName}},
 
-We're excited to remind you that BBJ Events 2026 is TOMORROW!
+We're excited to remind you that CEO Gála 2026 is TOMORROW!
 
 EVENT DETAILS
 -------------
@@ -660,19 +667,19 @@ We look forward to welcoming you!
 If you have any last-minute questions, please contact us.
 
 Best regards,
-BBJ Events Organizing Team`,
+CEO Gála Organizing Team`,
   },
   event_reminder_e10: {
     slug: 'event_reminder_e10',
     name: 'Event Reminder (10 days)',
-    subject: 'BBJ Events 2026 - 10 Days to Go!',
+    subject: 'CEO Gála 2026 - 10 Days to Go!',
     variables: ['guestName', 'eventDate', 'eventTime', 'eventVenue', 'eventAddress', 'tableName'],
     html_body: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BBJ Events - 10 Days to Go</title>
+  <title>CEO Gála - 10 Days to Go</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -682,6 +689,7 @@ BBJ Events Organizing Team`,
     .countdown { display: inline-block; background-color: #3b82f6; color: #ffffff; font-size: 16px; font-weight: 600; padding: 10px 24px; border-radius: 20px; margin-top: 15px; }
     .content { margin-bottom: 30px; }
     .greeting { font-size: 18px; margin-bottom: 20px; }
+    .guest-name { font-size: 24px; font-weight: 700; color: #1a1a2e; display: block; margin-top: 8px; }
     .event-details { background-color: #eff6ff; border: 2px solid #3b82f6; border-radius: 12px; padding: 25px; margin: 20px 0; }
     .event-details h3 { margin: 0 0 15px 0; color: #1d4ed8; text-align: center; }
     .event-details p { margin: 10px 0; }
@@ -697,12 +705,12 @@ BBJ Events Organizing Team`,
   <div class="container">
     <div class="card">
       <div class="header">
-        <h1>BBJ Events</h1>
+        <h1>CEO Gála</h1>
         <span class="countdown">10 Days to Go!</span>
       </div>
       <div class="content">
-        <p class="greeting">Dear {{guestName}},</p>
-        <p>The countdown is on! BBJ Events 2026 is just <strong>10 days away</strong>.</p>
+        <p class="greeting">Dear<span class="guest-name">{{guestName}}</span></p>
+        <p>The countdown is on! CEO Gála 2026 is just <strong>10 days away</strong>.</p>
         <div class="event-details">
           <h3>Mark Your Calendar</h3>
           <p><strong>Date:</strong> {{eventDate}}</p>
@@ -724,17 +732,17 @@ BBJ Events Organizing Team`,
       </div>
       <div class="footer">
         <p>Questions? Contact our support team.</p>
-        <p>Best regards,<br>BBJ Events Organizing Team</p>
+        <p>Best regards,<br>CEO Gála Organizing Team</p>
       </div>
     </div>
   </div>
 </body>
 </html>`,
-    text_body: `BBJ Events - 10 Days to Go!
+    text_body: `CEO Gála - 10 Days to Go!
 
 Dear {{guestName}},
 
-The countdown is on! BBJ Events 2026 is just 10 DAYS AWAY.
+The countdown is on! CEO Gála 2026 is just 10 DAYS AWAY.
 
 EVENT DETAILS
 -------------
@@ -756,19 +764,19 @@ We're looking forward to seeing you!
 Questions? Contact our support team.
 
 Best regards,
-BBJ Events Organizing Team`,
+CEO Gála Organizing Team`,
   },
   event_reminder_e7: {
     slug: 'event_reminder_e7',
     name: 'Event Reminder (7 days)',
-    subject: 'BBJ Events 2026 - One Week to Go!',
+    subject: 'CEO Gála 2026 - One Week to Go!',
     variables: ['guestName', 'eventDate', 'eventTime', 'eventVenue', 'eventAddress', 'tableName', 'cancelUrl'],
     html_body: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BBJ Events - One Week to Go</title>
+  <title>CEO Gála - One Week to Go</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -778,6 +786,7 @@ BBJ Events Organizing Team`,
     .countdown { display: inline-block; background-color: #f59e0b; color: #ffffff; font-size: 16px; font-weight: 600; padding: 10px 24px; border-radius: 20px; margin-top: 15px; }
     .content { margin-bottom: 30px; }
     .greeting { font-size: 18px; margin-bottom: 20px; }
+    .guest-name { font-size: 24px; font-weight: 700; color: #1a1a2e; display: block; margin-top: 8px; }
     .event-details { background-color: #fef3c7; border: 2px solid #f59e0b; border-radius: 12px; padding: 25px; margin: 20px 0; }
     .event-details h3 { margin: 0 0 15px 0; color: #d97706; text-align: center; }
     .event-details p { margin: 10px 0; }
@@ -792,12 +801,12 @@ BBJ Events Organizing Team`,
   <div class="container">
     <div class="card">
       <div class="header">
-        <h1>BBJ Events</h1>
+        <h1>CEO Gála</h1>
         <span class="countdown">One Week to Go!</span>
       </div>
       <div class="content">
-        <p class="greeting">Dear {{guestName}},</p>
-        <p>BBJ Events 2026 is now just <strong>one week away</strong>! We hope you're as excited as we are.</p>
+        <p class="greeting">Dear<span class="guest-name">{{guestName}}</span></p>
+        <p>CEO Gála 2026 is now just <strong>one week away</strong>! We hope you're as excited as we are.</p>
         <div class="event-details">
           <h3>Event Details</h3>
           <p><strong>Date:</strong> {{eventDate}}</p>
@@ -813,17 +822,17 @@ BBJ Events Organizing Team`,
       </div>
       <div class="footer">
         <p>Questions? Contact our support team.</p>
-        <p>Best regards,<br>BBJ Events Organizing Team</p>
+        <p>Best regards,<br>CEO Gála Organizing Team</p>
       </div>
     </div>
   </div>
 </body>
 </html>`,
-    text_body: `BBJ Events - One Week to Go!
+    text_body: `CEO Gála - One Week to Go!
 
 Dear {{guestName}},
 
-BBJ Events 2026 is now just ONE WEEK AWAY! We hope you're as excited as we are.
+CEO Gála 2026 is now just ONE WEEK AWAY! We hope you're as excited as we are.
 
 EVENT DETAILS
 -------------
@@ -843,7 +852,7 @@ We can't wait to welcome you!
 Questions? Contact our support team.
 
 Best regards,
-BBJ Events Organizing Team`,
+CEO Gála Organizing Team`,
   },
   ticket_delivery: {
     slug: 'ticket_delivery',
@@ -864,6 +873,7 @@ BBJ Events Organizing Team`,
     h2 { font-size: 20px; color: #333333; margin: 0 0 25px 0; }
     p { margin: 0 0 18px 0; font-size: 15px; color: #333333; }
     .greeting { font-size: 15px; margin-bottom: 20px; }
+    .guest-name { font-size: 22px; font-weight: 700; color: #1a1a2e; display: block; margin-top: 8px; }
     .highlight { font-weight: bold; }
     .details-section { margin: 30px 0; }
     .details-section .label { font-weight: bold; margin-bottom: 5px; }
@@ -888,7 +898,7 @@ BBJ Events Organizing Team`,
     <h2>Confirmation</h2>
 
     <div class="content">
-      <p class="greeting">Dear {{guestTitle}} {{guestName}},</p>
+      <p class="greeting">Dear<span class="guest-name">{{guestTitle}} {{guestName}}</span></p>
 
       <p><span class="highlight">Thank you for your registration!</span></p>
 
@@ -1020,6 +1030,7 @@ Event website: ceogala.com`,
     h2 { font-size: 20px; color: #333333; margin: 0 0 25px 0; }
     p { margin: 0 0 18px 0; font-size: 15px; color: #333333; }
     .greeting { font-size: 15px; margin-bottom: 20px; }
+    .guest-name { font-size: 22px; font-weight: 700; color: #1a1a2e; display: block; margin-top: 8px; }
     .highlight { font-weight: bold; }
     .details-section { margin: 30px 0; }
     .details-section .label { font-weight: bold; margin-bottom: 5px; }
@@ -1044,7 +1055,7 @@ Event website: ceogala.com`,
     <h2>Confirmation</h2>
 
     <div class="content">
-      <p class="greeting">Dear {{partnerTitle}} {{partnerName}},</p>
+      <p class="greeting">Dear<span class="guest-name">{{partnerTitle}} {{partnerName}}</span></p>
 
       <p><span class="highlight">Thank you for your registration!</span></p>
 
@@ -1144,14 +1155,14 @@ Event website: ceogala.com`,
   noshow_payment_request: {
     slug: 'noshow_payment_request',
     name: 'No-Show Payment Request',
-    subject: 'BBJ Events 2026 - No-Show Fee Notice',
+    subject: 'CEO Gála 2026 - No-Show Fee Notice',
     variables: ['guestName', 'eventDate', 'ticketType', 'noShowFee', 'paymentDeadline', 'paymentUrl'],
     html_body: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BBJ Events - No-Show Fee Notice</title>
+  <title>CEO Gála - No-Show Fee Notice</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -1161,6 +1172,7 @@ Event website: ceogala.com`,
     .notice-badge { display: inline-block; background-color: #dc2626; color: #ffffff; font-size: 14px; font-weight: 600; padding: 8px 20px; border-radius: 20px; margin-top: 15px; }
     .content { margin-bottom: 30px; }
     .greeting { font-size: 18px; margin-bottom: 20px; }
+    .guest-name { font-size: 24px; font-weight: 700; color: #1a1a2e; display: block; margin-top: 8px; }
     .notice-box { background-color: #fef2f2; border: 2px solid #dc2626; border-radius: 12px; padding: 25px; margin: 20px 0; }
     .notice-box h3 { margin: 0 0 15px 0; color: #dc2626; text-align: center; }
     .notice-box p { margin: 10px 0; }
@@ -1179,12 +1191,12 @@ Event website: ceogala.com`,
   <div class="container">
     <div class="card">
       <div class="header">
-        <h1>BBJ Events</h1>
+        <h1>CEO Gála</h1>
         <span class="notice-badge">Payment Required</span>
       </div>
       <div class="content">
-        <p class="greeting">Dear {{guestName}},</p>
-        <p>We noticed that you did not attend BBJ Events 2026 on {{eventDate}}, and you did not cancel your registration before the deadline.</p>
+        <p class="greeting">Dear<span class="guest-name">{{guestName}}</span></p>
+        <p>We noticed that you did not attend CEO Gála 2026 on {{eventDate}}, and you did not cancel your registration before the deadline.</p>
         <div class="notice-box">
           <h3>No-Show Fee</h3>
           <p>According to our registration terms, a no-show fee is applicable for registered guests who do not attend without prior cancellation.</p>
@@ -1203,17 +1215,17 @@ Event website: ceogala.com`,
       </div>
       <div class="footer">
         <p>If you have questions, please contact us at info@ceogala.hu</p>
-        <p>Best regards,<br>BBJ Events Organizing Team</p>
+        <p>Best regards,<br>CEO Gála Organizing Team</p>
       </div>
     </div>
   </div>
 </body>
 </html>`,
-    text_body: `BBJ Events - No-Show Fee Notice
+    text_body: `CEO Gála - No-Show Fee Notice
 
 Dear {{guestName}},
 
-We noticed that you did not attend BBJ Events 2026 on {{eventDate}}, and you did not cancel your registration before the deadline.
+We noticed that you did not attend CEO Gála 2026 on {{eventDate}}, and you did not cancel your registration before the deadline.
 
 NO-SHOW FEE
 -----------
@@ -1235,7 +1247,7 @@ Payment Deadline: {{paymentDeadline}}
 If you have questions, please contact us at info@ceogala.hu
 
 Best regards,
-BBJ Events Organizing Team`,
+CEO Gála Organizing Team`,
   },
   registration_feedback: {
     slug: 'registration_feedback',
@@ -1243,7 +1255,7 @@ BBJ Events Organizing Team`,
     subject: 'Automatic feedback message CEO Gala 2026',
     variables: [
       'guestTitle', 'guestName', 'guestCompany', 'guestPhone', 'guestEmail', 'guestDiet', 'guestSeating',
-      'hasPartner', 'partnerTitle', 'partnerName', 'partnerPhone', 'partnerEmail', 'partnerDiet', 'partnerSeating',
+      'hasPartner', 'partnerTitle', 'partnerName', 'partnerPhone', 'partnerEmail', 'partnerDiet',
       'headerImage', 'baseUrl'
     ],
     html_body: `<!DOCTYPE html>
@@ -1259,6 +1271,7 @@ BBJ Events Organizing Team`,
     .content { padding: 0 20px; }
     p { margin: 0 0 15px 0; font-size: 15px; color: #333333; }
     .greeting { font-size: 16px; margin-bottom: 20px; }
+    .guest-name { font-size: 22px; font-weight: 700; color: #1a1a2e; display: block; margin-top: 8px; }
     .highlight { font-weight: bold; }
     .order-details { background-color: #f8f8f8; border-left: 4px solid #c41e3a; padding: 20px; margin: 25px 0; }
     .order-details h3 { margin: 0 0 15px 0; font-size: 16px; color: #333333; }
@@ -1281,7 +1294,7 @@ BBJ Events Organizing Team`,
     <img src="{{headerImage}}" alt="CEO Gala 2026" class="header-image" />
 
     <div class="content">
-      <p class="greeting">Dear {{guestTitle}} {{guestName}},</p>
+      <p class="greeting">Dear<span class="guest-name">{{guestTitle}} {{guestName}}</span></p>
 
       <p>Thank you for your registration!</p>
 
@@ -1308,7 +1321,6 @@ BBJ Events Organizing Team`,
           <div class="detail-row"><span class="detail-label">Partner's phone:</span> <span class="detail-value">{{partnerPhone}}</span></div>
           <div class="detail-row"><span class="detail-label">Partner's email:</span> <span class="detail-value">{{partnerEmail}}</span></div>
           <div class="detail-row"><span class="detail-label">Partner's special diet:</span> <span class="detail-value">{{partnerDiet}}</span></div>
-          <div class="detail-row"><span class="detail-label">Partner's seating pref:</span> <span class="detail-value">{{partnerSeating}}</span></div>
         </div>
         {{/if}}
       </div>
@@ -1368,7 +1380,6 @@ Partner's name: {{partnerName}}
 Partner's phone: {{partnerPhone}}
 Partner's email: {{partnerEmail}}
 Partner's special diet: {{partnerDiet}}
-Partner's seating pref: {{partnerSeating}}
 {{/if}}
 
 DECLARATIONS ACCEPTED
@@ -1398,7 +1409,7 @@ Event website: ceogala.com`,
     name: 'Registration Feedback (Partner)',
     subject: 'Registration details received: CEO Gala 2026',
     variables: [
-      'partnerTitle', 'partnerName', 'partnerCompany', 'partnerPhone', 'partnerEmail', 'partnerDiet', 'partnerSeating',
+      'partnerTitle', 'partnerName', 'partnerCompany', 'partnerPhone', 'partnerEmail', 'partnerDiet',
       'mainGuestTitle', 'mainGuestName', 'headerImage', 'baseUrl'
     ],
     html_body: `<!DOCTYPE html>
@@ -1414,6 +1425,7 @@ Event website: ceogala.com`,
     .content { padding: 0 20px; }
     p { margin: 0 0 15px 0; font-size: 15px; color: #333333; }
     .greeting { font-size: 16px; margin-bottom: 20px; }
+    .guest-name { font-size: 22px; font-weight: 700; color: #1a1a2e; display: block; margin-top: 8px; }
     .highlight { font-weight: bold; }
     .order-details { background-color: #f8f8f8; border-left: 4px solid #c41e3a; padding: 20px; margin: 25px 0; }
     .order-details h3 { margin: 0 0 15px 0; font-size: 16px; color: #333333; }
@@ -1436,7 +1448,7 @@ Event website: ceogala.com`,
     <img src="{{headerImage}}" alt="CEO Gala 2026" class="header-image" />
 
     <div class="content">
-      <p class="greeting">Dear {{partnerTitle}} {{partnerName}},</p>
+      <p class="greeting">Dear<span class="guest-name">{{partnerTitle}} {{partnerName}}</span></p>
 
       <p>You are receiving this message because you have been registered as an accompanying guest for the CEO Gala 2026 by <span class="highlight">{{mainGuestTitle}} {{mainGuestName}}</span>.</p>
 
@@ -1452,7 +1464,6 @@ Event website: ceogala.com`,
         <div class="detail-row"><span class="detail-label">Phone number:</span> <span class="detail-value">{{partnerPhone}}</span></div>
         <div class="detail-row"><span class="detail-label">Email address:</span> <span class="detail-value">{{partnerEmail}}</span></div>
         <div class="detail-row"><span class="detail-label">Special diet:</span> <span class="detail-value">{{partnerDiet}}</span></div>
-        <div class="detail-row"><span class="detail-label">Seating preferences:</span> <span class="detail-value">{{partnerSeating}}</span></div>
       </div>
 
       <div class="consents">
@@ -1499,7 +1510,6 @@ Company name: {{partnerCompany}}
 Phone number: {{partnerPhone}}
 Email address: {{partnerEmail}}
 Special diet: {{partnerDiet}}
-Seating preferences: {{partnerSeating}}
 
 The following declarations were accepted at the time of registration on your behalf:
 
@@ -1522,6 +1532,121 @@ Business Publishing Services Kft.
 1075 Budapest, Madách Imre út 13-14., Hungary
 Publisher of Budapest Business Journal
 Event website: ceogala.com`,
+  },
+  principal_invitation: {
+    slug: 'principal_invitation',
+    name: 'Principal Guest Invitation',
+    subject: 'Invitation to the CEO Gala 2026',
+    variables: ['guestTitle', 'guestName', 'baseUrl'],
+    html_body: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invitation to the CEO Gala 2026</title>
+  <style>
+    body { font-family: Verdana, Geneva, sans-serif; line-height: 1.8; color: #333333; margin: 0; padding: 0; background-color: #ffffff; }
+    .container { max-width: 680px; margin: 0 auto; padding: 20px; background-color: #ffffff; }
+    .header-image { width: 100%; max-width: 680px; height: auto; display: block; margin: 0 auto 30px auto; }
+    .content { padding: 0 20px; text-align: center; }
+    p { margin: 0 0 16px 0; font-size: 13px; color: #333333; text-align: center; }
+    .greeting { font-size: 13px; margin-bottom: 20px; text-align: center; }
+    .highlight { font-weight: bold; }
+    .signatures { margin: 40px 0 30px 0; text-align: center; }
+    .signatures-row { display: table; width: 100%; margin: 0 auto; }
+    .signature { display: table-cell; width: 50%; text-align: center; vertical-align: top; }
+    .signature-name { font-weight: bold; font-size: 13px; margin-bottom: 2px; color: #000000; }
+    .signature-title { font-size: 12px; color: #333333; }
+    .footer { text-align: center; padding: 25px 0; border-top: 1px solid #cccccc; margin-top: 30px; font-size: 11px; color: #666666; }
+    .footer p { margin: 4px 0; text-align: center; font-size: 11px; }
+    .footer a { color: #333333; text-decoration: underline; }
+    .small-note { font-size: 10px; color: #999999; margin-top: 15px; }
+    .email-marketing { text-align: center; margin-top: 25px; padding-top: 15px; border-top: 1px solid #eeeeee; }
+    .email-marketing img { width: 20px; height: 20px; vertical-align: middle; margin-right: 5px; }
+    .email-marketing a { color: #666666; text-decoration: underline; font-size: 11px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="{{baseUrl}}/email-assets/CEO_Gala_2026_invitation_header_709x213.jpg" alt="CEO Gala 2026 - March 27, 2026" class="header-image" />
+
+    <div class="content">
+      <p class="greeting">Dear {{guestTitle}} {{guestName}},</p>
+
+      <p>We are delighted to announce that the next CEO Gala will take place on <span class="highlight">Friday, March 27, 2026</span>, at the <span class="highlight">Corinthia Hotel Budapest</span>.</p>
+
+      <p>Now in its <span class="highlight">12th edition</span>, the CEO Gala has become a landmark event in Hungary's business calendar, a must-attend occasion for the country's most distinguished business leaders, diplomats, and representatives of international business organizations.</p>
+
+      <p>The evening brings together a unique <span class="highlight">concentration of decision-makers</span> under one roof, individuals whose vision, leadership, and achievements drive a remarkable share of Hungary's economic performance. The atmosphere is truly inspiring: a celebration of excellence, innovation, and recognition, where meaningful connections are made and maintained.</p>
+
+      <p>During the evening, we will present two of the most prestigious titles in Hungary's business community. The <span class="highlight">Expat CEO of the Year Award</span> honors an outstanding international business leader for their contribution to Hungary's economic life, while the <span class="highlight">CEO Community Award</span> recognizes a visionary leader whose activities have had a lasting, positive impact on society and the business environment.</p>
+
+      <p>Please <span class="highlight">save the date</span> in your calendar; full event details and formal invitations will follow soon. We look forward to welcoming you to another inspiring edition of the CEO Gala in 2026.</p>
+
+      <p>Warm regards,</p>
+
+      <div class="signatures">
+        <div class="signatures-row">
+          <div class="signature">
+            <div class="signature-name">Tamas Botka</div>
+            <div class="signature-title">Publisher, BBJ</div>
+          </div>
+          <div class="signature">
+            <div class="signature-name">Balazs Roman</div>
+            <div class="signature-title">CEO, BBJ</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p>For more details about the event and the award, including previous winners, visit our website at <a href="https://www.ceogala.com">www.ceogala.com</a>. We look forward to meeting you at the gala and celebrating this outstanding CEO Community with you.</p>
+        <br>
+        <p>&copy; Copyright, 2024-25</p>
+        <p>1075 Budapest, Madách 11-13 14. Hungary</p>
+        <p>This email has been sent to you, because you are a customer or subscriber of</p>
+        <p>BUSINESS PUBLISHING SERVICES KFT.</p>
+        <p><a href="https://ceogala.com">www.ceogala.com</a> - <a href="mailto:event@bbj.hu">event@bbj.hu</a></p>
+        <p class="small-note"><a href="{{baseUrl}}/unsubscribe">Unsubscribe</a> | <a href="{{baseUrl}}/privacy">Manage my subscription</a></p>
+      </div>
+
+      <div class="email-marketing">
+        <p>Email Marketing<br>Powered by<br><a href="https://www.mailpoet.com">MailPoet</a></p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`,
+    text_body: `Invitation to the CEO Gala 2026
+
+Dear {{guestTitle}} {{guestName}},
+
+We are delighted to announce that the next CEO Gala will take place on Friday, March 27, 2026, at the Corinthia Hotel Budapest.
+
+Now in its 12th edition, the CEO Gala has become a landmark event in Hungary's business calendar, a must-attend occasion for the country's most distinguished business leaders, diplomats, and representatives of international business organizations.
+
+The evening brings together a unique concentration of decision-makers under one roof, individuals whose vision, leadership, and achievements drive a remarkable share of Hungary's economic performance. The atmosphere is truly inspiring: a celebration of excellence, innovation, and recognition, where meaningful connections are made and maintained.
+
+During the evening, we will present two of the most prestigious titles in Hungary's business community. The Expat CEO of the Year Award honors an outstanding international business leader for their contribution to Hungary's economic life, while the CEO Community Award recognizes a visionary leader whose activities have had a lasting, positive impact on society and the business environment.
+
+Please save the date in your calendar; full event details and formal invitations will follow soon. We look forward to welcoming you to another inspiring edition of the CEO Gala in 2026.
+
+Warm regards,
+
+Tamas Botka                    Balazs Roman
+Publisher, BBJ                 CEO, BBJ
+
+---
+
+For more details about the event and the award, including previous winners, visit our website at www.ceogala.com. We look forward to meeting you at the gala and celebrating this outstanding CEO Community with you.
+
+© Copyright, 2024-25
+1075 Budapest, Madách 11-13 14. Hungary
+BUSINESS PUBLISHING SERVICES KFT.
+www.ceogala.com - event@bbj.hu
+
+---
+Email Marketing
+Powered by MailPoet`,
   },
 } as const;
 

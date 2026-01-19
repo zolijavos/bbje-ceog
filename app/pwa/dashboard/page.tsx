@@ -267,7 +267,7 @@ export default function PWADashboardPage() {
       {/* Header */}
       <header className="pwa-bg-header px-4 py-6">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="font-display text-xl pwa-text-inverse">BBJ Events 2026</h1>
+          <h1 className="font-display text-xl pwa-text-inverse">CEO Gála 2026</h1>
           <div className="flex items-center gap-3">
             <ThemeToggle />
             <button

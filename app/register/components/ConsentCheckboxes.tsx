@@ -47,9 +47,9 @@ export default function ConsentCheckboxes({
               GDPR Data Processing Consent *
             </span>
             <p className="text-xs text-slate-500 mt-1">
-              I consent to BBJ Events collecting and processing my personal data
+              I consent to CEO Gála collecting and processing my personal data
               (name, email, phone, company, position, dietary requirements) for the
-              purpose of organizing and managing the BBJ Events 2026 gala event.
+              purpose of organizing and managing the CEO Gála 2026 gala event.
               This includes guest list management, seating arrangements, catering
               coordination, and event communications. My data will be retained for
               up to 12 months after the event and will not be shared with third

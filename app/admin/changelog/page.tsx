@@ -33,6 +33,68 @@ interface ChangelogEntry {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: '2.13.0',
+    date: '2026-01-16',
+    changes: [
+      {
+        type: 'feature',
+        category: 'checkin',
+        titleEn: 'Checked-In Registration Status',
+        titleHu: 'Checked-In Regisztrációs Státusz',
+        descriptionEn: 'New checked_in status automatically set when guest checks in. Displayed with emerald green badge in admin guest list.',
+        descriptionHu: 'Új checked_in státusz automatikusan beállítva belépéskor. Smaragdzöld badge-dzsel jelenik meg az admin vendéglistában.',
+      },
+      {
+        type: 'feature',
+        category: 'guest',
+        titleEn: 'Not Checked In Filter (No-Show)',
+        titleHu: 'Nem Bejelentkezett Szűrő (No-Show)',
+        descriptionEn: 'New filter option in admin guest list shows approved guests who haven\'t checked in yet. Useful for no-show follow-up emails.',
+        descriptionHu: 'Új szűrő opció az admin vendéglistában a még be nem jelentkezett approved vendégekhez. Hasznos no-show emailekhez.',
+      },
+      {
+        type: 'improvement',
+        category: 'ui',
+        titleEn: 'Guest Name Highlighting',
+        titleHu: 'Vendég Név Kiemelés',
+        descriptionEn: 'Guest name prominently displayed on all registration pages with large bold text and accent color.',
+        descriptionHu: 'Vendég neve kiemelten jelenik meg minden regisztrációs oldalon nagy félkövér szöveggel és akcentszínnel.',
+      },
+      {
+        type: 'improvement',
+        category: 'registration',
+        titleEn: 'Partner Title Required',
+        titleHu: 'Partner Címzés Kötelező',
+        descriptionEn: 'Partner title field is now required on VIP and Paid registration forms with validation.',
+        descriptionHu: 'Partner címzés mező mostantól kötelező a VIP és Paid regisztrációs űrlapokon validációval.',
+      },
+      {
+        type: 'improvement',
+        category: 'branding',
+        titleEn: 'CEO Gála 2026 Branding',
+        titleHu: 'CEO Gála 2026 Márkajelzés',
+        descriptionEn: 'Updated branding from "BBJ Events 2026" to "CEO Gála 2026" across all guest-facing pages and emails.',
+        descriptionHu: 'Márkajelzés frissítve "CEO Gála 2026"-ra minden vendég-oldali oldalon és emailben.',
+      },
+      {
+        type: 'improvement',
+        category: 'registration',
+        titleEn: 'Partner Seating Preferences Removed',
+        titleHu: 'Partner Ültetési Preferenciák Eltávolítva',
+        descriptionEn: 'Partner seating preferences field removed from forms. Main guest seating preferences still available.',
+        descriptionHu: 'Partner ültetési preferenciák mező eltávolítva. Fő vendég preferenciái továbbra is elérhetőek.',
+      },
+      {
+        type: 'improvement',
+        category: 'email',
+        titleEn: 'Email Greeting Punctuation',
+        titleHu: 'Email Megszólítás Írásjel',
+        descriptionEn: 'Changed email greeting from exclamation mark to comma. Example: "Dear Dr. Kovács," instead of "Dear Dr. Kovács!"',
+        descriptionHu: 'Email megszólítás írásjele vesszőre változott. Példa: "Dear Dr. Kovács," a "Dear Dr. Kovács!" helyett.',
+      },
+    ],
+  },
+  {
     version: '2.12.0',
     date: '2026-01-15',
     changes: [

@@ -1,0 +1,181 @@
+#!/bin/bash
+# =============================================
+# CEO Gala - Alkalmazás Indítása
+# =============================================
+# Telepíti a függőségeket, futtatja a migrációkat,
+# buildelei az alkalmazást és elindítja PM2-vel.
+#
+# Használat: sudo bash start.sh
+# =============================================
+
+set -e
+
+# Színek
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+NC='\033[0m'
+
+INSTALL_PATH="/var/www/ceog"
+
+print_header() {
+    echo ""
+    echo -e "${BLUE}============================================${NC}"
+    echo -e "${BLUE}$1${NC}"
+    echo -e "${BLUE}============================================${NC}"
+}
+
+print_success() {
+    echo -e "${GREEN}✓ $1${NC}"
+}
+
+print_warning() {
+    echo -e "${YELLOW}⚠ $1${NC}"
+}
+
+print_error() {
+    echo -e "${RED}✗ $1${NC}"
+}
+
+cd "$INSTALL_PATH"
+
+# ============================================
+# Előfeltételek ellenőrzése
+# ============================================
+print_header "Előfeltételek ellenőrzése"
+
+# .env fájl
+if [ ! -f ".env" ]; then
+    print_error ".env fájl nem található!"
+    echo "Futtasd előbb: bash deploy/configure.sh"
+    exit 1
+fi
+print_success ".env fájl megtalálva"
+
+# Node.js
+if ! command -v node &> /dev/null; then
+    print_error "Node.js nincs telepítve!"
+    exit 1
+fi
+print_success "Node.js: $(node -v)"
+
+# npm
+if ! command -v npm &> /dev/null; then
+    print_error "npm nincs telepítve!"
+    exit 1
+fi
+print_success "npm: $(npm -v)"
+
+# PM2
+if ! command -v pm2 &> /dev/null; then
+    print_warning "PM2 nincs telepítve, telepítés..."
+    npm install -g pm2
+fi
+print_success "PM2: $(pm2 -v)"
+
+# ============================================
+# Függőségek telepítése
+# ============================================
+print_header "Függőségek telepítése"
+
+echo "npm install futtatása..."
+npm install --omit=dev 2>&1 | tail -5
+
+print_success "Függőségek telepítve"
+
+# ============================================
+# Prisma client generálása
+# ============================================
+print_header "Prisma client generálása"
+
+npx prisma generate
+print_success "Prisma client kész"
+
+# ============================================
+# Adatbázis migrációk
+# ============================================
+print_header "Adatbázis migrációk futtatása"
+
+# Ellenőrizzük az adatbázis kapcsolatot
+echo "Adatbázis kapcsolat ellenőrzése..."
+if ! npx prisma db execute --stdin <<< "SELECT 1" 2>/dev/null; then
+    print_error "Nem sikerült csatlakozni az adatbázishoz!"
+    echo "Ellenőrizd a DATABASE_URL értékét a .env fájlban"
+    exit 1
+fi
+print_success "Adatbázis elérhető"
+
+echo "Migrációk futtatása..."
+npx prisma migrate deploy
+print_success "Migrációk sikeresen lefutottak"
+
+# ============================================
+# Alkalmazás buildelése
+# ============================================
+print_header "Alkalmazás buildelése"
+
+echo "Next.js build futtatása (ez eltarthat pár percig)..."
+npm run build 2>&1 | tail -10
+
+print_success "Build sikeres"
+
+# ============================================
+# PM2 indítása
+# ============================================
+print_header "Alkalmazás indítása PM2-vel"
+
+# Leállítjuk ha fut
+pm2 stop ceog 2>/dev/null || true
+pm2 delete ceog 2>/dev/null || true
+
+# Indítás
+pm2 start ecosystem.config.js
+pm2 save
+
+# PM2 startup beállítása
+pm2 startup systemd -u root --hp /root 2>/dev/null || true
+
+print_success "Alkalmazás elindítva"
+
+# ============================================
+# Státusz ellenőrzése
+# ============================================
+print_header "Alkalmazás állapota"
+
+sleep 3
+pm2 status
+
+# Teszt
+echo ""
+echo "Alkalmazás tesztelése..."
+sleep 2
+
+if curl -s -o /dev/null -w "%{http_code}" http://localhost:3000 | grep -q "200\|302"; then
+    print_success "Az alkalmazás fut és válaszol!"
+else
+    print_warning "Az alkalmazás még nem válaszol - várj pár másodpercet"
+fi
+
+# ============================================
+# Összefoglaló
+# ============================================
+print_header "Telepítés befejezve!"
+
+echo ""
+echo -e "${GREEN}Az alkalmazás sikeresen elindult!${NC}"
+echo ""
+echo -e "${CYAN}Hasznos parancsok:${NC}"
+echo "  pm2 status        - Alkalmazás állapota"
+echo "  pm2 logs ceog     - Logok megtekintése"
+echo "  pm2 restart ceog  - Újraindítás"
+echo "  pm2 stop ceog     - Leállítás"
+echo ""
+echo -e "${YELLOW}Következő lépések:${NC}"
+echo "  1. Nginx beállítása: bash deploy/setup-nginx.sh"
+echo "  2. SSL tanúsítvány:  bash deploy/setup-ssl.sh"
+echo ""
+echo -e "${CYAN}Lokális teszt:${NC}"
+echo "  curl http://localhost:3000"
+echo ""

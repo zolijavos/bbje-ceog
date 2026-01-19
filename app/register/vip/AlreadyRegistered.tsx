@@ -74,7 +74,7 @@ export default function AlreadyRegistered({
         {declined ? (
           <>
             <p className="text-slate-600 mb-6" data-testid="declined-message">
-              You have previously indicated that you cannot attend the BBJ Events 2026
+              You have previously indicated that you cannot attend the CEO Gála 2026
               event.
             </p>
             <div className="bg-slate-50 rounded-lg p-4 mb-6">
@@ -111,7 +111,7 @@ export default function AlreadyRegistered({
         {/* Event Info */}
         <div className="bg-slate-50 rounded-lg p-4 mb-6 border border-slate-200">
           <h2 className="text-lg font-semibold text-slate-800 mb-2">
-            BBJ Events 2026
+            CEO Gála 2026
           </h2>
           <p className="text-slate-600 text-sm">
             Friday, March 27, 2026 • 6:00 PM

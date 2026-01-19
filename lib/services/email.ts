@@ -373,7 +373,7 @@ export async function sendMagicLinkEmail(
       await logEmailDelivery({
         guestId,
         recipient: 'unknown',
-        subject: 'BBJ Events - Registration Invitation',
+        subject: 'CEO Gála 2026 - Registration Invitation',
         success: false,
         errorMessage,
       });

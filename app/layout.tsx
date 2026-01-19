@@ -25,14 +25,14 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'BBJ Events 2026 - Event Platform',
-  description: 'BBJ Events 2026 event registration and check-in system',
+  title: 'CEO Gála 2026 - Event Platform',
+  description: 'CEO Gála 2026 event registration and check-in system',
   manifest: '/manifest.json',
   themeColor: '#1e293b',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'BBJ Events',
+    title: 'CEO Gála 2026',
   },
   formatDetection: {
     telephone: false,

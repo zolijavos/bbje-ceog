@@ -100,7 +100,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
         {/* Event Details */}
         <div className="bg-neutral-100 rounded-lg p-4 mb-6">
           <h2 className="font-display text-lg font-semibold text-neutral-900 mb-2">
-            BBJ Events 2026
+            CEO Gála 2026
           </h2>
           <p className="text-neutral-700 text-sm font-sans">
             Friday, March 27, 2026 • 6:00 PM

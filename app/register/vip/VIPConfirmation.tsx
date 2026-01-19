@@ -64,6 +64,7 @@ interface FormErrors {
   seating_preferences?: string;
   gdpr_consent?: string;
   cancellation_accepted?: string;
+  partner_title?: string;
   partner_name?: string;
   partner_email?: string;
   partner_gdpr_consent?: string;
@@ -113,6 +114,9 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
 
     // Partner validation (if bringing a partner)
     if (formData.hasPartner) {
+      if (!formData.partnerTitle) {
+        newErrors.partner_title = 'Partner title is required';
+      }
       if (!formData.partnerName || formData.partnerName.trim().length < 2) {
         newErrors.partner_name = 'Partner name is required (min. 2 characters)';
       }
@@ -252,16 +256,19 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
           </div>
 
           {/* Welcome Message */}
-          <h1 className="font-display text-2xl font-semibold text-neutral-800 mb-2">
-            Dear {guest.name}!
+          <h1 className="font-display text-2xl font-semibold text-neutral-800 mb-1">
+            Dear,
           </h1>
+          <p className="text-3xl font-bold text-accent-gold mb-2">
+            {guest.name}
+          </p>
           <p className="text-accent-gold font-semibold mb-6 font-sans uppercase tracking-wider text-sm">Invited Guest</p>
 
           {/* Event Details */}
           <div className="bg-neutral-50 rounded-lg p-4 mb-6 border-l-4 border-accent-gold">
             <Link href="/" className="hover:opacity-80 transition-opacity">
               <h2 className="font-display text-lg font-semibold text-neutral-800 mb-2">
-                BBJ Events 2026
+                CEO Gála 2026
               </h2>
             </Link>
             <p className="text-neutral-500 text-sm font-sans">
@@ -344,7 +351,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
           <h1 className="font-display text-2xl font-semibold text-neutral-800 mb-1">
             Invited Guest Registration
           </h1>
-          <p className="text-neutral-500 font-sans">Dear {guest.name}!</p>
+          <p className="text-3xl font-bold text-accent-gold mt-2">{guest.name}</p>
         </div>
 
         {/* Error Message */}
@@ -372,6 +379,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
               {errors.phone && <li>Phone: {errors.phone}</li>}
               {errors.company && <li>Company: {errors.company}</li>}
               {errors.position && <li>Position: {errors.position}</li>}
+              {errors.partner_title && <li>Partner Title: {errors.partner_title}</li>}
               {errors.partner_name && <li>Partner Name: {errors.partner_name}</li>}
               {errors.partner_email && <li>Partner Email: {errors.partner_email}</li>}
               {errors.partner_gdpr_consent && <li>Partner Consent: {errors.partner_gdpr_consent}</li>}
@@ -456,12 +464,12 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
               {/* Partner Title */}
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-1">
-                  Partner Title (optional)
+                  Partner Title <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={formData.partnerTitle}
                   onChange={(e) => setFormData((prev) => ({ ...prev, partnerTitle: e.target.value }))}
-                  className="input w-full"
+                  className={`input w-full ${errors.partner_title ? 'border-red-500' : ''}`}
                 >
                   <option value="">-- Please select --</option>
                   <option value="Mr.">Mr.</option>
@@ -471,6 +479,9 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
                   <option value="Prof.">Prof.</option>
                   <option value="Prof. Dr.">Prof. Dr.</option>
                 </select>
+                {errors.partner_title && (
+                  <p className="text-red-500 text-sm mt-1">{errors.partner_title}</p>
+                )}
               </div>
 
               {/* Partner Name */}
@@ -572,24 +583,6 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
                 </div>
               </div>
 
-              {/* Partner Seating Preferences */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">
-                  Partner Seating Preferences (optional)
-                </label>
-                <textarea
-                  value={formData.partnerSeatingPreferences}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, partnerSeatingPreferences: e.target.value }))}
-                  maxLength={500}
-                  rows={2}
-                  className="input w-full"
-                  placeholder="Who would you like to sit with?"
-                />
-                <div className="flex justify-end mt-1">
-                  <span className="text-xs text-neutral-500">{formData.partnerSeatingPreferences.length}/500</span>
-                </div>
-              </div>
-
               {/* Partner GDPR Consent */}
               <div className="pt-2">
                 <label className="flex items-start gap-3 cursor-pointer">
@@ -655,7 +648,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
         {/* Event Info Footer */}
         <div className="mt-8 pt-6 border-t border-neutral-300/20">
           <div className="text-center text-sm text-neutral-500 font-sans">
-            <Link href="/" className="font-medium text-neutral-800 hover:text-accent-gold transition-colors">BBJ Events 2026</Link>
+            <Link href="/" className="font-medium text-neutral-800 hover:text-accent-gold transition-colors">CEO Gála 2026</Link>
             <p>Friday, March 27, 2026 • 6:00 PM • Budapest, Corinthia Hotel</p>
             <p className="mt-3">
               <Link href="/help" className="text-accent-gold hover:underline">

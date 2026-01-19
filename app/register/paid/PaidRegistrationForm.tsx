@@ -50,6 +50,7 @@ interface FormData {
   // Billing fields
   billing: BillingFormData;
   // Partner fields
+  partnerTitle: string;
   partnerName: string;
   partnerEmail: string;
   partnerPhone: string;
@@ -78,6 +79,7 @@ interface FormErrors {
   city?: string;
   postalCode?: string;
   country?: string;
+  partnerTitle?: string;
   partnerName?: string;
   partnerEmail?: string;
   partner_gdpr_consent?: string;
@@ -116,6 +118,7 @@ export default function PaidRegistrationForm({
       country: 'HU',
     },
     // Partner
+    partnerTitle: '',
     partnerName: '',
     partnerEmail: '',
     partnerPhone: '',
@@ -201,6 +204,9 @@ export default function PaidRegistrationForm({
 
     // Step 4: Partner (if paired)
     if (currentStep === 4 && formData.ticketType === 'paid_paired') {
+      if (!formData.partnerTitle) {
+        newErrors.partnerTitle = 'Partner title is required';
+      }
       if (!formData.partnerName || formData.partnerName.length < 2) {
         newErrors.partnerName = 'Partner name is required (min. 2 characters)';
       }
@@ -305,6 +311,7 @@ export default function PaidRegistrationForm({
             country: formData.billing.country,
           },
           // Partner info (if paired)
+          partner_title: formData.ticketType === 'paid_paired' ? formData.partnerTitle : null,
           partner_name: formData.ticketType === 'paid_paired' ? formData.partnerName : null,
           partner_email: formData.ticketType === 'paid_paired' ? formData.partnerEmail : null,
           partner_phone: formData.ticketType === 'paid_paired' ? (formData.partnerPhone || null) : null,
@@ -362,8 +369,8 @@ export default function PaidRegistrationForm({
       <div className="max-w-lg w-full bg-white rounded-2xl shadow-xl p-8">
         {/* Header */}
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-slate-900 mb-2">Registration</h1>
-          <p className="text-slate-600">Dear {guest.name}!</p>
+          <h1 className="text-2xl font-bold text-slate-900 mb-1">Registration</h1>
+          <p className="text-3xl font-bold text-amber-600 mt-2">{guest.name}</p>
         </div>
 
         {/* Progress Indicator */}
@@ -410,6 +417,7 @@ export default function PaidRegistrationForm({
               {errors.city && <li>City: {errors.city}</li>}
               {errors.postalCode && <li>Postal Code: {errors.postalCode}</li>}
               {errors.taxNumber && <li>Tax Number: {errors.taxNumber}</li>}
+              {errors.partnerTitle && <li>Partner Title: {errors.partnerTitle}</li>}
               {errors.partnerName && <li>Partner Name: {errors.partnerName}</li>}
               {errors.partnerEmail && <li>Partner Email: {errors.partnerEmail}</li>}
               {errors.partner_gdpr_consent && <li>Partner GDPR: {errors.partner_gdpr_consent}</li>}
@@ -539,6 +547,32 @@ export default function PaidRegistrationForm({
               Partner information is required to issue the personalized QR ticket.
             </p>
             <div className="space-y-4">
+              {/* Partner Title */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Partner Title <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={formData.partnerTitle}
+                  onChange={(e) => updateFormData('partnerTitle', e.target.value)}
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 ${
+                    errors.partnerTitle ? 'border-red-500' : 'border-slate-300'
+                  }`}
+                  data-testid="partner-title-select"
+                >
+                  <option value="">-- Please select --</option>
+                  <option value="Mr.">Mr.</option>
+                  <option value="Ms.">Ms.</option>
+                  <option value="Mrs.">Mrs.</option>
+                  <option value="Dr.">Dr.</option>
+                  <option value="Prof.">Prof.</option>
+                  <option value="Prof. Dr.">Prof. Dr.</option>
+                </select>
+                {errors.partnerTitle && (
+                  <p className="text-red-600 text-sm mt-1">{errors.partnerTitle}</p>
+                )}
+              </div>
+
               {/* Partner Name */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
@@ -644,24 +678,6 @@ export default function PaidRegistrationForm({
                 </div>
               </div>
 
-              {/* Partner Seating Preferences */}
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Partner Seating Preferences (optional)
-                </label>
-                <textarea
-                  value={formData.partnerSeatingPreferences}
-                  onChange={(e) => updateFormData('partnerSeatingPreferences', e.target.value)}
-                  className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 border-slate-300"
-                  placeholder="Who would you like to sit with?"
-                  rows={2}
-                  maxLength={500}
-                />
-                <div className="flex justify-end mt-1">
-                  <span className="text-xs text-slate-500">{formData.partnerSeatingPreferences.length}/500</span>
-                </div>
-              </div>
-
               {/* Partner GDPR Consent */}
               <div className="pt-2">
                 <label className="flex items-start gap-3 cursor-pointer">
@@ -746,7 +762,7 @@ export default function PaidRegistrationForm({
         {/* Event Info Footer */}
         <div className="mt-8 pt-6 border-t border-slate-200">
           <div className="text-center text-sm text-slate-500">
-            <Link href="/" className="font-medium text-slate-700 hover:text-amber-600 transition-colors">BBJ Events 2026</Link>
+            <Link href="/" className="font-medium text-slate-700 hover:text-amber-600 transition-colors">CEO Gála 2026</Link>
             <p>Friday, March 27, 2026 • 6:00 PM • Budapest, Corinthia Hotel</p>
             <p className="mt-3">
               <Link href="/help" className="text-amber-600 hover:underline">

@@ -22,6 +22,8 @@ export interface GuestListParams {
   isVipReception?: boolean;
   hasTicket?: boolean;
   hasTable?: boolean;
+  // Special filter: guests who are approved but not checked in
+  notCheckedIn?: boolean;
 }
 
 /**
@@ -79,6 +81,7 @@ export async function getGuestList(
     isVipReception,
     hasTicket,
     hasTable,
+    notCheckedIn,
   } = params;
 
   // Build where clause
@@ -92,18 +95,24 @@ export async function getGuestList(
     ];
   }
 
-  // Array guest type filter (takes precedence)
-  if (guestTypes && guestTypes.length > 0) {
-    where.guest_type = { in: guestTypes };
-  } else if (type !== 'all') {
-    where.guest_type = type;
-  }
+  // Special filter: not checked in (approved status but no checkin record)
+  if (notCheckedIn) {
+    where.registration_status = 'approved';
+    where.checkin = null;
+  } else {
+    // Array guest type filter (takes precedence)
+    if (guestTypes && guestTypes.length > 0) {
+      where.guest_type = { in: guestTypes };
+    } else if (type !== 'all') {
+      where.guest_type = type;
+    }
 
-  // Array registration status filter (takes precedence)
-  if (registrationStatuses && registrationStatuses.length > 0) {
-    where.registration_status = { in: registrationStatuses };
-  } else if (status !== 'all') {
-    where.registration_status = status;
+    // Array registration status filter (takes precedence)
+    if (registrationStatuses && registrationStatuses.length > 0) {
+      where.registration_status = { in: registrationStatuses };
+    } else if (status !== 'all') {
+      where.registration_status = status;
+    }
   }
 
   // VIP reception filter

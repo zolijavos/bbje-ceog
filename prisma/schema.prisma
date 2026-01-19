@@ -400,6 +400,7 @@ enum RegistrationStatus {
   pending_approval  // Applicant waiting for admin approval
   rejected          // Applicant rejected by admin
   cancelled         // Guest cancelled their registration
+  checked_in        // Guest has checked in at the event
 }
 
 enum TicketType {

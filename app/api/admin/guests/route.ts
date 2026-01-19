@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
 
     // Parse array filters
     const validGuestTypes = ['vip', 'invited', 'paying_single', 'paying_paired', 'applicant'];
-    const validStatuses = ['invited', 'registered', 'approved', 'declined', 'pending', 'pending_approval', 'rejected'];
+    const validStatuses = ['invited', 'registered', 'approved', 'declined', 'pending', 'pending_approval', 'rejected', 'cancelled', 'checked_in'];
 
     let guestTypes: GuestType[] | undefined;
     if (guestTypesParam) {
@@ -72,6 +72,9 @@ export async function GET(request: NextRequest) {
     const hasTicket = hasTicketParam === 'true' ? true : hasTicketParam === 'false' ? false : undefined;
     const hasTable = hasTableParam === 'true' ? true : hasTableParam === 'false' ? false : undefined;
 
+    // Special filter: not checked in (approved but no checkin record)
+    const notCheckedIn = statusParam === 'not_checked_in';
+
     // Validate single guest type (legacy support)
     let type: GuestType | 'all' = 'all';
     if (typeParam !== 'all' && !guestTypes) {
@@ -82,7 +85,7 @@ export async function GET(request: NextRequest) {
 
     // Validate single registration status (legacy support)
     let status: RegistrationStatus | 'all' = 'all';
-    if (statusParam !== 'all' && !registrationStatuses) {
+    if (statusParam !== 'all' && !registrationStatuses && !notCheckedIn) {
       if (validStatuses.includes(statusParam)) {
         status = statusParam as RegistrationStatus;
       }
@@ -100,6 +103,7 @@ export async function GET(request: NextRequest) {
       isVipReception,
       hasTicket,
       hasTable,
+      notCheckedIn,
     });
 
     // Optionally include stats

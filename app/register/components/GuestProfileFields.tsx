@@ -56,7 +56,7 @@ export default function GuestProfileFields({
     <div className="space-y-4">
       {/* Title/Salutation */}
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">
+        <label className="block text-sm font-medium text-neutral-800 mb-1">
           Title (optional)
         </label>
         <select
@@ -81,7 +81,7 @@ export default function GuestProfileFields({
 
       {/* Phone Number - REQUIRED */}
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">
+        <label className="block text-sm font-medium text-neutral-800 mb-1">
           Phone Number <span className="text-red-500">*</span>
         </label>
         <input
@@ -101,7 +101,7 @@ export default function GuestProfileFields({
 
       {/* Company - REQUIRED */}
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">
+        <label className="block text-sm font-medium text-neutral-800 mb-1">
           Company / Organization <span className="text-red-500">*</span>
         </label>
         <input
@@ -122,7 +122,7 @@ export default function GuestProfileFields({
 
       {/* Position - REQUIRED */}
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">
+        <label className="block text-sm font-medium text-neutral-800 mb-1">
           Position <span className="text-red-500">*</span>
         </label>
         <input
@@ -143,7 +143,7 @@ export default function GuestProfileFields({
 
       {/* Dietary Requirements */}
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">
+        <label className="block text-sm font-medium text-neutral-800 mb-1">
           Dietary Requirements / Food Allergies (optional)
         </label>
         <textarea
@@ -163,13 +163,13 @@ export default function GuestProfileFields({
           ) : (
             <span />
           )}
-          <span className="text-xs text-slate-500">{dietaryRequirements.length}/500</span>
+          <span className="text-xs text-neutral-400">{dietaryRequirements.length}/500</span>
         </div>
       </div>
 
       {/* Seating Preferences */}
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">
+        <label className="block text-sm font-medium text-neutral-800 mb-1">
           Seating Preferences (optional)
         </label>
         <textarea
@@ -189,7 +189,7 @@ export default function GuestProfileFields({
           ) : (
             <span />
           )}
-          <span className="text-xs text-slate-500">{seatingPreferences.length}/500</span>
+          <span className="text-xs text-neutral-400">{seatingPreferences.length}/500</span>
         </div>
       </div>
     </div>

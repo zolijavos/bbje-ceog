@@ -128,7 +128,7 @@ export default function RegisterError({
       <div className="max-w-md w-full">
         {/* Logo/Header */}
         <div className="text-center mb-8">
-          <h1 className="font-display text-4xl font-semibold text-white tracking-tight">BBJ Events 2026</h1>
+          <h1 className="font-display text-4xl font-semibold text-white tracking-tight">CEO Gála 2026</h1>
           <p className="text-accent-teal mt-2 font-sans uppercase tracking-widest text-sm">Registration</p>
         </div>
 

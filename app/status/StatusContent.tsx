@@ -125,7 +125,7 @@ export default function StatusContent({
         <div className="text-center mb-10">
           <Link href="/" className="inline-block hover:opacity-80 transition-opacity">
             <h1 className="font-display text-4xl md:text-5xl font-semibold text-white tracking-tight mb-3">
-              BBJ Events 2026
+              CEO Gála 2026
             </h1>
           </Link>
           <p className="text-accent-teal uppercase tracking-widest text-sm font-sans">

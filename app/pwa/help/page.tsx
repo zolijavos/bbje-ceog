@@ -56,7 +56,7 @@ const faqSections: FAQSection[] = [
       {
         id: 'event-1',
         question: 'When and where is the event?',
-        answer: `The BBJ Events 2026 takes place on ${formatEventDate()} at ${formatEventTime()}. The venue is ${EVENT_CONFIG.venue.name}, located at ${EVENT_CONFIG.venue.address}.`,
+        answer: `The CEO Gala 2026 takes place on ${formatEventDate()} at ${formatEventTime()}. The venue is ${EVENT_CONFIG.venue.name}, located at ${EVENT_CONFIG.venue.address}.`,
       },
       {
         id: 'event-2',
@@ -219,7 +219,7 @@ export default function PWAHelpPage() {
             Guest Guide
           </h2>
           <p className="pwa-text-secondary text-sm">
-            Everything you need to know for the BBJ Events 2026
+            Everything you need to know for the CEO Gála 2026
           </p>
         </Card>
 

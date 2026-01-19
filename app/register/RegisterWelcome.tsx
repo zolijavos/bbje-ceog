@@ -48,7 +48,7 @@ export default function RegisterWelcome({ guest }: RegisterWelcomeProps) {
       <div className="max-w-md w-full">
         {/* Logo/Header */}
         <div className="text-center mb-8">
-          <h1 className="font-display text-4xl font-bold text-white tracking-tight drop-shadow-lg" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>BBJ Events 2026</h1>
+          <h1 className="font-display text-4xl font-bold text-white tracking-tight drop-shadow-lg" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>CEO Gála 2026</h1>
           <p className="text-white mt-2 font-sans uppercase tracking-widest text-sm font-semibold">Registration</p>
         </div>
 
@@ -75,8 +75,11 @@ export default function RegisterWelcome({ guest }: RegisterWelcomeProps) {
 
           {/* Greeting */}
           <h2 className="font-display text-2xl font-semibold text-center text-neutral-800 mb-2">
-            Welcome, {guest.name}!
+            Welcome,
           </h2>
+          <p className="text-center text-3xl font-bold text-accent-teal mb-2">
+            {guest.name}
+          </p>
           <p className="text-center text-neutral-500 mb-6 font-sans">
             Your invitation has been validated. Please continue with registration.
           </p>
