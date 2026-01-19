@@ -84,7 +84,15 @@ sudo bash deploy/configure.sh
 
 Interaktívan bekéri az összes szükséges beállítást és létrehozza a `.env` fájlt.
 
-### 5. Alkalmazás indítása
+### 5. PM2 konfiguráció
+
+```bash
+cp deploy/ecosystem.config.example.js ecosystem.config.js
+```
+
+Ha más útvonalra telepítettél (nem `/var/www/ceog`), szerkeszd a `cwd` értékét az `ecosystem.config.js` fájlban.
+
+### 6. Alkalmazás indítása
 
 ```bash
 sudo bash deploy/start.sh
@@ -96,13 +104,13 @@ Ez:
 - Buildeli az alkalmazást
 - Elindítja PM2-vel
 
-### 6. Nginx beállítása
+### 7. Nginx beállítása
 
 ```bash
 sudo bash deploy/setup-nginx.sh
 ```
 
-### 7. SSL tanúsítvány
+### 8. SSL tanúsítvány
 
 ```bash
 sudo bash deploy/setup-ssl.sh
