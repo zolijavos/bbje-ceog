@@ -56,6 +56,23 @@ if [ ! -f ".env" ]; then
 fi
 print_success ".env fájl megtalálva"
 
+# ecosystem.config.js fájl
+if [ ! -f "ecosystem.config.js" ]; then
+    print_error "ecosystem.config.js nem található!"
+    echo "Másold át a példa fájlt:"
+    echo "  cp deploy/ecosystem.config.example.js ecosystem.config.js"
+    echo "Ha más útvonalra telepítettél, szerkeszd a 'cwd' értékét!"
+    exit 1
+fi
+print_success "ecosystem.config.js megtalálva"
+
+# Extract app name and port from ecosystem.config.js
+APP_NAME=$(grep -oP "name:\s*['\"]?\K[^'\"',]+" ecosystem.config.js | head -1)
+APP_PORT=$(grep -oP "PORT:\s*\K[0-9]+" ecosystem.config.js | head -1)
+APP_NAME=${APP_NAME:-ceog}
+APP_PORT=${APP_PORT:-3000}
+print_success "App: $APP_NAME, Port: $APP_PORT"
+
 # Node.js
 if ! command -v node &> /dev/null; then
     print_error "Node.js nincs telepítve!"
@@ -147,8 +164,8 @@ print_success "Build sikeres"
 print_header "Alkalmazás indítása PM2-vel"
 
 # Leállítjuk ha fut
-pm2 stop ceog 2>/dev/null || true
-pm2 delete ceog 2>/dev/null || true
+pm2 stop "$APP_NAME" 2>/dev/null || true
+pm2 delete "$APP_NAME" 2>/dev/null || true
 
 # Indítás
 pm2 start ecosystem.config.js
@@ -172,7 +189,7 @@ echo ""
 echo "Alkalmazás tesztelése..."
 sleep 2
 
-if curl -s -o /dev/null -w "%{http_code}" http://localhost:3000 | grep -q "200\|302"; then
+if curl -s -o /dev/null -w "%{http_code}" "http://localhost:$APP_PORT" | grep -q "200\|302"; then
     print_success "Az alkalmazás fut és válaszol!"
 else
     print_warning "Az alkalmazás még nem válaszol - várj pár másodpercet"
@@ -187,15 +204,15 @@ echo ""
 echo -e "${GREEN}Az alkalmazás sikeresen elindult!${NC}"
 echo ""
 echo -e "${CYAN}Hasznos parancsok:${NC}"
-echo "  pm2 status        - Alkalmazás állapota"
-echo "  pm2 logs ceog     - Logok megtekintése"
-echo "  pm2 restart ceog  - Újraindítás"
-echo "  pm2 stop ceog     - Leállítás"
+echo "  pm2 status            - Alkalmazás állapota"
+echo "  pm2 logs $APP_NAME    - Logok megtekintése"
+echo "  pm2 restart $APP_NAME - Újraindítás"
+echo "  pm2 stop $APP_NAME    - Leállítás"
 echo ""
 echo -e "${YELLOW}Következő lépések:${NC}"
 echo "  1. Nginx beállítása: bash deploy/setup-nginx.sh"
 echo "  2. SSL tanúsítvány:  bash deploy/setup-ssl.sh"
 echo ""
 echo -e "${CYAN}Lokális teszt:${NC}"
-echo "  curl http://localhost:3000"
+echo "  curl http://localhost:$APP_PORT"
 echo ""
