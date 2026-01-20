@@ -225,7 +225,7 @@ A `.env` fájlban az alábbi változókat kell beállítani:
 | Változó | Leírás | Példa |
 |---------|--------|-------|
 | `NEXTAUTH_URL` | Alkalmazás URL | `https://ceogala.hu` |
-| `NEXTAUTH_SECRET` | Session titkosítás (32 kar.) | `openssl rand -hex 32` |
+| `NEXTAUTH_SECRET` | Session titkosítás (64 kar.) | `openssl rand -hex 64` |
 
 ### Stripe (Fizetés)
 
@@ -248,11 +248,8 @@ A `.env` fájlban az alábbi változókat kell beállítani:
 ### Titkos kulcsok generálása
 
 ```bash
-# APP_SECRET és QR_SECRET (64 karakter)
+# APP_SECRET, QR_SECRET és NEXTAUTH_SECRET (mind 64 karakter)
 openssl rand -hex 64
-
-# NEXTAUTH_SECRET (32 karakter)
-openssl rand -hex 32
 ```
 
 ---

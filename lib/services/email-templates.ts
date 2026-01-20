@@ -28,9 +28,7 @@ export const DEFAULT_TEMPLATES = {
     .header-image { width: 100%; max-width: 680px; height: auto; display: block; margin: 0 auto 30px auto; }
     .content { padding: 0 20px; text-align: center; }
     p { margin: 0 0 20px 0; font-size: 15px; text-align: center; color: #333333; }
-    .greeting { font-size: 16px; margin-bottom: 25px; }
-    .guest-name { font-size: 22px; font-weight: 700; color: #1a1a2e; display: block; margin-top: 8px; }
-    .event-title { font-size: 28px; font-weight: bold; text-align: center; color: #000000; margin: 25px 0; }
+    .greeting { font-size: 15px; margin-bottom: 25px; }
     .details-section { margin: 35px 0; text-align: center; }
     .details-section p { margin: 5px 0; font-size: 15px; }
     .cta-container { text-align: center; margin: 35px 0 25px 0; }
@@ -52,19 +50,15 @@ export const DEFAULT_TEMPLATES = {
     <img src="{{baseUrl}}/email-assets/CEO_Gala_2026_invitation_header_709x213.jpg" alt="CEO Gala 2026 - March 27, 2026" class="header-image" />
 
     <div class="content">
-      <p class="greeting">Dear<span class="guest-name">{{guestName}}</span></p>
+      <p class="greeting">Dear {{guestName}},</p>
 
-      <p>The Budapest Business Journal is delighted to invite you to the official</p>
+      <p>We are delighted to announce that the next <strong>CEO Gala</strong> will take place on <strong>Friday, March 27, 2026</strong>, at the <strong>Corinthia Hotel Budapest</strong>.</p>
 
-      <div class="event-title">CEO Gala 2026</div>
+      <p>Now in its <strong>12th edition</strong>, the CEO Gala has become a <strong>landmark event</strong> in Hungary's business calendar, a <strong>must-attend occasion</strong> for the country's most distinguished business leaders, diplomats, and representatives of international business organizations.</p>
 
-      <p>hosted at Corinthia Hotel Budapest on Friday, March 27, 2026.</p>
+      <p>The evening brings together a unique <strong>concentration of decision-makers</strong> under one roof, individuals whose vision, leadership, and achievements drive a remarkable share of Hungary's economic performance. The atmosphere is truly inspiring: a celebration of <strong>excellence, innovation, and recognition</strong>, where meaningful connections are made and maintained.</p>
 
-      <p>As has now become a tradition of several years, two awards will be presented during the evening: the Expat CEO Award, granted to the most successful and innovative expatriate CEO working in Hungary; and the CEO Community Award, bestowed to a Hungarian executive who has been a role model by being successful in markets while demonstrating exceptional commitment to the community.</p>
-
-      <p>Two professional awards committees will choose the winners minutes before the gala starts from a shortlist of three candidates.</p>
-
-      <p>The Budapest Business Journal and our official event partner, the Hungarian Investment Promotion Agency (HIPA), are delighted to welcome you at our CEO Gala.</p>
+      <p>During the evening, we will present two of the most prestigious titles in Hungary's business community. The <strong>Expat CEO of the Year Award</strong> honors an outstanding international business leader for their contribution to Hungary's economic life, while the <strong>CEO Community Award</strong> recognizes a visionary leader whose activities have had a lasting, positive impact on society and the business environment.</p>
 
       <div class="details-section">
         <p>Date:</p>
@@ -136,17 +130,13 @@ export const DEFAULT_TEMPLATES = {
 
 Dear {{guestName}},
 
-The Budapest Business Journal is delighted to invite you to the official
+We are delighted to announce that the next CEO Gala will take place on Friday, March 27, 2026, at the Corinthia Hotel Budapest.
 
-CEO Gala 2026
+Now in its 12th edition, the CEO Gala has become a landmark event in Hungary's business calendar, a must-attend occasion for the country's most distinguished business leaders, diplomats, and representatives of international business organizations.
 
-hosted at Corinthia Hotel Budapest on Friday, March 27, 2026.
+The evening brings together a unique concentration of decision-makers under one roof, individuals whose vision, leadership, and achievements drive a remarkable share of Hungary's economic performance. The atmosphere is truly inspiring: a celebration of excellence, innovation, and recognition, where meaningful connections are made and maintained.
 
-As has now become a tradition of several years, two awards will be presented during the evening: the Expat CEO Award, granted to the most successful and innovative expatriate CEO working in Hungary; and the CEO Community Award, bestowed to a Hungarian executive who has been a role model by being successful in markets while demonstrating exceptional commitment to the community.
-
-Two professional awards committees will choose the winners minutes before the gala starts from a shortlist of three candidates.
-
-The Budapest Business Journal and our official event partner, the Hungarian Investment Promotion Agency (HIPA), are delighted to welcome you at our CEO Gala.
+During the evening, we will present two of the most prestigious titles in Hungary's business community. The Expat CEO of the Year Award honors an outstanding international business leader for their contribution to Hungary's economic life, while the CEO Community Award recognizes a visionary leader whose activities have had a lasting, positive impact on society and the business environment.
 
 Date:
 Friday, March 27, 2026, 7 p.m.

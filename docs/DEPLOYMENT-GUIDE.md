@@ -350,10 +350,10 @@ QR_SECRET="GENERALJ_64_KARAKTERES_VELETLENSZERU_STRINGET_QR_JEGYEKHEZ"
 
 # ============================================
 # NEXTAUTH (Kötelező)
-# Generálás: openssl rand -base64 32
+# Generálás: openssl rand -base64 64
 # ============================================
 NEXTAUTH_URL="https://yourdomain.com"
-NEXTAUTH_SECRET="GENERALJ_32_KARAKTERES_VELETLENSZERU_STRINGET"
+NEXTAUTH_SECRET="GENERALJ_64_KARAKTERES_VELETLENSZERU_STRINGET_ADMIN_SESSIONHOZ"
 
 # ============================================
 # STRIPE FIZETÉS (Kötelező)
@@ -385,11 +385,8 @@ SHOW_TABLE_NUMBERS=true
 ### Titkok Generálása
 
 ```bash
-# APP_SECRET és QR_SECRET generálása (64 karakter mindkettő)
+# APP_SECRET, QR_SECRET és NEXTAUTH_SECRET generálása (mind 64 karakter)
 openssl rand -base64 64
-
-# NEXTAUTH_SECRET generálása (32 karakter)
-openssl rand -base64 32
 ```
 
 ---
