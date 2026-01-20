@@ -18,7 +18,9 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 NC='\033[0m'
 
-INSTALL_PATH="/var/www/ceog"
+# Auto-detect install path from script location
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+INSTALL_PATH="$(dirname "$SCRIPT_DIR")"
 
 print_header() {
     echo ""
