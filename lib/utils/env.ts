@@ -76,17 +76,26 @@ function validateSecret(name: keyof EnvConfig, minLength: number = 32): string {
 
 /**
  * Validates email configuration
+ * SMTP credentials are optional - email will be disabled if not configured
  */
-function validateEmail(): void {
-  validateEnvVar('SMTP_HOST');
-  validateEnvVar('SMTP_PORT');
-  validateEnvVar('SMTP_USER');
-  validateEnvVar('SMTP_PASS');
+function validateEmail(): boolean {
+  const host = process.env.SMTP_HOST;
+  const port = process.env.SMTP_PORT;
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASS;
 
-  const port = parseInt(process.env.SMTP_PORT || '587', 10);
-  if (isNaN(port) || port < 1 || port > 65535) {
-    throw new Error(`Invalid SMTP_PORT: ${process.env.SMTP_PORT}. Must be a valid port number (1-65535).`);
+  // All SMTP vars must be set for email to work
+  if (!host || !port || !user || !pass) {
+    console.warn('⚠️  SMTP not fully configured - email functionality will be disabled');
+    return false;
   }
+
+  const portNum = parseInt(port, 10);
+  if (isNaN(portNum) || portNum < 1 || portNum > 65535) {
+    throw new Error(`Invalid SMTP_PORT: ${port}. Must be a valid port number (1-65535).`);
+  }
+
+  return true;
 }
 
 /**
@@ -111,8 +120,11 @@ export function validateEnv(): void {
     validateEnvVar('STRIPE_WEBHOOK_SECRET');
     validateEnvVar('NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY');
 
-    // Email
-    validateEmail();
+    // Email (optional - warns if not configured)
+    const emailConfigured = validateEmail();
+    if (!emailConfigured) {
+      console.warn('   Email features (magic links, tickets) will not work until SMTP is configured.');
+    }
 
     // NextAuth (must be at least 64 chars for security - prevents brute force attacks)
     validateEnvVar('NEXTAUTH_URL');
