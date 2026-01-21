@@ -10,7 +10,7 @@ import { prisma } from '@/lib/db/prisma';
 import { scheduleEmail } from '@/lib/services/email-scheduler';
 import { DEFAULT_TEMPLATES, type TemplateSlug } from '@/lib/services/email-templates';
 import { logError, logInfo } from '@/lib/utils/logger';
-import { getFullName } from '@/lib/utils/name';
+import { getDisplayName } from '@/lib/utils/name';
 import { z } from 'zod';
 
 // Valid enum values for type-safe filtering
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
       // Use specific guest IDs
       guests = await prisma.guest.findMany({
         where: { id: { in: guest_ids } },
-        select: { id: true, first_name: true, last_name: true, email: true },
+        select: { id: true, first_name: true, last_name: true, title: true, email: true },
       });
     } else if (filter) {
       // Build filter query
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
 
       guests = await prisma.guest.findMany({
         where,
-        select: { id: true, first_name: true, last_name: true, email: true },
+        select: { id: true, first_name: true, last_name: true, title: true, email: true },
         take: MAX_BULK_RECIPIENTS + 1, // +1 to detect if limit exceeded
       });
     } else {
@@ -164,7 +164,7 @@ export async function POST(request: NextRequest) {
       guestsToSchedule.map(async (guest) => {
         const guestVariables = {
           ...variables,
-          guestName: getFullName(guest.first_name, guest.last_name),
+          guestName: getDisplayName(guest.first_name, guest.last_name, guest.title),
         };
 
         return scheduleEmail({
