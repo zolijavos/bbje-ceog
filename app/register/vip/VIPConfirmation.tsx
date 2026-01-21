@@ -101,7 +101,8 @@ interface FormData {
   // Partner fields (optional for VIP)
   hasPartner: boolean;
   partnerTitle: string;
-  partnerName: string;
+  partnerFirstName: string;
+  partnerLastName: string;
   partnerEmail: string;
   partnerPhone: string;
   partnerCompany: string;
@@ -121,7 +122,8 @@ interface FormErrors {
   gdpr_consent?: string;
   cancellation_accepted?: string;
   partner_title?: string;
-  partner_name?: string;
+  partner_first_name?: string;
+  partner_last_name?: string;
   partner_email?: string;
   partner_phone?: string;
   partner_company?: string;
@@ -191,7 +193,8 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
     cancellationAccepted: false,
     hasPartner: false,
     partnerTitle: '',
-    partnerName: '',
+    partnerFirstName: '',
+    partnerLastName: '',
     partnerEmail: '',
     partnerPhone: '',
     partnerCompany: '',
@@ -220,8 +223,11 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
       if (!formData.partnerTitle) {
         newErrors.partner_title = 'Partner title is required';
       }
-      if (!formData.partnerName || formData.partnerName.trim().length < 2) {
-        newErrors.partner_name = 'Partner name is required (min. 2 characters)';
+      if (!formData.partnerFirstName || formData.partnerFirstName.trim().length < 1) {
+        newErrors.partner_first_name = 'Partner first name is required';
+      }
+      if (!formData.partnerLastName || formData.partnerLastName.trim().length < 1) {
+        newErrors.partner_last_name = 'Partner last name is required';
       }
       if (!formData.partnerEmail || formData.partnerEmail.trim().length < 5) {
         newErrors.partner_email = 'Partner email is required';
@@ -293,7 +299,8 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
           cancellation_accepted: formData.cancellationAccepted,
           // Partner info (optional for VIP)
           has_partner: formData.hasPartner,
-          partner_name: formData.hasPartner ? formData.partnerName : null,
+          partner_first_name: formData.hasPartner ? formData.partnerFirstName : null,
+          partner_last_name: formData.hasPartner ? formData.partnerLastName : null,
           partner_email: formData.hasPartner ? formData.partnerEmail : null,
           partner_title: formData.hasPartner ? (formData.partnerTitle || null) : null,
           partner_phone: formData.hasPartner ? (formData.partnerPhone || null) : null,
@@ -404,10 +411,10 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
             <button
               onClick={handleDecline}
               disabled={isLoading}
-              className={`w-full py-3 px-6 rounded-lg font-medium text-sm uppercase tracking-wider transition-all ${t.buttonSecondary}`}
+              className="w-full py-3 px-6 rounded-lg text-sm uppercase tracking-wider transition-all bg-transparent border border-white/20 hover:border-white/40 text-white/60 hover:text-white/80"
               data-testid="decline-attendance-button"
             >
-              {isLoading ? 'Processing...' : 'I CANNOT ATTEND'}
+              {isLoading ? 'Processing...' : 'I cannot attend'}
             </button>
           </div>
 
@@ -534,7 +541,8 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
               {errors.company && <li>Company: {errors.company}</li>}
               {errors.position && <li>Position: {errors.position}</li>}
               {errors.partner_title && <li>Partner Title: {errors.partner_title}</li>}
-              {errors.partner_name && <li>Partner Name: {errors.partner_name}</li>}
+              {errors.partner_first_name && <li>Partner First Name: {errors.partner_first_name}</li>}
+              {errors.partner_last_name && <li>Partner Last Name: {errors.partner_last_name}</li>}
               {errors.partner_email && <li>Partner Email: {errors.partner_email}</li>}
               {errors.partner_phone && <li>Partner Phone: {errors.partner_phone}</li>}
               {errors.partner_company && <li>Partner Company: {errors.partner_company}</li>}
@@ -590,7 +598,8 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
                   // Clear partner fields when unchecked
                   ...(checked ? {} : {
                     partnerTitle: '',
-                    partnerName: '',
+                    partnerFirstName: '',
+                    partnerLastName: '',
                     partnerEmail: '',
                     partnerPhone: '',
                     partnerCompany: '',
@@ -603,7 +612,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
                 // Clear partner errors when unchecked
                 if (!checked) {
                   setErrors((prev) => {
-                    const { partner_name, partner_email, partner_gdpr_consent, ...rest } = prev;
+                    const { partner_first_name, partner_last_name, partner_email, partner_gdpr_consent, ...rest } = prev;
                     return rest;
                   });
                 }
@@ -641,20 +650,37 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
                 )}
               </div>
 
-              {/* Partner Name */}
+              {/* Partner First Name */}
               <div>
                 <label className={`block text-sm font-medium ${t.text} mb-1`}>
-                  Partner Name <span className="text-red-400">*</span>
+                  Partner First Name <span className="text-red-400">*</span>
                 </label>
                 <input
                   type="text"
-                  value={formData.partnerName}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, partnerName: e.target.value }))}
-                  placeholder="Full name"
-                  className={`w-full px-4 py-3 rounded-lg border ${t.inputBg} ${errors.partner_name ? 'border-red-500' : ''}`}
+                  value={formData.partnerFirstName}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, partnerFirstName: e.target.value }))}
+                  placeholder="First name"
+                  className={`w-full px-4 py-3 rounded-lg border ${t.inputBg} ${errors.partner_first_name ? 'border-red-500' : ''}`}
                 />
-                {errors.partner_name && (
-                  <p className="text-red-400 text-sm mt-1">{errors.partner_name}</p>
+                {errors.partner_first_name && (
+                  <p className="text-red-400 text-sm mt-1">{errors.partner_first_name}</p>
+                )}
+              </div>
+
+              {/* Partner Last Name */}
+              <div>
+                <label className={`block text-sm font-medium ${t.text} mb-1`}>
+                  Partner Last Name <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={formData.partnerLastName}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, partnerLastName: e.target.value }))}
+                  placeholder="Last name"
+                  className={`w-full px-4 py-3 rounded-lg border ${t.inputBg} ${errors.partner_last_name ? 'border-red-500' : ''}`}
+                />
+                {errors.partner_last_name && (
+                  <p className="text-red-400 text-sm mt-1">{errors.partner_last_name}</p>
                 )}
               </div>
 
@@ -781,7 +807,6 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
             onGdprChange={(checked) => setFormData((prev) => ({ ...prev, gdprConsent: checked }))}
             onCancellationChange={(checked) => setFormData((prev) => ({ ...prev, cancellationAccepted: checked }))}
             errors={errors}
-            guestType={guest.guest_type as 'vip' | 'paying_single' | 'paying_paired' | 'applicant'}
           />
         </div>
 

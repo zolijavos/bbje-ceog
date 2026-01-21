@@ -857,7 +857,6 @@ export default function PaidRegistrationForm({
               onGdprChange={(checked) => updateFormData('gdprConsent', checked)}
               onCancellationChange={(checked) => updateFormData('cancellationAccepted', checked)}
               errors={errors}
-              guestType={formData.ticketType as 'paying_single' | 'paying_paired'}
             />
           </div>
         )}
