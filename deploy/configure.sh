@@ -17,7 +17,9 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 NC='\033[0m'
 
-INSTALL_PATH="/var/www/ceog"
+# Auto-detect install path from script location
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+INSTALL_PATH="$(dirname "$SCRIPT_DIR")"
 ENV_FILE="$INSTALL_PATH/.env"
 
 print_header() {
@@ -280,11 +282,11 @@ module.exports = {
       PORT: 3000
     },
     instances: 1,
-    exec_mode: 'fork',
+    exec_mode: 'cluster',
     watch: false,
     max_memory_restart: '500M',
-    error_file: '/var/log/ceog/error.log',
-    out_file: '/var/log/ceog/out.log',
+    error_file: '/var/log/pm2/ceog-error.log',
+    out_file: '/var/log/pm2/ceog-out.log',
     merge_logs: true,
     time: true
   }]
@@ -292,8 +294,8 @@ module.exports = {
 EOF
 
 # Log mappa létrehozása
-mkdir -p /var/log/ceog
-chmod 755 /var/log/ceog
+mkdir -p /var/log/pm2
+chmod 755 /var/log/pm2
 
 print_success "ecosystem.config.js létrehozva"
 

@@ -4,7 +4,10 @@
 // Másold át a projekt gyökérkönyvtárába:
 //   cp deploy/ecosystem.config.example.js ecosystem.config.js
 //
-// Szerkeszd a cwd útvonalat ha más helyre telepítettél!
+// Vagy használd a configure.sh scriptet:
+//   bash deploy/configure.sh
+//
+// FONTOS: Szerkeszd a cwd útvonalat ha más helyre telepítettél!
 // =============================================
 
 module.exports = {
@@ -18,8 +21,15 @@ module.exports = {
     // Telepítési útvonal - MÓDOSÍTSD HA MÁS HELYRE TELEPÍTETTÉL!
     cwd: '/var/www/ceog',
 
-    // Egy példány (Next.js saját maga kezeli a clustering-et)
+    // Környezeti változók
+    env: {
+      NODE_ENV: 'production',
+      PORT: 3000
+    },
+
+    // Egy példány cluster módban
     instances: 1,
+    exec_mode: 'cluster',
 
     // Automatikus újraindítás hiba esetén
     autorestart: true,
@@ -28,13 +38,12 @@ module.exports = {
     watch: false,
 
     // Maximum memóriahasználat - újraindít ha túllépi
-    max_memory_restart: '1G',
+    max_memory_restart: '500M',
 
-    // Környezeti változók
-    env: {
-      NODE_ENV: 'production',
-      HOST: '127.0.0.1',  // Biztonság: csak localhost-ról elérhető (Nginx mögött)
-      PORT: 3000
-    }
+    // Log fájlok
+    error_file: '/var/log/pm2/ceog-error.log',
+    out_file: '/var/log/pm2/ceog-out.log',
+    merge_logs: true,
+    time: true
   }]
 };
