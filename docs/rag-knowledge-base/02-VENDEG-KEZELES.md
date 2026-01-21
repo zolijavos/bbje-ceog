@@ -44,8 +44,10 @@ Admin → Guests (Vendégek) menüpont
 
 **CSV oszlopok:**
 - `email` (kötelező)
-- `name` (kötelező)
+- `first_name` (kötelező) - vendég keresztneve
+- `last_name` (kötelező) - vendég vezetékneve
 - `guest_type` (vip / paying_single / paying_paired)
+- `title` (opcionális) - megszólítás (Dr., Mr., Ms., stb.)
 - `company` (opcionális)
 - `position` (opcionális)
 - `phone` (opcionális)
@@ -58,7 +60,9 @@ Admin → Guests (Vendégek) menüpont
 4. Mentés
 
 **Szerkeszthető mezők:**
-- Név
+- Keresztnév (First Name)
+- Vezetéknév (Last Name)
+- Megszólítás / Title (Dr., Mr., Ms., stb.)
 - Email (figyelem: ha már regisztrált, értesíteni kell!)
 - Típus (csak ha még nem regisztrált)
 - Cég, Pozíció, Telefon

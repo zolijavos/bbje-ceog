@@ -30,6 +30,10 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
   - EN: Guest titles (Dr., Prof., etc.) now appear in all email greetings including bulk emails, scheduled emails, and magic link emails.
   - HU: Vendég címzések (Dr., Prof., stb.) mostantól megjelennek minden email megszólításban, beleértve a tömeges, ütemezett és magic link emaileket.
 
+- **Removed Link Fallback from Emails** / **Link Fallback Eltávolítva Emailekből**
+  - EN: Removed "If the button doesn't work, copy this link" fallback section from magic link and applicant approval emails for cleaner design.
+  - HU: "Ha a gomb nem működik, másold ki a linket" fallback szekció eltávolítva a magic link és jelentkező jóváhagyás emailekből a tisztább dizájn érdekében.
+
 ### Improvements / Javítások
 
 - **Subtle Decline Button** / **Visszafogott Elutasítás Gomb**

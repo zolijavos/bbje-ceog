@@ -133,9 +133,10 @@ The list can be filtered by guest type, status, payment status, VIP reception, a
     question: 'How do I add a new guest?',
     answer: `1. Click the **"+ Add Guest"** button above the list
 2. Fill out the form:
-   • **Name**: Guest's full name (required)
+   • **First Name**: Guest's first name (required)
+   • **Last Name**: Guest's last name (required)
    • **Email**: Email address - must be unique (required)
-   • **Title**: Salutation (Mr., Ms., Dr., etc.)
+   • **Title**: Salutation (Mr., Ms., Dr., etc.) - shown before name in emails
    • **Guest Type**: Invited (free), Paying Single (1 ticket), Paying Paired (2 tickets)
    • **Dietary Requirements**: Dietary needs (vegetarian, vegan, gluten-free, etc.)
    • **Seating Preferences**: Seating preferences
@@ -316,7 +317,8 @@ The list now sorts by **most recently updated** first, so new changes appear at 
 
 **Required columns**:
 • \`email\` - Guest email address (must be unique)
-• \`name\` - Guest full name
+• \`first_name\` - Guest's first name
+• \`last_name\` - Guest's last name
 • \`guest_type\` - Type: vip, paying_single, or paying_paired
 
 **Optional columns**:
@@ -334,10 +336,10 @@ The list now sorts by **most recently updated** first, so new changes appear at 
     question: 'What format should the CSV file be?',
     answer: `**Example CSV file content**:
 \`\`\`
-email,name,guest_type,title,company
-john@example.com,John Doe,vip,Mr.,Acme Inc.
-jane@example.com,Jane Smith,paying_single,Ms.,Tech Corp
-bob@example.com,Bob Wilson,paying_paired,Dr.,Health Ltd.
+email,first_name,last_name,guest_type,title,company
+john@example.com,John,Doe,vip,Mr.,Acme Inc.
+jane@example.com,Jane,Smith,paying_single,Ms.,Tech Corp
+bob@example.com,Bob,Wilson,paying_paired,Dr.,Health Ltd.
 \`\`\`
 
 **Rules**:
@@ -1624,9 +1626,10 @@ A lista szűrhető vendég típus, státusz, fizetési státusz, VIP fogadás é
     question: 'Hogyan adjak hozzá új vendéget?',
     answer: `1. Kattints a **"+ Add Guest"** gombra a lista felett
 2. Töltsd ki az űrlapot:
-   • **Name**: Vendég teljes neve (kötelező)
+   • **First Name**: Vendég keresztneve (kötelező)
+   • **Last Name**: Vendég vezetékneve (kötelező)
    • **Email**: Email cím - egyedinek kell lennie (kötelező)
-   • **Title**: Megszólítás (Mr., Ms., Dr., stb.)
+   • **Title**: Megszólítás (Mr., Ms., Dr., stb.) - emailekben a név előtt jelenik meg
    • **Guest Type**: Meghívott (ingyenes), Paying Single (1 jegy), Paying Paired (2 jegy)
    • **Dietary Requirements**: Étrendi igények (vegetáriánus, vegán, gluténmentes, stb.)
    • **Seating Preferences**: Ültetési preferenciák
@@ -1807,7 +1810,8 @@ A lista mostantól **a legutóbb módosított** szerint rendez, így az új vál
 
 **Kötelező oszlopok**:
 • \`email\` - Vendég email címe (egyedinek kell lennie)
-• \`name\` - Vendég teljes neve
+• \`first_name\` - Vendég keresztneve
+• \`last_name\` - Vendég vezetékneve
 • \`guest_type\` - Típus: vip, paying_single, vagy paying_paired
 
 **Opcionális oszlopok**:
@@ -1825,10 +1829,10 @@ A lista mostantól **a legutóbb módosított** szerint rendez, így az új vál
     question: 'Milyen formátumú legyen a CSV fájl?',
     answer: `**Példa CSV fájl tartalom**:
 \`\`\`
-email,name,guest_type,title,company
-john@example.com,John Doe,vip,Mr.,Acme Inc.
-jane@example.com,Jane Smith,paying_single,Ms.,Tech Corp
-bob@example.com,Bob Wilson,paying_paired,Dr.,Health Ltd.
+email,first_name,last_name,guest_type,title,company
+john@example.com,John,Doe,vip,Mr.,Acme Inc.
+jane@example.com,Jane,Smith,paying_single,Ms.,Tech Corp
+bob@example.com,Bob,Wilson,paying_paired,Dr.,Health Ltd.
 \`\`\`
 
 **Szabályok**:

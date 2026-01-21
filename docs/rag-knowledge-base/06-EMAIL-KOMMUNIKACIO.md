@@ -97,7 +97,7 @@ Admin → Email menüpont
 
 ### Sablon változók
 A sablonokban használható változók:
-- `{{name}}` - Vendég neve
+- `{{guestName}}` - Vendég teljes neve címzéssel (pl. "Dr. John Doe")
 - `{{email}}` - Vendég email címe
 - `{{event_date}}` - Esemény dátuma
 - `{{event_location}}` - Helyszín
