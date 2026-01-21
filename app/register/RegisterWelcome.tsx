@@ -184,12 +184,18 @@ export default function RegisterWelcome({ guest }: RegisterWelcomeProps) {
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-6 space-y-2">
-          <p className={`text-sm ${t.footerText}`}>
+        <div className="text-center mt-6 space-y-1">
+          <p className={`text-xs ${t.footerText}`}>
             Questions?{' '}
-            <Link href="/help" className={t.linkColor}>
+            <a href="https://bbj.hu/events/ceogala/#faq" target="_blank" rel="noopener noreferrer" className={t.linkColor}>
               View Registration Guide
-            </Link>
+            </a>
+          </p>
+          <p className={`text-xs ${t.footerText}`}>
+            Need more help:{' '}
+            <a href="mailto:event@bbj.hu" className={t.linkColor}>
+              event@bbj.hu
+            </a>
           </p>
         </div>
       </div>

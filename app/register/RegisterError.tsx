@@ -182,15 +182,25 @@ export default function RegisterError({
         </div>
 
         {/* Footer */}
-        <p className="text-center text-sm text-white/70 mt-6 font-sans">
-          Questions?{' '}
-          <Link
-            href="/help"
-            className="text-accent-teal hover:text-accent-teal-light"
-          >
-            View Registration Guide
-          </Link>
-        </p>
+        <div className="text-center text-xs text-white/70 mt-6 font-sans space-y-1">
+          <p>
+            Questions?{' '}
+            <a
+              href="https://bbj.hu/events/ceogala/#faq"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent-teal hover:text-accent-teal-light"
+            >
+              View Registration Guide
+            </a>
+          </p>
+          <p>
+            Need more help:{' '}
+            <a href="mailto:event@bbj.hu" className="text-accent-teal hover:text-accent-teal-light">
+              event@bbj.hu
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );

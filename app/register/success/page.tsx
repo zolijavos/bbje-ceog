@@ -190,15 +190,23 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
         )} */}
 
         {/* Contact Info */}
-        <div className="text-xs font-sans space-y-2">
+        <div className="text-xs font-sans space-y-1">
           <p className="text-neutral-600">
             Questions?{' '}
-            <Link
-              href="/help"
+            <a
+              href="https://bbj.hu/events/ceogala/#faq"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-accent-teal hover:text-accent-teal-dark"
             >
               View Registration Guide
-            </Link>
+            </a>
+          </p>
+          <p className="text-neutral-600">
+            Need more help:{' '}
+            <a href="mailto:event@bbj.hu" className="text-accent-teal hover:text-accent-teal-dark">
+              event@bbj.hu
+            </a>
           </p>
         </div>
       </div>

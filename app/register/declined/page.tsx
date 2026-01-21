@@ -99,15 +99,23 @@ export default async function DeclinedPage({ searchParams }: DeclinedPageProps) 
         </div>
 
         {/* Contact Info */}
-        <div className="text-xs space-y-2">
+        <div className="text-xs space-y-1">
           <p className="text-slate-500">
             Questions?{' '}
-            <Link
-              href="/help"
+            <a
+              href="https://bbj.hu/events/ceogala/#faq"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-amber-600 hover:underline"
             >
               View Registration Guide
-            </Link>
+            </a>
+          </p>
+          <p className="text-slate-500">
+            Need more help:{' '}
+            <a href="mailto:event@bbj.hu" className="text-amber-600 hover:underline">
+              event@bbj.hu
+            </a>
           </p>
         </div>
       </div>
