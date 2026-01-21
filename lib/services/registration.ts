@@ -385,45 +385,47 @@ export async function processVIPRegistration(
     });
 
     // Send registration feedback emails (confirmation of received data)
-    // These are sent BEFORE the ticket emails to confirm the registration data
-    try {
-      const feedbackResult = await sendRegistrationFeedbackEmails({
-        guestId: guestId,
-        guestEmail: guest.email,
-        guestTitle: data.title || undefined,
-        guestFirstName: guest.first_name,
-        guestLastName: guest.last_name,
-        guestCompany: data.company || undefined,
-        guestPhone: data.phone || undefined,
-        guestDiet: data.dietary_requirements || undefined,
-        guestSeating: data.seating_preferences || undefined,
-        hasPartner: data.has_partner || false,
-        partnerTitle: data.partner_title || undefined,
-        partnerFirstName: data.partner_first_name || undefined,
-        partnerLastName: data.partner_last_name || undefined,
-        partnerPhone: data.partner_phone || undefined,
-        partnerEmail: data.partner_email || undefined,
-        partnerDiet: data.partner_dietary_requirements || undefined,
-        partnerSeating: data.partner_seating_preferences || undefined,
-      });
+    // Fire-and-forget: don't block the response, emails are not critical for registration success
+    void (async () => {
+      try {
+        const feedbackResult = await sendRegistrationFeedbackEmails({
+          guestId: guestId,
+          guestEmail: guest.email,
+          guestTitle: data.title || undefined,
+          guestFirstName: guest.first_name,
+          guestLastName: guest.last_name,
+          guestCompany: data.company || undefined,
+          guestPhone: data.phone || undefined,
+          guestDiet: data.dietary_requirements || undefined,
+          guestSeating: data.seating_preferences || undefined,
+          hasPartner: data.has_partner || false,
+          partnerTitle: data.partner_title || undefined,
+          partnerFirstName: data.partner_first_name || undefined,
+          partnerLastName: data.partner_last_name || undefined,
+          partnerPhone: data.partner_phone || undefined,
+          partnerEmail: data.partner_email || undefined,
+          partnerDiet: data.partner_dietary_requirements || undefined,
+          partnerSeating: data.partner_seating_preferences || undefined,
+        });
 
-      if (feedbackResult.mainResult.success) {
-        logInfo(`[VIP_REGISTRATION] Feedback email sent to main guest ${guestId}`);
-      } else {
-        logError(`[VIP_REGISTRATION] Failed to send feedback email to main guest: ${feedbackResult.mainResult.error}`);
-      }
-
-      if (data.has_partner && feedbackResult.partnerResult) {
-        if (feedbackResult.partnerResult.success) {
-          logInfo(`[VIP_REGISTRATION] Feedback email sent to partner ${data.partner_email}`);
+        if (feedbackResult.mainResult.success) {
+          logInfo(`[VIP_REGISTRATION] Feedback email sent to main guest ${guestId}`);
         } else {
-          logError(`[VIP_REGISTRATION] Failed to send feedback email to partner: ${feedbackResult.partnerResult.error}`);
+          logError(`[VIP_REGISTRATION] Failed to send feedback email to main guest: ${feedbackResult.mainResult.error}`);
         }
+
+        if (data.has_partner && feedbackResult.partnerResult) {
+          if (feedbackResult.partnerResult.success) {
+            logInfo(`[VIP_REGISTRATION] Feedback email sent to partner ${data.partner_email}`);
+          } else {
+            logError(`[VIP_REGISTRATION] Failed to send feedback email to partner: ${feedbackResult.partnerResult.error}`);
+          }
+        }
+      } catch (feedbackError) {
+        // Log error but don't fail registration - feedback email is not critical
+        logError('[VIP_REGISTRATION] Error sending feedback emails:', feedbackError);
       }
-    } catch (feedbackError) {
-      // Log error but don't fail registration - feedback email is not critical
-      logError('[VIP_REGISTRATION] Error sending feedback emails:', feedbackError);
-    }
+    })();
 
     // Generate QR ticket and send confirmation email(s)
     // For paired registrations: both guests get emails with BOTH QR codes
