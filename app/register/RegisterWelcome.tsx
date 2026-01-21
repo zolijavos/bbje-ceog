@@ -43,6 +43,7 @@ function formatGuestType(type: string): { label: string; color: string } {
 export default function RegisterWelcome({ guest }: RegisterWelcomeProps) {
   const guestTypeInfo = formatGuestType(guest.guestType);
   const nextStepUrl = getRegistrationUrl(guest.id, guest.guestType);
+  const displayName = guest.title ? `${guest.title} ${guest.name}` : guest.name;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-neutral-800 to-neutral-700 flex items-center justify-center p-4">
@@ -79,7 +80,7 @@ export default function RegisterWelcome({ guest }: RegisterWelcomeProps) {
             Welcome,
           </h2>
           <p className="text-center text-3xl font-bold text-accent-teal mb-2">
-            {guest.name}
+            {displayName}
           </p>
           <p className="text-center text-neutral-500 mb-6 font-sans">
             Your invitation has been validated. Please continue with registration.
