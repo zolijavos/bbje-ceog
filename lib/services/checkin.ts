@@ -11,6 +11,7 @@ import { TicketType } from '@prisma/client';
 import { getErrorMessage } from '@/lib/utils/errors';
 import { logError, logInfo } from '@/lib/utils/logger';
 import { broadcastToGuest, CheckinEvent } from './event-broadcaster';
+import { getFullName } from '@/lib/utils/name';
 
 /**
  * Check-in validation response
@@ -20,9 +21,11 @@ export interface CheckinValidationResponse {
   error?: 'INVALID_TOKEN' | 'EXPIRED_TOKEN' | 'REGISTRATION_NOT_FOUND' | 'TOKEN_MISMATCH' | 'CANCELLED';
   guest?: {
     id: number;
-    name: string;
+    firstName: string;
+    lastName: string;
     ticketType: TicketType;
-    partnerName: string | null;
+    partnerFirstName: string | null;
+    partnerLastName: string | null;
   };
   registration?: {
     id: number;
@@ -30,7 +33,8 @@ export interface CheckinValidationResponse {
   alreadyCheckedIn: boolean;
   previousCheckin?: {
     checkedInAt: string;
-    staffName: string | null;
+    staffFirstName: string | null;
+    staffLastName: string | null;
   };
 }
 
@@ -74,19 +78,22 @@ export async function validateCheckinToken(qrToken: string): Promise<CheckinVali
         id: true,
         qr_code_hash: true,
         ticket_type: true,
-        partner_name: true,
+        partner_first_name: true,
+        partner_last_name: true,
         cancelled_at: true,
         guest: {
           select: {
             id: true,
-            name: true,
+            first_name: true,
+            last_name: true,
           },
         },
         checkin: {
           include: {
             staff_user: {
               select: {
-                name: true,
+                first_name: true,
+                last_name: true,
               },
             },
           },
@@ -115,9 +122,11 @@ export async function validateCheckinToken(qrToken: string): Promise<CheckinVali
       valid: true,
       guest: {
         id: registration.guest!.id,
-        name: registration.guest!.name,
+        firstName: registration.guest!.first_name,
+        lastName: registration.guest!.last_name,
         ticketType: registration.ticket_type,
-        partnerName: registration.partner_name,
+        partnerFirstName: registration.partner_first_name,
+        partnerLastName: registration.partner_last_name,
       },
       registration: {
         id: registration.id,
@@ -126,7 +135,8 @@ export async function validateCheckinToken(qrToken: string): Promise<CheckinVali
       previousCheckin: alreadyCheckedIn && registration.checkin
         ? {
             checkedInAt: registration.checkin.checked_in_at.toISOString(),
-            staffName: registration.checkin.staff_user?.name || null,
+            staffFirstName: registration.checkin.staff_user?.first_name || null,
+            staffLastName: registration.checkin.staff_user?.last_name || null,
           }
         : undefined,
     };
@@ -223,7 +233,7 @@ export async function submitCheckin(
     const checkinEvent: CheckinEvent = {
       type: 'CHECKED_IN',
       guestId: registration.guest.id,
-      guestName: registration.guest.name,
+      guestName: getFullName(registration.guest.first_name, registration.guest.last_name),
       tableName: tableAssignment?.table.name || null,
       tableType: tableAssignment?.table.type || null,
       seatNumber: tableAssignment?.seat_number || null,
@@ -264,13 +274,15 @@ export async function getCheckinStatus(registrationId: number) {
     include: {
       staff_user: {
         select: {
-          name: true,
+          first_name: true,
+          last_name: true,
           email: true,
         },
       },
       guest: {
         select: {
-          name: true,
+          first_name: true,
+          last_name: true,
           email: true,
         },
       },
@@ -310,7 +322,8 @@ export async function getCheckinLog(params: {
   if (search) {
     where.guest = {
       OR: [
-        { name: { contains: search } },
+        { first_name: { contains: search } },
+        { last_name: { contains: search } },
         { email: { contains: search } },
       ],
     };
@@ -326,7 +339,8 @@ export async function getCheckinLog(params: {
         guest: {
           select: {
             id: true,
-            name: true,
+            first_name: true,
+            last_name: true,
             email: true,
             guest_type: true,
           },
@@ -334,12 +348,14 @@ export async function getCheckinLog(params: {
         registration: {
           select: {
             ticket_type: true,
-            partner_name: true,
+            partner_first_name: true,
+            partner_last_name: true,
           },
         },
         staff_user: {
           select: {
-            name: true,
+            first_name: true,
+            last_name: true,
           },
         },
       },
@@ -375,7 +391,7 @@ export async function getCheckinStats() {
       orderBy: { checked_in_at: 'desc' },
       include: {
         guest: {
-          select: { name: true },
+          select: { first_name: true, last_name: true },
         },
         registration: {
           select: { ticket_type: true },
@@ -401,7 +417,7 @@ export async function getCheckinStats() {
     checkinRate: totalRegistrations > 0 ? (total / totalRegistrations) * 100 : 0,
     byTicketType: ticketTypeStats,
     recentCheckins: recentCheckins.map(c => ({
-      guestName: c.guest.name,
+      guestName: getFullName(c.guest.first_name, c.guest.last_name),
       ticketType: c.registration?.ticket_type || 'unknown',
       checkedInAt: c.checked_in_at.toISOString(),
     })),

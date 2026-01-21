@@ -31,7 +31,7 @@ export default async function DeclinedPage({ searchParams }: DeclinedPageProps) 
   // Get guest from database
   const guest = await prisma.guest.findUnique({
     where: { id: guestId },
-    select: { id: true, name: true, email: true },
+    select: { id: true, first_name: true, last_name: true, email: true },
   });
 
   // Guest not found
@@ -74,7 +74,7 @@ export default async function DeclinedPage({ searchParams }: DeclinedPageProps) 
 
         {/* Guest Name */}
         <p className="text-slate-500 mb-6">
-          Dear <span className="font-medium">{guest.name}</span>, we are sorry
+          Dear <span className="font-medium">{guest.first_name} {guest.last_name}</span>, we are sorry
           that you cannot attend the CEO Gála 2026 event.
         </p>
 

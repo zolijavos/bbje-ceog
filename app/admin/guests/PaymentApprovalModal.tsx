@@ -3,7 +3,9 @@
 import { X, CreditCard, Bank, User, Buildings, MapPin, Receipt } from '@phosphor-icons/react';
 
 interface BillingInfo {
-  billing_name: string;
+  billing_first_name: string;
+  billing_last_name: string;
+  billingName: string; // Computed full name
   company_name: string | null;
   tax_number: string | null;
   address_line1: string;
@@ -15,14 +17,18 @@ interface BillingInfo {
 
 interface Guest {
   id: number;
-  name: string;
+  firstName: string;
+  lastName: string;
+  name: string; // Computed full name
   email: string;
   guestType: string;
   paymentMethod: 'card' | 'bank_transfer' | null;
   billingInfo: BillingInfo | null;
-  partnerName: string | null;
+  partnerFirstName: string | null;
+  partnerLastName: string | null;
+  partnerName: string | null; // Computed full name
   partnerEmail: string | null;
-  partnerGuest?: { id: number; name: string; email: string } | null;
+  partnerGuest?: { id: number; firstName: string; lastName: string; name: string; email: string } | null;
 }
 
 interface PaymentApprovalModalProps {
@@ -145,7 +151,7 @@ export default function PaymentApprovalModal({
 
                 <div className="bg-gray-50 rounded-lg p-4 text-sm space-y-2">
                   <p className="font-medium text-gray-900">
-                    {guest.billingInfo.billing_name}
+                    {guest.billingInfo.billingName}
                   </p>
                   {guest.billingInfo.company_name && (
                     <p className="text-gray-600">{guest.billingInfo.company_name}</p>

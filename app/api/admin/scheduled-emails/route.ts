@@ -15,6 +15,7 @@ import {
 import { DEFAULT_TEMPLATES, type TemplateSlug } from '@/lib/services/email-templates';
 import { prisma } from '@/lib/db/prisma';
 import { logError } from '@/lib/utils/logger';
+import { getFullName } from '@/lib/utils/name';
 import { z } from 'zod';
 
 /**
@@ -106,7 +107,7 @@ export async function POST(request: NextRequest) {
     // Verify guests exist
     const guests = await prisma.guest.findMany({
       where: { id: { in: targetGuestIds } },
-      select: { id: true, name: true, email: true },
+      select: { id: true, first_name: true, last_name: true, email: true },
     });
 
     if (guests.length !== targetGuestIds.length) {
@@ -121,7 +122,7 @@ export async function POST(request: NextRequest) {
       guests.map(async (guest) => {
         const guestVariables = {
           ...variables,
-          guestName: guest.name,
+          guestName: getFullName(guest.first_name, guest.last_name),
         };
 
         return scheduleEmail({

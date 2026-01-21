@@ -67,7 +67,7 @@ export async function generateTicketToken(registrationId: number): Promise<strin
     registration_id: registration.id,
     guest_id: registration.guest.id,
     ticket_type: registration.ticket_type,
-    guest_name: registration.guest.name,
+    guest_name: `${registration.guest.first_name} ${registration.guest.last_name}`,
   };
 
   // Calculate expiry
@@ -213,7 +213,8 @@ export async function validateTicket(token: string): Promise<{
     ticket_type: TicketType;
     guest: {
       id: number;
-      name: string;
+      first_name: string;
+      last_name: string;
       email: string;
     };
   };
@@ -230,7 +231,8 @@ export async function validateTicket(token: string): Promise<{
         guest: {
           select: {
             id: true,
-            name: true,
+            first_name: true,
+            last_name: true,
             email: true,
           },
         },

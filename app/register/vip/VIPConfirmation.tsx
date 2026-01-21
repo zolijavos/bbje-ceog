@@ -73,7 +73,8 @@ type ScreenState = 'invitation' | 'confirmation' | 'registration';
 
 interface Guest {
   id: number;
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   guest_type: string;
   title?: string | null;
@@ -174,8 +175,10 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
   // Get current theme styles
   const t = themes[theme];
 
+  // Compose full name and display name
+  const fullName = `${guest.first_name} ${guest.last_name}`;
   // Get display name with title (e.g., "Dr. John Smith")
-  const displayName = guest.title ? `${guest.title} ${guest.name}` : guest.name;
+  const displayName = guest.title ? `${guest.title} ${fullName}` : fullName;
 
   const [formData, setFormData] = useState<FormData>({
     title: guest.title || '',

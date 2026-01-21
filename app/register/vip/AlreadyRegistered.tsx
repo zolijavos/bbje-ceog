@@ -99,7 +99,8 @@ function PoweredByFooter() {
 
 interface Guest {
   id: number;
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   guest_type: string;
   registration_status: string;
@@ -126,9 +127,11 @@ export default function AlreadyRegistered({
   }, []);
 
   const t = themes[theme];
+  // Compose full name
+  const fullName = `${guest.first_name} ${guest.last_name}`;
   // Get display name with title (e.g., "Dr. John Smith")
-  const displayName = guest.title ? `${guest.title} ${guest.name}` : guest.name;
-  const firstName = guest.name.split(' ')[0] || guest.name;
+  const displayName = guest.title ? `${guest.title} ${fullName}` : fullName;
+  const firstName = guest.first_name;
 
   return (
     <div className={`min-h-screen ${t.bg} flex items-center justify-center p-4`}>

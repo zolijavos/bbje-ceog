@@ -9,12 +9,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/api';
 import { prisma } from '@/lib/db/prisma';
 import { logError } from '@/lib/utils/logger';
+import { getFullName } from '@/lib/utils/name';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 
 const createUserSchema = z.object({
   email: z.string().email(),
-  name: z.string().min(2),
+  first_name: z.string().min(1),
+  last_name: z.string().min(1),
   password: z.string().min(8),
   role: z.enum(['admin', 'staff']),
 });
@@ -36,7 +38,8 @@ export async function GET() {
       select: {
         id: true,
         email: true,
-        name: true,
+        first_name: true,
+        last_name: true,
         role: true,
         created_at: true,
         updated_at: true,
@@ -46,10 +49,16 @@ export async function GET() {
           },
         },
       },
-      orderBy: { created_at: 'desc' },
+      orderBy: [{ last_name: 'asc' }, { first_name: 'asc' }],
     });
 
-    return NextResponse.json({ users });
+    // Add computed name field for backwards compatibility
+    const usersWithName = users.map(u => ({
+      ...u,
+      name: getFullName(u.first_name, u.last_name),
+    }));
+
+    return NextResponse.json({ users: usersWithName });
   } catch (error) {
     logError('[USERS] Error listing users:', error);
     return NextResponse.json(
@@ -82,7 +91,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { email, name, password, role } = parsed.data;
+    const { email, first_name, last_name, password, role } = parsed.data;
 
     // Check if email already exists
     const existing = await prisma.user.findUnique({
@@ -102,20 +111,28 @@ export async function POST(request: NextRequest) {
     const user = await prisma.user.create({
       data: {
         email,
-        name,
+        first_name,
+        last_name,
         password_hash,
         role,
       },
       select: {
         id: true,
         email: true,
-        name: true,
+        first_name: true,
+        last_name: true,
         role: true,
         created_at: true,
       },
     });
 
-    return NextResponse.json({ user }, { status: 201 });
+    // Add computed name field for backwards compatibility
+    const userWithName = {
+      ...user,
+      name: getFullName(user.first_name, user.last_name),
+    };
+
+    return NextResponse.json({ user: userWithName }, { status: 201 });
   } catch (error) {
     logError('[USERS] Error creating user:', error);
     return NextResponse.json(

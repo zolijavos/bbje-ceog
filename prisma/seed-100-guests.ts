@@ -52,10 +52,10 @@ function randomElement<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function generateName(): { first: string; last: string; full: string } {
+function generateName(): { first: string; last: string } {
   const first = randomElement(firstNames);
   const last = randomElement(lastNames);
-  return { first, last, full: `${last} ${first}` };
+  return { first, last };
 }
 
 async function main() {
@@ -93,7 +93,7 @@ async function main() {
     console.log(`✅ Created ${tablesToCreate} additional tables`);
   }
 
-  const createdGuests: { id: number; name: string; type: string }[] = [];
+  const createdGuests: { id: number; firstName: string; lastName: string; type: string }[] = [];
   let guestIndex = 0;
 
   // ==========================================
@@ -123,7 +123,8 @@ async function main() {
     const guest = await prisma.guest.create({
       data: {
         email,
-        name: name.full,
+        first_name: name.first,
+        last_name: name.last,
         guest_type: GuestType.paying_single,
         registration_status: status.regStatus,
         magic_link_hash: `hash_${email}`,
@@ -157,7 +158,8 @@ async function main() {
       await prisma.billingInfo.create({
         data: {
           registration_id: registration.id,
-          billing_name: name.full,
+          billing_first_name: name.first,
+          billing_last_name: name.last,
           address_line1: `Teszt utca ${guestIndex}.`,
           city: 'Budapest',
           postal_code: `1${String(Math.floor(Math.random() * 900) + 100)}`,
@@ -181,7 +183,7 @@ async function main() {
       }
     }
 
-    createdGuests.push({ id: guest.id, name: name.full, type: 'paying_single' });
+    createdGuests.push({ id: guest.id, firstName: name.first, lastName: name.last, type: 'paying_single' });
   }
 
   console.log('✅ Created 60 paying single guests');
@@ -206,8 +208,9 @@ async function main() {
     const guest = await prisma.guest.create({
       data: {
         email,
-        name: `Dr. ${name.full}`, // VIPs get Dr. title
-        title: 'Dr.',
+        first_name: name.first,
+        last_name: name.last,
+        title: 'Dr.', // VIPs get Dr. title
         guest_type: GuestType.vip,
         registration_status: status.regStatus,
         magic_link_hash: `hash_${email}`,
@@ -237,7 +240,7 @@ async function main() {
       });
     }
 
-    createdGuests.push({ id: guest.id, name: `Dr. ${name.full}`, type: 'vip' });
+    createdGuests.push({ id: guest.id, firstName: name.first, lastName: name.last, type: 'vip' });
   }
 
   console.log('✅ Created 15 VIP guests');
@@ -266,7 +269,8 @@ async function main() {
     const mainGuest = await prisma.guest.create({
       data: {
         email: mainEmail,
-        name: mainName.full,
+        first_name: mainName.first,
+        last_name: mainName.last,
         guest_type: GuestType.paying_paired,
         registration_status: status.regStatus,
         magic_link_hash: `hash_${mainEmail}`,
@@ -284,7 +288,8 @@ async function main() {
     const partnerGuest = await prisma.guest.create({
       data: {
         email: partnerEmail,
-        name: partnerName.full,
+        first_name: partnerName.first,
+        last_name: partnerName.last,
         guest_type: GuestType.paying_paired,
         registration_status: status.regStatus,
         magic_link_hash: `hash_${partnerEmail}`,
@@ -300,7 +305,8 @@ async function main() {
         data: {
           guest_id: mainGuest.id,
           ticket_type: TicketType.paid_paired,
-          partner_name: partnerName.full,
+          partner_first_name: partnerName.first,
+          partner_last_name: partnerName.last,
           partner_email: partnerEmail,
           payment_method: status.paymentMethod || PaymentMethod.card,
           gdpr_consent: true,
@@ -316,7 +322,8 @@ async function main() {
         data: {
           guest_id: partnerGuest.id,
           ticket_type: TicketType.paid_paired,
-          partner_name: mainName.full,
+          partner_first_name: mainName.first,
+          partner_last_name: mainName.last,
           partner_email: mainEmail,
           payment_method: status.paymentMethod || PaymentMethod.card,
           gdpr_consent: true,
@@ -332,7 +339,8 @@ async function main() {
       await prisma.billingInfo.create({
         data: {
           registration_id: mainReg.id,
-          billing_name: mainName.full,
+          billing_first_name: mainName.first,
+          billing_last_name: mainName.last,
           address_line1: `Páros utca ${guestIndex}.`,
           city: 'Budapest',
           postal_code: `1${String(Math.floor(Math.random() * 900) + 100)}`,
@@ -356,8 +364,8 @@ async function main() {
       }
     }
 
-    createdGuests.push({ id: mainGuest.id, name: mainName.full, type: 'paying_paired' });
-    createdGuests.push({ id: partnerGuest.id, name: partnerName.full, type: 'paying_paired_partner' });
+    createdGuests.push({ id: mainGuest.id, firstName: mainName.first, lastName: mainName.last, type: 'paying_paired' });
+    createdGuests.push({ id: partnerGuest.id, firstName: partnerName.first, lastName: partnerName.last, type: 'paying_paired_partner' });
   }
 
   console.log('✅ Created 10 paired guest couples (20 guests)');
@@ -384,7 +392,8 @@ async function main() {
     const guest = await prisma.guest.create({
       data: {
         email,
-        name: name.full,
+        first_name: name.first,
+        last_name: name.last,
         guest_type: GuestType.applicant,
         registration_status: status.regStatus,
         company: randomElement(companies),
@@ -399,7 +408,7 @@ async function main() {
       },
     });
 
-    createdGuests.push({ id: guest.id, name: name.full, type: 'applicant' });
+    createdGuests.push({ id: guest.id, firstName: name.first, lastName: name.last, type: 'applicant' });
   }
 
   console.log('✅ Created 5 applicant guests');

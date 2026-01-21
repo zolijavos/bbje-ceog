@@ -5,6 +5,7 @@ import { prisma } from '@/lib/db/prisma';
 import { sendEmail } from '@/lib/services/email';
 import { renderTemplate } from '@/lib/services/email-templates';
 import { logInfo, logError } from '@/lib/utils/logger';
+import { getFullName } from '@/lib/utils/name';
 
 /**
  * POST /api/admin/applicants/[id]/reject
@@ -65,7 +66,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
     // Send rejection email using customizable template
     try {
       const rendered = await renderTemplate('applicant_rejection', {
-        guestName: applicant.name,
+        guestName: getFullName(applicant.first_name, applicant.last_name),
         rejectionReason: reason || undefined,
       });
 
@@ -112,7 +113,9 @@ export async function POST(request: NextRequest, context: RouteContext) {
       guest: {
         id: updatedGuest.id,
         email: updatedGuest.email,
-        name: updatedGuest.name,
+        name: getFullName(updatedGuest.first_name, updatedGuest.last_name),
+        first_name: updatedGuest.first_name,
+        last_name: updatedGuest.last_name,
         status: updatedGuest.registration_status,
       },
     });

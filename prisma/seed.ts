@@ -33,7 +33,8 @@ async function main() {
     data: {
       email: 'admin@ceogala.test',
       password_hash: adminPasswordHash,
-      name: 'Admin Test User',
+      first_name: 'Admin',
+      last_name: 'Test User',
       role: 'admin',
     },
   });
@@ -42,7 +43,8 @@ async function main() {
     data: {
       email: 'staff@ceogala.test',
       password_hash: staffPasswordHash,
-      name: 'Staff Test User',
+      first_name: 'Staff',
+      last_name: 'Test User',
       role: 'staff',
     },
   });
@@ -74,16 +76,18 @@ async function main() {
   console.log('🎫 Creating VIP guests...');
 
   const vipGuests = [
-    { email: 'vip1@ceogala.test', name: 'Dr. Kovács János', status: 'invited' as const },
-    { email: 'vip2@ceogala.test', name: 'Nagy Éva', status: 'registered' as const },
-    { email: 'vip3@ceogala.test', name: 'Szabó Péter', status: 'approved' as const },
+    { email: 'vip1@ceogala.test', firstName: 'János', lastName: 'Kovács', title: 'Dr.', status: 'invited' as const },
+    { email: 'vip2@ceogala.test', firstName: 'Éva', lastName: 'Nagy', status: 'registered' as const },
+    { email: 'vip3@ceogala.test', firstName: 'Péter', lastName: 'Szabó', status: 'approved' as const },
   ];
 
   for (const vipData of vipGuests) {
     const guest = await prisma.guest.create({
       data: {
         email: vipData.email,
-        name: vipData.name,
+        first_name: vipData.firstName,
+        last_name: vipData.lastName,
+        title: vipData.title || null,
         guest_type: 'vip',
         registration_status: vipData.status,
         magic_link_hash: `test_hash_${vipData.email}`,
@@ -103,7 +107,7 @@ async function main() {
       });
     }
 
-    console.log(`✅ Created VIP guest: ${guest.name} (${vipData.status})`);
+    console.log(`✅ Created VIP guest: ${guest.first_name} ${guest.last_name} (${vipData.status})`);
   }
 
   // ==========================================
@@ -112,15 +116,16 @@ async function main() {
   console.log('💳 Creating paying single guests...');
 
   const payingSingleGuests = [
-    { email: 'paying1@ceogala.test', name: 'Kiss Anna', paymentStatus: 'paid' as const },
-    { email: 'paying2@ceogala.test', name: 'Tóth Gábor', paymentStatus: 'pending' as const },
+    { email: 'paying1@ceogala.test', firstName: 'Anna', lastName: 'Kiss', paymentStatus: 'paid' as const },
+    { email: 'paying2@ceogala.test', firstName: 'Gábor', lastName: 'Tóth', paymentStatus: 'pending' as const },
   ];
 
   for (const guestData of payingSingleGuests) {
     const guest = await prisma.guest.create({
       data: {
         email: guestData.email,
-        name: guestData.name,
+        first_name: guestData.firstName,
+        last_name: guestData.lastName,
         guest_type: 'paying_single',
         registration_status: guestData.paymentStatus === 'paid' ? 'approved' : 'registered',
         magic_link_hash: `test_hash_${guestData.email}`,
@@ -145,7 +150,8 @@ async function main() {
     await prisma.billingInfo.create({
       data: {
         registration_id: registration.id,
-        billing_name: guest.name,
+        billing_first_name: guest.first_name,
+        billing_last_name: guest.last_name,
         address_line1: 'Teszt utca 1.',
         city: 'Budapest',
         postal_code: '1111',
@@ -165,7 +171,7 @@ async function main() {
       },
     });
 
-    console.log(`✅ Created paying single guest: ${guest.name} (payment: ${guestData.paymentStatus})`);
+    console.log(`✅ Created paying single guest: ${guest.first_name} ${guest.last_name} (payment: ${guestData.paymentStatus})`);
   }
 
   // ==========================================
@@ -176,8 +182,10 @@ async function main() {
   const pairedGuestsData = [
     {
       email: 'paired1@ceogala.test',
-      name: 'Molnár László',
-      partnerName: 'Molnár Réka',
+      firstName: 'László',
+      lastName: 'Molnár',
+      partnerFirstName: 'Réka',
+      partnerLastName: 'Molnár',
       partnerEmail: 'partner1@ceogala.test',
       paymentStatus: 'paid' as const,
       paymentMethod: 'bank_transfer' as const,
@@ -189,8 +197,10 @@ async function main() {
     },
     {
       email: 'paired2@ceogala.test',
-      name: 'Horváth Attila',
-      partnerName: 'Horváth Krisztina',
+      firstName: 'Attila',
+      lastName: 'Horváth',
+      partnerFirstName: 'Krisztina',
+      partnerLastName: 'Horváth',
       partnerEmail: 'partner2@ceogala.test',
       paymentStatus: 'paid' as const,
       paymentMethod: 'card' as const,
@@ -202,8 +212,10 @@ async function main() {
     },
     {
       email: 'paired3@ceogala.test',
-      name: 'Szilágyi Márton',
-      partnerName: 'Szilágyi Nóra',
+      firstName: 'Márton',
+      lastName: 'Szilágyi',
+      partnerFirstName: 'Nóra',
+      partnerLastName: 'Szilágyi',
       partnerEmail: 'partner3@ceogala.test',
       paymentStatus: 'pending' as const,
       paymentMethod: 'card' as const,
@@ -215,8 +227,10 @@ async function main() {
     },
     {
       email: 'paired4@ceogala.test',
-      name: 'Bíró Tamás',
-      partnerName: 'Bíró Eszter',
+      firstName: 'Tamás',
+      lastName: 'Bíró',
+      partnerFirstName: 'Eszter',
+      partnerLastName: 'Bíró',
       partnerEmail: 'partner4@ceogala.test',
       paymentStatus: 'paid' as const,
       paymentMethod: 'bank_transfer' as const,
@@ -228,8 +242,10 @@ async function main() {
     },
     {
       email: 'paired5@ceogala.test',
-      name: 'Vincze Gergő',
-      partnerName: 'Vincze Lilla',
+      firstName: 'Gergő',
+      lastName: 'Vincze',
+      partnerFirstName: 'Lilla',
+      partnerLastName: 'Vincze',
       partnerEmail: 'partner5@ceogala.test',
       paymentStatus: 'pending' as const,
       paymentMethod: 'bank_transfer' as const,
@@ -246,7 +262,8 @@ async function main() {
     const mainGuest = await prisma.guest.create({
       data: {
         email: pairedData.email,
-        name: pairedData.name,
+        first_name: pairedData.firstName,
+        last_name: pairedData.lastName,
         guest_type: 'paying_paired',
         registration_status: pairedData.paymentStatus === 'paid' ? 'approved' : 'registered',
         magic_link_hash: `test_hash_${pairedData.email}`,
@@ -259,7 +276,8 @@ async function main() {
     const partnerGuest = await prisma.guest.create({
       data: {
         email: pairedData.partnerEmail,
-        name: pairedData.partnerName,
+        first_name: pairedData.partnerFirstName,
+        last_name: pairedData.partnerLastName,
         guest_type: 'paying_paired',
         registration_status: pairedData.paymentStatus === 'paid' ? 'approved' : 'registered',
         magic_link_hash: `test_hash_${pairedData.partnerEmail}`,
@@ -274,7 +292,8 @@ async function main() {
       data: {
         guest_id: mainGuest.id,
         ticket_type: 'paid_paired',
-        partner_name: pairedData.partnerName,
+        partner_first_name: pairedData.partnerFirstName,
+        partner_last_name: pairedData.partnerLastName,
         partner_email: pairedData.partnerEmail,
         payment_method: pairedData.paymentMethod,
         gdpr_consent: true,
@@ -291,7 +310,8 @@ async function main() {
       data: {
         guest_id: partnerGuest.id,
         ticket_type: 'paid_paired',
-        partner_name: mainGuest.name, // Reverse reference to main guest
+        partner_first_name: mainGuest.first_name, // Reverse reference to main guest
+        partner_last_name: mainGuest.last_name,
         partner_email: mainGuest.email,
         payment_method: pairedData.paymentMethod,
         gdpr_consent: true,
@@ -307,7 +327,8 @@ async function main() {
     await prisma.billingInfo.create({
       data: {
         registration_id: mainRegistration.id,
-        billing_name: pairedData.name,
+        billing_first_name: pairedData.firstName,
+        billing_last_name: pairedData.lastName,
         address_line1: pairedData.billingAddress,
         city: 'Budapest',
         postal_code: '1' + String(Math.floor(Math.random() * 900) + 100),
@@ -328,7 +349,7 @@ async function main() {
       },
     });
 
-    console.log(`✅ Created paying paired guests: ${mainGuest.name} ↔ ${partnerGuest.name} (${pairedData.paymentStatus})`);
+    console.log(`✅ Created paying paired guests: ${mainGuest.first_name} ${mainGuest.last_name} ↔ ${partnerGuest.first_name} ${partnerGuest.last_name} (${pairedData.paymentStatus})`);
   }
 
   // ==========================================
@@ -337,18 +358,19 @@ async function main() {
   console.log('🎭 Creating additional unassigned guests for seating tests...');
 
   const unassignedGuests = [
-    { email: 'unassigned1@ceogala.test', name: 'Horváth Béla', type: 'vip' as const },
-    { email: 'unassigned2@ceogala.test', name: 'Fekete Klára', type: 'paying_single' as const },
-    { email: 'unassigned3@ceogala.test', name: 'Fehér Tamás', type: 'paying_single' as const },
-    { email: 'unassigned4@ceogala.test', name: 'Balogh Zsófia', type: 'vip' as const },
-    { email: 'unassigned5@ceogala.test', name: 'Varga Imre', type: 'paying_single' as const },
+    { email: 'unassigned1@ceogala.test', firstName: 'Béla', lastName: 'Horváth', type: 'vip' as const },
+    { email: 'unassigned2@ceogala.test', firstName: 'Klára', lastName: 'Fekete', type: 'paying_single' as const },
+    { email: 'unassigned3@ceogala.test', firstName: 'Tamás', lastName: 'Fehér', type: 'paying_single' as const },
+    { email: 'unassigned4@ceogala.test', firstName: 'Zsófia', lastName: 'Balogh', type: 'vip' as const },
+    { email: 'unassigned5@ceogala.test', firstName: 'Imre', lastName: 'Varga', type: 'paying_single' as const },
   ];
 
   for (const guestData of unassignedGuests) {
     const unassignedGuest = await prisma.guest.create({
       data: {
         email: guestData.email,
-        name: guestData.name,
+        first_name: guestData.firstName,
+        last_name: guestData.lastName,
         guest_type: guestData.type,
         registration_status: 'approved',
         magic_link_hash: `test_hash_${guestData.email}`,
@@ -374,7 +396,8 @@ async function main() {
       await prisma.billingInfo.create({
         data: {
           registration_id: unassignedReg.id,
-          billing_name: unassignedGuest.name,
+          billing_first_name: unassignedGuest.first_name,
+          billing_last_name: unassignedGuest.last_name,
           address_line1: 'Teszt utca 1.',
           city: 'Budapest',
           postal_code: '1000',
@@ -402,7 +425,7 @@ async function main() {
       }
     }
 
-    console.log(`✅ Created unassigned guest: ${unassignedGuest.name}`);
+    console.log(`✅ Created unassigned guest: ${unassignedGuest.first_name} ${unassignedGuest.last_name}`);
   }
 
   // Additional paired guest for DnD testing (takes 2 seats)
@@ -410,7 +433,8 @@ async function main() {
   const pairedUnassignedMain = await prisma.guest.create({
     data: {
       email: 'paired-unassigned@ceogala.test',
-      name: 'Papp Zoltán',
+      first_name: 'Zoltán',
+      last_name: 'Papp',
       guest_type: 'paying_paired',
       registration_status: 'approved',
       magic_link_hash: 'test_hash_paired-unassigned@ceogala.test',
@@ -423,7 +447,8 @@ async function main() {
   const pairedUnassignedPartner = await prisma.guest.create({
     data: {
       email: 'partner-unassigned@ceogala.test',
-      name: 'Papp Judit',
+      first_name: 'Judit',
+      last_name: 'Papp',
       guest_type: 'paying_paired',
       registration_status: 'approved',
       magic_link_hash: 'test_hash_partner-unassigned@ceogala.test',
@@ -438,7 +463,8 @@ async function main() {
     data: {
       guest_id: pairedUnassignedMain.id,
       ticket_type: 'paid_paired',
-      partner_name: 'Papp Judit',
+      partner_first_name: 'Judit',
+      partner_last_name: 'Papp',
       partner_email: 'partner-unassigned@ceogala.test',
       payment_method: 'card',
       gdpr_consent: true,
@@ -455,7 +481,8 @@ async function main() {
     data: {
       guest_id: pairedUnassignedPartner.id,
       ticket_type: 'paid_paired',
-      partner_name: 'Papp Zoltán',
+      partner_first_name: 'Zoltán',
+      partner_last_name: 'Papp',
       partner_email: 'paired-unassigned@ceogala.test',
       payment_method: 'card',
       gdpr_consent: true,
@@ -471,7 +498,8 @@ async function main() {
   await prisma.billingInfo.create({
     data: {
       registration_id: pairedMainReg.id,
-      billing_name: 'Papp Zoltán',
+      billing_first_name: 'Zoltán',
+      billing_last_name: 'Papp',
       address_line1: 'Páros sétány 5.',
       city: 'Budapest',
       postal_code: '1234',
@@ -491,7 +519,7 @@ async function main() {
     },
   });
 
-  console.log(`✅ Created unassigned paired guests: ${pairedUnassignedMain.name} ↔ ${pairedUnassignedPartner.name}`);
+  console.log(`✅ Created unassigned paired guests: ${pairedUnassignedMain.first_name} ${pairedUnassignedMain.last_name} ↔ ${pairedUnassignedPartner.first_name} ${pairedUnassignedPartner.last_name}`);
 
   // ==========================================
   // TABLE ASSIGNMENTS (only assign some guests)
@@ -548,7 +576,7 @@ async function main() {
       },
     });
 
-    console.log(`✅ Checked in: ${reg.guest.name}`);
+    console.log(`✅ Checked in: ${reg.guest.first_name} ${reg.guest.last_name}`);
   }
 
   // ==========================================

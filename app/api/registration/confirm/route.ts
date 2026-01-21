@@ -25,7 +25,8 @@ interface ConfirmBody {
   // Partner fields (optional for VIP)
   has_partner?: boolean;
   partner_title?: string | null;
-  partner_name?: string | null;
+  partner_first_name?: string | null;
+  partner_last_name?: string | null;
   partner_email?: string | null;
   partner_phone?: string | null;
   partner_company?: string | null;
@@ -57,7 +58,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body: ConfirmBody = await request.json();
-    const { guest_id, attendance, title, phone, company, position, dietary_requirements, seating_preferences, gdpr_consent, cancellation_accepted, has_partner, partner_title, partner_name, partner_email, partner_phone, partner_company, partner_position, partner_dietary_requirements, partner_seating_preferences, partner_gdpr_consent } = body;
+    const { guest_id, attendance, title, phone, company, position, dietary_requirements, seating_preferences, gdpr_consent, cancellation_accepted, has_partner, partner_title, partner_first_name, partner_last_name, partner_email, partner_phone, partner_company, partner_position, partner_dietary_requirements, partner_seating_preferences, partner_gdpr_consent } = body;
 
     // Validate required fields
     if (!guest_id || typeof guest_id !== 'number') {
@@ -97,9 +98,15 @@ export async function POST(request: NextRequest) {
 
       // Validate partner fields if bringing a partner
       if (has_partner) {
-        if (!partner_name || typeof partner_name !== 'string' || partner_name.trim().length < 2) {
+        if (!partner_first_name || typeof partner_first_name !== 'string' || partner_first_name.trim().length < 1) {
           return NextResponse.json(
-            { success: false, error: 'Partner name is required (min. 2 characters)' },
+            { success: false, error: 'Partner first name is required' },
+            { status: 400 }
+          );
+        }
+        if (!partner_last_name || typeof partner_last_name !== 'string' || partner_last_name.trim().length < 1) {
+          return NextResponse.json(
+            { success: false, error: 'Partner last name is required' },
             { status: 400 }
           );
         }
@@ -157,7 +164,8 @@ export async function POST(request: NextRequest) {
       // Partner info (optional for VIP)
       has_partner,
       partner_title: has_partner ? partner_title : null,
-      partner_name: has_partner ? partner_name : null,
+      partner_first_name: has_partner ? partner_first_name : null,
+      partner_last_name: has_partner ? partner_last_name : null,
       partner_email: has_partner ? partner_email : null,
       partner_phone: has_partner ? partner_phone : null,
       partner_company: has_partner ? partner_company : null,

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/auth-options';
 import { prisma } from '@/lib/db/prisma';
+import { getFullName } from '@/lib/utils/name';
 
 /**
  * GET /api/admin/test-results/export
@@ -25,7 +26,7 @@ export async function GET(request: NextRequest) {
       where,
       include: {
         tester: {
-          select: { name: true, email: true }
+          select: { first_name: true, last_name: true, email: true }
         }
       },
       orderBy: [
@@ -67,7 +68,7 @@ export async function GET(request: NextRequest) {
         result.feature_index.toString(),
         escapeCSV(result.feature_name),
         result.status,
-        escapeCSV(result.tester_name),
+        escapeCSV(result.tester_name || getFullName(result.tester.first_name, result.tester.last_name)),
         result.tester.email,
         escapeCSV(result.comment || ''),
         stepResultsDisplay,

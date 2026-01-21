@@ -88,7 +88,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
         <div className="bg-neutral-50 rounded-lg p-4 mb-6 border-l-4 border-accent-teal">
           <h3 className="font-display font-semibold text-neutral-800 mb-2">Registration Details</h3>
           <p className="text-neutral-500 text-sm font-sans">
-            <span className="font-medium text-neutral-800">Name:</span> {guest.name}
+            <span className="font-medium text-neutral-800">Name:</span> {guest.first_name} {guest.last_name}
             <br />
             <span className="font-medium text-neutral-800">Email:</span> {guest.email}
             <br />

@@ -35,7 +35,7 @@ export async function GET(request: NextRequest, context: RouteContext) {
     if (email.guest_id) {
       guest = await prisma.guest.findUnique({
         where: { id: email.guest_id },
-        select: { id: true, name: true, email: true },
+        select: { id: true, first_name: true, last_name: true, email: true },
       });
     }
 

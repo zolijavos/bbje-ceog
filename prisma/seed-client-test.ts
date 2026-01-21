@@ -20,8 +20,8 @@ async function main() {
   console.log('👤 Creating additional admin users...');
 
   const adminUsers = [
-    { email: 'admin2@ceogala.test', name: 'Admin Teszt 2' },
-    { email: 'admin3@ceogala.test', name: 'Admin Teszt 3' },
+    { email: 'admin2@ceogala.test', firstName: 'Admin', lastName: 'Teszt 2' },
+    { email: 'admin3@ceogala.test', firstName: 'Admin', lastName: 'Teszt 3' },
   ];
 
   for (const admin of adminUsers) {
@@ -31,7 +31,8 @@ async function main() {
         data: {
           email: admin.email,
           password_hash: adminPasswordHash,
-          name: admin.name,
+          first_name: admin.firstName,
+          last_name: admin.lastName,
           role: 'admin',
         },
       });
@@ -47,8 +48,8 @@ async function main() {
   console.log('👷 Creating additional staff users...');
 
   const staffUsers = [
-    { email: 'staff2@ceogala.test', name: 'Staff Teszt 2' },
-    { email: 'staff3@ceogala.test', name: 'Staff Teszt 3' },
+    { email: 'staff2@ceogala.test', firstName: 'Staff', lastName: 'Teszt 2' },
+    { email: 'staff3@ceogala.test', firstName: 'Staff', lastName: 'Teszt 3' },
   ];
 
   for (const staff of staffUsers) {
@@ -58,7 +59,8 @@ async function main() {
         data: {
           email: staff.email,
           password_hash: staffPasswordHash,
-          name: staff.name,
+          first_name: staff.firstName,
+          last_name: staff.lastName,
           role: 'staff',
         },
       });
@@ -78,7 +80,9 @@ async function main() {
     await prisma.guest.create({
       data: {
         email: 'vip4@ceogala.test',
-        name: 'Dr. Teszt VIP 4',
+        first_name: 'VIP',
+        last_name: 'Teszt 4',
+        title: 'Dr.',
         guest_type: 'vip',
         registration_status: 'invited',
         magic_link_hash: `test_hash_vip4@ceogala.test`,
@@ -98,7 +102,8 @@ async function main() {
     await prisma.guest.create({
       data: {
         email: 'paying3@ceogala.test',
-        name: 'Barna Kata',
+        first_name: 'Kata',
+        last_name: 'Barna',
         guest_type: 'paying_single',
         registration_status: 'invited',
         magic_link_hash: `test_hash_paying3@ceogala.test`,
@@ -116,21 +121,24 @@ async function main() {
   const applicants = [
     {
       email: 'applicant1@ceogala.test',
-      name: 'Teszt Jelentkező 1',
+      firstName: 'Teszt',
+      lastName: 'Jelentkező 1',
       company: 'Teszt Cég Kft.',
       position: 'Ügyvezető',
       motivation: 'Szeretnék részt venni a CEO Gala rendezvényen, mert...',
     },
     {
       email: 'applicant2@ceogala.test',
-      name: 'Teszt Jelentkező 2',
+      firstName: 'Teszt',
+      lastName: 'Jelentkező 2',
       company: 'Példa Zrt.',
       position: 'Marketing igazgató',
       motivation: 'A networking lehetőségek miatt szeretnék jelentkezni.',
     },
     {
       email: 'applicant3@ceogala.test',
-      name: 'Teszt Jelentkező 3',
+      firstName: 'Teszt',
+      lastName: 'Jelentkező 3',
       company: 'Demo Bt.',
       position: 'Tulajdonos',
       motivation: 'Korábbi évben is részt vettem és nagyon tetszett.',
@@ -143,7 +151,8 @@ async function main() {
       await prisma.guest.create({
         data: {
           email: applicant.email,
-          name: applicant.name,
+          first_name: applicant.firstName,
+          last_name: applicant.lastName,
           guest_type: 'applicant',
           registration_status: 'pending_approval',
           company: applicant.company,

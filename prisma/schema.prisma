@@ -17,7 +17,8 @@ datasource db {
 model Guest {
   id                     Int                @id @default(autoincrement())
   email                  String             @unique @db.VarChar(255)
-  name                   String             @db.VarChar(255)
+  first_name             String             @db.VarChar(127)
+  last_name              String             @db.VarChar(127)
   title                  String?            @db.VarChar(50)  // Megszólítás: Dr., Prof., stb.
   phone                  String?            @db.VarChar(20)  // Telefonszám (kötelező regisztrációnál)
   company                String?            @db.VarChar(255) // Cég neve
@@ -57,7 +58,7 @@ model Guest {
   @@index([registration_status, guest_type])        // Guest list filtering by status + type
   @@index([registration_status, created_at])        // Guest list filtering + sorting
   @@index([guest_type, created_at])                 // Seating page unassigned guests
-  @@index([guest_type, name])                       // Seating page sorting
+  @@index([guest_type, last_name])                  // Seating page sorting
   @@map("guests")
 }
 
@@ -65,7 +66,8 @@ model Registration {
   id                  Int              @id @default(autoincrement())
   guest_id            Int              @unique
   ticket_type         TicketType       // vip_free, paid_single, paid_paired
-  partner_name        String?          @db.VarChar(255)
+  partner_first_name  String?          @db.VarChar(127)
+  partner_last_name   String?          @db.VarChar(127)
   partner_email       String?          @db.VarChar(255)
   payment_method      PaymentMethod?   // card, bank_transfer
   qr_code_hash        String?          @unique @db.VarChar(500) // JWT token
@@ -186,7 +188,8 @@ model User {
   id            Int       @id @default(autoincrement())
   email         String    @unique @db.VarChar(255)
   password_hash String    @db.VarChar(255) // bcrypt hash
-  name          String    @db.VarChar(255)
+  first_name    String    @db.VarChar(127)
+  last_name     String    @db.VarChar(127)
   role          UserRole  @default(staff) // admin, staff
   created_at    DateTime  @default(now())
   updated_at    DateTime  @updatedAt
@@ -229,10 +232,11 @@ model EmailLog {
 // ==================================
 
 model BillingInfo {
-  id              Int          @id @default(autoincrement())
-  registration_id Int          @unique
-  billing_name    String       @db.VarChar(255)  // Számlázási név
-  company_name    String?      @db.VarChar(255)  // Cégnév (opcionális)
+  id                   Int          @id @default(autoincrement())
+  registration_id      Int          @unique
+  billing_first_name   String       @db.VarChar(127)  // Számlázási keresztnév
+  billing_last_name    String       @db.VarChar(127)  // Számlázási vezetéknév
+  company_name         String?      @db.VarChar(255)  // Cégnév (opcionális)
   tax_number      String?      @db.VarChar(50)   // Adószám (opcionális, magyar format: 12345678-1-12)
   address_line1   String       @db.VarChar(255)  // Cím 1. sor
   address_line2   String?      @db.VarChar(255)  // Cím 2. sor (opcionális)

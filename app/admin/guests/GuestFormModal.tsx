@@ -4,7 +4,9 @@ import { useState, useEffect } from 'react';
 import { titleOptions } from '@/lib/validations/guest-profile';
 
 interface BillingInfo {
-  billing_name: string;
+  billing_first_name: string;
+  billing_last_name: string;
+  billingName: string; // Computed full name
   company_name: string | null;
   tax_number: string | null;
   address_line1: string;
@@ -16,7 +18,8 @@ interface BillingInfo {
 
 interface GuestFormData {
   email: string;
-  name: string;
+  first_name: string;
+  last_name: string;
   title: string | null;
   phone: string | null;
   company: string | null;
@@ -30,7 +33,9 @@ interface GuestFormData {
 
 interface PartnerGuestInfo {
   id: number;
-  name: string;
+  firstName: string;
+  lastName: string;
+  name: string; // Computed full name
   email: string;
   title?: string | null;
   dietaryRequirements?: string | null;
@@ -43,12 +48,14 @@ interface GuestFormModalProps {
   onSave: (data: Partial<GuestFormData>) => Promise<void>;
   initialData?: Partial<GuestFormData> & {
     id?: number;
-    partner_name?: string | null;
+    partner_first_name?: string | null;
+    partner_last_name?: string | null;
+    partner_name?: string | null; // Computed full name
     partner_email?: string | null;
     billing_info?: BillingInfo | null;
     // New partner guest relation
     isPartner?: boolean;
-    pairedWith?: { id: number; name: string; email: string } | null;
+    pairedWith?: { id: number; firstName: string; lastName: string; name: string; email: string } | null;
     partnerGuest?: PartnerGuestInfo | null;
   };
   mode: 'add' | 'edit';
@@ -63,7 +70,8 @@ export default function GuestFormModal({
 }: GuestFormModalProps) {
   const [formData, setFormData] = useState<GuestFormData>({
     email: '',
-    name: '',
+    first_name: '',
+    last_name: '',
     title: null,
     phone: null,
     company: null,
@@ -82,7 +90,8 @@ export default function GuestFormModal({
     if (isOpen) {
       setFormData({
         email: initialData?.email || '',
-        name: initialData?.name || '',
+        first_name: initialData?.first_name || '',
+        last_name: initialData?.last_name || '',
         title: initialData?.title || null,
         phone: (initialData as { phone?: string | null })?.phone || null,
         company: initialData?.company || null,
@@ -121,8 +130,12 @@ export default function GuestFormModal({
       newErrors.email = 'Invalid email address';
     }
 
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+    if (!formData.first_name.trim()) {
+      newErrors.first_name = 'First name is required';
+    }
+
+    if (!formData.last_name.trim()) {
+      newErrors.last_name = 'Last name is required';
     }
 
     if (!formData.company?.trim()) {
@@ -198,7 +211,8 @@ export default function GuestFormModal({
             </div>
             <ul className="list-disc list-inside space-y-1 text-sm text-red-700">
               {errors.email && <li><button type="button" onClick={() => document.getElementById('email')?.focus()} className="hover:underline text-left">Email: {errors.email}</button></li>}
-              {errors.name && <li><button type="button" onClick={() => document.getElementById('name')?.focus()} className="hover:underline text-left">Name: {errors.name}</button></li>}
+              {errors.first_name && <li><button type="button" onClick={() => document.getElementById('first_name')?.focus()} className="hover:underline text-left">First Name: {errors.first_name}</button></li>}
+              {errors.last_name && <li><button type="button" onClick={() => document.getElementById('last_name')?.focus()} className="hover:underline text-left">Last Name: {errors.last_name}</button></li>}
               {errors.company && <li><button type="button" onClick={() => document.getElementById('company')?.focus()} className="hover:underline text-left">Company: {errors.company}</button></li>}
               {errors.position && <li><button type="button" onClick={() => document.getElementById('position')?.focus()} className="hover:underline text-left">Position: {errors.position}</button></li>}
             </ul>
@@ -251,28 +265,54 @@ export default function GuestFormModal({
                 )}
               </div>
 
-              {/* Name */}
+              {/* First Name */}
               <div>
                 <label
-                  htmlFor="name"
+                  htmlFor="first_name"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Name *
+                  First Name *
                 </label>
                 <input
                   type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
+                  id="first_name"
+                  name="first_name"
+                  value={formData.first_name}
                   onChange={handleChange}
                   className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                    errors.name ? 'border-red-500' : 'border-gray-300'
+                    errors.first_name ? 'border-red-500' : 'border-gray-300'
                   }`}
-                  data-testid="guest-name-input"
+                  data-testid="guest-first-name-input"
                 />
-                {errors.name && (
-                  <p className="mt-1 text-sm text-red-600" data-testid="name-error">
-                    {errors.name}
+                {errors.first_name && (
+                  <p className="mt-1 text-sm text-red-600" data-testid="first-name-error">
+                    {errors.first_name}
+                  </p>
+                )}
+              </div>
+
+              {/* Last Name */}
+              <div>
+                <label
+                  htmlFor="last_name"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Last Name *
+                </label>
+                <input
+                  type="text"
+                  id="last_name"
+                  name="last_name"
+                  value={formData.last_name}
+                  onChange={handleChange}
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                    errors.last_name ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                  data-testid="guest-last-name-input"
+                />
+                {errors.last_name && (
+                  <p className="mt-1 text-sm text-red-600" data-testid="last-name-error">
+                    {errors.last_name}
                   </p>
                 )}
               </div>
@@ -613,7 +653,7 @@ export default function GuestFormModal({
                   </label>
                   <input
                     type="text"
-                    value={initialData.billing_info.billing_name}
+                    value={initialData.billing_info.billingName}
                     disabled
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100"
                   />

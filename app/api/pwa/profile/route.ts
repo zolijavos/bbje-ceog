@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { prisma } from '@/lib/db/prisma';
 import { z } from 'zod';
 import { verifyPWASession } from '@/lib/services/pwa-auth';
+import { getFullName } from '@/lib/utils/name';
 
 // Check if table numbers should be shown to guests (configurable via env)
 const SHOW_TABLE_NUMBERS = process.env.SHOW_TABLE_NUMBERS !== 'false';
@@ -63,7 +64,9 @@ export async function GET() {
       guest: {
         id: guest.id,
         email: guest.email,
-        name: guest.name,
+        name: getFullName(guest.first_name, guest.last_name),
+        first_name: guest.first_name,
+        last_name: guest.last_name,
         guest_type: guest.guest_type,
         phone: guest.phone,
         company: guest.company,
@@ -75,7 +78,11 @@ export async function GET() {
             ticket_type: registration.ticket_type,
             status: guest.registration_status,
             qr_code_hash: registration.qr_code_hash,
-            partner_name: registration.partner_name,
+            partner_name: registration.partner_first_name && registration.partner_last_name
+              ? getFullName(registration.partner_first_name, registration.partner_last_name)
+              : null,
+            partner_first_name: registration.partner_first_name,
+            partner_last_name: registration.partner_last_name,
             partner_email: registration.partner_email,
           }
         : null,

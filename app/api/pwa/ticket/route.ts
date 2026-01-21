@@ -91,7 +91,8 @@ export async function GET() {
     return NextResponse.json({
       guest: {
         id: guest.id,
-        name: guest.name,
+        first_name: guest.first_name,
+        last_name: guest.last_name,
         guest_type: guest.guest_type,
       },
       registration: {

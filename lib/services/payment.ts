@@ -111,7 +111,7 @@ export async function createCheckoutSession(registrationId: number): Promise<{
           currency: 'huf',
           product_data: {
             name: productName,
-            description: `Guest: ${registration.guest.name}`,
+            description: `Guest: ${registration.guest.first_name} ${registration.guest.last_name}`,
           },
           unit_amount: unitAmountFiller, // Stripe expects fillér (smallest unit)
         },

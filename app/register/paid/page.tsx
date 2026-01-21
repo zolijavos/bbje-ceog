@@ -71,7 +71,8 @@ export default async function PaidPage({ searchParams }: PaidPageProps) {
     <PaidRegistrationForm
       guest={{
         id: guest.id,
-        name: guest.name,
+        first_name: guest.first_name,
+        last_name: guest.last_name,
         email: guest.email,
         guest_type: guest.guest_type,
         title: guest.title,

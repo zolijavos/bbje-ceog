@@ -125,7 +125,8 @@ function PoweredByFooter({ theme }: { theme: typeof themes.dark }) {
 
 interface Guest {
   id: number;
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   guest_type: string;
   title?: string | null;
@@ -216,8 +217,10 @@ export default function PaidRegistrationForm({
 
   const t = themes[theme];
 
+  // Compose full name and display name
+  const fullName = `${guest.first_name} ${guest.last_name}`;
   // Get display name with title (e.g., "Dr. John Smith")
-  const displayName = guest.title ? `${guest.title} ${guest.name}` : guest.name;
+  const displayName = guest.title ? `${guest.title} ${fullName}` : fullName;
 
   const [formData, setFormData] = useState<FormData>({
     ticketType: 'paid_single',
@@ -230,7 +233,7 @@ export default function PaidRegistrationForm({
     seatingPreferences: guest.seating_preferences || '',
     // Billing
     billing: {
-      billingName: guest.name,
+      billingName: `${guest.first_name} ${guest.last_name}`,
       companyName: guest.company || '',
       taxNumber: '',
       addressLine1: '',

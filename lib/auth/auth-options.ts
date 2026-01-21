@@ -4,6 +4,7 @@ import { prisma } from '@/lib/db/prisma';
 import bcrypt from 'bcryptjs';
 import { logError } from '@/lib/utils/logger';
 import { checkRateLimit, resetRateLimit, RATE_LIMITS } from '@/lib/services/rate-limit';
+import { getFullName } from '@/lib/utils/name';
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -51,7 +52,7 @@ export const authOptions: AuthOptions = {
           return {
             id: user.id.toString(),
             email: user.email,
-            name: user.name,
+            name: getFullName(user.first_name, user.last_name),
             role: user.role
           };
         } catch (error) {

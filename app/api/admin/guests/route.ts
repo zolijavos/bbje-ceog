@@ -10,13 +10,15 @@ import { requireAuth, validateBody, errorResponse } from '@/lib/api';
 import { getGuestList, getGuestStats, createGuest } from '@/lib/services/guest';
 import { createAuditLog } from '@/lib/services/audit';
 import { logError } from '@/lib/utils/logger';
+import { getFullName } from '@/lib/utils/name';
 import { GuestType, RegistrationStatus } from '@prisma/client';
 import { z } from 'zod';
 
 // Validation schema for creating a guest
 const createGuestSchema = z.object({
   email: z.string().email('Invalid email address'),
-  name: z.string().min(1, 'Name is required'),
+  first_name: z.string().min(1, 'First name is required'),
+  last_name: z.string().min(1, 'Last name is required'),
   guest_type: z.enum(['vip', 'invited', 'paying_single', 'paying_paired', 'applicant']),
   title: z.string().nullable().optional(),
   phone: z.string().nullable().optional(),
@@ -143,7 +145,8 @@ export async function POST(request: NextRequest) {
     // Create guest - data is validated
     const guest = await createGuest({
       email: validation.data.email,
-      name: validation.data.name,
+      first_name: validation.data.first_name,
+      last_name: validation.data.last_name,
       guest_type: validation.data.guest_type,
       title: validation.data.title || null,
       phone: validation.data.phone || null,
@@ -158,10 +161,11 @@ export async function POST(request: NextRequest) {
       action: 'CREATE',
       entityType: 'guest',
       entityId: guest.id,
-      entityName: guest.name,
+      entityName: getFullName(guest.first_name, guest.last_name),
       newValues: {
         email: guest.email,
-        name: guest.name,
+        first_name: guest.first_name,
+        last_name: guest.last_name,
         guest_type: guest.guest_type,
         company: guest.company,
         position: guest.position,

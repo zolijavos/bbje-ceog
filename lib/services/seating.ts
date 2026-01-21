@@ -41,7 +41,8 @@ export interface TableWithAssignments {
     seat_number: number | null;
     guest: {
       id: number;
-      name: string;
+      first_name: string;
+      last_name: string;
       email: string;
       guest_type: string;
     };
@@ -157,7 +158,8 @@ export async function getTable(id: number): Promise<TableWithAssignments | null>
           guest: {
             select: {
               id: true,
-              name: true,
+              first_name: true,
+              last_name: true,
               email: true,
               guest_type: true,
             },
@@ -188,21 +190,24 @@ export async function getAllTables(): Promise<TableWithAssignments[]> {
           guest: {
             select: {
               id: true,
-              name: true,
+              first_name: true,
+              last_name: true,
               email: true,
               guest_type: true,
               paired_with_id: true, // For filtering partners in drag & drop UI
               registration: {
                 select: {
                   ticket_type: true,
-                  partner_name: true,
+                  partner_first_name: true,
+                  partner_last_name: true,
                 },
               },
               // Partner relation for paired guests display
               partner_of: {
                 select: {
                   id: true,
-                  name: true,
+                  first_name: true,
+                  last_name: true,
                 },
               },
             },
@@ -288,8 +293,8 @@ export async function assignGuestToTable(
     where: { id: guestId },
     include: {
       table_assignment: true,
-      paired_with: { select: { id: true, name: true, table_assignment: true } },
-      partner_of: { select: { id: true, name: true, table_assignment: true } },
+      paired_with: { select: { id: true, first_name: true, last_name: true, table_assignment: true } },
+      partner_of: { select: { id: true, first_name: true, last_name: true, table_assignment: true } },
     },
   });
 
@@ -357,7 +362,8 @@ export async function assignGuestToTable(
         guest: {
           select: {
             id: true,
-            name: true,
+            first_name: true,
+            last_name: true,
             email: true,
           },
         },
@@ -461,7 +467,8 @@ export async function moveGuestToTable(
       guest: {
         select: {
           id: true,
-          name: true,
+          first_name: true,
+          last_name: true,
           email: true,
           paired_with_id: true,
           partner_of: { select: { id: true } },
@@ -549,7 +556,8 @@ export async function moveGuestToTable(
         guest: {
           select: {
             id: true,
-            name: true,
+            first_name: true,
+            last_name: true,
             email: true,
           },
         },
@@ -638,13 +646,15 @@ export async function getUnassignedGuests() {
     },
     select: {
       id: true,
-      name: true,
+      first_name: true,
+      last_name: true,
       email: true,
       guest_type: true,
       registration: {
         select: {
           ticket_type: true,
-          partner_name: true,
+          partner_first_name: true,
+          partner_last_name: true,
           partner_email: true,
         },
       },
@@ -653,7 +663,8 @@ export async function getUnassignedGuests() {
       paired_with: {
         select: {
           id: true,
-          name: true,
+          first_name: true,
+          last_name: true,
           table_assignment: { select: { id: true } },
         },
       },
@@ -661,15 +672,17 @@ export async function getUnassignedGuests() {
       partner_of: {
         select: {
           id: true,
-          name: true,
+          first_name: true,
+          last_name: true,
           table_assignment: { select: { id: true } },
         },
       },
     },
-    // Sort alphabetically by name (ABC order)
-    orderBy: {
-      name: 'asc',
-    },
+    // Sort alphabetically by last name (ABC order)
+    orderBy: [
+      { last_name: 'asc' },
+      { first_name: 'asc' },
+    ],
   });
 }
 
@@ -715,7 +728,8 @@ export async function getAllAssignments() {
       guest: {
         select: {
           id: true,
-          name: true,
+          first_name: true,
+          last_name: true,
           email: true,
           guest_type: true,
         },
@@ -879,7 +893,8 @@ export async function exportSeatingArrangement(): Promise<string> {
       },
       guest: {
         select: {
-          name: true,
+          first_name: true,
+          last_name: true,
           email: true,
           guest_type: true,
         },
@@ -891,11 +906,12 @@ export async function exportSeatingArrangement(): Promise<string> {
     ],
   });
 
-  const header = 'table_name,table_type,guest_name,guest_email,guest_type,seat_number';
+  const header = 'table_name,table_type,guest_first_name,guest_last_name,guest_email,guest_type,seat_number';
   const rows = assignments.map(a => [
     a.table.name,
     a.table.type,
-    `"${a.guest.name}"`,
+    `"${a.guest.first_name}"`,
+    `"${a.guest.last_name}"`,
     a.guest.email,
     a.guest.guest_type,
     a.seat_number || '',

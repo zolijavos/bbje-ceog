@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/api';
 import { prisma } from '@/lib/db/prisma';
 import { logError } from '@/lib/utils/logger';
+import { getFullName } from '@/lib/utils/name';
 
 /**
  * GET - List payments with filtering and pagination
@@ -53,7 +54,8 @@ export async function GET(request: NextRequest) {
       where.registration = {
         guest: {
           OR: [
-            { name: { contains: search } },
+            { first_name: { contains: search } },
+            { last_name: { contains: search } },
             { email: { contains: search } },
           ],
         },
@@ -72,7 +74,8 @@ export async function GET(request: NextRequest) {
               guest: {
                 select: {
                   id: true,
-                  name: true,
+                  first_name: true,
+                  last_name: true,
                   email: true,
                   guest_type: true,
                   phone: true,
@@ -129,21 +132,27 @@ export async function GET(request: NextRequest) {
     ]);
 
     // Format payments for response
-    const formattedPayments = payments.map((p) => ({
-      id: p.id,
-      registration_id: p.registration_id,
-      stripe_session_id: p.stripe_session_id,
-      stripe_payment_intent_id: p.stripe_payment_intent_id,
-      amount: Number(p.amount),
-      currency: p.currency,
-      payment_status: p.payment_status,
-      payment_method: p.payment_method,
-      paid_at: p.paid_at,
-      created_at: p.created_at,
-      guest: p.registration?.guest || null,
-      ticket_type: p.registration?.ticket_type || null,
-      billing_info: p.registration?.billing_info || null,
-    }));
+    const formattedPayments = payments.map((p) => {
+      const guest = p.registration?.guest;
+      return {
+        id: p.id,
+        registration_id: p.registration_id,
+        stripe_session_id: p.stripe_session_id,
+        stripe_payment_intent_id: p.stripe_payment_intent_id,
+        amount: Number(p.amount),
+        currency: p.currency,
+        payment_status: p.payment_status,
+        payment_method: p.payment_method,
+        paid_at: p.paid_at,
+        created_at: p.created_at,
+        guest: guest ? {
+          ...guest,
+          name: getFullName(guest.first_name, guest.last_name),
+        } : null,
+        ticket_type: p.registration?.ticket_type || null,
+        billing_info: p.registration?.billing_info || null,
+      };
+    });
 
     return NextResponse.json({
       payments: formattedPayments,

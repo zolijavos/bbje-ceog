@@ -11,7 +11,8 @@ import { processPaidRegistration, PaidRegistrationData, BillingInfoData } from '
 import { logError } from '@/lib/utils/logger';
 
 interface BillingInfoInput {
-  billing_name: string;
+  billing_first_name: string;
+  billing_last_name: string;
   company_name?: string | null;
   tax_number?: string | null;
   address_line1: string;
@@ -25,7 +26,8 @@ interface SubmitBody {
   guest_id: number;
   ticket_type: 'paid_single' | 'paid_paired';
   billing_info: BillingInfoInput;
-  partner_name?: string | null;
+  partner_first_name?: string | null;
+  partner_last_name?: string | null;
   partner_email?: string | null;
   partner_phone?: string | null;
   partner_company?: string | null;
@@ -52,7 +54,8 @@ export async function POST(request: NextRequest) {
       guest_id,
       ticket_type,
       billing_info,
-      partner_name,
+      partner_first_name,
+      partner_last_name,
       partner_email,
       partner_phone,
       partner_company,
@@ -113,9 +116,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!billing_info.billing_name || billing_info.billing_name.length < 2) {
+    if (!billing_info.billing_first_name || billing_info.billing_first_name.length < 1) {
       return NextResponse.json(
-        { success: false, error: 'Billing name is required (min. 2 characters)' },
+        { success: false, error: 'Billing first name is required' },
+        { status: 400 }
+      );
+    }
+
+    if (!billing_info.billing_last_name || billing_info.billing_last_name.length < 1) {
+      return NextResponse.json(
+        { success: false, error: 'Billing last name is required' },
         { status: 400 }
       );
     }
@@ -167,9 +177,16 @@ export async function POST(request: NextRequest) {
 
     // Validate partner info for paired tickets
     if (ticket_type === 'paid_paired') {
-      if (!partner_name || typeof partner_name !== 'string' || partner_name.length < 2) {
+      if (!partner_first_name || typeof partner_first_name !== 'string' || partner_first_name.length < 1) {
         return NextResponse.json(
-          { success: false, error: 'Partner name is required for paired tickets (min. 2 characters)' },
+          { success: false, error: 'Partner first name is required for paired tickets' },
+          { status: 400 }
+        );
+      }
+
+      if (!partner_last_name || typeof partner_last_name !== 'string' || partner_last_name.length < 1) {
+        return NextResponse.json(
+          { success: false, error: 'Partner last name is required for paired tickets' },
           { status: 400 }
         );
       }
@@ -204,7 +221,8 @@ export async function POST(request: NextRequest) {
       guest_id,
       ticket_type,
       billing_info: {
-        billing_name: billing_info.billing_name,
+        billing_first_name: billing_info.billing_first_name,
+        billing_last_name: billing_info.billing_last_name,
         company_name: billing_info.company_name || null,
         tax_number: billing_info.tax_number || null,
         address_line1: billing_info.address_line1,
@@ -213,7 +231,8 @@ export async function POST(request: NextRequest) {
         postal_code: billing_info.postal_code,
         country: billing_info.country || 'HU',
       },
-      partner_name: partner_name || null,
+      partner_first_name: partner_first_name || null,
+      partner_last_name: partner_last_name || null,
       partner_email: partner_email || null,
       partner_phone: partner_phone || null,
       partner_company: partner_company || null,
