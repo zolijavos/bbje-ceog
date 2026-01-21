@@ -53,8 +53,9 @@ export default function ConsentCheckboxes({
               request access, correction, or deletion of my data at any time.
               Full privacy policy available{' '}
               <a
-                href="/privacy"
+                href="https://bbj.hu/about/privacy/"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="text-amber-600 underline hover:text-amber-700"
                 onClick={(e) => e.stopPropagation()}
               >

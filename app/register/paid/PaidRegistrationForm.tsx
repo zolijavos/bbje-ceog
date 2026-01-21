@@ -460,16 +460,25 @@ export default function PaidRegistrationForm({
         }),
       });
 
-      const data = await response.json();
-
+      // Check response before parsing JSON
       if (!response.ok) {
         if (response.status === 409) {
           router.push(`/register/paid?guest_id=${guest.id}&error=already_registered`);
           return;
         }
-        throw new Error(data.error || 'An error occurred');
+        // Try to parse error message from JSON, fallback to generic error
+        let errorMessage = 'An error occurred';
+        try {
+          const data = await response.json();
+          errorMessage = data.error || errorMessage;
+        } catch {
+          // Response was not JSON (likely HTML error page)
+          errorMessage = `Server error (${response.status}). Please try again.`;
+        }
+        throw new Error(errorMessage);
       }
 
+      const data = await response.json();
       router.push(`/register/success?guest_id=${guest.id}&type=paid`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred');
@@ -836,7 +845,7 @@ export default function PaidRegistrationForm({
                     className={`w-5 h-5 mt-0.5 rounded border-[#d1aa67]/50 text-[#d1aa67] focus:ring-[#d1aa67] ${errors.partner_gdpr_consent ? 'border-red-500' : ''}`}
                   />
                   <span className={`text-sm ${t.textMuted}`}>
-                    I confirm that my partner has consented to the processing of their personal data according to the <a href="/privacy" target="_blank" className="text-[#d1aa67] hover:underline">Privacy Policy</a>. <span className="text-[#b41115]">*</span>
+                    I confirm that my partner has consented to the processing of their personal data according to the <a href="https://bbj.hu/about/privacy/" target="_blank" rel="noopener noreferrer" className="text-[#d1aa67] hover:underline">Privacy Policy</a>. <span className="text-[#b41115]">*</span>
                   </span>
                 </label>
                 {errors.partner_gdpr_consent && (
