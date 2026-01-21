@@ -5,8 +5,8 @@
 
 import { z } from 'zod';
 
-// Title/Salutation options
-export const titleOptions = ['', 'Dr.', 'Prof.', 'Mr.', 'Mrs.', 'Ms.', 'ifj.', 'id.'] as const;
+// Title/Salutation options (English)
+export const titleOptions = ['', 'Dr.', 'Prof.', 'Mr.', 'Mrs.', 'Ms.', 'Jr.', 'Sr.'] as const;
 export type TitleOption = typeof titleOptions[number];
 
 // Hungarian phone number regex (accepts various formats)
