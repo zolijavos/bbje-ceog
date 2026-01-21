@@ -12,7 +12,7 @@ import { getTicketDeliveryEmailTemplate } from '@/lib/email-templates/ticket-del
 import { renderTemplate } from '@/lib/services/email-templates';
 import { generateTicket, getExistingTicket, tryAcquireTicketLock } from '@/lib/services/qr-ticket';
 import { logError, logInfo } from '@/lib/utils/logger';
-import { getFullName } from '@/lib/utils/name';
+import { getFullName, getDisplayName } from '@/lib/utils/name';
 import type { TicketType } from '@prisma/client';
 
 // Singleton Nodemailer transport for connection pooling (thread-safe)
@@ -323,7 +323,7 @@ export async function sendMagicLinkEmail(
 
     try {
       const rendered = await renderTemplate('magic_link', {
-        guestName: getFullName(guest.first_name, guest.last_name),
+        guestName: getDisplayName(guest.first_name, guest.last_name, guest.title),
         magicLinkUrl,
         baseUrl: appUrl,
       });
@@ -333,7 +333,7 @@ export async function sendMagicLinkEmail(
     } catch {
       // Fallback to hardcoded template
       const fallback = getMagicLinkEmailTemplate({
-        guestName: getFullName(guest.first_name, guest.last_name),
+        guestName: getDisplayName(guest.first_name, guest.last_name, guest.title),
         magicLinkUrl,
         baseUrl: appUrl,
       });

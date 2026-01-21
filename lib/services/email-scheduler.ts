@@ -12,7 +12,7 @@ import { renderTemplate, type TemplateSlug } from '@/lib/services/email-template
 import { sendEmail, logEmailDelivery } from '@/lib/services/email';
 import { logInfo, logError } from '@/lib/utils/logger';
 import { EVENT_CONFIG } from '@/lib/config/event';
-import { getFullName } from '@/lib/utils/name';
+import { getFullName, getDisplayName } from '@/lib/utils/name';
 import type { ScheduledEmailStatus, Guest } from '@prisma/client';
 
 // Extract event constants for convenience
@@ -122,7 +122,7 @@ export async function processScheduledEmails(): Promise<{
       };
 
       if (guest) {
-        variables.guestName = getFullName(guest.first_name, guest.last_name);
+        variables.guestName = getDisplayName(guest.first_name, guest.last_name, guest.title);
         // Add other guest fields as needed
       }
 
@@ -320,7 +320,7 @@ export async function schedulePaymentReminders(config?: {
       templateSlug: 'payment_reminder',
       scheduledFor,
       variables: {
-        guestName: getFullName(reg.guest.first_name, reg.guest.last_name),
+        guestName: getDisplayName(reg.guest.first_name, reg.guest.last_name, reg.guest.title),
         ticketType: ticketLabels[reg.ticket_type] || reg.ticket_type,
         amount: reg.payment ? `${Number(reg.payment.amount).toLocaleString('hu-HU')} ${reg.payment.currency}` : 'N/A',
         paymentUrl: `${process.env.APP_URL || 'https://ceogala.mflevents.space'}/status?guestId=${reg.guest_id}`,
@@ -418,7 +418,7 @@ export async function scheduleEventReminders(config?: {
       templateSlug: 'event_reminder',
       scheduledFor: reminderDate,
       variables: {
-        guestName: getFullName(guest.first_name, guest.last_name),
+        guestName: getDisplayName(guest.first_name, guest.last_name, guest.title),
         eventDate: eventDate.toLocaleDateString('en-US', {
           weekday: 'long',
           year: 'numeric',
@@ -544,7 +544,7 @@ export async function scheduleNoShowPaymentRequests(config?: {
       templateSlug: 'noshow_payment_request',
       scheduledFor,
       variables: {
-        guestName: getFullName(guest.first_name, guest.last_name),
+        guestName: getDisplayName(guest.first_name, guest.last_name, guest.title),
         eventDate: eventDate.toLocaleDateString('en-US', {
           weekday: 'long',
           year: 'numeric',
@@ -626,7 +626,7 @@ async function scheduleGenericEmails(config: {
 
   const guests = await prisma.guest.findMany({
     where,
-    select: { id: true, first_name: true, last_name: true },
+    select: { id: true, first_name: true, last_name: true, title: true },
   });
 
   let scheduled = 0;
@@ -649,7 +649,7 @@ async function scheduleGenericEmails(config: {
       templateSlug: config.template_slug as TemplateSlug,
       scheduledFor,
       variables: {
-        guestName: getFullName(guest.first_name, guest.last_name),
+        guestName: getDisplayName(guest.first_name, guest.last_name, guest.title),
       },
       scheduleType: config.config_key,
     });
