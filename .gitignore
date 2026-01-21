@@ -1,53 +1,125 @@
-# Dependencies
-node_modules/
-.pnp
-.pnp.js
+# =============================================
+# CEO Gala - Production .gitignore
+# =============================================
+# Ez a .gitignore fájl a production/deployment ághoz
+# Kizárja a dokumentációt és fejlesztői fájlokat
+# =============================================
 
-# Testing
-coverage/
-.nyc_output/
-playwright-report/
+# =============================================
+# DOKUMENTÁCIÓ (kizárva)
+# =============================================
+docs/
+*.excalidraw
+CLAUDE.md
+REFACTORING_SUMMARY.md
+
+# Megtartjuk a README.md-t és INSTALL.md-t!
+!README.md
+!INSTALL.md
+
+# =============================================
+# FEJLESZTŐI ESZKÖZÖK
+# =============================================
+# BMad framework
+_bmad/
+bmad-custom-src/
+.agent/
+.claude/
+.codex/
+.gemini/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Vercel
+.vercel/
+
+# =============================================
+# TESZTELÉS
+# =============================================
+tests/
 test-results/
-playwright/.cache/
+playwright-report/
+playwright.config.ts
+vitest.config.ts
+coverage/
+*.test.ts
+*.spec.ts
 
-# Next.js
+# Seed fájlok (teszt adatok)
+prisma/seed.ts
+prisma/seed-*.ts
+
+# Teszt szkriptek
+test-*.js
+test-*.csv
+check-*.js
+simulate-*.js
+send-qr*.js
+
+# =============================================
+# FEJLESZTŐI SZKRIPTEK
+# =============================================
+scripts/capture-*.mjs
+scripts/debug-*.mjs
+scripts/full-screenshots.mjs
+scripts/generate-*.js
+scripts/payment-*.mjs
+scripts/screenshots.mjs
+scripts/seating-*.mjs
+scripts/take-screenshots.ts
+scripts/test-*.mjs
+
+# =============================================
+# BUILD ÉS FÜGGŐSÉGEK
+# =============================================
 .next/
+node_modules/
 out/
 build/
 dist/
+*.tsbuildinfo
 
-# Production
+# =============================================
+# KÖRNYEZET ÉS TITKOS FÁJLOK
+# =============================================
+.env
+.env.local
+.env.development
+.env.development.local
+.env.test.local
+.env.production.local
+.db-config
+ecosystem.config.js
+
+# Backup fájlok
+*.sql
+backup_*.sql
+
+# =============================================
+# RENDSZER FÁJLOK
+# =============================================
+.DS_Store
+Thumbs.db
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-# Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Misc
-.DS_Store
 *.pem
-.vscode/
-.idea/
 
-# Debug
-*.tsbuildinfo
+# =============================================
+# IDEIGLENES FÁJLOK
+# =============================================
+.workflow-init-temp.yaml
 next-env.d.ts
 
-# Prisma
-prisma/*.db
-prisma/*.db-journal
-
-# BMad temporary files
-.workflow-init-temp.yaml
-
-# OS
-Thumbs.db
-ecosystem.config.js
+# =============================================
+# DOCKER (opcionális - csak ha nem kell)
+# =============================================
+# docker/
+# docker-compose*.yml
+# Dockerfile
+# .dockerignore
