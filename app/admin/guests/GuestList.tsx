@@ -367,7 +367,8 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
   const handleCreateGuest = useCallback(
     async (data: {
       email?: string;
-      name?: string;
+      first_name?: string;
+      last_name?: string;
       title?: string | null;
       phone?: string | null;
       company?: string | null;
@@ -381,7 +382,8 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: data.email,
-          name: data.name,
+          first_name: data.first_name,
+          last_name: data.last_name,
           guest_type: data.guest_type,
           title: data.title,
           phone: data.phone,
@@ -408,7 +410,8 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
   const handleUpdateGuest = useCallback(
     async (data: {
       email?: string;
-      name?: string;
+      first_name?: string;
+      last_name?: string;
       title?: string | null;
       phone?: string | null;
       company?: string | null;
@@ -425,7 +428,8 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: data.name,
+          first_name: data.first_name,
+          last_name: data.last_name,
           title: data.title,
           phone: data.phone,
           company: data.company,

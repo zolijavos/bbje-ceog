@@ -1,6 +1,6 @@
 // CEO Gala - Create Admin User Script
-// Usage: npx tsx scripts/create-admin.ts <email> <password> [name]
-// Example: npx tsx scripts/create-admin.ts admin@ceogala.hu MySecurePass123! "Admin User"
+// Usage: npx tsx scripts/create-admin.ts <email> <password> <first_name> <last_name>
+// Example: npx tsx scripts/create-admin.ts admin@ceogala.hu MySecurePass123! Admin User
 
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
@@ -10,17 +10,17 @@ const prisma = new PrismaClient();
 async function main() {
   const args = process.argv.slice(2);
 
-  if (args.length < 2) {
+  if (args.length < 4) {
     console.log('');
     console.log('🔐 CEO Gala - Create Admin User');
     console.log('================================');
     console.log('');
     console.log('Usage:');
-    console.log('  npx tsx scripts/create-admin.ts <email> <password> [name]');
+    console.log('  npx tsx scripts/create-admin.ts <email> <password> <first_name> <last_name>');
     console.log('');
     console.log('Examples:');
-    console.log('  npx tsx scripts/create-admin.ts admin@ceogala.hu MySecurePass123!');
-    console.log('  npx tsx scripts/create-admin.ts admin@ceogala.hu MySecurePass123! "Kovács János"');
+    console.log('  npx tsx scripts/create-admin.ts admin@ceogala.hu MySecurePass123! Admin User');
+    console.log('  npx tsx scripts/create-admin.ts admin@ceogala.hu MySecurePass123! Kovács János');
     console.log('');
     console.log('Password requirements:');
     console.log('  - Minimum 8 characters');
@@ -33,7 +33,8 @@ async function main() {
 
   const email = args[0];
   const password = args[1];
-  const name = args[2] || 'Admin';
+  const firstName = args[2];
+  const lastName = args[3];
 
   // Validate email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -85,7 +86,8 @@ async function main() {
     data: {
       email,
       password_hash: passwordHash,
-      name,
+      first_name: firstName,
+      last_name: lastName,
       role: 'admin',
     },
   });
@@ -95,7 +97,7 @@ async function main() {
   console.log('');
   console.log('📋 Details:');
   console.log(`   Email: ${user.email}`);
-  console.log(`   Name:  ${user.name}`);
+  console.log(`   Name:  ${user.first_name} ${user.last_name}`);
   console.log(`   Role:  ${user.role}`);
   console.log('');
   console.log('🌐 Login at: /admin/login');
