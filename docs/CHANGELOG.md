@@ -4,6 +4,52 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
 
 ---
 
+## v2.15.0 (2026-01-21)
+
+### Breaking Changes / Törő Változások
+
+- **Database Schema: Name Field Split** / **Adatbázis Séma: Név Mező Szétbontás**
+  - EN: **MIGRATION REQUIRED** - The `name` fields have been split into `first_name` and `last_name` across all tables:
+    - `guests.name` → `guests.first_name` + `guests.last_name`
+    - `registrations.partner_name` → `registrations.partner_first_name` + `registrations.partner_last_name`
+    - `users.name` → `users.first_name` + `users.last_name`
+    - `billing_info.billing_name` → `billing_info.billing_first_name` + `billing_info.billing_last_name`
+  - HU: **MIGRÁCIÓ SZÜKSÉGES** - A `name` mezők szét lettek bontva `first_name` és `last_name` mezőkre minden táblában.
+
+### New Features / Új funkciók
+
+- **Dark Theme Registration Pages** / **Sötét Téma Regisztrációs Oldalakon**
+  - EN: All registration pages now feature a dark theme with `#0c0d0e` background and `#d1aa67` gold accents. Provides elegant, premium look matching event branding.
+  - HU: Minden regisztrációs oldal sötét témát kapott `#0c0d0e` háttérrel és `#d1aa67` arany kiemelésekkel. Elegáns, prémium megjelenés az esemény arculatához.
+
+- **Updated Magic Link Email Template** / **Frissített Magic Link Email Sablon**
+  - EN: New HIPA-compliant email design with Verdana 15px font, BBJ logo, and dark blue guest name highlighting. More professional appearance.
+  - HU: Új HIPA-kompatibilis email dizájn Verdana 15px betűtípussal, BBJ logóval és sötétkék vendégnév kiemeléssel.
+
+- **Title Display in All Emails** / **Címzés Megjelenítés Minden Emailben**
+  - EN: Guest titles (Dr., Prof., etc.) now appear in all email greetings including bulk emails, scheduled emails, and magic link emails.
+  - HU: Vendég címzések (Dr., Prof., stb.) mostantól megjelennek minden email megszólításban, beleértve a tömeges, ütemezett és magic link emaileket.
+
+### Improvements / Javítások
+
+- **Subtle Decline Button** / **Visszafogott Elutasítás Gomb**
+  - EN: The decline/reject button on registration pages is now less prominent (outline style) to encourage acceptance.
+  - HU: Az elutasítás gomb a regisztrációs oldalakon visszafogottabb (körvonal stílus) a részvétel ösztönzésére.
+
+- **"Gála" → "Gala" Text Change** / **"Gála" → "Gala" Szöveg Változás**
+  - EN: Changed Hungarian "Gála" spelling to English "Gala" across all user-facing text for consistency.
+  - HU: Magyar "Gála" helyett angol "Gala" írás minden felhasználói szövegben az egységesség érdekében.
+
+- **English Title Dropdown Options** / **Angol Címzés Dropdown Opciók**
+  - EN: Changed Hungarian title options (ifj., id.) to English equivalents (Jr., Sr.) in the dropdown.
+  - HU: Magyar címzés opciók (ifj., id.) lecserélve angol megfelelőkre (Jr., Sr.) a legördülő menüben.
+
+- **Updated Attendance Commitment Text** / **Frissített Részvételi Kötelezettség Szöveg**
+  - EN: Updated consent checkbox with 10 business days cancellation notice and HUF 99,000 + VAT no-show fee policy.
+  - HU: Frissített beleegyezés checkbox 10 munkanap lemondási határidővel és HUF 99,000 + ÁFA no-show díj szabályzattal.
+
+---
+
 ## v2.13.5 (2026-01-19)
 
 ### Deployment Fixes / Telepítési Javítások
