@@ -75,6 +75,27 @@ function validateSecret(name: keyof EnvConfig, minLength: number = 32): string {
 }
 
 /**
+ * Validates Stripe configuration
+ * Stripe credentials are optional - payment will be disabled if not configured
+ */
+function validateStripe(): boolean {
+  const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+  const secretKey = process.env.STRIPE_SECRET_KEY;
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+  // Check if any key is missing or is a placeholder
+  const isPlaceholder = (key: string | undefined) =>
+    !key || key.includes('YOUR_KEY') || key === 'pk_test_' || key === 'sk_test_' || key === 'whsec_';
+
+  if (isPlaceholder(publishableKey) || isPlaceholder(secretKey) || isPlaceholder(webhookSecret)) {
+    console.warn('⚠️  Stripe not fully configured - payment functionality will be disabled');
+    return false;
+  }
+
+  return true;
+}
+
+/**
  * Validates email configuration
  * SMTP credentials are optional - email will be disabled if not configured
  */
@@ -115,10 +136,11 @@ export function validateEnv(): void {
     validateSecret('APP_SECRET', 64);
     validateSecret('QR_SECRET', 64);
 
-    // Stripe
-    validateEnvVar('STRIPE_SECRET_KEY');
-    validateEnvVar('STRIPE_WEBHOOK_SECRET');
-    validateEnvVar('NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY');
+    // Stripe (optional - warns if not configured)
+    const stripeConfigured = validateStripe();
+    if (!stripeConfigured) {
+      console.warn('   Payment features will not work until Stripe is configured.');
+    }
 
     // Email (optional - warns if not configured)
     const emailConfigured = validateEmail();
