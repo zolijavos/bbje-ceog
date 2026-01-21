@@ -225,7 +225,7 @@ print_success "Dependencies installed"
 print_header "5. Database Schema"
 
 print_step "Generating Prisma client..."
-npx prisma generate --quiet
+npx prisma generate > /dev/null 2>&1
 print_success "Prisma client generated"
 
 print_step "Applying database migrations..."
