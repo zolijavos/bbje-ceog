@@ -23,28 +23,27 @@ export const DEFAULT_TEMPLATES = {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Invitation to the CEO Gala 2026</title>
   <style>
-    body { font-family: Arial, Helvetica, sans-serif; line-height: 1.5; color: #333333; margin: 0; padding: 0; background-color: #ffffff; }
+    body { font-family: Verdana, Geneva, sans-serif; font-size: 15px; line-height: 1.6; color: #333333; margin: 0; padding: 0; background-color: #ffffff; }
     .container { max-width: 680px; margin: 0 auto; padding: 15px; background-color: #ffffff; }
     .header-image { width: 100%; max-width: 680px; height: auto; display: block; margin: 0 auto 20px auto; }
     .content { padding: 0 15px; text-align: center; }
-    p { margin: 0 0 12px 0; font-size: 14px; text-align: center; color: #333333; }
-    .greeting { font-size: 14px; margin-bottom: 18px; }
+    p { margin: 0 0 12px 0; font-size: 15px; text-align: center; color: #333333; }
+    .greeting { font-size: 15px; margin-bottom: 18px; }
     .details-section { margin: 20px 0; text-align: center; }
-    .details-section p { margin: 3px 0; font-size: 14px; }
+    .details-section p { margin: 3px 0; font-size: 15px; }
     .cta-container { text-align: center; margin: 25px 0 20px 0; }
-    .cta-button { display: inline-block; background-color: #c41e3a; color: #ffffff !important; text-decoration: none; padding: 10px 30px; font-size: 13px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; }
+    .cta-button { display: inline-block; background-color: #c41e3a; color: #ffffff !important; text-decoration: none; padding: 12px 35px; font-size: 14px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; border-radius: 4px; font-family: Arial, Helvetica, sans-serif; }
     .cta-button:hover { background-color: #a01830; }
-    .warm-regards { margin: 25px 0 8px 0; font-style: italic; }
+    .warm-regards { margin: 25px 0 8px 0; font-style: italic; text-align: left; }
     .signatures { margin: 30px 0 25px 0; text-align: center; }
     .signatures-row { display: inline-block; width: 100%; }
     .signature { display: inline-block; width: 45%; text-align: center; vertical-align: top; }
-    .signature-name { font-weight: bold; font-size: 14px; margin-bottom: 2px; color: #c41e3a; }
-    .signature-title { font-size: 13px; color: #333333; }
+    .signature-name { font-weight: bold; font-size: 15px; margin-bottom: 2px; color: #1a1a2e; }
+    .signature-title { font-size: 14px; color: #333333; }
     .divider { border: 0; border-top: 1px solid #cccccc; margin: 25px 0; }
     .footer { text-align: center; padding: 15px 0; }
     .footer p { font-size: 12px; color: #666666; margin: 4px 0; }
     .footer a { color: #333333; text-decoration: underline; }
-    .footer-logo { margin-bottom: 10px; }
     .link-fallback { font-size: 10px; color: #999999; word-break: break-all; margin-top: 20px; text-align: center; padding: 15px; background-color: #f5f5f5; }
   </style>
 </head>
@@ -53,29 +52,22 @@ export const DEFAULT_TEMPLATES = {
     <img src="{{baseUrl}}/email-assets/CEO_Gala_2026_invitation_header_709x213.jpg" alt="CEO Gala 2026 - March 27, 2026" class="header-image" />
 
     <div class="content">
-      <p class="greeting">Dear {{guestName}},</p>
+      <p class="greeting">Dear <strong>{{guestName}}</strong>,</p>
 
-      <p>We are delighted to announce that the next <strong>CEO Gala</strong> will take place on <strong>Friday, March 27, 2026</strong>, at the <strong>Corinthia Hotel Budapest</strong>.</p>
+      <p>The Budapest Business Journal and our official event partner, the <strong>Hungarian Investment Promotion Agency (HIPA)</strong>, are delighted to invite you to the official <strong>CEO Gala 2026</strong> hosted at <strong>Corinthia Hotel Budapest on Friday, March 27, 2026.</strong></p>
 
-      <p>Now in its <strong>12th edition</strong>, the CEO Gala has become a <strong>landmark event</strong> in Hungary's business calendar, a <strong>must-attend occasion</strong> for the country's most distinguished business leaders, diplomats, and representatives of international business organizations.</p>
-
-      <p>The evening brings together a unique <strong>concentration of decision-makers</strong> under one roof, individuals whose vision, leadership, and achievements drive a remarkable share of Hungary's economic performance. The atmosphere is truly inspiring: a celebration of <strong>excellence, innovation, and recognition</strong>, where meaningful connections are made and maintained.</p>
-
-      <p>During the evening, we will present two of the most prestigious titles in Hungary's business community. The <strong>Expat CEO of the Year Award</strong> honors an outstanding international business leader for their contribution to Hungary's economic life, while the <strong>CEO Community Award</strong> recognizes a visionary leader whose activities have had a lasting, positive impact on society and the business environment.</p>
+      <p>As has now become a tradition of several years, two awards will be presented during the evening: the <strong>Expat CEO Award</strong>, granted to the most successful and innovative expatriate CEO working in Hungary; and the <strong>CEO Community Award</strong>, bestowed to a Hungarian executive who has been a role model by being successful in markets while demonstrating exceptional commitment to the community. Two professional awards committees will choose the winners minutes before the gala starts from a shortlist of three candidates.</p>
 
       <div class="details-section">
-        <p>Date:</p>
-        <p>Friday, March 27, 2026, 7 p.m.</p>
+        <p><strong>Date:</strong> Friday, March 27, 2026, 7 p.m.</p>
         <br>
-        <p>Location:</p>
-        <p>The Grand Ballroom of the Corinthia Hotel Budapest</p>
+        <p><strong>Location:</strong> The Grand Ballroom of the Corinthia Hotel Budapest</p>
         <p>1073 Budapest, Erzsébet krt. 43-49</p>
         <br>
-        <p>Dress Code:</p>
-        <p>Black tie for men, ball gown or cocktail dress for women</p>
+        <p><strong>Dress Code:</strong> Black tie for men, ball gown or cocktail dress for women</p>
       </div>
 
-      <p>If you wish to reserve your place at the gala now, click the REGISTRATION button below.</p>
+      <p>If you wish to reserve your place at the gala now, click the registration button below.</p>
 
       <div class="cta-container">
         <a href="{{magicLinkUrl}}" class="cta-button">REGISTRATION</a>
@@ -83,21 +75,11 @@ export const DEFAULT_TEMPLATES = {
 
       <p>Should you wish to reserve an exclusive table for yourself, your guests or your company, our team will be pleased to assist you upon request.</p>
 
-      <p>This personal invitation is dedicated to the addressee and is not transferable.</p>
-
-      <p>Due to the event's popularity and the limited seating, early registration is strongly recommended to ensure participation.</p>
-
-      <p>When you register, please let us know if you have any special dietary requirements.</p>
-
-      <p>We will send you a feedback email after successful registration.</p>
-
-      <p>Please kindly note that your registration will only be finalised after having the official confirmation received.</p>
-
-      <p>For more details about the event and the award, including previous winners, visit our website at <a href="https://www.ceogala.com" style="color: #333333;">www.ceogala.com</a>.</p>
+      <p>This personal invitation is dedicated to the addressee and is not transferable. Due to the event's popularity and the limited seating, early registration is strongly recommended to ensure participation. When you register, please let us know if you have any special dietary requirements. We will send you a feedback email after successful registration. Please kindly note that your registration will only be finalised after having the official confirmation received.</p>
 
       <p>We remind you that any cancellations or changes to your registration must be made at least ten business days before the gala. Cancellations should be sent to <a href="mailto:event@bbj.hu" style="color: #333333;">event@bbj.hu</a>.</p>
 
-      <p>Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 per person.</p>
+      <p>Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of <strong>HUF 99,000 + VAT</strong> per person.</p>
 
       <p>We look forward to meeting you at the gala and celebrating our outstanding CEO Community.</p>
 
@@ -116,14 +98,18 @@ export const DEFAULT_TEMPLATES = {
         </div>
       </div>
 
+      <!-- BBJ Logo -->
+      <div style="text-align: center; margin: 30px 0;">
+        <img src="{{baseUrl}}/email-assets/bbj-logo.png" alt="Budapest Business Journal" style="max-width: 300px; height: auto;" />
+      </div>
+
       <hr class="divider" />
 
       <div class="footer">
-        <p><strong>BUDAPEST<br>BUSINESS JOURNAL</strong></p>
-        <p>For more details about the event and the award, <a href="https://www.ceogala.com">including previous winners</a>,<br>visit our website at <a href="https://www.ceogala.com">www.ceogala.com</a>. We look forward to meeting you at the<br>gala and celebrating our outstanding CEO Community with you.</p>
-        <p style="margin-top: 12px; font-size: 11px;">© Copyright, 2024-25<br>1075 Budapest, Madách I. út 13-14, Hungary</p>
+        <p><a href="https://bbj.hu" style="color: #333333; text-decoration: underline;">Business Publishing Services Kft.</a></p>
+        <p>For more details about the event and the award, <a href="https://www.ceogala.com">including previous winners</a>,<br>visit our website at <a href="https://www.ceogala.com">www.ceogala.com</a>.</p>
+        <p style="margin-top: 12px; font-size: 11px;">© Copyright, 2024-26<br>1075 Budapest, Madách I. út 13-14, Hungary</p>
         <p style="font-size: 11px;">This email has been sent to you, because you are a customer or subscriber of<br>BUSINESS PUBLISHING SERVICES KFT.<br><a href="https://www.ceogala.com">www.ceogala.com</a> - <a href="mailto:event@bbj.hu">event@bbj.hu</a></p>
-        <p style="font-size: 11px; margin-top: 8px;"><a href="#">Unsubscribe</a> | <a href="#">Manage your subscription</a></p>
       </div>
 
       <div class="link-fallback">
@@ -138,23 +124,16 @@ export const DEFAULT_TEMPLATES = {
 
 Dear {{guestName}},
 
-We are delighted to announce that the next CEO Gala will take place on Friday, March 27, 2026, at the Corinthia Hotel Budapest.
+The Budapest Business Journal and our official event partner, the Hungarian Investment Promotion Agency (HIPA), are delighted to invite you to the official CEO Gala 2026 hosted at Corinthia Hotel Budapest on Friday, March 27, 2026.
 
-Now in its 12th edition, the CEO Gala has become a landmark event in Hungary's business calendar, a must-attend occasion for the country's most distinguished business leaders, diplomats, and representatives of international business organizations.
+As has now become a tradition of several years, two awards will be presented during the evening: the Expat CEO Award, granted to the most successful and innovative expatriate CEO working in Hungary; and the CEO Community Award, bestowed to a Hungarian executive who has been a role model by being successful in markets while demonstrating exceptional commitment to the community. Two professional awards committees will choose the winners minutes before the gala starts from a shortlist of three candidates.
 
-The evening brings together a unique concentration of decision-makers under one roof, individuals whose vision, leadership, and achievements drive a remarkable share of Hungary's economic performance. The atmosphere is truly inspiring: a celebration of excellence, innovation, and recognition, where meaningful connections are made and maintained.
+Date: Friday, March 27, 2026, 7 p.m.
 
-During the evening, we will present two of the most prestigious titles in Hungary's business community. The Expat CEO of the Year Award honors an outstanding international business leader for their contribution to Hungary's economic life, while the CEO Community Award recognizes a visionary leader whose activities have had a lasting, positive impact on society and the business environment.
-
-Date:
-Friday, March 27, 2026, 7 p.m.
-
-Location:
-The Grand Ballroom of the Corinthia Hotel Budapest
+Location: The Grand Ballroom of the Corinthia Hotel Budapest
 1073 Budapest, Erzsébet krt. 43-49
 
-Dress Code:
-Black tie for men, ball gown or cocktail dress for women
+Dress Code: Black tie for men, ball gown or cocktail dress for women
 
 If you wish to reserve your place at the gala now, click the REGISTRATION link below.
 
@@ -162,34 +141,28 @@ If you wish to reserve your place at the gala now, click the REGISTRATION link b
 
 Should you wish to reserve an exclusive table for yourself, your guests or your company, our team will be pleased to assist you upon request.
 
-This personal invitation is dedicated to the addressee and is not transferable.
-
-Due to the event's popularity and the limited seating, early registration is strongly recommended to ensure participation.
-
-When you register, please let us know if you have any special dietary requirements.
-
-We will send you a feedback email after successful registration.
-
-Please kindly note that your registration will only be finalised after having the official confirmation received.
-
-For more details about the event and the award, including previous winners, visit our website at www.ceogala.com.
+This personal invitation is dedicated to the addressee and is not transferable. Due to the event's popularity and the limited seating, early registration is strongly recommended to ensure participation. When you register, please let us know if you have any special dietary requirements. We will send you a feedback email after successful registration. Please kindly note that your registration will only be finalised after having the official confirmation received.
 
 We remind you that any cancellations or changes to your registration must be made at least ten business days before the gala. Cancellations should be sent to event@bbj.hu.
 
-Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 per person.
+Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 + VAT per person.
 
 We look forward to meeting you at the gala and celebrating our outstanding CEO Community.
+
+Warm regards,
 
 Tamas Botka                    Balazs Roman
 Publisher, BBJ                 CEO, BBJ
 
 ---
 
+BUDAPEST BUSINESS JOURNAL
+For more details about the event and the award, including previous winners, visit our website at www.ceogala.com
+
+© Copyright, 2024-26
 Business Publishing Services Kft.
 1075 Budapest, Madách Imre út 13–14., Hungary
-Publisher of Budapest Business Journal
-
-Event website: ceogala.com`,
+www.ceogala.com - event@bbj.hu`,
   },
   applicant_approval: {
     slug: 'applicant_approval',
