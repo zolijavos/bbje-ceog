@@ -225,7 +225,7 @@ export default function AlreadyRegistered({
             CEO Gala 2026
           </h2>
           <p className={`text-sm ${t.textMuted}`}>
-            Friday, March 27, 2026 • 6:00 PM
+            Friday, March 27, 2026 • 7:00 PM
             <br />
             Budapest, Corinthia Hotel
           </p>

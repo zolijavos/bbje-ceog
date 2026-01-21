@@ -44,7 +44,6 @@ export const DEFAULT_TEMPLATES = {
     .footer { text-align: center; padding: 15px 0; }
     .footer p { font-size: 12px; color: #666666; margin: 4px 0; }
     .footer a { color: #333333; text-decoration: underline; }
-    .link-fallback { font-size: 10px; color: #999999; word-break: break-all; margin-top: 20px; text-align: center; padding: 15px; background-color: #f5f5f5; }
   </style>
 </head>
 <body>
@@ -110,11 +109,6 @@ export const DEFAULT_TEMPLATES = {
         <p>For more details about the event and the award, <a href="https://www.ceogala.com">including previous winners</a>,<br>visit our website at <a href="https://www.ceogala.com">www.ceogala.com</a>.</p>
         <p style="margin-top: 12px; font-size: 11px;">© Copyright, 2024-26<br>1075 Budapest, Madách I. út 13-14, Hungary</p>
         <p style="font-size: 11px;">This email has been sent to you, because you are a customer or subscriber of<br>BUSINESS PUBLISHING SERVICES KFT.<br><a href="https://www.ceogala.com">www.ceogala.com</a> - <a href="mailto:event@bbj.hu">event@bbj.hu</a></p>
-      </div>
-
-      <div class="link-fallback">
-        If the button doesn't work, copy this link into your browser:<br>
-        {{magicLinkUrl}}
       </div>
     </div>
   </div>
@@ -190,7 +184,6 @@ www.ceogala.com - event@bbj.hu`,
     .expiry-note { font-size: 14px; color: #6b7280; text-align: center; margin-top: 15px; }
     .footer { text-align: center; padding-top: 30px; border-top: 1px solid #e5e7eb; margin-top: 30px; }
     .footer p { font-size: 14px; color: #6b7280; margin: 5px 0; }
-    .link-fallback { font-size: 12px; color: #9ca3af; word-break: break-all; margin-top: 20px; }
   </style>
 </head>
 <body>
@@ -213,10 +206,6 @@ www.ceogala.com - event@bbj.hu`,
         <p>If you have any questions, please contact us.</p>
         <p>Best regards,<br>CEO Gála Organizing Team</p>
       </div>
-      <p class="link-fallback">
-        If the button doesn't work, copy this link into your browser:<br>
-        {{magicLinkUrl}}
-      </p>
     </div>
   </div>
 </body>

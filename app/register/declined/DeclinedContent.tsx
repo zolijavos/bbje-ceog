@@ -136,7 +136,7 @@ export default function DeclinedContent({ guest }: DeclinedContentProps) {
         </h2>
 
         <div className={`${t.textMuted} text-sm mt-3 space-y-1`}>
-          <p>Friday, March 27, 2026 • 6:00 PM</p>
+          <p>Friday, March 27, 2026 • 7:00 PM</p>
           <p>Budapest, Corinthia Hotel</p>
         </div>
 

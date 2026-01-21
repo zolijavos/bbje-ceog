@@ -911,7 +911,7 @@ export default function PaidRegistrationForm({
         {/* Event Info Footer */}
         <div className={`text-center text-sm ${t.textMuted}`}>
           <p className={`font-medium ${t.text}`}>CEO Gala 2026</p>
-          <p className={`${t.textSubtle} mt-1`}>Friday, March 27, 2026 • 6:00 PM</p>
+          <p className={`${t.textSubtle} mt-1`}>Friday, March 27, 2026 • 7:00 PM</p>
           <p className={t.textSubtle}>Budapest, Corinthia Hotel</p>
         </div>
 

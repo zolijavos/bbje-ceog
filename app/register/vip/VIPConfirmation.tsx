@@ -391,7 +391,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
 
           {/* Event Details */}
           <div className={`${t.textMuted} text-sm mt-3 space-y-1`}>
-            <p>Friday, March 27, 2026 • 6:00 PM</p>
+            <p>Friday, March 27, 2026 • 7:00 PM</p>
             <p>Budapest, Corinthia Hotel</p>
           </div>
 
@@ -833,7 +833,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
         <div className={`mt-8 pt-6 border-t ${theme === 'light' ? 'border-[#0c0d0e]/10' : 'border-white/10'}`}>
           <div className={`text-center text-sm ${t.textMuted}`}>
             <p className={`font-medium ${t.text}`}>CEO Gala 2026</p>
-            <p className="mt-1">Friday, March 27, 2026 • 6:00 PM • Budapest, Corinthia Hotel</p>
+            <p className="mt-1">Friday, March 27, 2026 • 7:00 PM • Budapest, Corinthia Hotel</p>
           </div>
         </div>
 

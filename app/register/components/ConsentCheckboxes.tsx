@@ -95,15 +95,6 @@ export default function ConsentCheckboxes({
             <p className="text-xs text-slate-500 mt-2">
               Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of{' '}
               <span className="font-semibold text-slate-600">HUF 99,000 + VAT</span> per person.
-              {' '}Full terms available{' '}
-              <a
-                href="/terms"
-                target="_blank"
-                className="text-amber-600 underline hover:text-amber-700"
-                onClick={(e) => e.stopPropagation()}
-              >
-                here
-              </a>.
             </p>
           </div>
         </label>
