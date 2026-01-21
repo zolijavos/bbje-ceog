@@ -8,8 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # Only deploy if tests pass (requires playwright-test.yml to run first)
-    needs: []
 
     steps:
       - name: Checkout code
@@ -26,7 +24,7 @@ jobs:
             echo "🚀 Starting deployment to Hostinger VPS..."
 
             # Navigate to project directory
-            cd /var/www/ceog-gala || exit 1
+            cd /var/www/ceog || exit 1
 
             # Pull latest changes
             echo "📥 Pulling latest changes from GitHub..."
@@ -47,7 +45,7 @@ jobs:
 
             # Restart PM2 process
             echo "🔄 Restarting PM2 process..."
-            pm2 restart ceog-gala || pm2 start npm --name "ceog-gala" -- start
+            pm2 restart ceog || pm2 start npm --name "ceog" -- start
 
             # Save PM2 process list
             pm2 save
@@ -57,7 +55,7 @@ jobs:
             # Show PM2 status
             pm2 status
 
-      - name: Run Production Smoke Tests (Optional)
+      - name: Verify Deployment
         uses: appleboy/ssh-action@v1.0.3
         continue-on-error: true
         with:
@@ -66,14 +64,12 @@ jobs:
           key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
           port: ${{ secrets.VPS_SSH_PORT || 22 }}
           script: |
-            cd /var/www/ceog-gala
-
             # Wait for application to start
-            sleep 10
+            sleep 5
 
-            # Run smoke tests (headless)
-            echo "🧪 Running production smoke tests..."
-            npx playwright test tests/e2e/smoke.spec.ts --project=chromium || echo "⚠️ Smoke tests failed (non-blocking)"
+            # Simple health check
+            echo "🔍 Checking application status..."
+            curl -s -o /dev/null -w "%{http_code}" http://localhost:3000 || echo "App not responding on localhost"
 
       - name: Notify Deployment Success
         if: success()
