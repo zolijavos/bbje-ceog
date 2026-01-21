@@ -8,6 +8,7 @@ interface Guest {
   email: string;
   guestType: string;
   status: string;
+  title?: string | null;
 }
 
 interface RegisterWelcomeProps {
