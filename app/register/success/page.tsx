@@ -2,17 +2,39 @@
  * Registration Success Page
  *
  * Displays success message after VIP or paid registration.
+ * Design: Dark theme with gold accents (CEO Gala 2026 branding)
  */
 
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db/prisma';
 import Link from 'next/link';
+import { getFullName } from '@/lib/utils/name';
 
 interface SuccessPageProps {
   searchParams: Promise<{
     guest_id?: string;
     type?: string;
   }>;
+}
+
+// Star decoration component
+function StarDecoration({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6L5.7 21l2.3-7-6-4.6h7.6L12 2z" />
+    </svg>
+  );
+}
+
+// Decorative line with stars
+function GoldLine() {
+  return (
+    <div className="flex items-center justify-center gap-2 my-6">
+      <div className="h-px w-12 bg-[#d1aa67] opacity-50" />
+      <StarDecoration className="w-3 h-3 text-[#d1aa67]" />
+      <div className="h-px w-12 bg-[#d1aa67] opacity-50" />
+    </div>
+  );
 }
 
 export default async function SuccessPage({ searchParams }: SuccessPageProps) {
@@ -42,67 +64,72 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
   }
 
   const isVIP = registrationType === 'vip' || guest.guest_type === 'vip';
+  const isInvited = guest.guest_type === 'invited';
   const isPaid = registrationType === 'paid' || guest.guest_type === 'paying_single' || guest.guest_type === 'paying_paired';
   const ticketType = guest.registration?.ticket_type;
   const isPairedTicket = ticketType === 'paid_paired';
   const ticketPrice = isPairedTicket ? '180,000 Ft' : '100,000 Ft';
+  const fullName = getFullName(guest.first_name, guest.last_name);
+  const displayName = guest.title ? `${guest.title} ${fullName}` : fullName;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-neutral-800 to-neutral-700 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-2xl p-8 text-center">
-        {/* Success Icon */}
-        <div className="inline-flex items-center justify-center w-20 h-20 bg-accent-teal/10 rounded-full mb-6">
-          <svg
-            className="w-10 h-10 text-accent-teal"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
+    <div className="min-h-screen bg-[#0c0d0e] flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-[#1a1a1f] rounded-2xl shadow-2xl p-8 text-center border border-[#d1aa67]/30">
+        {/* Success Icon with gold border */}
+        <div className="flex justify-center mb-6">
+          <div className="w-20 h-20 rounded-full border-2 border-[#d1aa67] flex items-center justify-center">
+            <svg className="w-10 h-10 text-[#d1aa67]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
         </div>
 
         {/* Success Title */}
         <h1
-          className="font-display text-2xl font-semibold text-neutral-800 mb-4"
+          className="text-2xl font-bold text-white mb-4"
           data-testid="success-title"
         >
           {isPaid ? 'Registration Saved!' : 'Thank You for Confirming!'}
         </h1>
 
         {/* Success Message */}
-        <p className="text-neutral-500 mb-6 font-sans" data-testid="success-message">
-          {isVIP
+        <p className="text-white/70 mb-6 text-sm" data-testid="success-message">
+          {isVIP || isInvited
             ? 'Your QR ticket will arrive via email shortly.'
             : isPaid
             ? 'Payment options will be available soon.'
             : 'Your registration has been successfully recorded.'}
         </p>
 
+        <GoldLine />
+
         {/* Guest Info */}
-        <div className="bg-neutral-50 rounded-lg p-4 mb-6 border-l-4 border-accent-teal">
-          <h3 className="font-display font-semibold text-neutral-800 mb-2">Registration Details</h3>
-          <p className="text-neutral-500 text-sm font-sans">
-            <span className="font-medium text-neutral-800">Name:</span> {guest.first_name} {guest.last_name}
-            <br />
-            <span className="font-medium text-neutral-800">Email:</span> {guest.email}
-            <br />
-            <span className="font-medium text-neutral-800">Status:</span>{' '}
-            {isVIP ? 'VIP Guest' : isPairedTicket ? 'Paired Ticket' : 'Single Ticket'}
-          </p>
+        <div className="bg-black/20 rounded-lg p-4 mb-6 border-l-4 border-[#d1aa67]">
+          <h3 className="font-semibold text-[#d1aa67] mb-3 text-lg">Registration Details</h3>
+          <div className="space-y-2 text-sm">
+            <div className="flex justify-between">
+              <span className="text-white/60">Name:</span>
+              <span className="text-white font-medium">{displayName}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-white/60">Email:</span>
+              <span className="text-white font-medium">{guest.email}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-white/60">Status:</span>
+              <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#d1aa67] text-[#0c0d0e]">
+                {isVIP ? 'VIP Guest' : isInvited ? 'Invited Guest' : isPairedTicket ? 'Paired Ticket' : 'Single Ticket'}
+              </span>
+            </div>
+          </div>
         </div>
 
         {/* Event Details */}
-        <div className="bg-neutral-100 rounded-lg p-4 mb-6">
-          <h2 className="font-display text-lg font-semibold text-neutral-900 mb-2">
-            CEO Gála 2026
+        <div className="bg-black/30 rounded-lg p-4 mb-6">
+          <h2 className="text-lg font-bold text-white mb-2">
+            CEO Gala 2026
           </h2>
-          <p className="text-neutral-700 text-sm font-sans">
+          <p className="text-white/70 text-sm">
             Friday, March 27, 2026 • 6:00 PM
             <br />
             Budapest, Corinthia Hotel
@@ -111,11 +138,11 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
 
         {/* Payment Section for Paid Guests */}
         {isPaid && guest.registration && (
-          <div className="bg-accent-teal/5 border border-accent-teal/20 rounded-lg p-4 mb-6">
-            <h3 className="font-display font-semibold text-neutral-800 mb-3">Payment</h3>
-            <p className="text-neutral-500 text-sm mb-4 font-sans">
+          <div className="bg-[#b41115]/10 border border-[#b41115]/30 rounded-lg p-4 mb-6">
+            <h3 className="font-semibold text-white mb-3">Payment</h3>
+            <p className="text-white/70 text-sm mb-4">
               Your ticket price:{' '}
-              <span className="font-bold text-accent-teal">{ticketPrice}</span>
+              <span className="font-bold text-[#d1aa67]">{ticketPrice}</span>
             </p>
             <form action="/api/stripe/redirect-to-checkout" method="POST">
               <input
@@ -125,7 +152,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
               />
               <button
                 type="submit"
-                className="btn btn-primary w-full"
+                className="w-full py-3 px-6 rounded-lg font-bold text-sm uppercase tracking-wider transition-all bg-[#b41115] hover:bg-[#8a0d10] text-white flex items-center justify-center gap-2"
                 data-testid="pay-with-card-button"
               >
                 <svg
@@ -144,23 +171,23 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
                 Pay with Card
               </button>
             </form>
-            <p className="text-xs text-neutral-500 mt-3 font-sans">
+            <p className="text-xs text-white/50 mt-3">
               Secure payment via Stripe
             </p>
           </div>
         )}
 
         {/* Next Steps */}
-        <div className="bg-neutral-50 rounded-lg p-4 mb-6 border-l-4 border-amber-500">
-          <h3 className="font-display font-semibold text-neutral-800 mb-2">Next Steps</h3>
+        <div className="bg-black/20 rounded-lg p-4 mb-6 border-l-4 border-[#d1aa67]">
+          <h3 className="font-semibold text-[#d1aa67] mb-3">Next Steps</h3>
           {isPaid ? (
-            <ul className="text-neutral-500 text-sm text-left list-disc list-inside font-sans">
+            <ul className="text-white/70 text-sm text-left list-disc list-inside space-y-1">
               <li>Pay with card using the button above</li>
               <li>Or choose bank transfer</li>
               <li>You will receive the QR ticket after payment</li>
             </ul>
           ) : (
-            <ul className="text-neutral-500 text-sm text-left list-disc list-inside font-sans">
+            <ul className="text-white/70 text-sm text-left list-disc list-inside space-y-1">
               <li>QR ticket will arrive via email</li>
               <li>Show the QR code at the check-in point</li>
               <li>Enjoy the event!</li>
@@ -168,43 +195,24 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
           )}
         </div>
 
-        {/* PWA Download Section - Hidden for now */}
-        {/* {isVIP && (
-          <div className="bg-gradient-to-r from-teal-600 to-teal-700 rounded-lg p-4 mb-6 text-center">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-              </svg>
-              <h3 className="font-display font-semibold text-white text-sm">Download the Gala App</h3>
-            </div>
-            <p className="text-white text-sm mb-3 font-sans">
-              Access your ticket &amp; event info - even offline!
-            </p>
-            <Link
-              href="/pwa"
-              className="inline-block bg-white text-teal-700 font-semibold text-sm px-5 py-2 rounded-lg shadow-md hover:shadow-lg transition-shadow"
-            >
-              Open Gala App
-            </Link>
-          </div>
-        )} */}
+        <GoldLine />
 
         {/* Contact Info */}
-        <div className="text-xs font-sans space-y-1">
-          <p className="text-neutral-600">
+        <div className="text-xs text-white/50 space-y-1">
+          <p>
             Questions?{' '}
             <a
               href="https://bbj.hu/events/ceogala/#faq"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-accent-teal hover:text-accent-teal-dark"
+              className="text-[#d1aa67] hover:underline"
             >
               View Registration Guide
             </a>
           </p>
-          <p className="text-neutral-600">
+          <p>
             Need more help:{' '}
-            <a href="mailto:event@bbj.hu" className="text-accent-teal hover:text-accent-teal-dark">
+            <a href="mailto:event@bbj.hu" className="text-[#d1aa67] hover:underline">
               event@bbj.hu
             </a>
           </p>
