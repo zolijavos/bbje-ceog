@@ -17,7 +17,6 @@ interface ConsentCheckboxesProps {
     gdpr_consent?: string;
     cancellation_accepted?: string;
   };
-  guestType?: 'vip' | 'paying_single' | 'paying_paired' | 'applicant';
 }
 
 export default function ConsentCheckboxes({
@@ -26,10 +25,7 @@ export default function ConsentCheckboxes({
   onGdprChange,
   onCancellationChange,
   errors,
-  guestType = 'vip',
 }: ConsentCheckboxesProps) {
-  const isVipOrApplicant = guestType === 'vip' || guestType === 'applicant';
-
   return (
     <div className="space-y-4">
       {/* GDPR Consent */}
@@ -47,9 +43,9 @@ export default function ConsentCheckboxes({
               GDPR Data Processing Consent *
             </span>
             <p className="text-xs text-slate-500 mt-1">
-              I consent to CEO Gála collecting and processing my personal data
+              I consent to CEO Gala collecting and processing my personal data
               (name, email, phone, company, position, dietary requirements) for the
-              purpose of organizing and managing the CEO Gála 2026 gala event.
+              purpose of organizing and managing the CEO Gala 2026 event.
               This includes guest list management, seating arrangements, catering
               coordination, and event communications. My data will be retained for
               up to 12 months after the event and will not be shared with third
@@ -87,15 +83,18 @@ export default function ConsentCheckboxes({
               Attendance Commitment *
             </span>
             <p className="text-xs text-slate-500 mt-1">
-              I acknowledge that registration cancellation is possible no later than
-              7 days before the event via the guest app or by contacting the organizer.
-              {isVipOrApplicant && (
-                <span className="font-medium text-slate-600">
-                  {' '}If I register and fail to attend without prior cancellation (no-show),
-                  I understand that the organizer reserves the right to charge a fee
-                  equivalent to the ticket price.
-                </span>
-              )}
+              We remind you that any cancellations or changes to your registration must be made at least ten business days before the gala. Cancellations should be sent to{' '}
+              <a
+                href="mailto:event@bbj.hu"
+                className="text-amber-600 underline hover:text-amber-700"
+                onClick={(e) => e.stopPropagation()}
+              >
+                event@bbj.hu
+              </a>.
+            </p>
+            <p className="text-xs text-slate-500 mt-2">
+              Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of{' '}
+              <span className="font-semibold text-slate-600">HUF 99,000 + VAT</span> per person.
               {' '}Full terms available{' '}
               <a
                 href="/terms"
