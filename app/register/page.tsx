@@ -51,6 +51,7 @@ export default async function RegisterPage({ searchParams }: RegisterPageProps) 
       guest={{
         id: result.guest.id,
         name: result.guest.name,
+        title: result.guest.title,
         email: result.guest.email,
         guestType: result.guest.guestType,
         status: result.guest.status,

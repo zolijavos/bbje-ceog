@@ -9,14 +9,119 @@
  * - Step 3: Billing information (structured form)
  * - Step 4: Partner details (if paired selected)
  * - Step 5: Consent (GDPR, cancellation)
+ *
+ * Themes: Dark (#0c0d0e), Dark Blue (#120c3a), Light (#ffffff)
+ * Brand colors: Gold (#d1aa67), Red (#b41115)
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import GuestProfileFields from '../components/GuestProfileFields';
 import BillingForm, { type BillingFormData } from '../components/BillingForm';
 import ConsentCheckboxes from '../components/ConsentCheckboxes';
+
+// Theme definitions
+type Theme = 'dark' | 'dark-blue' | 'light';
+
+const themes = {
+  dark: {
+    bg: 'bg-[#0c0d0e]',
+    cardBg: 'bg-[#1a1a1f]',
+    cardBorder: 'border-[#d1aa67]/30',
+    text: 'text-white',
+    textMuted: 'text-white/70',
+    textSubtle: 'text-white/50',
+    gold: 'text-[#d1aa67]',
+    goldBg: 'bg-[#d1aa67]',
+    buttonPrimary: 'bg-[#b41115] hover:bg-[#8a0d10] text-white',
+    buttonSecondary: 'bg-transparent border border-white/30 hover:bg-white/10 text-white',
+    inputBg: 'bg-[#2a2a2f] border-[#d1aa67]/30 text-white placeholder-white/40',
+    inputBgError: 'bg-[#2a2a2f] border-red-500 text-white placeholder-white/40',
+    progressBg: 'bg-white/20',
+    progressFill: 'bg-[#d1aa67]',
+    radioSelected: 'border-[#d1aa67] bg-[#d1aa67]/10',
+    radioUnselected: 'border-white/30 hover:border-white/50',
+    errorBg: 'bg-red-900/30 border-red-500/50',
+    errorText: 'text-red-300',
+    footerBorder: 'border-white/10',
+    footerText: 'text-white/40',
+    labelText: 'text-white/80',
+  },
+  'dark-blue': {
+    bg: 'bg-[#120c3a]',
+    cardBg: 'bg-[#1a1445]',
+    cardBorder: 'border-[#d1aa67]/30',
+    text: 'text-white',
+    textMuted: 'text-white/70',
+    textSubtle: 'text-white/50',
+    gold: 'text-[#d1aa67]',
+    goldBg: 'bg-[#d1aa67]',
+    buttonPrimary: 'bg-[#b41115] hover:bg-[#8a0d10] text-white',
+    buttonSecondary: 'bg-transparent border border-white/30 hover:bg-white/10 text-white',
+    inputBg: 'bg-[#251d55] border-[#d1aa67]/30 text-white placeholder-white/40',
+    inputBgError: 'bg-[#251d55] border-red-500 text-white placeholder-white/40',
+    progressBg: 'bg-white/20',
+    progressFill: 'bg-[#d1aa67]',
+    radioSelected: 'border-[#d1aa67] bg-[#d1aa67]/10',
+    radioUnselected: 'border-white/30 hover:border-white/50',
+    errorBg: 'bg-red-900/30 border-red-500/50',
+    errorText: 'text-red-300',
+    footerBorder: 'border-white/10',
+    footerText: 'text-white/40',
+    labelText: 'text-white/80',
+  },
+  light: {
+    bg: 'bg-[#f5f0e8]',
+    cardBg: 'bg-white',
+    cardBorder: 'border-[#d1aa67]/40',
+    text: 'text-[#0c0d0e]',
+    textMuted: 'text-[#0c0d0e]/70',
+    textSubtle: 'text-[#0c0d0e]/50',
+    gold: 'text-[#d1aa67]',
+    goldBg: 'bg-[#d1aa67]',
+    buttonPrimary: 'bg-[#b41115] hover:bg-[#8a0d10] text-white',
+    buttonSecondary: 'bg-transparent border border-[#0c0d0e]/30 hover:bg-[#0c0d0e]/10 text-[#0c0d0e]',
+    inputBg: 'bg-[#f5f0e8] border-[#d1aa67]/40 text-[#0c0d0e] placeholder-[#0c0d0e]/40',
+    inputBgError: 'bg-[#f5f0e8] border-red-500 text-[#0c0d0e] placeholder-[#0c0d0e]/40',
+    progressBg: 'bg-[#0c0d0e]/20',
+    progressFill: 'bg-[#d1aa67]',
+    radioSelected: 'border-[#d1aa67] bg-[#d1aa67]/10',
+    radioUnselected: 'border-[#0c0d0e]/30 hover:border-[#0c0d0e]/50',
+    errorBg: 'bg-red-50 border-red-200',
+    errorText: 'text-red-700',
+    footerBorder: 'border-[#0c0d0e]/10',
+    footerText: 'text-[#0c0d0e]/40',
+    labelText: 'text-[#0c0d0e]/80',
+  },
+};
+
+// Star decoration component
+function StarDecoration({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6L5.7 21l2.3-7-6-4.6h7.6L12 2z" />
+    </svg>
+  );
+}
+
+// Decorative line with stars
+function GoldLine({ theme }: { theme: typeof themes.dark }) {
+  return (
+    <div className="flex items-center justify-center gap-2 my-4">
+      <div className={`h-px w-12 ${theme.goldBg} opacity-50`} />
+      <StarDecoration className={`w-3 h-3 ${theme.gold}`} />
+      <div className={`h-px w-12 ${theme.goldBg} opacity-50`} />
+    </div>
+  );
+}
+
+// Footer component
+function PoweredByFooter({ theme }: { theme: typeof themes.dark }) {
+  return (
+    <div className={`text-center mt-6 pt-4 border-t ${theme.footerBorder}`} />
+  );
+}
 
 interface Guest {
   id: number;
@@ -82,6 +187,9 @@ interface FormErrors {
   partnerTitle?: string;
   partnerName?: string;
   partnerEmail?: string;
+  partnerPhone?: string;
+  partnerCompany?: string;
+  partnerPosition?: string;
   partner_gdpr_consent?: string;
   gdpr_consent?: string;
   cancellation_accepted?: string;
@@ -92,10 +200,24 @@ export default function PaidRegistrationForm({
   canSelectPaired,
 }: PaidRegistrationFormProps) {
   const router = useRouter();
+  const [theme, setTheme] = useState<Theme>('dark');
   const [step, setStep] = useState(canSelectPaired ? 1 : 2);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState<FormErrors>({});
+
+  // Load theme from localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('registration-theme') as Theme;
+    if (savedTheme && themes[savedTheme]) {
+      setTheme(savedTheme);
+    }
+  }, []);
+
+  const t = themes[theme];
+
+  // Get display name with title (e.g., "Dr. John Smith")
+  const displayName = guest.title ? `${guest.title} ${guest.name}` : guest.name;
 
   const [formData, setFormData] = useState<FormData>({
     ticketType: 'paid_single',
@@ -217,6 +339,15 @@ export default function PaidRegistrationForm({
         if (!emailRegex.test(formData.partnerEmail)) {
           newErrors.partnerEmail = 'Invalid email format';
         }
+      }
+      if (!formData.partnerPhone || formData.partnerPhone.trim().length < 9) {
+        newErrors.partnerPhone = 'Partner phone number is required';
+      }
+      if (!formData.partnerCompany || formData.partnerCompany.trim().length < 1) {
+        newErrors.partnerCompany = 'Partner company name is required';
+      }
+      if (!formData.partnerPosition || formData.partnerPosition.trim().length < 1) {
+        newErrors.partnerPosition = 'Partner position is required';
       }
       // Partner GDPR consent required
       if (!formData.partnerGdprConsent) {
@@ -365,23 +496,25 @@ export default function PaidRegistrationForm({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 flex items-center justify-center p-4">
-      <div className="max-w-lg w-full bg-white rounded-2xl shadow-xl p-8">
+    <div className={`min-h-screen ${t.bg} flex items-center justify-center p-4`}>
+      <div className={`max-w-lg w-full ${t.cardBg} rounded-2xl shadow-2xl p-8 border ${t.cardBorder}`}>
         {/* Header */}
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-slate-900 mb-1">Registration</h1>
-          <p className="text-3xl font-bold text-amber-600 mt-2">{guest.name}</p>
+          <h1 className={`text-2xl font-bold ${t.text} mb-1`}>Registration</h1>
+          <p className={`text-xl font-bold ${t.gold} mt-2`}>{displayName}</p>
         </div>
+
+        <GoldLine theme={t} />
 
         {/* Progress Indicator */}
         <div className="mb-6">
           <div className="flex justify-between items-center mb-2">
-            <span className="text-sm font-medium text-slate-600">{getStepName(step)}</span>
-            <span className="text-sm text-slate-600">{step}/{totalSteps}</span>
+            <span className={`text-sm font-medium ${t.textMuted}`}>{getStepName(step)}</span>
+            <span className={`text-sm ${t.textMuted}`}>{step}/{totalSteps}</span>
           </div>
-          <div className="w-full bg-slate-200 rounded-full h-2">
+          <div className={`w-full ${t.progressBg} rounded-full h-2`}>
             <div
-              className="bg-amber-500 h-2 rounded-full transition-all duration-300"
+              className={`${t.progressFill} h-2 rounded-full transition-all duration-300`}
               style={{ width: `${(step / totalSteps) * 100}%` }}
             />
           </div>
@@ -389,8 +522,8 @@ export default function PaidRegistrationForm({
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
-            {error}
+          <div className={`${t.errorBg} border px-4 py-3 rounded-lg mb-6`}>
+            <span className={t.errorText}>{error}</span>
           </div>
         )}
 
@@ -398,17 +531,17 @@ export default function PaidRegistrationForm({
         {Object.keys(errors).length > 0 && (
           <div
             id="error-summary"
-            className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg"
+            className={`mb-6 p-4 ${t.errorBg} border rounded-lg`}
           >
             <div className="flex items-center gap-2 mb-2">
-              <svg className="w-5 h-5 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className={`w-5 h-5 ${t.errorText} flex-shrink-0`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
-              <span className="font-medium text-red-800 text-sm">
+              <span className={`font-medium ${t.errorText} text-sm`}>
                 Please fix the following errors:
               </span>
             </div>
-            <ul className="list-disc list-inside space-y-1 text-sm text-red-700">
+            <ul className={`list-disc list-inside space-y-1 text-sm ${t.errorText}`}>
               {errors.phone && <li>Phone: {errors.phone}</li>}
               {errors.company && <li>Company: {errors.company}</li>}
               {errors.position && <li>Position: {errors.position}</li>}
@@ -420,6 +553,9 @@ export default function PaidRegistrationForm({
               {errors.partnerTitle && <li>Partner Title: {errors.partnerTitle}</li>}
               {errors.partnerName && <li>Partner Name: {errors.partnerName}</li>}
               {errors.partnerEmail && <li>Partner Email: {errors.partnerEmail}</li>}
+              {errors.partnerPhone && <li>Partner Phone: {errors.partnerPhone}</li>}
+              {errors.partnerCompany && <li>Partner Company: {errors.partnerCompany}</li>}
+              {errors.partnerPosition && <li>Partner Position: {errors.partnerPosition}</li>}
               {errors.partner_gdpr_consent && <li>Partner GDPR: {errors.partner_gdpr_consent}</li>}
               {errors.gdpr_consent && <li>GDPR: {errors.gdpr_consent}</li>}
               {errors.cancellation_accepted && <li>Cancellation: {errors.cancellation_accepted}</li>}
@@ -430,15 +566,15 @@ export default function PaidRegistrationForm({
         {/* Step 1: Ticket Type Selection */}
         {step === 1 && canSelectPaired && (
           <div>
-            <h2 className="text-lg font-semibold text-slate-800 mb-4">
+            <h2 className={`text-lg font-semibold ${t.text} mb-4`}>
               Select ticket type
             </h2>
             <div className="space-y-3">
               <label
                 className={`block p-4 border-2 rounded-lg cursor-pointer transition-colors ${
                   formData.ticketType === 'paid_single'
-                    ? 'border-amber-500 bg-amber-50'
-                    : 'border-slate-200 hover:border-slate-300'
+                    ? t.radioSelected
+                    : t.radioUnselected
                 }`}
               >
                 <input
@@ -452,18 +588,18 @@ export default function PaidRegistrationForm({
                 />
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="font-medium text-slate-900">Single Ticket</span>
-                    <p className="text-sm text-slate-500 mt-1">Entry for one person</p>
+                    <span className={`font-medium ${t.text}`}>Single Ticket</span>
+                    <p className={`text-sm ${t.textMuted} mt-1`}>Entry for one person</p>
                   </div>
                   <div
                     className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                       formData.ticketType === 'paid_single'
-                        ? 'border-amber-500 bg-amber-500'
-                        : 'border-slate-300'
+                        ? 'border-[#d1aa67] bg-[#d1aa67]'
+                        : 'border-white/30'
                     }`}
                   >
                     {formData.ticketType === 'paid_single' && (
-                      <svg className="w-3 h-3 text-white" viewBox="0 0 20 20" fill="currentColor">
+                      <svg className="w-3 h-3 text-[#0c0d0e]" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
                     )}
@@ -474,8 +610,8 @@ export default function PaidRegistrationForm({
               <label
                 className={`block p-4 border-2 rounded-lg cursor-pointer transition-colors ${
                   formData.ticketType === 'paid_paired'
-                    ? 'border-amber-500 bg-amber-50'
-                    : 'border-slate-200 hover:border-slate-300'
+                    ? t.radioSelected
+                    : t.radioUnselected
                 }`}
               >
                 <input
@@ -489,18 +625,18 @@ export default function PaidRegistrationForm({
                 />
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="font-medium text-slate-900">Paired Ticket</span>
-                    <p className="text-sm text-slate-500 mt-1">Entry for two people (You + partner)</p>
+                    <span className={`font-medium ${t.text}`}>Paired Ticket</span>
+                    <p className={`text-sm ${t.textMuted} mt-1`}>Entry for two people (You + partner)</p>
                   </div>
                   <div
                     className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                       formData.ticketType === 'paid_paired'
-                        ? 'border-amber-500 bg-amber-500'
-                        : 'border-slate-300'
+                        ? 'border-[#d1aa67] bg-[#d1aa67]'
+                        : 'border-white/30'
                     }`}
                   >
                     {formData.ticketType === 'paid_paired' && (
-                      <svg className="w-3 h-3 text-white" viewBox="0 0 20 20" fill="currentColor">
+                      <svg className="w-3 h-3 text-[#0c0d0e]" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
                     )}
@@ -527,6 +663,7 @@ export default function PaidRegistrationForm({
             onDietaryChange={(value) => updateFormData('dietaryRequirements', value)}
             onSeatingChange={(value) => updateFormData('seatingPreferences', value)}
             errors={errors}
+            theme={theme}
           />
         )}
 
@@ -536,27 +673,28 @@ export default function PaidRegistrationForm({
             data={formData.billing}
             onChange={updateBillingField}
             errors={errors}
+            theme={theme}
           />
         )}
 
         {/* Step 4: Partner Details (if paired) */}
         {step === 4 && formData.ticketType === 'paid_paired' && (
           <div>
-            <h2 className="text-lg font-semibold text-slate-800 mb-2">Partner Details</h2>
-            <p className="text-sm text-slate-500 mb-4">
+            <h2 className={`text-lg font-semibold ${t.text} mb-2`}>Partner Details</h2>
+            <p className={`text-sm ${t.textMuted} mb-4`}>
               Partner information is required to issue the personalized QR ticket.
             </p>
             <div className="space-y-4">
               {/* Partner Title */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Partner Title <span className="text-red-500">*</span>
+                <label className={`block text-sm font-medium ${t.labelText} mb-1`}>
+                  Partner Title <span className="text-[#b41115]">*</span>
                 </label>
                 <select
                   value={formData.partnerTitle}
                   onChange={(e) => updateFormData('partnerTitle', e.target.value)}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 ${
-                    errors.partnerTitle ? 'border-red-500' : 'border-slate-300'
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#d1aa67] focus:border-[#d1aa67] ${
+                    errors.partnerTitle ? t.inputBgError : t.inputBg
                   }`}
                   data-testid="partner-title-select"
                 >
@@ -569,112 +707,121 @@ export default function PaidRegistrationForm({
                   <option value="Prof. Dr.">Prof. Dr.</option>
                 </select>
                 {errors.partnerTitle && (
-                  <p className="text-red-600 text-sm mt-1">{errors.partnerTitle}</p>
+                  <p className={`${t.errorText} text-sm mt-1`}>{errors.partnerTitle}</p>
                 )}
               </div>
 
               {/* Partner Name */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Partner Name <span className="text-red-500">*</span>
+                <label className={`block text-sm font-medium ${t.labelText} mb-1`}>
+                  Partner Name <span className="text-[#b41115]">*</span>
                 </label>
                 <input
                   type="text"
                   value={formData.partnerName}
                   onChange={(e) => updateFormData('partnerName', e.target.value)}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 ${
-                    errors.partnerName ? 'border-red-500' : 'border-slate-300'
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#d1aa67] focus:border-[#d1aa67] ${
+                    errors.partnerName ? t.inputBgError : t.inputBg
                   }`}
                   placeholder="Partner's full name"
                   data-testid="partner-name-input"
                 />
                 {errors.partnerName && (
-                  <p className="text-red-600 text-sm mt-1">{errors.partnerName}</p>
+                  <p className={`${t.errorText} text-sm mt-1`}>{errors.partnerName}</p>
                 )}
               </div>
 
               {/* Partner Email */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Partner Email Address <span className="text-red-500">*</span>
+                <label className={`block text-sm font-medium ${t.labelText} mb-1`}>
+                  Partner Email Address <span className="text-[#b41115]">*</span>
                 </label>
                 <input
                   type="email"
                   value={formData.partnerEmail}
                   onChange={(e) => updateFormData('partnerEmail', e.target.value)}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 ${
-                    errors.partnerEmail ? 'border-red-500' : 'border-slate-300'
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#d1aa67] focus:border-[#d1aa67] ${
+                    errors.partnerEmail ? t.inputBgError : t.inputBg
                   }`}
                   placeholder="partner@email.com"
                   data-testid="partner-email-input"
                 />
                 {errors.partnerEmail && (
-                  <p className="text-red-600 text-sm mt-1">{errors.partnerEmail}</p>
+                  <p className={`${t.errorText} text-sm mt-1`}>{errors.partnerEmail}</p>
                 )}
-                <p className="text-xs text-slate-500 mt-1">
+                <p className={`text-xs ${t.textSubtle} mt-1`}>
                   Your partner will receive their own ticket via email.
                 </p>
               </div>
 
               {/* Partner Phone */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Partner Phone (optional)
+                <label className={`block text-sm font-medium ${t.labelText} mb-1`}>
+                  Partner Phone <span className="text-[#b41115]">*</span>
                 </label>
                 <input
                   type="tel"
                   value={formData.partnerPhone}
                   onChange={(e) => updateFormData('partnerPhone', e.target.value)}
-                  className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 border-slate-300"
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#d1aa67] focus:border-[#d1aa67] ${errors.partnerPhone ? t.inputBgError : t.inputBg}`}
                   placeholder="+36 30 123 4567"
                 />
+                {errors.partnerPhone && (
+                  <p className={`${t.errorText} text-sm mt-1`}>{errors.partnerPhone}</p>
+                )}
               </div>
 
               {/* Partner Company */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Partner Company / Organization (optional)
+                <label className={`block text-sm font-medium ${t.labelText} mb-1`}>
+                  Partner Company / Organization <span className="text-[#b41115]">*</span>
                 </label>
                 <input
                   type="text"
                   value={formData.partnerCompany}
                   onChange={(e) => updateFormData('partnerCompany', e.target.value)}
-                  className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 border-slate-300"
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#d1aa67] focus:border-[#d1aa67] ${errors.partnerCompany ? t.inputBgError : t.inputBg}`}
                   placeholder="Company Ltd."
                   maxLength={255}
                 />
+                {errors.partnerCompany && (
+                  <p className={`${t.errorText} text-sm mt-1`}>{errors.partnerCompany}</p>
+                )}
               </div>
 
               {/* Partner Position */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Partner Position (optional)
+                <label className={`block text-sm font-medium ${t.labelText} mb-1`}>
+                  Partner Position <span className="text-[#b41115]">*</span>
                 </label>
                 <input
                   type="text"
                   value={formData.partnerPosition}
                   onChange={(e) => updateFormData('partnerPosition', e.target.value)}
-                  className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 border-slate-300"
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#d1aa67] focus:border-[#d1aa67] ${errors.partnerPosition ? t.inputBgError : t.inputBg}`}
                   placeholder="CEO"
                   maxLength={100}
                 />
+                {errors.partnerPosition && (
+                  <p className={`${t.errorText} text-sm mt-1`}>{errors.partnerPosition}</p>
+                )}
               </div>
 
               {/* Partner Dietary Requirements */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
+                <label className={`block text-sm font-medium ${t.labelText} mb-1`}>
                   Partner Dietary Requirements (optional)
                 </label>
                 <textarea
                   value={formData.partnerDietaryRequirements}
                   onChange={(e) => updateFormData('partnerDietaryRequirements', e.target.value)}
-                  className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 border-slate-300"
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#d1aa67] focus:border-[#d1aa67] ${t.inputBg}`}
                   placeholder="E.g., vegetarian, gluten-free, lactose-free, nut allergy..."
                   rows={2}
                   maxLength={500}
                 />
                 <div className="flex justify-end mt-1">
-                  <span className="text-xs text-slate-500">{formData.partnerDietaryRequirements.length}/500</span>
+                  <span className={`text-xs ${t.textSubtle}`}>{formData.partnerDietaryRequirements.length}/500</span>
                 </div>
               </div>
 
@@ -685,14 +832,14 @@ export default function PaidRegistrationForm({
                     type="checkbox"
                     checked={formData.partnerGdprConsent}
                     onChange={(e) => updateFormData('partnerGdprConsent', e.target.checked)}
-                    className={`w-5 h-5 mt-0.5 rounded border-slate-300 text-amber-500 focus:ring-amber-500 ${errors.partner_gdpr_consent ? 'border-red-500' : ''}`}
+                    className={`w-5 h-5 mt-0.5 rounded border-[#d1aa67]/50 text-[#d1aa67] focus:ring-[#d1aa67] ${errors.partner_gdpr_consent ? 'border-red-500' : ''}`}
                   />
-                  <span className="text-sm text-slate-700">
-                    I confirm that my partner has consented to the processing of their personal data according to the <a href="/privacy" target="_blank" className="text-amber-600 hover:underline">Privacy Policy</a>. <span className="text-red-500">*</span>
+                  <span className={`text-sm ${t.textMuted}`}>
+                    I confirm that my partner has consented to the processing of their personal data according to the <a href="/privacy" target="_blank" className="text-[#d1aa67] hover:underline">Privacy Policy</a>. <span className="text-[#b41115]">*</span>
                   </span>
                 </label>
                 {errors.partner_gdpr_consent && (
-                  <p className="text-red-600 text-sm mt-1 ml-8">{errors.partner_gdpr_consent}</p>
+                  <p className={`${t.errorText} text-sm mt-1 ml-8`}>{errors.partner_gdpr_consent}</p>
                 )}
               </div>
             </div>
@@ -702,7 +849,7 @@ export default function PaidRegistrationForm({
         {/* Step 4/5: Consent */}
         {((step === 4 && formData.ticketType === 'paid_single') || step === 5) && (
           <div>
-            <h2 className="text-lg font-semibold text-slate-800 mb-4">Consents</h2>
+            <h2 className={`text-lg font-semibold ${t.text} mb-4`}>Consents</h2>
             <ConsentCheckboxes
               gdprConsent={formData.gdprConsent}
               cancellationAccepted={formData.cancellationAccepted}
@@ -710,6 +857,7 @@ export default function PaidRegistrationForm({
               onCancellationChange={(checked) => updateFormData('cancellationAccepted', checked)}
               errors={errors}
               guestType={formData.ticketType as 'paying_single' | 'paying_paired'}
+              theme={theme}
             />
           </div>
         )}
@@ -720,7 +868,7 @@ export default function PaidRegistrationForm({
             <button
               onClick={handleBack}
               disabled={isLoading}
-              className="px-6 py-3 text-slate-600 hover:text-slate-800 font-medium disabled:opacity-50"
+              className={`px-6 py-3 font-medium disabled:opacity-50 ${t.buttonSecondary} rounded-lg`}
             >
               Back
             </button>
@@ -732,7 +880,7 @@ export default function PaidRegistrationForm({
             <button
               onClick={handleNext}
               disabled={isLoading}
-              className="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg disabled:opacity-50"
+              className={`px-6 py-3 font-semibold rounded-lg disabled:opacity-50 ${t.buttonPrimary}`}
               data-testid="next-button"
             >
               Next
@@ -741,7 +889,7 @@ export default function PaidRegistrationForm({
             <button
               onClick={handleSubmit}
               disabled={isLoading}
-              className="px-6 py-3 bg-amber-500 hover:bg-amber-600 disabled:bg-amber-300 text-white font-semibold rounded-lg flex items-center gap-2"
+              className={`px-6 py-3 font-semibold rounded-lg flex items-center gap-2 disabled:opacity-50 ${t.buttonPrimary}`}
               data-testid="submit-button"
             >
               {isLoading ? (
@@ -759,18 +907,32 @@ export default function PaidRegistrationForm({
           )}
         </div>
 
+        <GoldLine theme={t} />
+
         {/* Event Info Footer */}
-        <div className="mt-8 pt-6 border-t border-slate-200">
-          <div className="text-center text-sm text-slate-500">
-            <Link href="/" className="font-medium text-slate-700 hover:text-amber-600 transition-colors">CEO Gála 2026</Link>
-            <p>Friday, March 27, 2026 • 6:00 PM • Budapest, Corinthia Hotel</p>
-            <p className="mt-3">
-              <Link href="/help" className="text-amber-600 hover:underline">
-                Need help?
-              </Link>
-            </p>
-          </div>
+        <div className={`text-center text-sm ${t.textMuted}`}>
+          <p className={`font-medium ${t.text}`}>CEO Gala 2026</p>
+          <p className={`${t.textSubtle} mt-1`}>Friday, March 27, 2026 • 6:00 PM</p>
+          <p className={t.textSubtle}>Budapest, Corinthia Hotel</p>
         </div>
+
+        {/* Help Links */}
+        <div className={`mt-6 text-xs ${t.textMuted} text-center space-y-1`}>
+          <p>
+            Questions?{' '}
+            <a href="https://bbj.hu/events/ceogala/#faq" target="_blank" rel="noopener noreferrer" className="text-[#d1aa67] hover:underline">
+              View Registration Guide
+            </a>
+          </p>
+          <p>
+            Need more help:{' '}
+            <a href="mailto:event@bbj.hu" className="text-[#d1aa67] hover:underline">
+              event@bbj.hu
+            </a>
+          </p>
+        </div>
+
+        <PoweredByFooter theme={t} />
       </div>
     </div>
   );

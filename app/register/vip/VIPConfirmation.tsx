@@ -4,17 +4,72 @@
  * VIP Confirmation Client Component
  *
  * Displays VIP guest info with confirm/decline buttons.
- * Includes:
- * - Profile fields (title, dietary, seating preferences)
- * - Consent checkboxes (GDPR, cancellation policy)
- * Handles API calls and redirects on success.
+ * Implements 4-screen registration flow:
+ * - Screen 1: Invitation (Yes/No)
+ * - Screen 2: Confirmation (Thank you, continue)
+ * - Screen 3: Registration Details (form)
+ * - Screen 4: Redirect to success page
+ *
+ * Themes: Dark (#0c0d0e), Dark Blue (#120c3a), Light (#ffffff)
+ * Brand colors: Gold (#d1aa67), Red (#b41115)
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import GuestProfileFields from '../components/GuestProfileFields';
 import ConsentCheckboxes from '../components/ConsentCheckboxes';
+
+// Theme definitions
+type Theme = 'dark' | 'dark-blue' | 'light';
+
+const themes = {
+  dark: {
+    bg: 'bg-[#0c0d0e]',
+    cardBg: 'bg-[#1a1a1f]',
+    cardBorder: 'border-[#d1aa67]/30',
+    text: 'text-white',
+    textMuted: 'text-white/70',
+    textSubtle: 'text-white/50',
+    gold: 'text-[#d1aa67]',
+    goldBg: 'bg-[#d1aa67]',
+    buttonPrimary: 'bg-[#b41115] hover:bg-[#8a0d10] text-white',
+    buttonSecondary: 'bg-transparent border border-white/30 hover:bg-white/10 text-white',
+    inputBg: 'bg-[#2a2a2f] border-[#d1aa67]/30 text-white placeholder-white/40',
+    footerText: 'text-white/40',
+  },
+  'dark-blue': {
+    bg: 'bg-[#120c3a]',
+    cardBg: 'bg-[#1a1445]',
+    cardBorder: 'border-[#d1aa67]/30',
+    text: 'text-white',
+    textMuted: 'text-white/70',
+    textSubtle: 'text-white/50',
+    gold: 'text-[#d1aa67]',
+    goldBg: 'bg-[#d1aa67]',
+    buttonPrimary: 'bg-[#b41115] hover:bg-[#8a0d10] text-white',
+    buttonSecondary: 'bg-transparent border border-white/30 hover:bg-white/10 text-white',
+    inputBg: 'bg-[#2a2455] border-[#d1aa67]/30 text-white placeholder-white/40',
+    footerText: 'text-white/40',
+  },
+  light: {
+    bg: 'bg-[#f5f0e8]',
+    cardBg: 'bg-white',
+    cardBorder: 'border-[#d1aa67]/40',
+    text: 'text-[#0c0d0e]',
+    textMuted: 'text-[#0c0d0e]/70',
+    textSubtle: 'text-[#0c0d0e]/50',
+    gold: 'text-[#d1aa67]',
+    goldBg: 'bg-[#d1aa67]',
+    buttonPrimary: 'bg-[#b41115] hover:bg-[#8a0d10] text-white',
+    buttonSecondary: 'bg-transparent border border-[#0c0d0e]/30 hover:bg-[#0c0d0e]/10 text-[#0c0d0e]',
+    inputBg: 'bg-[#f5f0e8] border-[#d1aa67]/40 text-[#0c0d0e] placeholder-[#0c0d0e]/40',
+    footerText: 'text-[#0c0d0e]/40',
+  },
+};
+
+// Screen states
+type ScreenState = 'invitation' | 'confirmation' | 'registration';
 
 interface Guest {
   id: number;
@@ -67,7 +122,37 @@ interface FormErrors {
   partner_title?: string;
   partner_name?: string;
   partner_email?: string;
+  partner_phone?: string;
+  partner_company?: string;
+  partner_position?: string;
   partner_gdpr_consent?: string;
+}
+
+// Star decoration component
+function StarDecoration({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6L5.7 21l2.3-7-6-4.6h7.6L12 2z" />
+    </svg>
+  );
+}
+
+// Decorative line with stars
+function GoldLine({ theme }: { theme: typeof themes.dark }) {
+  return (
+    <div className="flex items-center justify-center gap-2 my-4">
+      <div className={`h-px w-12 ${theme.goldBg} opacity-50`} />
+      <StarDecoration className={`w-3 h-3 ${theme.gold}`} />
+      <div className={`h-px w-12 ${theme.goldBg} opacity-50`} />
+    </div>
+  );
+}
+
+// Footer component
+function PoweredByFooter() {
+  return (
+    <div className={`text-center mt-8 pt-4 border-t border-white/10`} />
+  );
 }
 
 export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
@@ -75,7 +160,22 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [showForm, setShowForm] = useState(false);
+  const [screenState, setScreenState] = useState<ScreenState>('invitation');
+  const [theme, setTheme] = useState<Theme>('dark');
+
+  // Load theme from localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('registration-theme') as Theme;
+    if (savedTheme && themes[savedTheme]) {
+      setTheme(savedTheme);
+    }
+  }, []);
+
+  // Get current theme styles
+  const t = themes[theme];
+
+  // Get display name with title (e.g., "Dr. John Smith")
+  const displayName = guest.title ? `${guest.title} ${guest.name}` : guest.name;
 
   const [formData, setFormData] = useState<FormData>({
     title: guest.title || '',
@@ -128,6 +228,15 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
         if (!emailRegex.test(formData.partnerEmail)) {
           newErrors.partner_email = 'Invalid email format';
         }
+      }
+      if (!formData.partnerPhone || formData.partnerPhone.trim().length < 9) {
+        newErrors.partner_phone = 'Partner phone number is required';
+      }
+      if (!formData.partnerCompany || formData.partnerCompany.trim().length < 1) {
+        newErrors.partner_company = 'Partner company name is required';
+      }
+      if (!formData.partnerPosition || formData.partnerPosition.trim().length < 1) {
+        newErrors.partner_position = 'Partner position is required';
       }
       // Partner GDPR consent required
       if (!formData.partnerGdprConsent) {
@@ -239,124 +348,166 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
     }
   };
 
-  // Show initial confirmation screen
-  if (!showForm) {
+  // ========================================
+  // SCREEN 1: INVITATION
+  // ========================================
+  if (screenState === 'invitation') {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-neutral-800 to-neutral-700 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white rounded-lg shadow-2xl p-8 text-center">
-          {/* VIP Badge */}
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-accent-gold/10 rounded-full mb-6">
-            <svg
-              className="w-8 h-8 text-accent-gold"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
+      <div className={`min-h-screen ${t.bg} flex items-center justify-center p-4`}>
+        <div className={`max-w-sm w-full ${t.cardBg} rounded-2xl shadow-2xl p-8 text-center border ${t.cardBorder}`}>
+          {/* Decorative stars at top */}
+          <div className="flex justify-center gap-1 mb-2">
+            <StarDecoration className={`w-4 h-4 ${t.gold} opacity-60`} />
+            <StarDecoration className={`w-5 h-5 ${t.gold}`} />
+            <StarDecoration className={`w-4 h-4 ${t.gold} opacity-60`} />
           </div>
 
-          {/* Welcome Message */}
-          <h1 className="font-display text-2xl font-semibold text-neutral-800 mb-1">
-            Dear,
-          </h1>
-          <p className="text-3xl font-bold text-accent-gold mb-2">
-            {guest.name}
+          {/* Dear Label */}
+          <p className={`text-xs uppercase tracking-[3px] ${t.textMuted} mt-4`}>
+            Dear
           </p>
-          <p className="text-accent-gold font-semibold mb-6 font-sans uppercase tracking-wider text-sm">Invited Guest</p>
+
+          {/* Guest Name */}
+          <h1 className={`text-2xl font-semibold ${t.text} mt-2 mb-2`}>
+            {displayName}
+          </h1>
+
+          <GoldLine theme={t} />
+
+          {/* Event Title */}
+          <h2 className={`text-xl font-bold ${t.text} tracking-wide`}>
+            CEO Gala 2026
+          </h2>
 
           {/* Event Details */}
-          <div className="bg-neutral-50 rounded-lg p-4 mb-6 border-l-4 border-accent-gold">
-            <Link href="/" className="hover:opacity-80 transition-opacity">
-              <h2 className="font-display text-lg font-semibold text-neutral-800 mb-2">
-                CEO Gála 2026
-              </h2>
-            </Link>
-            <p className="text-neutral-500 text-sm font-sans">
-              Friday, March 27, 2026 • 6:00 PM
-              <br />
-              Budapest, Corinthia Hotel
-            </p>
+          <div className={`${t.textMuted} text-sm mt-3 space-y-1`}>
+            <p>Friday, March 27, 2026 • 6:00 PM</p>
+            <p>Budapest, Corinthia Hotel</p>
           </div>
 
-          {/* Invitation Text */}
-          <p className="text-neutral-500 mb-8 font-sans">
-            It is our honor to welcome you as an invited guest at the
-            CEO Gala 2026 event.
-          </p>
+          <GoldLine theme={t} />
 
           {/* Action Buttons */}
-          <div className="space-y-3">
+          <div className="space-y-3 mt-6">
             <button
-              onClick={() => setShowForm(true)}
-              className="btn btn-primary w-full py-4"
+              onClick={() => setScreenState('confirmation')}
+              disabled={isLoading}
+              className={`w-full py-4 px-6 rounded-lg font-bold text-sm uppercase tracking-wider transition-all ${t.buttonPrimary}`}
               data-testid="confirm-attendance-button"
             >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-              Yes, I will attend
+              YES, I WILL ATTEND
             </button>
 
             <button
               onClick={handleDecline}
               disabled={isLoading}
-              className="btn btn-ghost w-full"
+              className={`w-full py-3 px-6 rounded-lg font-medium text-sm uppercase tracking-wider transition-all ${t.buttonSecondary}`}
               data-testid="decline-attendance-button"
             >
-              I cannot attend
+              {isLoading ? 'Processing...' : 'I CANNOT ATTEND'}
             </button>
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg font-sans">
+            <div className="mt-4 bg-red-900/30 border border-red-500/50 text-red-300 px-4 py-3 rounded-lg text-sm">
               {error}
             </div>
           )}
 
-          {/* Footer Note */}
-          <p className="text-xs text-neutral-500 mt-6 font-sans">
-            Your QR ticket will arrive via email after confirmation.
-          </p>
+          <PoweredByFooter />
         </div>
       </div>
     );
   }
 
-  // Show registration form with profile fields and consent
+  // ========================================
+  // SCREEN 2: CONFIRMATION (Thank You)
+  // ========================================
+  if (screenState === 'confirmation') {
+    return (
+      <div className={`min-h-screen ${t.bg} flex items-center justify-center p-4`}>
+        <div className={`max-w-sm w-full ${t.cardBg} rounded-2xl shadow-2xl p-8 text-center border ${t.cardBorder}`}>
+          {/* Checkmark Icon with gold border */}
+          <div className="flex justify-center mb-6">
+            <div className="w-20 h-20 rounded-full border-2 border-[#d1aa67] flex items-center justify-center">
+              <svg className="w-10 h-10 text-[#d1aa67]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+          </div>
+
+          {/* Thank You Heading */}
+          <h1 className={`text-2xl font-bold ${t.text} mb-4`}>
+            Thank You for Your Response!
+          </h1>
+
+          {/* Subtext */}
+          <p className={`${t.textMuted} text-sm mb-2`}>
+            You will receive a confirmation email shortly.
+          </p>
+          <p className={`${t.textMuted} text-sm mb-8`}>
+            Please continue to registration.
+          </p>
+
+          {/* Continue Button */}
+          <button
+            onClick={() => setScreenState('registration')}
+            className={`w-full py-4 px-6 rounded-lg font-bold text-sm uppercase tracking-wider transition-all ${t.buttonPrimary} flex items-center justify-center gap-2`}
+          >
+            CONTINUE TO REGISTRATION
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+
+          <PoweredByFooter />
+        </div>
+      </div>
+    );
+  }
+
+  // ========================================
+  // SCREEN 3: REGISTRATION FORM
+  // ========================================
   return (
-    <div className="min-h-screen bg-gradient-to-b from-neutral-800 to-neutral-700 flex items-center justify-center p-4">
-      <div className="max-w-lg w-full bg-white rounded-lg shadow-2xl p-8">
+    <div className={`min-h-screen ${t.bg} flex items-center justify-center p-4`}>
+      <div className={`max-w-lg w-full ${t.cardBg} rounded-2xl shadow-2xl p-8 border ${t.cardBorder}`}>
         {/* Header */}
         <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-accent-gold/10 rounded-full mb-4">
-            <svg
-              className="w-6 h-6 text-accent-gold"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
+          <div className="flex justify-center gap-1 mb-4">
+            <StarDecoration className={`w-4 h-4 ${t.gold} opacity-60`} />
+            <StarDecoration className={`w-5 h-5 ${t.gold}`} />
+            <StarDecoration className={`w-4 h-4 ${t.gold} opacity-60`} />
           </div>
-          <h1 className="font-display text-2xl font-semibold text-neutral-800 mb-1">
-            Invited Guest Registration
+          <h1 className={`text-xl font-semibold ${t.text} mb-1`}>
+            Registration Details
           </h1>
-          <p className="text-3xl font-bold text-accent-gold mt-2">{guest.name}</p>
+
+          {/* Guest Info Summary */}
+          <div className={`mt-4 p-4 rounded-lg ${theme === 'light' ? 'bg-[#f5f0e8]' : 'bg-black/20'}`}>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className={t.textMuted}>Name:</span>
+                <span className={`${t.text} font-medium`}>{displayName}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className={t.textMuted}>Email:</span>
+                <span className={`${t.text} font-medium`}>{guest.email}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className={t.textMuted}>Status:</span>
+                <span className={`px-3 py-1 rounded-full text-xs font-bold ${t.goldBg} text-[#0c0d0e]`}>
+                  VIP Guest
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 font-sans">
+          <div className="bg-red-900/30 border border-red-500/50 text-red-300 px-4 py-3 rounded-lg mb-6 text-sm">
             {error}
           </div>
         )}
@@ -365,23 +516,26 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
         {Object.keys(errors).length > 0 && (
           <div
             id="error-summary"
-            className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg"
+            className="mb-6 p-4 bg-red-900/30 border border-red-500/50 rounded-lg"
           >
             <div className="flex items-center gap-2 mb-2">
-              <svg className="w-5 h-5 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
-              <span className="font-medium text-red-800 text-sm font-sans">
+              <span className="font-medium text-red-300 text-sm">
                 Please fix the following errors:
               </span>
             </div>
-            <ul className="list-disc list-inside space-y-1 text-sm text-red-700 font-sans">
+            <ul className="list-disc list-inside space-y-1 text-sm text-red-300">
               {errors.phone && <li>Phone: {errors.phone}</li>}
               {errors.company && <li>Company: {errors.company}</li>}
               {errors.position && <li>Position: {errors.position}</li>}
               {errors.partner_title && <li>Partner Title: {errors.partner_title}</li>}
               {errors.partner_name && <li>Partner Name: {errors.partner_name}</li>}
               {errors.partner_email && <li>Partner Email: {errors.partner_email}</li>}
+              {errors.partner_phone && <li>Partner Phone: {errors.partner_phone}</li>}
+              {errors.partner_company && <li>Partner Company: {errors.partner_company}</li>}
+              {errors.partner_position && <li>Partner Position: {errors.partner_position}</li>}
               {errors.partner_gdpr_consent && <li>Partner Consent: {errors.partner_gdpr_consent}</li>}
               {errors.gdpr_consent && <li>GDPR: {errors.gdpr_consent}</li>}
               {errors.cancellation_accepted && <li>Cancellation: {errors.cancellation_accepted}</li>}
@@ -391,7 +545,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
 
         {/* Profile Fields Section */}
         <div className="mb-6">
-          <h3 className="font-display text-lg font-medium text-neutral-800 mb-4">
+          <h3 className={`text-lg font-medium ${t.text} mb-4`}>
             Personal Information
           </h3>
           <GuestProfileFields
@@ -413,10 +567,10 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
 
         {/* Partner Section (Optional for VIP) */}
         <div className="mb-6">
-          <h3 className="font-display text-lg font-medium text-neutral-800 mb-4">
+          <h3 className={`text-lg font-medium ${t.text} mb-4`}>
             Bringing a Partner?
           </h3>
-          <p className="text-sm text-neutral-500 mb-4">
+          <p className={`text-sm ${t.textMuted} mb-4`}>
             As an invited guest, you may bring one partner free of charge.
           </p>
 
@@ -451,25 +605,25 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
                   });
                 }
               }}
-              className="w-5 h-5 rounded border-neutral-300 text-accent-gold focus:ring-accent-gold"
+              className="w-5 h-5 rounded border-[#d1aa67]/50 text-[#d1aa67] focus:ring-[#d1aa67] bg-transparent"
             />
-            <span className="text-neutral-800 font-sans">
+            <span className={t.text}>
               Yes, I would like to bring a partner
             </span>
           </label>
 
           {/* Partner Details (shown when checkbox is checked) */}
           {formData.hasPartner && (
-            <div className="space-y-4 p-4 bg-neutral-50 rounded-lg border border-neutral-200">
+            <div className={`space-y-4 p-4 rounded-lg border ${theme === 'light' ? 'bg-[#f5f0e8] border-[#d1aa67]/30' : 'bg-black/20 border-[#d1aa67]/20'}`}>
               {/* Partner Title */}
               <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">
-                  Partner Title <span className="text-red-500">*</span>
+                <label className={`block text-sm font-medium ${t.text} mb-1`}>
+                  Partner Title <span className="text-red-400">*</span>
                 </label>
                 <select
                   value={formData.partnerTitle}
                   onChange={(e) => setFormData((prev) => ({ ...prev, partnerTitle: e.target.value }))}
-                  className={`input w-full ${errors.partner_title ? 'border-red-500' : ''}`}
+                  className={`w-full px-4 py-3 rounded-lg border ${t.inputBg} ${errors.partner_title ? 'border-red-500' : ''}`}
                 >
                   <option value="">-- Please select --</option>
                   <option value="Mr.">Mr.</option>
@@ -480,65 +634,68 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
                   <option value="Prof. Dr.">Prof. Dr.</option>
                 </select>
                 {errors.partner_title && (
-                  <p className="text-red-500 text-sm mt-1">{errors.partner_title}</p>
+                  <p className="text-red-400 text-sm mt-1">{errors.partner_title}</p>
                 )}
               </div>
 
               {/* Partner Name */}
               <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">
-                  Partner Name <span className="text-red-500">*</span>
+                <label className={`block text-sm font-medium ${t.text} mb-1`}>
+                  Partner Name <span className="text-red-400">*</span>
                 </label>
                 <input
                   type="text"
                   value={formData.partnerName}
                   onChange={(e) => setFormData((prev) => ({ ...prev, partnerName: e.target.value }))}
                   placeholder="Full name"
-                  className={`input w-full ${errors.partner_name ? 'border-red-500' : ''}`}
+                  className={`w-full px-4 py-3 rounded-lg border ${t.inputBg} ${errors.partner_name ? 'border-red-500' : ''}`}
                 />
                 {errors.partner_name && (
-                  <p className="text-red-500 text-sm mt-1">{errors.partner_name}</p>
+                  <p className="text-red-400 text-sm mt-1">{errors.partner_name}</p>
                 )}
               </div>
 
               {/* Partner Email */}
               <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">
-                  Partner Email <span className="text-red-500">*</span>
+                <label className={`block text-sm font-medium ${t.text} mb-1`}>
+                  Partner Email <span className="text-red-400">*</span>
                 </label>
                 <input
                   type="email"
                   value={formData.partnerEmail}
                   onChange={(e) => setFormData((prev) => ({ ...prev, partnerEmail: e.target.value }))}
                   placeholder="partner@example.com"
-                  className={`input w-full ${errors.partner_email ? 'border-red-500' : ''}`}
+                  className={`w-full px-4 py-3 rounded-lg border ${t.inputBg} ${errors.partner_email ? 'border-red-500' : ''}`}
                 />
                 {errors.partner_email && (
-                  <p className="text-red-500 text-sm mt-1">{errors.partner_email}</p>
+                  <p className="text-red-400 text-sm mt-1">{errors.partner_email}</p>
                 )}
-                <p className="text-xs text-neutral-600 mt-1">
+                <p className={`text-xs ${t.textSubtle} mt-1`}>
                   Your partner will receive their own ticket via email.
                 </p>
               </div>
 
               {/* Partner Phone */}
               <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">
-                  Partner Phone (optional)
+                <label className={`block text-sm font-medium ${t.text} mb-1`}>
+                  Partner Phone <span className="text-[#b41115]">*</span>
                 </label>
                 <input
                   type="tel"
                   value={formData.partnerPhone}
                   onChange={(e) => setFormData((prev) => ({ ...prev, partnerPhone: e.target.value }))}
                   placeholder="+36 30 123 4567"
-                  className="input w-full"
+                  className={`w-full px-4 py-3 rounded-lg border ${t.inputBg} ${errors.partner_phone ? 'border-red-500' : ''}`}
                 />
+                {errors.partner_phone && (
+                  <p className="text-red-400 text-sm mt-1">{errors.partner_phone}</p>
+                )}
               </div>
 
               {/* Partner Company */}
               <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">
-                  Partner Company / Organization (optional)
+                <label className={`block text-sm font-medium ${t.text} mb-1`}>
+                  Partner Company / Organization <span className="text-[#b41115]">*</span>
                 </label>
                 <input
                   type="text"
@@ -546,14 +703,17 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
                   onChange={(e) => setFormData((prev) => ({ ...prev, partnerCompany: e.target.value }))}
                   placeholder="Company Ltd."
                   maxLength={255}
-                  className="input w-full"
+                  className={`w-full px-4 py-3 rounded-lg border ${t.inputBg} ${errors.partner_company ? 'border-red-500' : ''}`}
                 />
+                {errors.partner_company && (
+                  <p className="text-red-400 text-sm mt-1">{errors.partner_company}</p>
+                )}
               </div>
 
               {/* Partner Position */}
               <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">
-                  Partner Position (optional)
+                <label className={`block text-sm font-medium ${t.text} mb-1`}>
+                  Partner Position <span className="text-[#b41115]">*</span>
                 </label>
                 <input
                   type="text"
@@ -561,13 +721,16 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
                   onChange={(e) => setFormData((prev) => ({ ...prev, partnerPosition: e.target.value }))}
                   placeholder="CEO"
                   maxLength={100}
-                  className="input w-full"
+                  className={`w-full px-4 py-3 rounded-lg border ${t.inputBg} ${errors.partner_position ? 'border-red-500' : ''}`}
                 />
+                {errors.partner_position && (
+                  <p className="text-red-400 text-sm mt-1">{errors.partner_position}</p>
+                )}
               </div>
 
               {/* Partner Dietary Requirements */}
               <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">
+                <label className={`block text-sm font-medium ${t.text} mb-1`}>
                   Partner Dietary Requirements (optional)
                 </label>
                 <textarea
@@ -575,11 +738,11 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
                   onChange={(e) => setFormData((prev) => ({ ...prev, partnerDietaryRequirements: e.target.value }))}
                   maxLength={500}
                   rows={2}
-                  className="input w-full"
+                  className={`w-full px-4 py-3 rounded-lg border ${t.inputBg}`}
                   placeholder="E.g., vegetarian, gluten-free, lactose-free, nut allergy..."
                 />
                 <div className="flex justify-end mt-1">
-                  <span className="text-xs text-neutral-500">{formData.partnerDietaryRequirements.length}/500</span>
+                  <span className={`text-xs ${t.textSubtle}`}>{formData.partnerDietaryRequirements.length}/500</span>
                 </div>
               </div>
 
@@ -590,14 +753,14 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
                     type="checkbox"
                     checked={formData.partnerGdprConsent}
                     onChange={(e) => setFormData((prev) => ({ ...prev, partnerGdprConsent: e.target.checked }))}
-                    className={`w-5 h-5 mt-0.5 rounded border-neutral-300 text-accent-gold focus:ring-accent-gold ${errors.partner_gdpr_consent ? 'border-red-500' : ''}`}
+                    className={`w-5 h-5 mt-0.5 rounded border-[#d1aa67]/50 text-[#d1aa67] focus:ring-[#d1aa67] bg-transparent ${errors.partner_gdpr_consent ? 'border-red-500' : ''}`}
                   />
-                  <span className="text-sm text-neutral-700">
-                    I confirm that my partner has consented to the processing of their personal data according to the <a href="/privacy" target="_blank" className="text-accent-gold hover:underline">Privacy Policy</a>. <span className="text-red-500">*</span>
+                  <span className={`text-sm ${t.textMuted}`}>
+                    I confirm that my partner has consented to the processing of their personal data according to the <a href="/privacy" target="_blank" className="text-[#d1aa67] hover:underline">Privacy Policy</a>. <span className="text-red-400">*</span>
                   </span>
                 </label>
                 {errors.partner_gdpr_consent && (
-                  <p className="text-red-500 text-sm mt-1 ml-8">{errors.partner_gdpr_consent}</p>
+                  <p className="text-red-400 text-sm mt-1 ml-8">{errors.partner_gdpr_consent}</p>
                 )}
               </div>
             </div>
@@ -606,7 +769,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
 
         {/* Consent Section */}
         <div className="mb-8">
-          <h3 className="font-display text-lg font-medium text-neutral-800 mb-4">
+          <h3 className={`text-lg font-medium ${t.text} mb-4`}>
             Consents
           </h3>
           <ConsentCheckboxes
@@ -622,41 +785,47 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
         {/* Action Buttons */}
         <div className="flex gap-3">
           <button
-            onClick={() => setShowForm(false)}
+            onClick={() => setScreenState('confirmation')}
             disabled={isLoading}
-            className="btn btn-ghost flex-1"
+            className={`flex-1 py-3 px-6 rounded-lg font-medium text-sm uppercase tracking-wider transition-all ${t.buttonSecondary}`}
           >
             Back
           </button>
           <button
             onClick={handleConfirm}
             disabled={isLoading}
-            className="btn btn-primary flex-1"
+            className={`flex-1 py-4 px-6 rounded-lg font-bold text-sm uppercase tracking-wider transition-all ${t.buttonPrimary}`}
             data-testid="submit-button"
           >
-            {isLoading ? (
-              <>
-                <span className="spinner"></span>
-                Processing...
-              </>
-            ) : (
-              'Complete Registration'
-            )}
+            {isLoading ? 'Processing...' : 'Complete Registration'}
           </button>
         </div>
 
         {/* Event Info Footer */}
-        <div className="mt-8 pt-6 border-t border-neutral-300/20">
-          <div className="text-center text-sm text-neutral-500 font-sans">
-            <Link href="/" className="font-medium text-neutral-800 hover:text-accent-gold transition-colors">CEO Gála 2026</Link>
-            <p>Friday, March 27, 2026 • 6:00 PM • Budapest, Corinthia Hotel</p>
-            <p className="mt-3">
-              <Link href="/help" className="text-accent-gold hover:underline">
-                Need help?
-              </Link>
-            </p>
+        <div className={`mt-8 pt-6 border-t ${theme === 'light' ? 'border-[#0c0d0e]/10' : 'border-white/10'}`}>
+          <div className={`text-center text-sm ${t.textMuted}`}>
+            <p className={`font-medium ${t.text}`}>CEO Gala 2026</p>
+            <p className="mt-1">Friday, March 27, 2026 • 6:00 PM • Budapest, Corinthia Hotel</p>
           </div>
         </div>
+
+        {/* Help Links */}
+        <div className={`mt-6 text-xs ${t.textMuted} text-center space-y-1`}>
+          <p>
+            Questions?{' '}
+            <a href="https://bbj.hu/events/ceogala/#faq" target="_blank" rel="noopener noreferrer" className="text-[#d1aa67] hover:underline">
+              View Registration Guide
+            </a>
+          </p>
+          <p>
+            Need more help:{' '}
+            <a href="mailto:event@bbj.hu" className="text-[#d1aa67] hover:underline">
+              event@bbj.hu
+            </a>
+          </p>
+        </div>
+
+        <PoweredByFooter />
       </div>
     </div>
   );

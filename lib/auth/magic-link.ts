@@ -52,6 +52,7 @@ export interface MagicLinkValidationResult {
   guest?: {
     id: number;
     name: string;
+    title: string | null;
     email: string;
     guestType: string;
     status: string;
@@ -82,6 +83,7 @@ export async function validateMagicLink(
     select: {
       id: true,
       name: true,
+      title: true,
       email: true,
       guest_type: true,
       registration_status: true,
@@ -139,6 +141,7 @@ export async function validateMagicLink(
     guest: {
       id: guest.id,
       name: guest.name,
+      title: guest.title,
       email: guest.email,
       guestType: guest.guest_type,
       status: guest.registration_status,
