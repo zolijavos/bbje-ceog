@@ -278,21 +278,20 @@ print_header "8. Health Check"
 print_step "Waiting for application to start..."
 sleep 5
 
+HEALTH_PASSED=false
 for i in $(seq 1 $HEALTH_CHECK_RETRIES); do
     print_step "Health check attempt $i/$HEALTH_CHECK_RETRIES..."
 
-    RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" "$HEALTH_CHECK_URL" 2>/dev/null || echo "000")
-
-    if [ "$RESPONSE" = "200" ]; then
-        # Get full health response
-        HEALTH_DATA=$(curl -s "$HEALTH_CHECK_URL" 2>/dev/null)
-        HEALTH_STATUS=$(echo "$HEALTH_DATA" | grep -o '"status":"[^"]*"' | cut -d'"' -f4)
-
-        if [ "$HEALTH_STATUS" = "healthy" ]; then
-            print_success "Health check passed: $HEALTH_STATUS"
+    # Simple HTTP check - if we get a 200 response, app is running
+    if curl -sf "$HEALTH_CHECK_URL" > /tmp/health_response.json 2>/dev/null; then
+        # Check if response contains "healthy" or "degraded"
+        if grep -q '"status":"healthy"' /tmp/health_response.json 2>/dev/null; then
+            print_success "Health check passed: healthy"
+            HEALTH_PASSED=true
             break
-        elif [ "$HEALTH_STATUS" = "degraded" ]; then
-            print_warning "Health check: $HEALTH_STATUS (continuing)"
+        elif grep -q '"status":"degraded"' /tmp/health_response.json 2>/dev/null; then
+            print_warning "Health check: degraded (continuing)"
+            HEALTH_PASSED=true
             break
         fi
     fi
@@ -300,11 +299,13 @@ for i in $(seq 1 $HEALTH_CHECK_RETRIES); do
     if [ $i -eq $HEALTH_CHECK_RETRIES ]; then
         print_error "Health check failed after $HEALTH_CHECK_RETRIES attempts"
         print_warning "Check logs: pm2 logs $PM2_APP_NAME --lines 50"
+        rm -f /tmp/health_response.json
         exit 1
     fi
 
     sleep $HEALTH_CHECK_DELAY
 done
+rm -f /tmp/health_response.json
 
 # ============================================
 # Final Status
