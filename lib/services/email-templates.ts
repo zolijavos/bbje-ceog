@@ -23,26 +23,29 @@ export const DEFAULT_TEMPLATES = {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Invitation to the CEO Gala 2026</title>
   <style>
-    body { font-family: Arial, Helvetica, sans-serif; line-height: 1.8; color: #333333; margin: 0; padding: 0; background-color: #ffffff; }
-    .container { max-width: 680px; margin: 0 auto; padding: 20px; background-color: #ffffff; }
-    .header-image { width: 100%; max-width: 680px; height: auto; display: block; margin: 0 auto 30px auto; }
-    .content { padding: 0 20px; text-align: center; }
-    p { margin: 0 0 20px 0; font-size: 15px; text-align: center; color: #333333; }
-    .greeting { font-size: 15px; margin-bottom: 25px; }
-    .details-section { margin: 35px 0; text-align: center; }
-    .details-section p { margin: 5px 0; font-size: 15px; }
-    .cta-container { text-align: center; margin: 35px 0 25px 0; }
-    .cta-button { display: inline-block; background-color: #c41e3a; color: #ffffff !important; text-decoration: none; padding: 12px 35px; font-size: 14px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; }
+    body { font-family: Arial, Helvetica, sans-serif; line-height: 1.5; color: #333333; margin: 0; padding: 0; background-color: #ffffff; }
+    .container { max-width: 680px; margin: 0 auto; padding: 15px; background-color: #ffffff; }
+    .header-image { width: 100%; max-width: 680px; height: auto; display: block; margin: 0 auto 20px auto; }
+    .content { padding: 0 15px; text-align: center; }
+    p { margin: 0 0 12px 0; font-size: 14px; text-align: center; color: #333333; }
+    .greeting { font-size: 14px; margin-bottom: 18px; }
+    .details-section { margin: 20px 0; text-align: center; }
+    .details-section p { margin: 3px 0; font-size: 14px; }
+    .cta-container { text-align: center; margin: 25px 0 20px 0; }
+    .cta-button { display: inline-block; background-color: #c41e3a; color: #ffffff !important; text-decoration: none; padding: 10px 30px; font-size: 13px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; }
     .cta-button:hover { background-color: #a01830; }
-    .signatures { margin: 50px 0 40px 0; text-align: center; }
+    .warm-regards { margin: 25px 0 8px 0; font-style: italic; }
+    .signatures { margin: 30px 0 25px 0; text-align: center; }
     .signatures-row { display: inline-block; width: 100%; }
     .signature { display: inline-block; width: 45%; text-align: center; vertical-align: top; }
-    .signature-name { font-weight: bold; font-size: 15px; margin-bottom: 3px; color: #000000; }
-    .signature-title { font-size: 14px; color: #333333; }
-    .footer { text-align: center; padding: 20px 0; }
-    .footer p { font-size: 13px; color: #666666; margin: 5px 0; }
+    .signature-name { font-weight: bold; font-size: 14px; margin-bottom: 2px; color: #c41e3a; }
+    .signature-title { font-size: 13px; color: #333333; }
+    .divider { border: 0; border-top: 1px solid #cccccc; margin: 25px 0; }
+    .footer { text-align: center; padding: 15px 0; }
+    .footer p { font-size: 12px; color: #666666; margin: 4px 0; }
     .footer a { color: #333333; text-decoration: underline; }
-    .link-fallback { font-size: 11px; color: #999999; word-break: break-all; margin-top: 30px; text-align: center; padding: 20px; background-color: #f5f5f5; }
+    .footer-logo { margin-bottom: 10px; }
+    .link-fallback { font-size: 10px; color: #999999; word-break: break-all; margin-top: 20px; text-align: center; padding: 15px; background-color: #f5f5f5; }
   </style>
 </head>
 <body>
@@ -98,6 +101,8 @@ export const DEFAULT_TEMPLATES = {
 
       <p>We look forward to meeting you at the gala and celebrating our outstanding CEO Community.</p>
 
+      <p class="warm-regards">Warm regards,</p>
+
       <div class="signatures">
         <div class="signatures-row">
           <div class="signature">
@@ -111,11 +116,14 @@ export const DEFAULT_TEMPLATES = {
         </div>
       </div>
 
+      <hr class="divider" />
+
       <div class="footer">
-        <p><u>Business Publishing Services Kft.</u></p>
-        <p>1075 Budapest, Madách Imre út 13–14., Hungary</p>
-        <p>Publisher of Budapest Business Journal</p>
-        <p>Event website: <a href="https://ceogala.com">ceogala.com</a></p>
+        <p><strong>BUDAPEST<br>BUSINESS JOURNAL</strong></p>
+        <p>For more details about the event and the award, <a href="https://www.ceogala.com">including previous winners</a>,<br>visit our website at <a href="https://www.ceogala.com">www.ceogala.com</a>. We look forward to meeting you at the<br>gala and celebrating our outstanding CEO Community with you.</p>
+        <p style="margin-top: 12px; font-size: 11px;">© Copyright, 2024-25<br>1075 Budapest, Madách I. út 13-14, Hungary</p>
+        <p style="font-size: 11px;">This email has been sent to you, because you are a customer or subscriber of<br>BUSINESS PUBLISHING SERVICES KFT.<br><a href="https://www.ceogala.com">www.ceogala.com</a> - <a href="mailto:event@bbj.hu">event@bbj.hu</a></p>
+        <p style="font-size: 11px; margin-top: 8px;"><a href="#">Unsubscribe</a> | <a href="#">Manage your subscription</a></p>
       </div>
 
       <div class="link-fallback">

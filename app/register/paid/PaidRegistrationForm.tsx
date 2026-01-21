@@ -672,7 +672,6 @@ export default function PaidRegistrationForm({
             data={formData.billing}
             onChange={updateBillingField}
             errors={errors}
-            theme={theme}
           />
         )}
 
@@ -856,7 +855,6 @@ export default function PaidRegistrationForm({
               onCancellationChange={(checked) => updateFormData('cancellationAccepted', checked)}
               errors={errors}
               guestType={formData.ticketType as 'paying_single' | 'paying_paired'}
-              theme={theme}
             />
           </div>
         )}
