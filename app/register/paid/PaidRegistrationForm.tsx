@@ -663,7 +663,6 @@ export default function PaidRegistrationForm({
             onDietaryChange={(value) => updateFormData('dietaryRequirements', value)}
             onSeatingChange={(value) => updateFormData('seatingPreferences', value)}
             errors={errors}
-            theme={theme}
           />
         )}
 
