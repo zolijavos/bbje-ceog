@@ -14,7 +14,8 @@ import { logInfo, logError } from '@/lib/utils/logger';
 const phoneRegex = /^[\+]?[(]?[0-9]{1,3}[)]?[-\s\.]?[0-9]{1,4}[-\s\.]?[0-9]{1,4}[-\s\.]?[0-9]{1,9}$/;
 
 const applySchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
+  first_name: z.string().min(1, 'First name is required'),
+  last_name: z.string().min(1, 'Last name is required'),
   email: z.string().email('Invalid email address'),
   title: z.string().max(50).nullable().optional(),
   phone: z.string().min(9, 'Phone number is required').regex(phoneRegex, 'Invalid phone number format'),
@@ -105,7 +106,8 @@ export async function POST(request: NextRequest) {
     const guest = await prisma.guest.create({
       data: {
         email: data.email.toLowerCase(),
-        name: data.name,
+        first_name: data.first_name,
+        last_name: data.last_name,
         title: data.title || null,
         phone: data.phone,
         company: data.company,

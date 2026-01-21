@@ -11,6 +11,7 @@ import { NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/api';
 import { prisma } from '@/lib/db/prisma';
 import { logError } from '@/lib/utils/logger';
+import { getFullName } from '@/lib/utils/name';
 
 export async function GET(request: Request) {
   try {
@@ -35,7 +36,8 @@ export async function GET(request: Request) {
       where: whereClause,
       select: {
         id: true,
-        name: true,
+        first_name: true,
+        last_name: true,
         email: true,
         title: true,
         phone: true,
@@ -57,7 +59,9 @@ export async function GET(request: Request) {
     // Transform for API response
     const applicantData = applicants.map((a) => ({
       id: a.id,
-      name: a.name,
+      name: getFullName(a.first_name, a.last_name),
+      first_name: a.first_name,
+      last_name: a.last_name,
       email: a.email,
       title: a.title,
       phone: a.phone,

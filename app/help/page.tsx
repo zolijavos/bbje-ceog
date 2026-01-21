@@ -51,7 +51,7 @@ const faqs: FAQItem[] = [
   {
     id: '5',
     question: 'What information do I need to register?',
-    answer: 'You\'ll need your full name, email address, phone number, company name, and position. You can also provide dietary requirements and seating preferences.',
+    answer: 'You\'ll need your first name, last name, email address, phone number, company name, and position. You can also add an optional title (Dr., Mr., Ms., etc.) which will appear in your personalized emails, as well as dietary requirements and seating preferences.',
   },
   {
     id: '6',

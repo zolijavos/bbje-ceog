@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CEO Gala 2026 - Magic Link Email Preview (v2)</title>
+  <style>
+    body { font-family: Verdana, Geneva, sans-serif; font-size: 15px; line-height: 1.6; color: #333333; margin: 0; padding: 0; background-color: #f5f5f5; }
+    .preview-header { background: #1a1a2e; color: white; padding: 20px; text-align: center; position: sticky; top: 0; z-index: 100; }
+    .preview-header h1 { margin: 0 0 10px 0; font-size: 18px; }
+    .preview-header p { margin: 0; font-size: 12px; opacity: 0.8; }
+    .email-wrapper { max-width: 720px; margin: 20px auto; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+
+    /* Email styles */
+    .container { max-width: 680px; margin: 0 auto; padding: 15px; background-color: #ffffff; }
+    .header-image { width: 100%; max-width: 680px; height: auto; display: block; margin: 0 auto 20px auto; }
+    .content { padding: 0 15px; text-align: center; }
+    p { margin: 0 0 12px 0; font-size: 15px; text-align: center; color: #333333; }
+    .greeting { font-size: 15px; margin-bottom: 18px; }
+    .details-section { margin: 20px 0; text-align: center; }
+    .details-section p { margin: 3px 0; font-size: 15px; }
+    .cta-container { text-align: center; margin: 25px 0 20px 0; }
+    .cta-button { display: inline-block; background-color: #c41e3a; color: #ffffff !important; text-decoration: none; padding: 12px 35px; font-size: 14px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; border-radius: 4px; font-family: Arial, Helvetica, sans-serif; }
+    .cta-button:hover { background-color: #a01830; }
+    .warm-regards { margin: 25px 0 8px 0; font-style: italic; text-align: left; }
+    .signatures { margin: 30px 0 25px 0; text-align: center; }
+    .signatures-row { display: inline-block; width: 100%; }
+    .signature { display: inline-block; width: 45%; text-align: center; vertical-align: top; }
+    .signature-name { font-weight: bold; font-size: 15px; margin-bottom: 2px; color: #1a1a2e; }
+    .signature-title { font-size: 14px; color: #333333; }
+    .divider { border: 0; border-top: 1px solid #cccccc; margin: 25px 0; }
+    .footer { text-align: center; padding: 15px 0; }
+    .footer p { font-size: 12px; color: #666666; margin: 4px 0; }
+    .footer a { color: #333333; text-decoration: underline; }
+    .link-fallback { font-size: 10px; color: #999999; word-break: break-all; margin-top: 20px; text-align: center; padding: 15px; background-color: #f5f5f5; }
+
+    /* Highlight changes */
+    .changed { background-color: #fff3cd; }
+  </style>
+</head>
+<body>
+  <div class="preview-header">
+    <h1>EMAIL PREVIEW - Magic Link Invitation v2</h1>
+    <p>Kliens által kért tartalom + jelenlegi dizájn elemek (header kép, gomb, aláírások, footer)</p>
+  </div>
+
+  <div class="email-wrapper">
+    <div class="container">
+      <!-- Header Image - MEGTARTVA -->
+      <img src="https://ceog.stage.myforgelabs.com/email-assets/CEO_Gala_2026_invitation_header_709x213.jpg" alt="CEO Gala 2026 - March 27, 2026" class="header-image" />
+
+      <div class="content">
+        <!-- Greeting - változó: {{guestName}} -->
+        <p class="greeting">Dear <strong>{{guestName}}</strong>,</p>
+
+        <!-- ÚJ TARTALOM A KLIENSTŐL -->
+        <p class="changed">The Budapest Business Journal and our official event partner, the <strong>Hungarian Investment Promotion Agency (HIPA)</strong>, are delighted to invite you to the official <strong>CEO Gala 2026</strong> hosted at <strong>Corinthia Hotel Budapest on Friday, March 27, 2026.</strong></p>
+
+        <p class="changed">As has now become a tradition of several years, two awards will be presented during the evening: the <strong>Expat CEO Award</strong>, granted to the most successful and innovative expatriate CEO working in Hungary; and the <strong>CEO Community Award</strong>, bestowed to a Hungarian executive who has been a role model by being successful in markets while demonstrating exceptional commitment to the community. Two professional awards committees will choose the winners minutes before the gala starts from a shortlist of three candidates.</p>
+
+        <!-- Event Details -->
+        <div class="details-section">
+          <p><strong>Date:</strong> Friday, March 27, 2026, 7 p.m.</p>
+          <br>
+          <p><strong>Location:</strong> The Grand Ballroom of the Corinthia Hotel Budapest</p>
+          <p>1073 Budapest, Erzsébet krt. 43-49</p>
+          <br>
+          <p><strong>Dress Code:</strong> Black tie for men, ball gown or cocktail dress for women</p>
+        </div>
+
+        <p>If you wish to reserve your place at the gala now, click the registration button below.</p>
+
+        <!-- CTA Button - MEGTARTVA -->
+        <div class="cta-container">
+          <a href="{{magicLinkUrl}}" class="cta-button">REGISTRATION</a>
+        </div>
+
+        <p>Should you wish to reserve an exclusive table for yourself, your guests or your company, our team will be pleased to assist you upon request.</p>
+
+        <p>This personal invitation is dedicated to the addressee and is not transferable. Due to the event's popularity and the limited seating, early registration is strongly recommended to ensure participation. When you register, please let us know if you have any special dietary requirements. We will send you a feedback email after successful registration. Please kindly note that your registration will only be finalised after having the official confirmation received.</p>
+
+        <!-- Cancellation notice -->
+        <p>We remind you that any cancellations or changes to your registration must be made at least ten business days before the gala. Cancellations should be sent to <a href="mailto:event@bbj.hu" style="color: #333333;">event@bbj.hu</a>.</p>
+        <p>Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of <strong>HUF 99,000 + VAT</strong> per person.</p>
+
+        <p>We look forward to meeting you at the gala and celebrating our outstanding CEO Community.</p>
+
+        <!-- Warm Regards -->
+        <p class="warm-regards">Warm regards,</p>
+
+        <!-- Signatures - MEGTARTVA -->
+        <div class="signatures">
+          <div class="signatures-row">
+            <div class="signature">
+              <div class="signature-name">Tamas Botka</div>
+              <div class="signature-title">Publisher, BBJ</div>
+            </div>
+            <div class="signature">
+              <div class="signature-name">Balazs Roman</div>
+              <div class="signature-title">CEO, BBJ</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BBJ Logo -->
+        <div style="text-align: center; margin: 30px 0;">
+          <img src="https://ceog.stage.myforgelabs.com/email-assets/bbj-logo.png" alt="Budapest Business Journal" style="max-width: 300px; height: auto;" />
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Footer - MEGTARTVA -->
+        <div class="footer">
+          <p><a href="https://bbj.hu" style="color: #333333; text-decoration: underline;">Business Publishing Services Kft.</a></p>
+          <p>For more details about the event and the award, <a href="https://www.ceogala.com">including previous winners</a>,<br>visit our website at <a href="https://www.ceogala.com">www.ceogala.com</a>.</p>
+          <p style="margin-top: 12px; font-size: 11px;">© Copyright, 2024-26<br>1075 Budapest, Madách I. út 13-14, Hungary</p>
+          <p style="font-size: 11px;">This email has been sent to you, because you are a customer or subscriber of<br>BUSINESS PUBLISHING SERVICES KFT.<br><a href="https://www.ceogala.com">www.ceogala.com</a> - <a href="mailto:event@bbj.hu">event@bbj.hu</a></p>
+        </div>
+
+        <!-- Link Fallback - MEGTARTVA -->
+        <div class="link-fallback">
+          If the button doesn't work, copy this link into your browser:<br>
+          {{magicLinkUrl}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width: 720px; margin: 20px auto; padding: 20px; background: #e8f4e8; border-radius: 8px;">
+    <h3 style="margin-top: 0; color: #2d5a2d;">Változások összefoglalása:</h3>
+    <ul style="color: #333; line-height: 1.8;">
+      <li><strong>HIPA hozzáadva:</strong> "The Budapest Business Journal and our official event partner, the Hungarian Investment Promotion Agency (HIPA)..."</li>
+      <li><strong>Díjak leírása módosítva:</strong> Rövidebb, tömörebb szöveg a két díjról</li>
+      <li><strong>No-show fee:</strong> "HUF 99,000" → "HUF 99,000 + VAT"</li>
+      <li><strong>Szöveg összevonva:</strong> Több bekezdés egy blokkba (non-transferable, early registration, dietary, confirmation)</li>
+    </ul>
+    <p style="color: #666; font-size: 12px; margin-bottom: 0;">Sárga háttérrel jelölve a változtatott részek.</p>
+  </div>
+</body>
+</html>

@@ -47,7 +47,6 @@ export function getMagicLinkEmailTemplate(params: MagicLinkEmailParams): {
     .footer { text-align: center; padding: 20px 0; }
     .footer p { font-size: 13px; color: #666666; margin: 5px 0; }
     .footer a { color: #333333; text-decoration: underline; }
-    .link-fallback { font-size: 11px; color: #999999; word-break: break-all; margin-top: 30px; text-align: center; padding: 20px; background-color: #f5f5f5; }
   </style>
 </head>
 <body>
@@ -131,10 +130,6 @@ export function getMagicLinkEmailTemplate(params: MagicLinkEmailParams): {
         <p>Event website: <a href="https://ceogala.com">ceogala.com</a></p>
       </div>
 
-      <div class="link-fallback">
-        If the button doesn't work, copy this link into your browser:<br>
-        ${escapeHtml(magicLinkUrl)}
-      </div>
     </div>
   </div>
 </body>

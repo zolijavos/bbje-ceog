@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/auth-options';
 import { prisma } from '@/lib/db/prisma';
 import { TestStatus } from '@prisma/client';
+import { getFullName } from '@/lib/utils/name';
 
 /**
  * GET /api/admin/test-results
@@ -24,7 +25,7 @@ export async function GET(request: NextRequest) {
       where,
       include: {
         tester: {
-          select: { id: true, name: true, email: true }
+          select: { id: true, first_name: true, last_name: true, email: true }
         }
       },
       orderBy: [
@@ -33,7 +34,16 @@ export async function GET(request: NextRequest) {
       ]
     });
 
-    return NextResponse.json({ results });
+    // Add computed name field for backwards compatibility
+    const resultsWithName = results.map(r => ({
+      ...r,
+      tester: {
+        ...r.tester,
+        name: getFullName(r.tester.first_name, r.tester.last_name),
+      },
+    }));
+
+    return NextResponse.json({ results: resultsWithName });
   } catch (error) {
     console.error('Error fetching test results:', error);
     return NextResponse.json(
@@ -83,6 +93,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
+    // Compute tester name for caching
+    const testerName = getFullName(user.first_name, user.last_name);
+
     // Upsert the test result
     const result = await prisma.testResult.upsert({
       where: {
@@ -99,24 +112,33 @@ export async function POST(request: NextRequest) {
         comment: comment || null,
         step_results: stepResults ? JSON.stringify(stepResults) : null,
         tester_id: user.id,
-        tester_name: user.name
+        tester_name: testerName
       },
       update: {
         status: status || 'not_tested',
         comment: comment || null,
         step_results: stepResults ? JSON.stringify(stepResults) : null,
         tester_id: user.id,
-        tester_name: user.name,
+        tester_name: testerName,
         updated_at: new Date()
       },
       include: {
         tester: {
-          select: { id: true, name: true, email: true }
+          select: { id: true, first_name: true, last_name: true, email: true }
         }
       }
     });
 
-    return NextResponse.json({ success: true, result });
+    // Add computed name field for backwards compatibility
+    const resultWithName = {
+      ...result,
+      tester: {
+        ...result.tester,
+        name: getFullName(result.tester.first_name, result.tester.last_name),
+      },
+    };
+
+    return NextResponse.json({ success: true, result: resultWithName });
   } catch (error) {
     console.error('Error saving test result:', error);
     return NextResponse.json(

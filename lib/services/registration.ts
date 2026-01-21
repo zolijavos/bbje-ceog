@@ -8,6 +8,7 @@ import { TicketType, RegistrationStatus, PaymentStatus, PaymentMethod } from '@p
 import { getErrorMessage } from '@/lib/utils/errors';
 import { logError, logInfo } from '@/lib/utils/logger';
 import { generateAndSendTicket, generateAndSendPairedTickets, sendRegistrationFeedbackEmails } from '@/lib/services/email';
+import { getFullName } from '@/lib/utils/name';
 import crypto from 'crypto';
 
 /**
@@ -186,7 +187,8 @@ export interface VIPRegistrationInput {
   // Partner fields (optional for VIP - free partner)
   has_partner?: boolean;
   partner_title?: string | null;
-  partner_name?: string | null;
+  partner_first_name?: string | null;
+  partner_last_name?: string | null;
   partner_email?: string | null;
   partner_phone?: string | null;
   partner_company?: string | null;
@@ -289,7 +291,8 @@ export async function processVIPRegistration(
           cancellation_accepted: data.cancellation_accepted ?? false,
           cancellation_accepted_at: data.cancellation_accepted ? new Date() : null,
           // Store partner info in registration (for reference)
-          partner_name: data.has_partner ? data.partner_name : null,
+          partner_first_name: data.has_partner ? data.partner_first_name : null,
+          partner_last_name: data.has_partner ? data.partner_last_name : null,
           partner_email: data.has_partner ? data.partner_email : null,
         },
       });
@@ -298,9 +301,10 @@ export async function processVIPRegistration(
       // Partner also gets their own Registration and ticket
       let partnerRegistrationId: number | null = null;
 
-      if (data.has_partner && data.partner_name && data.partner_email && partnerPwaAuthCode) {
+      if (data.has_partner && data.partner_first_name && data.partner_last_name && data.partner_email && partnerPwaAuthCode) {
         // Trim partner inputs
-        const trimmedPartnerName = data.partner_name.trim();
+        const trimmedPartnerFirstName = data.partner_first_name.trim();
+        const trimmedPartnerLastName = data.partner_last_name.trim();
         const trimmedPartnerEmail = data.partner_email.trim().toLowerCase();
 
         // Check if partner already exists as guest (include registration to check if already registered)
@@ -317,7 +321,8 @@ export async function processVIPRegistration(
           const newPartner = await tx.guest.create({
             data: {
               email: trimmedPartnerEmail,
-              name: trimmedPartnerName,
+              first_name: trimmedPartnerFirstName,
+              last_name: trimmedPartnerLastName,
               guest_type: guest.guest_type, // Partner inherits same guest type (vip/invited)
               registration_status: 'registered', // Auto-registered through main guest
               paired_with_id: guestId, // Link to main guest
@@ -367,7 +372,8 @@ export async function processVIPRegistration(
               ticket_type: 'vip_free',
               gdpr_consent: data.partner_gdpr_consent ?? false,
               gdpr_consent_at: data.partner_gdpr_consent ? new Date() : null,
-              partner_name: null,
+              partner_first_name: null,
+              partner_last_name: null,
               partner_email: null,
             },
           });
@@ -379,43 +385,47 @@ export async function processVIPRegistration(
     });
 
     // Send registration feedback emails (confirmation of received data)
-    // These are sent BEFORE the ticket emails to confirm the registration data
-    try {
-      const feedbackResult = await sendRegistrationFeedbackEmails({
-        guestId: guestId,
-        guestEmail: guest.email,
-        guestTitle: data.title || undefined,
-        guestName: guest.name,
-        guestCompany: data.company || undefined,
-        guestPhone: data.phone || undefined,
-        guestDiet: data.dietary_requirements || undefined,
-        guestSeating: data.seating_preferences || undefined,
-        hasPartner: data.has_partner || false,
-        partnerTitle: data.partner_title || undefined,
-        partnerName: data.partner_name || undefined,
-        partnerPhone: data.partner_phone || undefined,
-        partnerEmail: data.partner_email || undefined,
-        partnerDiet: data.partner_dietary_requirements || undefined,
-        partnerSeating: data.partner_seating_preferences || undefined,
-      });
+    // Fire-and-forget: don't block the response, emails are not critical for registration success
+    void (async () => {
+      try {
+        const feedbackResult = await sendRegistrationFeedbackEmails({
+          guestId: guestId,
+          guestEmail: guest.email,
+          guestTitle: data.title || undefined,
+          guestFirstName: guest.first_name,
+          guestLastName: guest.last_name,
+          guestCompany: data.company || undefined,
+          guestPhone: data.phone || undefined,
+          guestDiet: data.dietary_requirements || undefined,
+          guestSeating: data.seating_preferences || undefined,
+          hasPartner: data.has_partner || false,
+          partnerTitle: data.partner_title || undefined,
+          partnerFirstName: data.partner_first_name || undefined,
+          partnerLastName: data.partner_last_name || undefined,
+          partnerPhone: data.partner_phone || undefined,
+          partnerEmail: data.partner_email || undefined,
+          partnerDiet: data.partner_dietary_requirements || undefined,
+          partnerSeating: data.partner_seating_preferences || undefined,
+        });
 
-      if (feedbackResult.mainResult.success) {
-        logInfo(`[VIP_REGISTRATION] Feedback email sent to main guest ${guestId}`);
-      } else {
-        logError(`[VIP_REGISTRATION] Failed to send feedback email to main guest: ${feedbackResult.mainResult.error}`);
-      }
-
-      if (data.has_partner && feedbackResult.partnerResult) {
-        if (feedbackResult.partnerResult.success) {
-          logInfo(`[VIP_REGISTRATION] Feedback email sent to partner ${data.partner_email}`);
+        if (feedbackResult.mainResult.success) {
+          logInfo(`[VIP_REGISTRATION] Feedback email sent to main guest ${guestId}`);
         } else {
-          logError(`[VIP_REGISTRATION] Failed to send feedback email to partner: ${feedbackResult.partnerResult.error}`);
+          logError(`[VIP_REGISTRATION] Failed to send feedback email to main guest: ${feedbackResult.mainResult.error}`);
         }
+
+        if (data.has_partner && feedbackResult.partnerResult) {
+          if (feedbackResult.partnerResult.success) {
+            logInfo(`[VIP_REGISTRATION] Feedback email sent to partner ${data.partner_email}`);
+          } else {
+            logError(`[VIP_REGISTRATION] Failed to send feedback email to partner: ${feedbackResult.partnerResult.error}`);
+          }
+        }
+      } catch (feedbackError) {
+        // Log error but don't fail registration - feedback email is not critical
+        logError('[VIP_REGISTRATION] Error sending feedback emails:', feedbackError);
       }
-    } catch (feedbackError) {
-      // Log error but don't fail registration - feedback email is not critical
-      logError('[VIP_REGISTRATION] Error sending feedback emails:', feedbackError);
-    }
+    })();
 
     // Generate QR ticket and send confirmation email(s)
     // For paired registrations: both guests get emails with BOTH QR codes
@@ -501,7 +511,8 @@ export async function getGuestForRegistration(guestId: number) {
     where: { id: guestId },
     select: {
       id: true,
-      name: true,
+      first_name: true,
+      last_name: true,
       email: true,
       guest_type: true,
       registration_status: true,
@@ -520,7 +531,8 @@ export async function getGuestForRegistration(guestId: number) {
  * Billing Info Data for BillingInfo model
  */
 export interface BillingInfoData {
-  billing_name: string;
+  billing_first_name: string;
+  billing_last_name: string;
   company_name?: string | null;
   tax_number?: string | null;
   address_line1: string;
@@ -537,7 +549,8 @@ export interface PaidRegistrationData {
   guest_id: number;
   ticket_type: 'paid_single' | 'paid_paired';
   billing_info: BillingInfoData;
-  partner_name?: string | null;
+  partner_first_name?: string | null;
+  partner_last_name?: string | null;
   partner_email?: string | null;
   partner_phone?: string | null;
   partner_company?: string | null;
@@ -614,7 +627,7 @@ export async function processPaidRegistration(
 
     // 3. Validate paired ticket requires partner info
     if (data.ticket_type === 'paid_paired') {
-      if (!data.partner_name || !data.partner_email) {
+      if (!data.partner_first_name || !data.partner_last_name || !data.partner_email) {
         return {
           success: false,
           error: 'Partner details are required for paired tickets',
@@ -647,7 +660,8 @@ export async function processPaidRegistration(
         data: {
           guest_id: data.guest_id,
           ticket_type: data.ticket_type,
-          partner_name: data.partner_name || null,
+          partner_first_name: data.partner_first_name || null,
+          partner_last_name: data.partner_last_name || null,
           partner_email: data.partner_email || null,
           gdpr_consent: data.gdpr_consent,
           gdpr_consent_at: data.gdpr_consent ? new Date() : null,
@@ -660,7 +674,8 @@ export async function processPaidRegistration(
       await tx.billingInfo.create({
         data: {
           registration_id: registration.id,
-          billing_name: data.billing_info.billing_name,
+          billing_first_name: data.billing_info.billing_first_name,
+          billing_last_name: data.billing_info.billing_last_name,
           company_name: data.billing_info.company_name || null,
           tax_number: data.billing_info.tax_number || null,
           address_line1: data.billing_info.address_line1,
@@ -672,7 +687,7 @@ export async function processPaidRegistration(
       });
 
       // For paired tickets: Create partner as separate Guest record linked to main guest
-      if (data.ticket_type === 'paid_paired' && data.partner_name && data.partner_email) {
+      if (data.ticket_type === 'paid_paired' && data.partner_first_name && data.partner_last_name && data.partner_email) {
         // Check if partner already exists as guest
         const existingPartner = await tx.guest.findUnique({
           where: { email: data.partner_email },
@@ -683,7 +698,8 @@ export async function processPaidRegistration(
           await tx.guest.create({
             data: {
               email: data.partner_email,
-              name: data.partner_name,
+              first_name: data.partner_first_name,
+              last_name: data.partner_last_name,
               guest_type: 'paying_paired',
               registration_status: 'registered', // Auto-registered through main guest
               paired_with_id: data.guest_id, // Link to main guest
@@ -737,7 +753,8 @@ export interface GuestStatusResult {
   success: boolean;
   error?: string;
   guest?: {
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
     guestType: string;
   };
@@ -745,7 +762,8 @@ export interface GuestStatusResult {
     id: number;
     ticketType: TicketType;
     registeredAt: Date;
-    partnerName: string | null;
+    partnerFirstName: string | null;
+    partnerLastName: string | null;
   } | null;
   payment?: {
     status: PaymentStatus;
@@ -771,7 +789,8 @@ export async function getGuestStatus(guestId: number): Promise<GuestStatusResult
       where: { id: guestId },
       select: {
         id: true,
-        name: true,
+        first_name: true,
+        last_name: true,
         email: true,
         guest_type: true,
         registration_status: true,
@@ -780,7 +799,8 @@ export async function getGuestStatus(guestId: number): Promise<GuestStatusResult
             id: true,
             ticket_type: true,
             registered_at: true,
-            partner_name: true,
+            partner_first_name: true,
+            partner_last_name: true,
             qr_code_hash: true,
             payment: {
               select: {
@@ -811,7 +831,8 @@ export async function getGuestStatus(guestId: number): Promise<GuestStatusResult
     return {
       success: true,
       guest: {
-        name: guest.name,
+        firstName: guest.first_name,
+        lastName: guest.last_name,
         email: guest.email,
         guestType: guest.guest_type,
       },
@@ -820,7 +841,8 @@ export async function getGuestStatus(guestId: number): Promise<GuestStatusResult
             id: guest.registration.id,
             ticketType: guest.registration.ticket_type,
             registeredAt: guest.registration.registered_at,
-            partnerName: guest.registration.partner_name,
+            partnerFirstName: guest.registration.partner_first_name,
+            partnerLastName: guest.registration.partner_last_name,
           }
         : null,
       payment: guest.registration?.payment

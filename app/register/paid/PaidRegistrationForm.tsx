@@ -125,7 +125,8 @@ function PoweredByFooter({ theme }: { theme: typeof themes.dark }) {
 
 interface Guest {
   id: number;
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   guest_type: string;
   title?: string | null;
@@ -216,8 +217,10 @@ export default function PaidRegistrationForm({
 
   const t = themes[theme];
 
+  // Compose full name and display name
+  const fullName = `${guest.first_name} ${guest.last_name}`;
   // Get display name with title (e.g., "Dr. John Smith")
-  const displayName = guest.title ? `${guest.title} ${guest.name}` : guest.name;
+  const displayName = guest.title ? `${guest.title} ${fullName}` : fullName;
 
   const [formData, setFormData] = useState<FormData>({
     ticketType: 'paid_single',
@@ -230,7 +233,7 @@ export default function PaidRegistrationForm({
     seatingPreferences: guest.seating_preferences || '',
     // Billing
     billing: {
-      billingName: guest.name,
+      billingName: `${guest.first_name} ${guest.last_name}`,
       companyName: guest.company || '',
       taxNumber: '',
       addressLine1: '',
@@ -457,16 +460,25 @@ export default function PaidRegistrationForm({
         }),
       });
 
-      const data = await response.json();
-
+      // Check response before parsing JSON
       if (!response.ok) {
         if (response.status === 409) {
           router.push(`/register/paid?guest_id=${guest.id}&error=already_registered`);
           return;
         }
-        throw new Error(data.error || 'An error occurred');
+        // Try to parse error message from JSON, fallback to generic error
+        let errorMessage = 'An error occurred';
+        try {
+          const data = await response.json();
+          errorMessage = data.error || errorMessage;
+        } catch {
+          // Response was not JSON (likely HTML error page)
+          errorMessage = `Server error (${response.status}). Please try again.`;
+        }
+        throw new Error(errorMessage);
       }
 
+      const data = await response.json();
       router.push(`/register/success?guest_id=${guest.id}&type=paid`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred');
@@ -833,7 +845,7 @@ export default function PaidRegistrationForm({
                     className={`w-5 h-5 mt-0.5 rounded border-[#d1aa67]/50 text-[#d1aa67] focus:ring-[#d1aa67] ${errors.partner_gdpr_consent ? 'border-red-500' : ''}`}
                   />
                   <span className={`text-sm ${t.textMuted}`}>
-                    I confirm that my partner has consented to the processing of their personal data according to the <a href="/privacy" target="_blank" className="text-[#d1aa67] hover:underline">Privacy Policy</a>. <span className="text-[#b41115]">*</span>
+                    I confirm that my partner has consented to the processing of their personal data according to the <a href="https://bbj.hu/about/privacy/" target="_blank" rel="noopener noreferrer" className="text-[#d1aa67] hover:underline">Privacy Policy</a>. <span className="text-[#b41115]">*</span>
                   </span>
                 </label>
                 {errors.partner_gdpr_consent && (
@@ -854,7 +866,6 @@ export default function PaidRegistrationForm({
               onGdprChange={(checked) => updateFormData('gdprConsent', checked)}
               onCancellationChange={(checked) => updateFormData('cancellationAccepted', checked)}
               errors={errors}
-              guestType={formData.ticketType as 'paying_single' | 'paying_paired'}
             />
           </div>
         )}
@@ -909,7 +920,7 @@ export default function PaidRegistrationForm({
         {/* Event Info Footer */}
         <div className={`text-center text-sm ${t.textMuted}`}>
           <p className={`font-medium ${t.text}`}>CEO Gala 2026</p>
-          <p className={`${t.textSubtle} mt-1`}>Friday, March 27, 2026 • 6:00 PM</p>
+          <p className={`${t.textSubtle} mt-1`}>Friday, March 27, 2026 • 7:00 PM</p>
           <p className={t.textSubtle}>Budapest, Corinthia Hotel</p>
         </div>
 

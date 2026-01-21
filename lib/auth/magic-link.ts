@@ -5,6 +5,7 @@
 
 import crypto from 'crypto';
 import { MAGIC_LINK } from '@/lib/config/constants';
+import { getFullName } from '@/lib/utils/name';
 
 /**
  * Generate a magic link hash and expiry timestamp
@@ -51,7 +52,9 @@ export interface MagicLinkValidationResult {
   error?: string;
   guest?: {
     id: number;
-    name: string;
+    name: string;  // Computed from first_name + last_name
+    first_name: string;
+    last_name: string;
     title: string | null;
     email: string;
     guestType: string;
@@ -82,7 +85,8 @@ export async function validateMagicLink(
     where: { email: email.toLowerCase() },
     select: {
       id: true,
-      name: true,
+      first_name: true,
+      last_name: true,
       title: true,
       email: true,
       guest_type: true,
@@ -140,7 +144,9 @@ export async function validateMagicLink(
     valid: true,
     guest: {
       id: guest.id,
-      name: guest.name,
+      name: getFullName(guest.first_name, guest.last_name),
+      first_name: guest.first_name,
+      last_name: guest.last_name,
       title: guest.title,
       email: guest.email,
       guestType: guest.guest_type,

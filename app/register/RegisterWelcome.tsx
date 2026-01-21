@@ -118,7 +118,7 @@ export default function RegisterWelcome({ guest }: RegisterWelcomeProps) {
         {/* Logo/Header */}
         <div className="text-center mb-8">
           <h1 className={`font-display text-4xl font-bold ${t.gold} tracking-tight`}>
-            CEO Gála 2026
+            CEO Gala 2026
           </h1>
           <p className={`${t.textMuted} mt-2 uppercase tracking-widest text-sm font-semibold`}>
             Registration

@@ -82,7 +82,8 @@ export async function GET(request: NextRequest) {
             id: statusResult.registration.id,
             ticketType: statusResult.registration.ticketType,
             registeredAt: statusResult.registration.registeredAt.toISOString(),
-            partnerName: statusResult.registration.partnerName,
+            partnerFirstName: statusResult.registration.partnerFirstName,
+            partnerLastName: statusResult.registration.partnerLastName,
           }
         : null,
       payment: statusResult.payment

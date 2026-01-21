@@ -44,7 +44,8 @@ export async function GET(request: NextRequest) {
       where.OR = [
         { recipient: { contains: search } },
         { subject: { contains: search } },
-        { guest: { name: { contains: search } } },
+        { guest: { first_name: { contains: search } } },
+        { guest: { last_name: { contains: search } } },
       ];
     }
 
@@ -58,7 +59,8 @@ export async function GET(request: NextRequest) {
           guest: {
             select: {
               id: true,
-              name: true,
+              first_name: true,
+              last_name: true,
               email: true,
             },
           },

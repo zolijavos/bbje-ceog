@@ -25,7 +25,9 @@ import {
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 interface BillingInfo {
-  billing_name: string;
+  billing_first_name: string;
+  billing_last_name: string;
+  billingName: string; // Computed full name
   company_name: string | null;
   tax_number: string | null;
   address_line1: string;
@@ -37,7 +39,9 @@ interface BillingInfo {
 
 interface PartnerGuestInfo {
   id: number;
-  name: string;
+  firstName: string;
+  lastName: string;
+  name: string; // Computed full name
   email: string;
   title?: string | null;
   dietaryRequirements?: string | null;
@@ -46,7 +50,9 @@ interface PartnerGuestInfo {
 
 interface Guest {
   id: number;
-  name: string;
+  firstName: string;
+  lastName: string;
+  name: string; // Computed full name
   email: string;
   title: string | null;
   phone: string | null;
@@ -68,14 +74,16 @@ interface Guest {
   paymentStatus: 'pending' | 'paid' | 'failed' | 'refunded' | null;
   paymentMethod: 'card' | 'bank_transfer' | null;
   hasRegistration: boolean;
-  partnerName: string | null;
+  partnerFirstName: string | null;
+  partnerLastName: string | null;
+  partnerName: string | null; // Computed full name
   partnerEmail: string | null;
   billingInfo: BillingInfo | null;
   isVipReception?: boolean;
   // Partner relation fields
   isPartner?: boolean;
   pairedWithId?: number | null;
-  pairedWith?: { id: number; name: string; email: string } | null;
+  pairedWith?: { id: number; firstName: string; lastName: string; name: string; email: string } | null;
   partnerGuest?: PartnerGuestInfo | null;
   // Attendance tracking
   cancelledAt?: string | null;
@@ -359,7 +367,8 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
   const handleCreateGuest = useCallback(
     async (data: {
       email?: string;
-      name?: string;
+      first_name?: string;
+      last_name?: string;
       title?: string | null;
       phone?: string | null;
       company?: string | null;
@@ -373,7 +382,8 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: data.email,
-          name: data.name,
+          first_name: data.first_name,
+          last_name: data.last_name,
           guest_type: data.guest_type,
           title: data.title,
           phone: data.phone,
@@ -400,7 +410,8 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
   const handleUpdateGuest = useCallback(
     async (data: {
       email?: string;
-      name?: string;
+      first_name?: string;
+      last_name?: string;
       title?: string | null;
       phone?: string | null;
       company?: string | null;
@@ -417,7 +428,8 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: data.name,
+          first_name: data.first_name,
+          last_name: data.last_name,
           title: data.title,
           phone: data.phone,
           company: data.company,
@@ -1039,7 +1051,8 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
             ? {
                 id: editingGuest.id,
                 email: editingGuest.email,
-                name: editingGuest.name,
+                first_name: editingGuest.firstName,
+                last_name: editingGuest.lastName,
                 title: editingGuest.title,
                 phone: editingGuest.phone,
                 company: editingGuest.company,
@@ -1049,6 +1062,8 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                 dietary_requirements: editingGuest.dietaryRequirements,
                 seating_preferences: editingGuest.seatingPreferences,
                 is_vip_reception: editingGuest.isVipReception || false,
+                partner_first_name: editingGuest.partnerFirstName,
+                partner_last_name: editingGuest.partnerLastName,
                 partner_name: editingGuest.partnerName,
                 partner_email: editingGuest.partnerEmail,
                 billing_info: editingGuest.billingInfo,

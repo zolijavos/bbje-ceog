@@ -33,6 +33,7 @@ module.exports = {
     // Környezeti változók
     env: {
       NODE_ENV: 'production',
+      HOST: '127.0.0.1',  // Biztonság: csak localhost-ról elérhető (Nginx mögött)
       PORT: 3000
     }
   }]

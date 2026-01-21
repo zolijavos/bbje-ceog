@@ -32,7 +32,9 @@ export interface GuestListParams {
 export interface GuestListItem {
   id: number;
   email: string;
-  name: string;
+  first_name: string;
+  last_name: string;
+  title?: string | null;
   guest_type: GuestType;
   registration_status: RegistrationStatus;
   is_vip_reception: boolean;
@@ -87,10 +89,11 @@ export async function getGuestList(
   // Build where clause
   const where: Prisma.GuestWhereInput = {};
 
-  // Search filter (name or email)
+  // Search filter (first_name, last_name, or email)
   if (search) {
     where.OR = [
-      { name: { contains: search } },
+      { first_name: { contains: search } },
+      { last_name: { contains: search } },
       { email: { contains: search } },
     ];
   }
@@ -219,7 +222,8 @@ export interface GuestStats {
  */
 export interface CreateGuestInput {
   email: string;
-  name: string;
+  first_name: string;
+  last_name: string;
   guest_type: GuestType;
   title?: string | null;
   phone?: string | null;
@@ -233,7 +237,8 @@ export interface CreateGuestInput {
  * Update guest input
  */
 export interface UpdateGuestInput {
-  name?: string;
+  first_name?: string;
+  last_name?: string;
   title?: string | null;
   company?: string | null;
   position?: string | null;
@@ -263,7 +268,8 @@ export async function createGuest(data: CreateGuestInput) {
   return prisma.guest.create({
     data: {
       email: data.email,
-      name: data.name,
+      first_name: data.first_name,
+      last_name: data.last_name,
       guest_type: data.guest_type,
       registration_status: 'pending',
       title: data.title || null,

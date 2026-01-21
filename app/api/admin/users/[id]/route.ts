@@ -14,7 +14,8 @@ import { z } from 'zod';
 
 const updateUserSchema = z.object({
   email: z.string().email().optional(),
-  name: z.string().min(2).optional(),
+  first_name: z.string().min(1).optional(),
+  last_name: z.string().min(1).optional(),
   password: z.string().min(8).optional(),
   role: z.enum(['admin', 'staff']).optional(),
 });
@@ -52,7 +53,7 @@ export async function PATCH(
       );
     }
 
-    const { email, name, password, role } = parsed.data;
+    const { email, first_name, last_name, password, role } = parsed.data;
 
     // Check if user exists
     const existing = await prisma.user.findUnique({
@@ -79,7 +80,8 @@ export async function PATCH(
     // Build update data
     const updateData: Record<string, unknown> = {};
     if (email) updateData.email = email;
-    if (name) updateData.name = name;
+    if (first_name) updateData.first_name = first_name;
+    if (last_name) updateData.last_name = last_name;
     if (role) updateData.role = role;
     if (password) {
       updateData.password_hash = await bcrypt.hash(password, 12);
@@ -91,7 +93,8 @@ export async function PATCH(
       select: {
         id: true,
         email: true,
-        name: true,
+        first_name: true,
+        last_name: true,
         role: true,
         created_at: true,
         updated_at: true,

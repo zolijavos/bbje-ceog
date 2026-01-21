@@ -15,7 +15,7 @@ export async function GET() {
 
     // Fetch all guests with all relations
     const guests = await prisma.guest.findMany({
-      orderBy: { name: 'asc' },
+      orderBy: [{ last_name: 'asc' }, { first_name: 'asc' }],
       include: {
         registration: {
           include: {
@@ -38,7 +38,8 @@ export async function GET() {
     const headers = [
       // Basic info
       'ID',
-      'Name',
+      'First Name',
+      'Last Name',
       'Email',
       'Title',
       'Company',
@@ -51,9 +52,11 @@ export async function GET() {
       'Applied At',
       'Rejection Reason',
       // Partner info
-      'Paired Guest Name',
+      'Paired Guest First Name',
+      'Paired Guest Last Name',
       'Paired Guest Email',
-      'Partner Name (Registration)',
+      'Partner First Name (Registration)',
+      'Partner Last Name (Registration)',
       'Partner Email (Registration)',
       // Registration
       'Registered At',
@@ -67,7 +70,8 @@ export async function GET() {
       'Currency',
       'Paid At',
       // Billing
-      'Billing Name',
+      'Billing First Name',
+      'Billing Last Name',
       'Billing Company',
       'Tax Number',
       'Billing Address',
@@ -128,7 +132,8 @@ export async function GET() {
       return [
         // Basic info
         guest.id,
-        guest.name,
+        guest.first_name,
+        guest.last_name,
         guest.email,
         guest.title || '',
         guest.company || '',
@@ -141,10 +146,12 @@ export async function GET() {
         guest.applied_at ? guest.applied_at.toISOString().split('T')[0] : '',
         guest.rejection_reason || '',
         // Paired guest info (from Guest relation)
-        pairedGuest?.name || '',
+        pairedGuest?.first_name || '',
+        pairedGuest?.last_name || '',
         pairedGuest?.email || '',
-        // Partner info (from Registration legacy fields)
-        guest.registration?.partner_name || '',
+        // Partner info (from Registration fields)
+        guest.registration?.partner_first_name || '',
+        guest.registration?.partner_last_name || '',
         guest.registration?.partner_email || '',
         // Registration
         guest.registration?.registered_at?.toISOString().split('T')[0] || '',
@@ -160,7 +167,8 @@ export async function GET() {
         guest.registration?.payment?.currency || '',
         guest.registration?.payment?.paid_at?.toISOString().split('T')[0] || '',
         // Billing
-        billing?.billing_name || '',
+        billing?.billing_first_name || '',
+        billing?.billing_last_name || '',
         billing?.company_name || '',
         billing?.tax_number || '',
         billingAddress,

@@ -67,16 +67,25 @@ export default async function StatusPage({ searchParams }: StatusPageProps) {
     }
   }
 
+  // Compose partner full name from first/last name
+  const partnerFullName = statusResult.registration?.partnerFirstName && statusResult.registration?.partnerLastName
+    ? `${statusResult.registration.partnerFirstName} ${statusResult.registration.partnerLastName}`
+    : null;
+
   return (
     <StatusContent
-      guest={statusResult.guest}
+      guest={{
+        name: `${statusResult.guest.firstName} ${statusResult.guest.lastName}`,
+        email: statusResult.guest.email,
+        guestType: statusResult.guest.guestType,
+      }}
       registration={
         statusResult.registration
           ? {
               id: statusResult.registration.id,
               ticketType: statusResult.registration.ticketType,
               registeredAt: statusResult.registration.registeredAt.toISOString(),
-              partnerName: statusResult.registration.partnerName,
+              partnerName: partnerFullName,
             }
           : null
       }

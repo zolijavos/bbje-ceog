@@ -179,7 +179,7 @@ export const translations = {
     // Event info
     eventName: 'CEO Gala 2026',
     eventDate: 'Friday, March 27, 2026',
-    eventTime: '6:00 PM',
+    eventTime: '7:00 PM',
     eventVenue: 'Budapest, Corinthia Hotel',
     registration: 'Registration',
 

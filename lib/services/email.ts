@@ -12,6 +12,7 @@ import { getTicketDeliveryEmailTemplate } from '@/lib/email-templates/ticket-del
 import { renderTemplate } from '@/lib/services/email-templates';
 import { generateTicket, getExistingTicket, tryAcquireTicketLock } from '@/lib/services/qr-ticket';
 import { logError, logInfo } from '@/lib/utils/logger';
+import { getFullName, getDisplayName } from '@/lib/utils/name';
 import type { TicketType } from '@prisma/client';
 
 // Singleton Nodemailer transport for connection pooling (thread-safe)
@@ -322,7 +323,7 @@ export async function sendMagicLinkEmail(
 
     try {
       const rendered = await renderTemplate('magic_link', {
-        guestName: guest.name,
+        guestName: getDisplayName(guest.first_name, guest.last_name, guest.title),
         magicLinkUrl,
         baseUrl: appUrl,
       });
@@ -332,7 +333,7 @@ export async function sendMagicLinkEmail(
     } catch {
       // Fallback to hardcoded template
       const fallback = getMagicLinkEmailTemplate({
-        guestName: guest.name,
+        guestName: getDisplayName(guest.first_name, guest.last_name, guest.title),
         magicLinkUrl,
         baseUrl: appUrl,
       });
@@ -487,8 +488,12 @@ export async function sendTicketEmail(
     }
 
     // 3. Determine if guest has a partner
-    const hasPartner = !!(registration.partner_name || registration.guest.paired_with);
-    let partnerName = registration.partner_name || registration.guest.paired_with?.name || '';
+    const hasPartner = !!(registration.partner_first_name || registration.guest.paired_with);
+    let partnerName = registration.partner_first_name && registration.partner_last_name
+      ? getFullName(registration.partner_first_name, registration.partner_last_name)
+      : registration.guest.paired_with
+        ? getFullName(registration.guest.paired_with.first_name, registration.guest.paired_with.last_name)
+        : '';
     let partnerQrCode = partnerQrDataUrl;
 
     // If partner exists but QR not provided, try to generate it
@@ -516,7 +521,7 @@ export async function sendTicketEmail(
 
     try {
       const rendered = await renderTemplate('ticket_delivery', {
-        guestName: registration.guest.name,
+        guestName: getFullName(registration.guest.first_name, registration.guest.last_name),
         guestTitle: registration.guest.title || '',
         partnerName: partnerName || undefined,
         guestQrCode: guestQrCidRef,
@@ -530,7 +535,7 @@ export async function sendTicketEmail(
     } catch {
       // Fallback to hardcoded template (legacy format)
       const fallback = getTicketDeliveryEmailTemplate({
-        guestName: registration.guest.name,
+        guestName: getFullName(registration.guest.first_name, registration.guest.last_name),
         ticketType: registration.ticket_type,
         qrCodeDataUrl: guestQrCidRef,
         partnerName: partnerName || undefined,
@@ -702,9 +707,9 @@ export async function sendPartnerTicketEmail(
 
     try {
       const rendered = await renderTemplate('partner_ticket_delivery', {
-        partnerName: partnerRegistration.guest.name,
+        partnerName: getFullName(partnerRegistration.guest.first_name, partnerRegistration.guest.last_name),
         partnerTitle: partnerRegistration.guest.title || '',
-        mainGuestName: mainGuestRegistration.guest.name,
+        mainGuestName: getFullName(mainGuestRegistration.guest.first_name, mainGuestRegistration.guest.last_name),
         mainGuestTitle: mainGuestRegistration.guest.title || '',
         partnerQrCode: partnerQrCidRef,
         mainGuestQrCode: mainGuestQrCidRef,
@@ -716,10 +721,10 @@ export async function sendPartnerTicketEmail(
     } catch {
       // Fallback to basic template format
       const fallback = getTicketDeliveryEmailTemplate({
-        guestName: partnerRegistration.guest.name,
+        guestName: getFullName(partnerRegistration.guest.first_name, partnerRegistration.guest.last_name),
         ticketType: partnerRegistration.ticket_type,
         qrCodeDataUrl: partnerQrCidRef,
-        partnerName: mainGuestRegistration.guest.name,
+        partnerName: getFullName(mainGuestRegistration.guest.first_name, mainGuestRegistration.guest.last_name),
       });
       subject = fallback.subject;
       html = fallback.html;
@@ -1204,14 +1209,16 @@ export async function sendRegistrationFeedbackEmail(params: {
   guestId: number;
   guestEmail: string;
   guestTitle?: string;
-  guestName: string;
+  guestFirstName: string;
+  guestLastName: string;
   guestCompany?: string;
   guestPhone?: string;
   guestDiet?: string;
   guestSeating?: string;
   hasPartner: boolean;
   partnerTitle?: string;
-  partnerName?: string;
+  partnerFirstName?: string;
+  partnerLastName?: string;
   partnerPhone?: string;
   partnerEmail?: string;
   partnerDiet?: string;
@@ -1223,7 +1230,7 @@ export async function sendRegistrationFeedbackEmail(params: {
 
     const rendered = await renderTemplate('registration_feedback', {
       guestTitle: params.guestTitle || '',
-      guestName: params.guestName,
+      guestName: getFullName(params.guestFirstName, params.guestLastName),
       guestCompany: params.guestCompany || '-',
       guestPhone: params.guestPhone || '-',
       guestEmail: params.guestEmail,
@@ -1231,7 +1238,9 @@ export async function sendRegistrationFeedbackEmail(params: {
       guestSeating: params.guestSeating || 'No preferences',
       hasPartner: params.hasPartner ? 'Yes' : 'No',
       partnerTitle: params.partnerTitle || '',
-      partnerName: params.partnerName || '',
+      partnerName: params.partnerFirstName && params.partnerLastName
+        ? getFullName(params.partnerFirstName, params.partnerLastName)
+        : '',
       partnerPhone: params.partnerPhone || '-',
       partnerEmail: params.partnerEmail || '-',
       partnerDiet: params.partnerDiet || 'No special requirements',
@@ -1284,13 +1293,15 @@ export async function sendRegistrationFeedbackPartnerEmail(params: {
   partnerId?: number; // May not have a guest record yet
   partnerEmail: string;
   partnerTitle?: string;
-  partnerName: string;
+  partnerFirstName: string;
+  partnerLastName: string;
   partnerCompany?: string;
   partnerPhone?: string;
   partnerDiet?: string;
   partnerSeating?: string;
   mainGuestTitle?: string;
-  mainGuestName: string;
+  mainGuestFirstName: string;
+  mainGuestLastName: string;
   mainGuestId: number;
 }): Promise<EmailResult> {
   try {
@@ -1299,14 +1310,14 @@ export async function sendRegistrationFeedbackPartnerEmail(params: {
 
     const rendered = await renderTemplate('registration_feedback_partner', {
       partnerTitle: params.partnerTitle || '',
-      partnerName: params.partnerName,
+      partnerName: getFullName(params.partnerFirstName, params.partnerLastName),
       partnerCompany: params.partnerCompany || '-',
       partnerPhone: params.partnerPhone || '-',
       partnerEmail: params.partnerEmail,
       partnerDiet: params.partnerDiet || 'No special requirements',
       partnerSeating: params.partnerSeating || 'No preferences',
       mainGuestTitle: params.mainGuestTitle || '',
-      mainGuestName: params.mainGuestName,
+      mainGuestName: getFullName(params.mainGuestFirstName, params.mainGuestLastName),
       headerImage: headerImageUrl,
       baseUrl: appUrl,
     });
@@ -1331,7 +1342,7 @@ export async function sendRegistrationFeedbackPartnerEmail(params: {
     });
 
     if (result.success) {
-      logInfo(`[REGISTRATION_FEEDBACK_PARTNER] Email sent to ${params.partnerEmail} (registered by ${params.mainGuestName})`);
+      logInfo(`[REGISTRATION_FEEDBACK_PARTNER] Email sent to ${params.partnerEmail} (registered by ${params.mainGuestFirstName} ${params.mainGuestLastName})`);
     } else {
       logError(`[REGISTRATION_FEEDBACK_PARTNER] Failed to send email to ${params.partnerEmail}: ${result.error}`);
     }
@@ -1356,7 +1367,8 @@ export async function sendRegistrationFeedbackEmails(params: {
   guestId: number;
   guestEmail: string;
   guestTitle?: string;
-  guestName: string;
+  guestFirstName: string;
+  guestLastName: string;
   guestCompany?: string;
   guestPhone?: string;
   guestDiet?: string;
@@ -1364,7 +1376,8 @@ export async function sendRegistrationFeedbackEmails(params: {
   hasPartner: boolean;
   partnerGuestId?: number;
   partnerTitle?: string;
-  partnerName?: string;
+  partnerFirstName?: string;
+  partnerLastName?: string;
   partnerPhone?: string;
   partnerEmail?: string;
   partnerDiet?: string;
@@ -1375,14 +1388,16 @@ export async function sendRegistrationFeedbackEmails(params: {
     guestId: params.guestId,
     guestEmail: params.guestEmail,
     guestTitle: params.guestTitle,
-    guestName: params.guestName,
+    guestFirstName: params.guestFirstName,
+    guestLastName: params.guestLastName,
     guestCompany: params.guestCompany,
     guestPhone: params.guestPhone,
     guestDiet: params.guestDiet,
     guestSeating: params.guestSeating,
     hasPartner: params.hasPartner,
     partnerTitle: params.partnerTitle,
-    partnerName: params.partnerName,
+    partnerFirstName: params.partnerFirstName,
+    partnerLastName: params.partnerLastName,
     partnerPhone: params.partnerPhone,
     partnerEmail: params.partnerEmail,
     partnerDiet: params.partnerDiet,
@@ -1391,18 +1406,20 @@ export async function sendRegistrationFeedbackEmails(params: {
 
   // Send feedback to partner if they have an email
   let partnerResult: EmailResult | undefined;
-  if (params.hasPartner && params.partnerEmail && params.partnerName) {
+  if (params.hasPartner && params.partnerEmail && params.partnerFirstName && params.partnerLastName) {
     partnerResult = await sendRegistrationFeedbackPartnerEmail({
       partnerId: params.partnerGuestId,
       partnerEmail: params.partnerEmail,
       partnerTitle: params.partnerTitle,
-      partnerName: params.partnerName,
+      partnerFirstName: params.partnerFirstName,
+      partnerLastName: params.partnerLastName,
       partnerCompany: params.guestCompany, // Partner typically shares company with main guest
       partnerPhone: params.partnerPhone,
       partnerDiet: params.partnerDiet,
       partnerSeating: params.partnerSeating,
       mainGuestTitle: params.guestTitle,
-      mainGuestName: params.guestName,
+      mainGuestFirstName: params.guestFirstName,
+      mainGuestLastName: params.guestLastName,
       mainGuestId: params.guestId,
     });
   }

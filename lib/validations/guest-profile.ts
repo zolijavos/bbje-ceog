@@ -5,8 +5,8 @@
 
 import { z } from 'zod';
 
-// Title/Salutation options
-export const titleOptions = ['', 'Dr.', 'Prof.', 'Mr.', 'Mrs.', 'Ms.', 'ifj.', 'id.'] as const;
+// Title/Salutation options (English)
+export const titleOptions = ['', 'Dr.', 'Prof.', 'Mr.', 'Mrs.', 'Ms.', 'Jr.', 'Sr.'] as const;
 export type TitleOption = typeof titleOptions[number];
 
 // Hungarian phone number regex (accepts various formats)
@@ -33,9 +33,12 @@ export type GuestProfileInput = z.infer<typeof guestProfileSchema>;
 
 // Billing info schema for paying guests
 export const billingInfoSchema = z.object({
-  billing_name: z.string()
-    .min(2, 'Billing name must be at least 2 characters')
-    .max(255, 'Billing name maximum 255 characters'),
+  billing_first_name: z.string()
+    .min(1, 'First name is required')
+    .max(127, 'First name maximum 127 characters'),
+  billing_last_name: z.string()
+    .min(1, 'Last name is required')
+    .max(127, 'Last name maximum 127 characters'),
   company_name: z.string()
     .max(255, 'Company name maximum 255 characters')
     .optional()
@@ -78,9 +81,12 @@ export type ConsentInput = z.infer<typeof consentSchema>;
 
 // Partner info schema for paired tickets
 export const partnerSchema = z.object({
-  partner_name: z.string()
-    .min(2, 'Partner name must be at least 2 characters')
-    .max(255, 'Partner name maximum 255 characters'),
+  partner_first_name: z.string()
+    .min(1, 'Partner first name is required')
+    .max(127, 'Partner first name maximum 127 characters'),
+  partner_last_name: z.string()
+    .min(1, 'Partner last name is required')
+    .max(127, 'Partner last name maximum 127 characters'),
   partner_email: z.string()
     .email('Invalid email address')
     .max(255, 'Email maximum 255 characters'),

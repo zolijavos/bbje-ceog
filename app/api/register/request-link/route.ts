@@ -180,7 +180,8 @@ export async function POST(request: NextRequest) {
       where: { email: email.toLowerCase() },
       select: {
         id: true,
-        name: true,
+        first_name: true,
+        last_name: true,
         email: true,
         magic_link_expires_at: true,
       },

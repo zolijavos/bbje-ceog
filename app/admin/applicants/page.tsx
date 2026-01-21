@@ -21,7 +21,8 @@ export default async function ApplicantsPage() {
     },
     select: {
       id: true,
-      name: true,
+      first_name: true,
+      last_name: true,
       email: true,
       title: true,
       phone: true,
@@ -53,7 +54,7 @@ export default async function ApplicantsPage() {
   // Transform for client component
   const applicantData = applicants.map((a) => ({
     id: a.id,
-    name: a.name,
+    name: `${a.first_name} ${a.last_name}`,
     email: a.email,
     title: a.title,
     phone: a.phone,

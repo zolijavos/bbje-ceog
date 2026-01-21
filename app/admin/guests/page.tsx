@@ -6,6 +6,7 @@ import { prisma } from '@/lib/db/prisma';
 import GuestList from './GuestList';
 import { ClipboardText, UploadSimple } from '@phosphor-icons/react/dist/ssr';
 import PageHeader from '../components/PageHeader';
+import { getFullName } from '@/lib/utils/name';
 
 export default async function GuestsPage() {
   const session = await getServerSession(authOptions);
@@ -18,7 +19,8 @@ export default async function GuestsPage() {
   const guests = await prisma.guest.findMany({
     select: {
       id: true,
-      name: true,
+      first_name: true,
+      last_name: true,
       email: true,
       title: true,
       phone: true,
@@ -38,7 +40,8 @@ export default async function GuestsPage() {
       partner_of: {
         select: {
           id: true,
-          name: true,
+          first_name: true,
+          last_name: true,
           email: true,
           title: true,
           dietary_requirements: true,
@@ -49,7 +52,8 @@ export default async function GuestsPage() {
       paired_with: {
         select: {
           id: true,
-          name: true,
+          first_name: true,
+          last_name: true,
           email: true,
         },
       },
@@ -76,7 +80,8 @@ export default async function GuestsPage() {
         select: {
           id: true,
           ticket_type: true,
-          partner_name: true,
+          partner_first_name: true,
+          partner_last_name: true,
           partner_email: true,
           cancelled_at: true,
           cancellation_reason: true,
@@ -88,7 +93,8 @@ export default async function GuestsPage() {
           },
           billing_info: {
             select: {
-              billing_name: true,
+              billing_first_name: true,
+              billing_last_name: true,
               company_name: true,
               tax_number: true,
               address_line1: true,
@@ -115,7 +121,9 @@ export default async function GuestsPage() {
   // Transform for client component
   const guestData = guests.map(g => ({
     id: g.id,
-    name: g.name,
+    firstName: g.first_name,
+    lastName: g.last_name,
+    name: getFullName(g.first_name, g.last_name),
     email: g.email,
     title: g.title,
     phone: g.phone,
@@ -142,16 +150,23 @@ export default async function GuestsPage() {
     paymentMethod: g.registration?.payment?.payment_method || null,
     hasRegistration: !!g.registration,
     // Legacy partner data from registration (for backwards compatibility)
-    partnerName: g.registration?.partner_name || null,
+    partnerFirstName: g.registration?.partner_first_name || null,
+    partnerLastName: g.registration?.partner_last_name || null,
+    partnerName: g.registration ? getFullName(g.registration.partner_first_name, g.registration.partner_last_name) : null,
     partnerEmail: g.registration?.partner_email || null,
-    billingInfo: g.registration?.billing_info || null,
+    billingInfo: g.registration?.billing_info ? {
+      ...g.registration.billing_info,
+      billingName: getFullName(g.registration.billing_info.billing_first_name, g.registration.billing_info.billing_last_name),
+    } : null,
     // New partner guest relation
     isPartner: !!g.paired_with_id,
     pairedWithId: g.paired_with_id,
     pairedWith: g.paired_with
       ? {
           id: g.paired_with.id,
-          name: g.paired_with.name,
+          firstName: g.paired_with.first_name,
+          lastName: g.paired_with.last_name,
+          name: getFullName(g.paired_with.first_name, g.paired_with.last_name),
           email: g.paired_with.email,
         }
       : null,
@@ -159,7 +174,9 @@ export default async function GuestsPage() {
     partnerGuest: g.partner_of
       ? {
           id: g.partner_of.id,
-          name: g.partner_of.name,
+          firstName: g.partner_of.first_name,
+          lastName: g.partner_of.last_name,
+          name: getFullName(g.partner_of.first_name, g.partner_of.last_name),
           email: g.partner_of.email,
           title: g.partner_of.title,
           dietaryRequirements: g.partner_of.dietary_requirements,

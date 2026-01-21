@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEO Gala 2026 - Registration Screens (English)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #1a1a2e;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .theme-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .theme-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .theme-btn.active {
+            transform: scale(1.05);
+        }
+
+        .theme-btn.dark {
+            background: #1a1a2e;
+            color: #d4af37;
+            border: 2px solid #d4af37;
+        }
+
+        .theme-btn.dark-blue {
+            background: #0a1628;
+            color: #d4af37;
+            border: 2px solid #d4af37;
+        }
+
+        .theme-btn.light {
+            background: #f5f0e8;
+            color: #722f37;
+            border: 2px solid #722f37;
+        }
+
+        h1 {
+            text-align: center;
+            color: #d4af37;
+            margin-bottom: 40px;
+            font-size: 28px;
+        }
+
+        .screens-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 380px));
+            gap: 30px;
+            justify-content: center;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Card Base Styles */
+        .card {
+            border-radius: 16px;
+            padding: 32px 24px;
+            max-width: 380px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Dark Theme */
+        .card.dark {
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid #d4af3740;
+            color: #fff;
+        }
+
+        /* Dark Blue Theme */
+        .card.dark-blue {
+            background: linear-gradient(180deg, #0a1628 0%, #162447 100%);
+            border: 1px solid #d4af3750;
+            color: #fff;
+        }
+
+        /* Light Theme */
+        .card.light {
+            background: linear-gradient(180deg, #fffef9 0%, #f5f0e8 100%);
+            border: 1px solid #d4af3760;
+            color: #2d2d2d;
+        }
+
+        /* Gold decorations */
+        .gold-star {
+            color: #d4af37;
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .gold-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+            margin: 20px 0;
+        }
+
+        .gold-line-solid {
+            height: 1px;
+            background: #d4af37;
+            margin: 16px 0;
+        }
+
+        /* Typography */
+        .label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.7;
+            margin-bottom: 4px;
+        }
+
+        .card.light .label {
+            color: #722f37;
+        }
+
+        .guest-name {
+            font-size: 28px;
+            font-weight: 300;
+            margin-bottom: 4px;
+        }
+
+        .guest-title {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 24px;
+        }
+
+        .event-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #d4af37;
+            margin-bottom: 8px;
+        }
+
+        .event-details {
+            font-size: 14px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .event-details p {
+            margin-bottom: 4px;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 12px;
+        }
+
+        .btn-primary.burgundy {
+            background: #722f37;
+            color: #fff;
+        }
+
+        .btn-primary.burgundy:hover {
+            background: #8b3a44;
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            border: 1px solid currentColor;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: inherit;
+            opacity: 0.7;
+        }
+
+        .btn-secondary:hover {
+            opacity: 1;
+        }
+
+        /* Success icon */
+        .success-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #722f37;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
+        }
+
+        .success-icon.gold-border {
+            border: 2px solid #d4af37;
+        }
+
+        /* Info box */
+        .info-box {
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+
+        .card.dark .info-box,
+        .card.dark-blue .info-box {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(212,175,55,0.2);
+        }
+
+        .card.light .info-box {
+            background: rgba(114,47,55,0.05);
+            border: 1px solid rgba(114,47,55,0.2);
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            opacity: 0.7;
+        }
+
+        .info-value {
+            font-weight: 600;
+        }
+
+        .status-badge {
+            background: #d4af37;
+            color: #1a1a2e;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* Steps list */
+        .steps-list {
+            list-style: none;
+            margin: 16px 0;
+        }
+
+        .steps-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(212,175,55,0.2);
+            font-size: 14px;
+        }
+
+        .steps-list li:last-child {
+            border-bottom: none;
+        }
+
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(212,175,55,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        /* Footer branding */
+        .footer-branding {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(212,175,55,0.2);
+            font-size: 10px;
+            opacity: 0.5;
+            letter-spacing: 1px;
+        }
+
+        /* Screen label */
+        .screen-label {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #d4af37;
+            color: #1a1a2e;
+            padding: 4px 16px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .heading-center {
+            text-align: center;
+        }
+
+        .subtext {
+            font-size: 14px;
+            opacity: 0.8;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .enjoy-text {
+            text-align: center;
+            font-size: 18px;
+            font-style: italic;
+            color: #d4af37;
+            margin-top: 20px;
+        }
+
+        /* Hide themes */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="theme-switcher">
+        <button class="theme-btn dark active" onclick="setTheme('dark')">Dark</button>
+        <button class="theme-btn dark-blue" onclick="setTheme('dark-blue')">Dark Blue</button>
+        <button class="theme-btn light" onclick="setTheme('light')">Light</button>
+    </div>
+
+    <h1>CEO Gala 2026 - Registration Screens</h1>
+
+    <div class="screens-container">
+
+        <!-- SCREEN 1: Invitation -->
+        <div class="card dark" data-theme="dark">
+            <span class="screen-label">1. Invitation</span>
+            <div class="gold-star">&#9733;</div>
+
+            <p class="label">Dear</p>
+            <h2 class="guest-name">Jane Smith</h2>
+            <p class="guest-title">Invited Guest</p>
+
+            <div class="gold-line"></div>
+
+            <h3 class="event-title">CEO Gala 2026</h3>
+            <div class="event-details">
+                <p>Friday, March 27, 2026 &bull; 6:00 PM</p>
+                <p>Budapest, Corinthia Hotel</p>
+            </div>
+
+            <div class="gold-line"></div>
+
+            <button class="btn-primary burgundy">Yes, I Will Attend</button>
+            <button class="btn-secondary">I Cannot Attend</button>
+
+            <p class="footer-branding">Built By MyForge Labs</p>
+        </div>
+
+        <!-- SCREEN 1: Invitation (Dark Blue) -->
+        <div class="card dark-blue hidden" data-theme="dark-blue">
+            <span class="screen-label">1. Invitation</span>
+            <div class="gold-star">&#9733;</div>
+
+            <p class="label">Dear</p>
+            <h2 class="guest-name">Jane Smith</h2>
+            <p class="guest-title">Invited Guest</p>
+
+            <div class="gold-line"></div>
+
+            <h3 class="event-title">CEO Gala 2026</h3>
+            <div class="event-details">
+                <p>Friday, March 27, 2026 &bull; 6:00 PM</p>
+                <p>Budapest, Corinthia Hotel</p>
+            </div>
+
+            <div class="gold-line"></div>
+
+            <button class="btn-primary burgundy">Yes, I Will Attend</button>
+            <button class="btn-secondary">I Cannot Attend</button>
+
+            <p class="footer-branding">Built By MyForge Labs</p>
+        </div>
+
+        <!-- SCREEN 1: Invitation (Light) -->
+        <div class="card light hidden" data-theme="light">
+            <span class="screen-label">1. Invitation</span>
+            <div class="gold-star">&#9733;</div>
+
+            <p class="label">Dear</p>
+            <h2 class="guest-name">Jane Smith</h2>
+            <p class="guest-title">Invited Guest</p>
+
+            <div class="gold-line"></div>
+
+            <h3 class="event-title">CEO Gala 2026</h3>
+            <div class="event-details">
+                <p>Friday, March 27, 2026 &bull; 6:00 PM</p>
+                <p>Budapest, Corinthia Hotel</p>
+            </div>
+
+            <div class="gold-line"></div>
+
+            <button class="btn-primary burgundy">Yes, I Will Attend</button>
+            <button class="btn-secondary">I Cannot Attend</button>
+
+            <p class="footer-branding">Built By MyForge Labs</p>
+        </div>
+
+        <!-- SCREEN 2: Thank You -->
+        <div class="card dark" data-theme="dark">
+            <span class="screen-label">2. Confirmation</span>
+            <div class="gold-star">&#9733;</div>
+
+            <div class="success-icon gold-border">&#10003;</div>
+
+            <h2 class="heading-center" style="margin-bottom: 12px;">Thank You for Your Response!</h2>
+            <p class="subtext">You will receive a confirmation email shortly.<br>Please continue to registration.</p>
+
+            <div class="gold-line"></div>
+
+            <button class="btn-primary burgundy">Continue to Registration &rarr;</button>
+
+            <p class="footer-branding">Built By MyForge Labs</p>
+        </div>
+
+        <!-- SCREEN 2: Thank You (Dark Blue) -->
+        <div class="card dark-blue hidden" data-theme="dark-blue">
+            <span class="screen-label">2. Confirmation</span>
+            <div class="gold-star">&#9733;</div>
+
+            <div class="success-icon gold-border">&#10003;</div>
+
+            <h2 class="heading-center" style="margin-bottom: 12px;">Thank You for Your Response!</h2>
+            <p class="subtext">You will receive a confirmation email shortly.<br>Please continue to registration.</p>
+
+            <div class="gold-line"></div>
+
+            <button class="btn-primary burgundy">Continue to Registration &rarr;</button>
+
+            <p class="footer-branding">Built By MyForge Labs</p>
+        </div>
+
+        <!-- SCREEN 2: Thank You (Light) -->
+        <div class="card light hidden" data-theme="light">
+            <span class="screen-label">2. Confirmation</span>
+            <div class="gold-star">&#9733;</div>
+
+            <div class="success-icon gold-border">&#10003;</div>
+
+            <h2 class="heading-center" style="margin-bottom: 12px;">Thank You for Your Response!</h2>
+            <p class="subtext">You will receive a confirmation email shortly.<br>Please continue to registration.</p>
+
+            <div class="gold-line"></div>
+
+            <button class="btn-primary burgundy">Continue to Registration &rarr;</button>
+
+            <p class="footer-branding">Built By MyForge Labs</p>
+        </div>
+
+        <!-- SCREEN 3: Registration Details -->
+        <div class="card dark" data-theme="dark">
+            <span class="screen-label">3. Registration Details</span>
+            <div class="gold-star">&#9733;</div>
+
+            <h2 class="heading-center" style="margin-bottom: 8px;">Registration Details</h2>
+
+            <div class="info-box">
+                <div class="info-row">
+                    <span class="info-label">Name:</span>
+                    <span class="info-value">Jane Smith</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value">jane@company.com</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Status:</span>
+                    <span class="status-badge">VIP Guest</span>
+                </div>
+            </div>
+
+            <div class="gold-line"></div>
+
+            <h3 class="heading-center" style="font-size: 16px; margin-bottom: 12px;">Next Steps</h3>
+
+            <ul class="steps-list">
+                <li>
+                    <span class="step-icon">&#128241;</span>
+                    <span>Download your QR ticket</span>
+                </li>
+                <li>
+                    <span class="step-icon">&#128197;</span>
+                    <span>Add event to calendar</span>
+                </li>
+                <li>
+                    <span class="step-icon">&#127881;</span>
+                    <span>Enjoy the event!</span>
+                </li>
+            </ul>
+
+            <p class="footer-branding">Built By MyForge Labs</p>
+        </div>
+
+        <!-- SCREEN 3: Registration Details (Dark Blue) -->
+        <div class="card dark-blue hidden" data-theme="dark-blue">
+            <span class="screen-label">3. Registration Details</span>
+            <div class="gold-star">&#9733;</div>
+
+            <h2 class="heading-center" style="margin-bottom: 8px;">Registration Details</h2>
+
+            <div class="info-box">
+                <div class="info-row">
+                    <span class="info-label">Name:</span>
+                    <span class="info-value">Jane Smith</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value">jane@company.com</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Status:</span>
+                    <span class="status-badge">VIP Guest</span>
+                </div>
+            </div>
+
+            <div class="gold-line"></div>
+
+            <h3 class="heading-center" style="font-size: 16px; margin-bottom: 12px;">Next Steps</h3>
+
+            <ul class="steps-list">
+                <li>
+                    <span class="step-icon">&#128241;</span>
+                    <span>Download your QR ticket</span>
+                </li>
+                <li>
+                    <span class="step-icon">&#128197;</span>
+                    <span>Add event to calendar</span>
+                </li>
+                <li>
+                    <span class="step-icon">&#127881;</span>
+                    <span>Enjoy the event!</span>
+                </li>
+            </ul>
+
+            <p class="footer-branding">Built By MyForge Labs</p>
+        </div>
+
+        <!-- SCREEN 3: Registration Details (Light) -->
+        <div class="card light hidden" data-theme="light">
+            <span class="screen-label">3. Registration Details</span>
+            <div class="gold-star">&#9733;</div>
+
+            <h2 class="heading-center" style="margin-bottom: 8px;">Registration Details</h2>
+
+            <div class="info-box">
+                <div class="info-row">
+                    <span class="info-label">Name:</span>
+                    <span class="info-value">Jane Smith</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value">jane@company.com</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Status:</span>
+                    <span class="status-badge">VIP Guest</span>
+                </div>
+            </div>
+
+            <div class="gold-line"></div>
+
+            <h3 class="heading-center" style="font-size: 16px; margin-bottom: 12px;">Next Steps</h3>
+
+            <ul class="steps-list">
+                <li>
+                    <span class="step-icon">&#128241;</span>
+                    <span>Download your QR ticket</span>
+                </li>
+                <li>
+                    <span class="step-icon">&#128197;</span>
+                    <span>Add event to calendar</span>
+                </li>
+                <li>
+                    <span class="step-icon">&#127881;</span>
+                    <span>Enjoy the event!</span>
+                </li>
+            </ul>
+
+            <p class="footer-branding">Built By MyForge Labs</p>
+        </div>
+
+        <!-- SCREEN 4: Success / Final -->
+        <div class="card dark" data-theme="dark">
+            <span class="screen-label">4. Success</span>
+            <div class="gold-star">&#9733;</div>
+
+            <div class="success-icon gold-border">&#10003;</div>
+
+            <h2 class="heading-center" style="margin-bottom: 12px;">Registration Complete!</h2>
+            <p class="subtext">We hope you will have a wonderful time at the event.</p>
+
+            <div class="gold-line"></div>
+
+            <h3 class="event-title heading-center">CEO Gala 2026</h3>
+            <div class="event-details heading-center">
+                <p>Friday, March 27, 2026 &bull; 6:00 PM</p>
+                <p>Budapest, Corinthia Hotel</p>
+            </div>
+
+            <p class="enjoy-text">Enjoy the event!</p>
+
+            <p class="footer-branding">Built By MyForge Labs</p>
+        </div>
+
+        <!-- SCREEN 4: Success (Dark Blue) -->
+        <div class="card dark-blue hidden" data-theme="dark-blue">
+            <span class="screen-label">4. Success</span>
+            <div class="gold-star">&#9733;</div>
+
+            <div class="success-icon gold-border">&#10003;</div>
+
+            <h2 class="heading-center" style="margin-bottom: 12px;">Registration Complete!</h2>
+            <p class="subtext">We hope you will have a wonderful time at the event.</p>
+
+            <div class="gold-line"></div>
+
+            <h3 class="event-title heading-center">CEO Gala 2026</h3>
+            <div class="event-details heading-center">
+                <p>Friday, March 27, 2026 &bull; 6:00 PM</p>
+                <p>Budapest, Corinthia Hotel</p>
+            </div>
+
+            <p class="enjoy-text">Enjoy the event!</p>
+
+            <p class="footer-branding">Built By MyForge Labs</p>
+        </div>
+
+        <!-- SCREEN 4: Success (Light) -->
+        <div class="card light hidden" data-theme="light">
+            <span class="screen-label">4. Success</span>
+            <div class="gold-star">&#9733;</div>
+
+            <div class="success-icon gold-border">&#10003;</div>
+
+            <h2 class="heading-center" style="margin-bottom: 12px;">Registration Complete!</h2>
+            <p class="subtext">We hope you will have a wonderful time at the event.</p>
+
+            <div class="gold-line"></div>
+
+            <h3 class="event-title heading-center">CEO Gala 2026</h3>
+            <div class="event-details heading-center">
+                <p>Friday, March 27, 2026 &bull; 6:00 PM</p>
+                <p>Budapest, Corinthia Hotel</p>
+            </div>
+
+            <p class="enjoy-text">Enjoy the event!</p>
+
+            <p class="footer-branding">Built By MyForge Labs</p>
+        </div>
+
+    </div>
+
+    <script>
+        function setTheme(theme) {
+            // Update buttons
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.theme-btn.${theme}`).classList.add('active');
+
+            // Show/hide cards
+            document.querySelectorAll('.card').forEach(card => {
+                if (card.dataset.theme === theme) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            // Update body background
+            if (theme === 'light') {
+                document.body.style.background = '#e8e0d0';
+                document.querySelector('h1').style.color = '#722f37';
+            } else if (theme === 'dark-blue') {
+                document.body.style.background = '#0a1628';
+                document.querySelector('h1').style.color = '#d4af37';
+            } else {
+                document.body.style.background = '#1a1a2e';
+                document.querySelector('h1').style.color = '#d4af37';
+            }
+        }
+    </script>
+
+</body>
+</html>

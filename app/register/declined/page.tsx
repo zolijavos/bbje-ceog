@@ -31,7 +31,7 @@ export default async function DeclinedPage({ searchParams }: DeclinedPageProps) 
   // Get guest from database
   const guest = await prisma.guest.findUnique({
     where: { id: guestId },
-    select: { id: true, name: true, email: true },
+    select: { id: true, first_name: true, last_name: true, email: true },
   });
 
   // Guest not found
@@ -40,12 +40,12 @@ export default async function DeclinedPage({ searchParams }: DeclinedPageProps) 
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
+    <div className="min-h-screen bg-[#0c0d0e] flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-[#1a1a1f] rounded-2xl shadow-2xl p-8 text-center border border-[#d1aa67]/30">
         {/* Info Icon */}
-        <div className="inline-flex items-center justify-center w-20 h-20 bg-slate-100 rounded-full mb-6">
+        <div className="inline-flex items-center justify-center w-20 h-20 bg-[#d1aa67]/10 rounded-full mb-6 border-2 border-[#d1aa67]/50">
           <svg
-            className="w-10 h-10 text-slate-500"
+            className="w-10 h-10 text-[#d1aa67]"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -61,38 +61,38 @@ export default async function DeclinedPage({ searchParams }: DeclinedPageProps) 
 
         {/* Title */}
         <h1
-          className="text-2xl font-bold text-slate-900 mb-4"
+          className="text-2xl font-bold text-white mb-4"
           data-testid="declined-title"
         >
           Thank You for Your Response!
         </h1>
 
         {/* Message */}
-        <p className="text-slate-600 mb-6" data-testid="declined-message">
+        <p className="text-white/70 mb-6" data-testid="declined-message">
           We hope to see you next time!
         </p>
 
         {/* Guest Name */}
-        <p className="text-slate-500 mb-6">
-          Dear <span className="font-medium">{guest.name}</span>, we are sorry
-          that you cannot attend the CEO Gála 2026 event.
+        <p className="text-white/60 mb-6">
+          <span className="font-medium text-[#d1aa67]">{guest.first_name} {guest.last_name}</span>, we are sorry
+          that you cannot attend the CEO Gala 2026 event.
         </p>
 
         {/* Event Details */}
-        <div className="bg-slate-100 rounded-lg p-4 mb-6">
-          <h2 className="text-lg font-semibold text-slate-900 mb-2">
-            CEO Gála 2026
+        <div className="bg-[#2a2a2f] rounded-lg p-4 mb-6 border border-[#d1aa67]/20">
+          <h2 className="text-lg font-semibold text-[#d1aa67] mb-2">
+            CEO Gala 2026
           </h2>
-          <p className="text-slate-700 text-sm">
-            Friday, March 27, 2026 • 6:00 PM
+          <p className="text-white/70 text-sm">
+            Friday, March 27, 2026 • 7:00 PM
             <br />
             Budapest, Corinthia Hotel
           </p>
         </div>
 
         {/* Future Contact */}
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
-          <p className="text-amber-700 text-sm">
+        <div className="bg-[#d1aa67]/10 border border-[#d1aa67]/30 rounded-lg p-4 mb-6">
+          <p className="text-white/80 text-sm">
             If you change your mind, please contact us via email and we will
             help you with the registration.
           </p>
@@ -100,20 +100,20 @@ export default async function DeclinedPage({ searchParams }: DeclinedPageProps) 
 
         {/* Contact Info */}
         <div className="text-xs space-y-1">
-          <p className="text-slate-500">
+          <p className="text-white/40">
             Questions?{' '}
             <a
               href="https://bbj.hu/events/ceogala/#faq"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-amber-600 hover:underline"
+              className="text-[#d1aa67] hover:text-[#e5c078]"
             >
               View Registration Guide
             </a>
           </p>
-          <p className="text-slate-500">
+          <p className="text-white/40">
             Need more help:{' '}
-            <a href="mailto:event@bbj.hu" className="text-amber-600 hover:underline">
+            <a href="mailto:event@bbj.hu" className="text-[#d1aa67] hover:text-[#e5c078]">
               event@bbj.hu
             </a>
           </p>

@@ -11,11 +11,13 @@ import { requireAuth, validateBody, parseIdParam, errorResponse, type RouteConte
 import { getGuestById, updateGuest, deleteGuest } from '@/lib/services/guest';
 import { createAuditLog } from '@/lib/services/audit';
 import { logError } from '@/lib/utils/logger';
+import { getFullName } from '@/lib/utils/name';
 import { z } from 'zod';
 
 // Validation schema for updating a guest
 const updateGuestSchema = z.object({
-  name: z.string().min(1, 'Name is required').optional(),
+  first_name: z.string().min(1, 'First name is required').optional(),
+  last_name: z.string().min(1, 'Last name is required').optional(),
   title: z.string().max(50).optional().nullable(),
   phone: z.string().optional().nullable(),
   company: z.string().optional().nullable(),
@@ -93,9 +95,10 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       action: 'UPDATE',
       entityType: 'guest',
       entityId: guest.id,
-      entityName: guest.name,
+      entityName: getFullName(guest.first_name, guest.last_name),
       oldValues: oldGuest ? {
-        name: oldGuest.name,
+        first_name: oldGuest.first_name,
+        last_name: oldGuest.last_name,
         title: oldGuest.title,
         phone: oldGuest.phone,
         company: oldGuest.company,
@@ -152,10 +155,11 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
         action: 'DELETE',
         entityType: 'guest',
         entityId: idResult.id,
-        entityName: guest.name,
+        entityName: getFullName(guest.first_name, guest.last_name),
         oldValues: {
           email: guest.email,
-          name: guest.name,
+          first_name: guest.first_name,
+          last_name: guest.last_name,
           phone: guest.phone,
           guest_type: guest.guest_type,
           registration_status: guest.registration_status,

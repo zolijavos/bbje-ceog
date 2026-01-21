@@ -85,9 +85,21 @@ export default function RequestLinkForm({
         }),
       });
 
-      const data = await response.json();
+      // Check response before parsing JSON
+      if (!response.ok) {
+        let errorMessage = 'An error occurred while sending';
+        try {
+          const data = await response.json();
+          errorMessage = data.error || errorMessage;
+        } catch {
+          errorMessage = `Server error (${response.status}). Please try again.`;
+        }
+        setError(errorMessage);
+        return;
+      }
 
-      if (response.ok && data.success) {
+      const data = await response.json();
+      if (data.success) {
         setSuccess(true);
       } else {
         setError(data.error || 'An error occurred while sending');

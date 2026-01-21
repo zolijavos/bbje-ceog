@@ -79,7 +79,7 @@ const SAMPLE_DATA: Record<string, Record<string, string>> = {
   event_reminder: {
     guestName: 'John Smith',
     eventDate: 'Friday, March 27, 2026',
-    eventTime: '6:00 PM',
+    eventTime: '7:00 PM',
     eventVenue: 'Budapest, Corinthia Hotel',
     eventAddress: '1073 Budapest, Erzsébet krt. 43-49.',
     tableName: 'Table A1',

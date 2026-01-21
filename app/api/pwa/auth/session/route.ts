@@ -20,7 +20,8 @@ export async function GET() {
       select: {
         id: true,
         email: true,
-        name: true,
+        first_name: true,
+        last_name: true,
         guest_type: true,
         phone: true,
         company: true,

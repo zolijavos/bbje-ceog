@@ -16,7 +16,8 @@ import { GuestType, RegistrationStatus } from '@prisma/client';
 
 export interface CSVRow {
   email: string;
-  name: string;
+  first_name: string;
+  last_name: string;
   guest_type: string;
   phone: string;
   company: string;
@@ -54,9 +55,13 @@ const csvRowSchema = z.object({
     .string()
     .email('Invalid email format')
     .transform((val) => val.toLowerCase().trim()),
-  name: z
+  first_name: z
     .string()
-    .min(2, 'Name must be at least 2 characters')
+    .min(1, 'First name is required')
+    .transform((val) => val.trim()),
+  last_name: z
+    .string()
+    .min(1, 'Last name is required')
     .transform((val) => val.trim()),
   guest_type: z.enum(guestTypeValues, {
     errorMap: () => ({
@@ -126,7 +131,8 @@ export function parseCSV(content: string): ParseResult {
     // Map CSV columns (support various column name formats)
     const mappedRow: CSVRow = {
       email: row.email || row['e-mail'] || '',
-      name: row.name || '',
+      first_name: row.first_name || row['first name'] || row['firstname'] || row['keresztnév'] || '',
+      last_name: row.last_name || row['last name'] || row['lastname'] || row['vezetéknév'] || '',
       guest_type:
         row.guest_type ||
         row['guest type'] ||
@@ -349,7 +355,8 @@ export async function bulkInsertGuests(rows: CSVRow[]): Promise<number> {
   const result = await prisma.guest.createMany({
     data: rows.map((row) => ({
       email: row.email.toLowerCase().trim(),
-      name: row.name.trim(),
+      first_name: row.first_name.trim(),
+      last_name: row.last_name.trim(),
       guest_type: row.guest_type as GuestType,
       registration_status: (row.status || 'invited') as RegistrationStatus,
       phone: row.phone,

@@ -6,6 +6,7 @@ import { generateMagicLinkHash } from '@/lib/auth/magic-link';
 import { sendEmail } from '@/lib/services/email';
 import { renderTemplate } from '@/lib/services/email-templates';
 import { logInfo, logError } from '@/lib/utils/logger';
+import { getDisplayName, getFullName } from '@/lib/utils/name';
 
 /**
  * POST /api/admin/applicants/[id]/approve
@@ -65,7 +66,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
       const magicLinkUrl = `${process.env.APP_URL || 'https://ceogala.mflevents.space'}/register?code=${hash}&email=${encodeURIComponent(applicant.email)}`;
 
       const rendered = await renderTemplate('applicant_approval', {
-        guestName: applicant.name,
+        guestName: getDisplayName(applicant.first_name, applicant.last_name, applicant.title),
         magicLinkUrl,
       });
 
@@ -114,7 +115,9 @@ export async function POST(request: NextRequest, context: RouteContext) {
       guest: {
         id: updatedGuest.id,
         email: updatedGuest.email,
-        name: updatedGuest.name,
+        name: getFullName(updatedGuest.first_name, updatedGuest.last_name),
+        first_name: updatedGuest.first_name,
+        last_name: updatedGuest.last_name,
         status: updatedGuest.registration_status,
       },
     });
