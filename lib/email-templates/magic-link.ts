@@ -100,7 +100,7 @@ export function getMagicLinkEmailTemplate(params: MagicLinkEmailParams): {
 
       <p>For more details about the event and the award, including previous winners, visit our website at <a href="https://www.ceogala.com" style="color: #333333;">www.ceogala.com</a>.</p>
 
-      <p>We remind you that any cancellations or changes to your registration must be made at least ten business days before the gala. Cancellations should be sent to <a href="mailto:event@bbj.hu" style="color: #333333;">event@bbj.hu</a>.</p>
+      <p>We remind you that any cancellations or changes to your registration must be made at least ten business days before the gala. Cancellations should be sent to <a href="mailto:event@bbj.hu?subject=Inquiry%20regarding%20CEO%20Gala%202026" style="color: #333333;">event@bbj.hu</a>.</p>
 
       <p>Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 + VAT per person.</p>
 

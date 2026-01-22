@@ -65,7 +65,7 @@ export default function StatusContent({
   payment,
   ticket,
 }: StatusContentProps) {
-  const isVIP = guest.guestType === 'vip';
+  const isInvited = guest.guestType === 'invited';
   const isPending = payment?.status === 'pending';
   const isPaid = payment?.status === 'paid';
   const isFailed = payment?.status === 'failed';
@@ -83,7 +83,7 @@ export default function StatusContent({
 
   // Get payment status badge
   const getPaymentBadge = () => {
-    if (isVIP) {
+    if (isInvited) {
       return (
         <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-accent-teal/10 text-accent-teal">
           Invited - Free
@@ -271,7 +271,7 @@ export default function StatusContent({
                 </a>
               </div>
             )}
-            {isVIP && (
+            {isInvited && (
               <p className="text-neutral-600 font-sans">
                 As an invited guest, you have received a free invitation to the event.
               </p>

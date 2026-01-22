@@ -240,7 +240,7 @@ export default function AlreadyRegistered({
           </p>
           <p>
             Need more help:{' '}
-            <a href="mailto:event@bbj.hu" className={t.linkColor}>
+            <a href="mailto:event@bbj.hu?subject=Inquiry%20regarding%20CEO%20Gala%202026" className={t.linkColor}>
               event@bbj.hu
             </a>
           </p>

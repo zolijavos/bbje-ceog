@@ -211,7 +211,7 @@ async function main() {
         first_name: name.first,
         last_name: name.last,
         title: 'Dr.', // VIPs get Dr. title
-        guest_type: GuestType.vip,
+        guest_type: GuestType.invited,
         registration_status: status.regStatus,
         magic_link_hash: `hash_${email}`,
         magic_link_expires_at: status.regStatus === RegistrationStatus.invited

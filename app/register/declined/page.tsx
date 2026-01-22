@@ -113,7 +113,7 @@ export default async function DeclinedPage({ searchParams }: DeclinedPageProps) 
           </p>
           <p className="text-white/40">
             Need more help:{' '}
-            <a href="mailto:event@bbj.hu" className="text-[#d1aa67] hover:text-[#e5c078]">
+            <a href="mailto:event@bbj.hu?subject=Inquiry%20regarding%20CEO%20Gala%202026" className="text-[#d1aa67] hover:text-[#e5c078]">
               event@bbj.hu
             </a>
           </p>

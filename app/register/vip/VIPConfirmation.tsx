@@ -332,7 +332,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
       }
 
       const data = await response.json();
-      router.push(`/register/success?guest_id=${guest.id}&type=vip`);
+      router.push(`/register/success?guest_id=${guest.id}&type=invited`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred');
       setIsLoading(false);
@@ -854,7 +854,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
           </p>
           <p>
             Need more help:{' '}
-            <a href="mailto:event@bbj.hu" className="text-[#d1aa67] hover:underline">
+            <a href="mailto:event@bbj.hu?subject=Inquiry%20regarding%20CEO%20Gala%202026" className="text-[#d1aa67] hover:underline">
               event@bbj.hu
             </a>
           </p>

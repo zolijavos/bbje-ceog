@@ -606,7 +606,7 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
                           )}
                         </div>
                         <span className={`text-xs px-1.5 py-0.5 rounded flex-shrink-0 ${
-                          assignment.guest.guest_type === 'vip'
+                          assignment.guest.guest_type === 'invited'
                             ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300'
                             : assignment.guest.guest_type === 'paying_paired'
                               ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300'

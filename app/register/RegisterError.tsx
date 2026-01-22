@@ -196,7 +196,7 @@ export default function RegisterError({
           </p>
           <p>
             Need more help:{' '}
-            <a href="mailto:event@bbj.hu" className="text-accent-teal hover:text-accent-teal-light">
+            <a href="mailto:event@bbj.hu?subject=Inquiry%20regarding%20CEO%20Gala%202026" className="text-accent-teal hover:text-accent-teal-light">
               event@bbj.hu
             </a>
           </p>

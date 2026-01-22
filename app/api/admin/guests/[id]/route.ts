@@ -22,7 +22,7 @@ const updateGuestSchema = z.object({
   phone: z.string().optional().nullable(),
   company: z.string().optional().nullable(),
   position: z.string().optional().nullable(),
-  guest_type: z.enum(['vip', 'invited', 'paying_single', 'paying_paired', 'applicant']).optional(),
+  guest_type: z.enum(['invited', 'paying_single', 'paying_paired', 'applicant']).optional(),
   registration_status: z
     .enum(['pending', 'invited', 'registered', 'approved', 'declined', 'pending_approval', 'rejected'])
     .optional(),

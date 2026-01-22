@@ -78,7 +78,7 @@ export default function ConsentCheckboxes({
             <p className="text-xs text-slate-500 mt-1">
               We remind you that any cancellations or changes to your registration must be made at least ten business days before the gala. Cancellations should be sent to{' '}
               <a
-                href="mailto:event@bbj.hu"
+                href="mailto:event@bbj.hu?subject=Inquiry%20regarding%20CEO%20Gala%202026"
                 className="text-amber-600 underline hover:text-amber-700"
                 onClick={(e) => e.stopPropagation()}
               >

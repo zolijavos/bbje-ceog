@@ -14,7 +14,7 @@ import { getDisplayName } from '@/lib/utils/name';
 import { z } from 'zod';
 
 // Valid enum values for type-safe filtering
-const VALID_GUEST_TYPES = ['vip', 'paying_single', 'paying_paired', 'applicant'] as const;
+const VALID_GUEST_TYPES = ['invited', 'paying_single', 'paying_paired', 'applicant'] as const;
 const VALID_REGISTRATION_STATUSES = ['pending', 'invited', 'registered', 'approved', 'declined', 'pending_approval', 'rejected'] as const;
 const VALID_PAYMENT_STATUSES = ['pending', 'paid', 'failed', 'refunded'] as const;
 const MAX_BULK_RECIPIENTS = 1000;
@@ -160,11 +160,13 @@ export async function POST(request: NextRequest) {
     const guestsToSchedule = guests.filter(g => !existingGuestIds.has(g.id));
 
     // Schedule emails
+    const appUrl = process.env.APP_URL || 'https://ceogala.mflevents.space';
     const results = await Promise.all(
       guestsToSchedule.map(async (guest) => {
         const guestVariables = {
           ...variables,
           guestName: getDisplayName(guest.first_name, guest.last_name, guest.title),
+          baseUrl: appUrl,
         };
 
         return scheduleEmail({

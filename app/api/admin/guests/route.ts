@@ -19,7 +19,7 @@ const createGuestSchema = z.object({
   email: z.string().email('Invalid email address'),
   first_name: z.string().min(1, 'First name is required'),
   last_name: z.string().min(1, 'Last name is required'),
-  guest_type: z.enum(['vip', 'invited', 'paying_single', 'paying_paired', 'applicant']),
+  guest_type: z.enum(['invited', 'paying_single', 'paying_paired', 'applicant']),
   title: z.string().nullable().optional(),
   phone: z.string().nullable().optional(),
   company: z.string().min(1, 'Company is required'),
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
     const hasTableParam = searchParams.get('has_table');
 
     // Parse array filters
-    const validGuestTypes = ['vip', 'invited', 'paying_single', 'paying_paired', 'applicant'];
+    const validGuestTypes = ['invited', 'paying_single', 'paying_paired', 'applicant'];
     const validStatuses = ['invited', 'registered', 'approved', 'declined', 'pending', 'pending_approval', 'rejected', 'cancelled', 'checked_in'];
 
     let guestTypes: GuestType[] | undefined;

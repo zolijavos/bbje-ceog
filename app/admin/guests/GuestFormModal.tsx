@@ -24,7 +24,7 @@ interface GuestFormData {
   phone: string | null;
   company: string | null;
   position: string | null;
-  guest_type: 'vip' | 'invited' | 'paying_single' | 'paying_paired';
+  guest_type: 'invited' | 'paying_single' | 'paying_paired' | 'applicant';
   status: 'pending' | 'invited' | 'registered' | 'approved' | 'declined';
   dietary_requirements: string | null;
   seating_preferences: string | null;
@@ -182,7 +182,7 @@ export default function GuestFormModal({
 
   if (!isOpen) return null;
 
-  const isPayingGuest = formData.guest_type !== 'vip';
+  const isPayingGuest = formData.guest_type !== 'invited' && formData.guest_type !== 'applicant';
 
   return (
     <div

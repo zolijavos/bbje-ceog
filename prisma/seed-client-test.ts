@@ -83,7 +83,7 @@ async function main() {
         first_name: 'VIP',
         last_name: 'Teszt 4',
         title: 'Dr.',
-        guest_type: 'vip',
+        guest_type: 'invited',
         registration_status: 'invited',
         magic_link_hash: `test_hash_vip4@ceogala.test`,
         magic_link_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),

@@ -88,7 +88,7 @@ async function main() {
         first_name: vipData.firstName,
         last_name: vipData.lastName,
         title: vipData.title || null,
-        guest_type: 'vip',
+        guest_type: 'invited',
         registration_status: vipData.status,
         magic_link_hash: `test_hash_${vipData.email}`,
         magic_link_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24h
@@ -358,10 +358,10 @@ async function main() {
   console.log('🎭 Creating additional unassigned guests for seating tests...');
 
   const unassignedGuests = [
-    { email: 'unassigned1@ceogala.test', firstName: 'Béla', lastName: 'Horváth', type: 'vip' as const },
+    { email: 'unassigned1@ceogala.test', firstName: 'Béla', lastName: 'Horváth', type: 'invited' as const },
     { email: 'unassigned2@ceogala.test', firstName: 'Klára', lastName: 'Fekete', type: 'paying_single' as const },
     { email: 'unassigned3@ceogala.test', firstName: 'Tamás', lastName: 'Fehér', type: 'paying_single' as const },
-    { email: 'unassigned4@ceogala.test', firstName: 'Zsófia', lastName: 'Balogh', type: 'vip' as const },
+    { email: 'unassigned4@ceogala.test', firstName: 'Zsófia', lastName: 'Balogh', type: 'invited' as const },
     { email: 'unassigned5@ceogala.test', firstName: 'Imre', lastName: 'Varga', type: 'paying_single' as const },
   ];
 
@@ -380,8 +380,8 @@ async function main() {
     const unassignedReg = await prisma.registration.create({
       data: {
         guest_id: unassignedGuest.id,
-        ticket_type: guestData.type === 'vip' ? 'vip_free' : 'paid_single',
-        payment_method: guestData.type !== 'vip' ? 'card' : undefined,
+        ticket_type: guestData.type === 'invited' ? 'vip_free' : 'paid_single',
+        payment_method: guestData.type !== 'invited' ? 'card' : undefined,
         gdpr_consent: true,
         gdpr_consent_at: new Date(),
         cancellation_accepted: true,
@@ -392,7 +392,7 @@ async function main() {
     });
 
     // Create billing info for paying unassigned guests
-    if (guestData.type !== 'vip') {
+    if (guestData.type !== 'invited') {
       await prisma.billingInfo.create({
         data: {
           registration_id: unassignedReg.id,
@@ -406,7 +406,7 @@ async function main() {
       });
     }
 
-    if (guestData.type !== 'vip') {
+    if (guestData.type !== 'invited') {
       const reg = await prisma.registration.findFirst({
         where: { guest_id: unassignedGuest.id },
       });

@@ -49,7 +49,7 @@ export default async function RegisterPage({ searchParams }: RegisterPageProps) 
   const guestType = result.guest.guestType;
   const guestId = result.guest.id;
 
-  if (guestType === 'vip' || guestType === 'invited') {
+  if (guestType === 'invited') {
     redirect(`/register/vip?guest_id=${guestId}`);
   } else {
     redirect(`/register/paid?guest_id=${guestId}`);

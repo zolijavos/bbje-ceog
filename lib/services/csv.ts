@@ -48,7 +48,7 @@ export interface ParseResult {
 // Validation Schemas
 // =============================================================================
 
-const guestTypeValues = ['vip', 'invited', 'paying_single', 'paying_paired'] as const;
+const guestTypeValues = ['invited', 'paying_single', 'paying_paired', 'applicant'] as const;
 const statusValues = ['pending', 'invited', 'registered', 'approved'] as const;
 
 const csvRowSchema = z.object({

@@ -44,9 +44,8 @@ export default async function VIPPage({ searchParams }: VIPPageProps) {
     redirect('/register?error=not_found');
   }
 
-  // Not a VIP/Invited guest - redirect to appropriate page
-  // Both 'vip' and 'invited' are free ticket guests that use this flow
-  if (guest.guest_type !== 'vip' && guest.guest_type !== 'invited') {
+  // Not an invited guest - redirect to appropriate page
+  if (guest.guest_type !== 'invited') {
     // Redirect to paid registration if paying guest
     if (guest.guest_type === 'paying_single' || guest.guest_type === 'paying_paired') {
       redirect(`/register/paid?guest_id=${guestId}`);

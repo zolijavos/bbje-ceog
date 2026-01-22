@@ -91,7 +91,7 @@ interface RegisterWelcomeProps {
 
 // Determine next step URL based on guest type
 function getRegistrationUrl(guestId: number, guestType: string): string {
-  if (guestType === 'vip' || guestType === 'invited') {
+  if (guestType === 'invited') {
     return `/register/vip?guest_id=${guestId}`;
   }
   return `/register/paid?guest_id=${guestId}`;
@@ -176,7 +176,7 @@ export default function RegisterWelcome({ guest }: RegisterWelcomeProps) {
           {/* Info text */}
           <p className={`text-xs ${t.textSubtle} text-center mt-4`}>
             In the next step you can{' '}
-            {guest.guestType === 'vip' || guest.guestType === 'invited'
+            {guest.guestType === 'invited'
               ? 'confirm your attendance'
               : 'enter your billing information'}
             .
@@ -193,7 +193,7 @@ export default function RegisterWelcome({ guest }: RegisterWelcomeProps) {
           </p>
           <p className={`text-[10px] ${t.footerText}`}>
             Need more help:{' '}
-            <a href="mailto:event@bbj.hu" className={t.linkColor}>
+            <a href="mailto:event@bbj.hu?subject=Inquiry%20regarding%20CEO%20Gala%202026" className={t.linkColor}>
               event@bbj.hu
             </a>
           </p>

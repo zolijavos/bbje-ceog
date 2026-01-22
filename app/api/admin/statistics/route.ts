@@ -30,7 +30,7 @@ export async function GET() {
     const declinedCount = guestStats.find((s) => s.registration_status === 'declined')?._count || 0;
     const cancelledCount = guestStats.find((s) => s.registration_status === 'cancelled')?._count || 0;
 
-    const vipCount = guestTypeStats.find((s) => s.guest_type === 'vip')?._count || 0;
+    const invitedGuestCount = guestTypeStats.find((s) => s.guest_type === 'invited')?._count || 0;
     const singleCount = guestTypeStats.find((s) => s.guest_type === 'paying_single')?._count || 0;
     const pairedCount = guestTypeStats.find((s) => s.guest_type === 'paying_paired')?._count || 0;
 
@@ -217,7 +217,7 @@ export async function GET() {
           cancelled: cancelledCount,
         },
         byType: {
-          vip: vipCount,
+          invited: invitedGuestCount,
           paying_single: singleCount,
           paying_paired: pairedCount,
         },
