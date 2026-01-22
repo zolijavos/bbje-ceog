@@ -20,6 +20,7 @@ import Link from 'next/link';
 import GuestProfileFields from '../components/GuestProfileFields';
 import BillingForm, { type BillingFormData } from '../components/BillingForm';
 import ConsentCheckboxes from '../components/ConsentCheckboxes';
+import { titleOptions } from '@/lib/validations/guest-profile';
 
 // Theme definitions
 type Theme = 'dark' | 'dark-blue' | 'light';
@@ -709,14 +710,9 @@ export default function PaidRegistrationForm({
                   data-testid="partner-title-select"
                 >
                   <option value="">-- Please select --</option>
-                  <option value="H.E. Mr.">H.E. Mr.</option>
-                  <option value="H.E. Ms.">H.E. Ms.</option>
-                  <option value="Mr.">Mr.</option>
-                  <option value="Ms.">Ms.</option>
-                  <option value="Mrs.">Mrs.</option>
-                  <option value="Dr.">Dr.</option>
-                  <option value="Prof.">Prof.</option>
-                  <option value="Prof. Dr.">Prof. Dr.</option>
+                  {titleOptions.filter(t => t !== '').map((option) => (
+                    <option key={option} value={option}>{option}</option>
+                  ))}
                 </select>
                 {errors.partnerTitle && (
                   <p className={`${t.errorText} text-sm mt-1`}>{errors.partnerTitle}</p>

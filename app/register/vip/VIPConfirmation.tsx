@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import GuestProfileFields from '../components/GuestProfileFields';
 import ConsentCheckboxes from '../components/ConsentCheckboxes';
+import { titleOptions } from '@/lib/validations/guest-profile';
 
 // Theme definitions
 type Theme = 'dark' | 'dark-blue' | 'light';
@@ -647,14 +648,9 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
                   className={`w-full px-4 py-3 rounded-lg border bg-white text-gray-900 ${errors.partner_title ? 'border-red-500' : 'border-[#d1aa67]/30'}`}
                 >
                   <option value="">-- Please select --</option>
-                  <option value="H.E. Mr.">H.E. Mr.</option>
-                  <option value="H.E. Ms.">H.E. Ms.</option>
-                  <option value="Mr.">Mr.</option>
-                  <option value="Ms.">Ms.</option>
-                  <option value="Mrs.">Mrs.</option>
-                  <option value="Dr.">Dr.</option>
-                  <option value="Prof.">Prof.</option>
-                  <option value="Prof. Dr.">Prof. Dr.</option>
+                  {titleOptions.filter(t => t !== '').map((option) => (
+                    <option key={option} value={option}>{option}</option>
+                  ))}
                 </select>
                 {errors.partner_title && (
                   <p className="text-red-400 text-sm mt-1">{errors.partner_title}</p>
