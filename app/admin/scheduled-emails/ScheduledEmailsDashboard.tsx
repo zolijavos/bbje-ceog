@@ -155,6 +155,7 @@ export default function ScheduledEmailsDashboard() {
   const getLocalizedTypeLabel = (type: string): string => {
     const typeMap: Record<string, string> = {
       vip: t('vip'),
+      invited: t('invited'),
       paying_single: t('payingSingle'),
       paying_paired: t('payingPaired'),
       applicant: t('applicant'),
