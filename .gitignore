@@ -48,6 +48,13 @@ prisma/*.db-journal
 # BMad temporary files
 .workflow-init-temp.yaml
 
+# Backup and temp files
+*.bak
+*.swp
+*.tmp
+*.old
+*~
+
 # OS
 Thumbs.db
 ecosystem.config.js

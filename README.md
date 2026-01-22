@@ -4,10 +4,10 @@ VIP gála esemény regisztrációs rendszer invitation-only alapon, fizetési in
 
 ## 📋 Projekt Áttekintés
 
-**Státusz:** Development (Fázis 1 előtt)
-**Tech Stack:** Next.js 14+, Prisma, MySQL 8.0, Playwright, Stripe
-**Timeline:** 1 hónap fejlesztés (4 fázis)
-**Deployment:** Hostinger VPS (Ubuntu) + GitHub Actions CI/CD
+**Státusz:** ✅ Production Ready (v2.17.0)
+**Tech Stack:** Next.js 14+, Prisma, MySQL 8.0, Playwright, Stripe, Nodemailer
+**Fejlesztés:** Minden fázis befejezve (7/7 epic, 38/38 story)
+**Deployment:** Hetzner VPS (Ubuntu) + PM2 + Nginx
 
 ### Főbb Funkciók
 
@@ -29,8 +29,8 @@ VIP gála esemény regisztrációs rendszer invitation-only alapon, fizetési in
 ### 1. Klónozás
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/ceog-gala.git
-cd ceog-gala
+git clone https://github.com/zolijavos/bbje-ceog.git ceog
+cd ceog
 ```
 
 ### 2. Dependencies
@@ -211,15 +211,18 @@ pm2 restart ceog-gala
 
 ## 🗄️ Database Schema (Prisma)
 
-**8 fő tábla:**
-- `guests` - Vendéglista (email, név, kategória, status)
-- `registrations` - Regisztrációs adatok (jegytípus, partner info)
+**11 fő tábla:**
+- `guests` - Vendéglista (email, first_name, last_name, title, kategória, status)
+- `registrations` - Regisztrációs adatok (jegytípus, partner info, GDPR)
 - `payments` - Stripe fizetések (session_id, összeg, status)
-- `checkins` - Check-in log (időbélyeg, staff)
+- `checkins` - Check-in log (időbélyeg, staff, override)
 - `tables` - Asztal definíciók (név, kapacitás, pozíció)
 - `table_assignments` - Asztalfoglalások (guest → table mapping)
-- `users` - Admin felhasználók (bcrypt password)
+- `users` - Admin/staff felhasználók (bcrypt password, role)
 - `email_logs` - Email delivery tracking
+- `email_templates` - Reusable email templates
+- `billing_info` - Számlázási adatok (cég, adószám)
+- `scheduled_emails` - Ütemezett email küldések
 
 **Schema megtekintése:**
 ```bash
@@ -234,36 +237,47 @@ npx prisma studio
 - **[research-atdd-testing-2025-11-27.md](docs/research-atdd-testing-2025-11-27.md)** - ATDD metodológia kutatás
 - **[CLAUDE.md](CLAUDE.md)** - Claude Code AI assistant instrukciók
 
-## 🔧 Fejlesztési Fázisok
+## 🔧 Befejezett Fejlesztési Fázisok
 
-### ✅ Fázis 0: Discovery & Research (Befejezve)
-- Technikai stack research (React-Konva, Prisma)
-- ATDD testing stratégia kutatás
-- Deployment environment tervezés
-
-### 🔄 Fázis 1: Core Registration (7-10 nap) - KÖVETKEZŐ
+### ✅ Epic 1: Core Registration
 - Magic link authentication
 - Admin login & session
 - Guest list CRUD operations
 - CSV import
 
-### ⏳ Fázis 2: Payment & Ticketing (5-7 nap)
+### ✅ Epic 2: Payment & Ticketing
 - Stripe Checkout integration
 - Webhook handling
 - QR code generation (JWT)
 - Email delivery (tickets)
 
-### ⏳ Fázis 3: Check-in System (4-5 nap)
+### ✅ Epic 3: Check-in System
 - Mobile QR scanner (html5-qrcode)
 - Check-in validation API
 - Duplicate prevention
 - Admin override
 
-### ⏳ Fázis 4: Seating Management (5-7 nap)
+### ✅ Epic 4: Seating Management
 - Table CRUD
-- Drag-and-drop seating map (React-DnD-Kit)
+- Drag-and-drop seating map (React-Konva)
 - Bulk CSV assignment
 - Seating export
+
+### ✅ Epic 5: Guest Profile Extension
+- Extended guest profile (title, phone, company)
+- Dietary requirements & seating preferences
+- Zod validation schemas
+
+### ✅ Epic 6: PWA Guest App
+- Progressive Web App (manifest.json, service worker)
+- Code-based authentication
+- Offline QR ticket display
+- Push notification infrastructure
+
+### ✅ Epic 7: Applicant Flow
+- Public application form
+- Admin applicant management (approve/reject)
+- Magic link expiry handling
 
 ## 🛠️ Tech Stack Details
 
@@ -282,8 +296,9 @@ npx prisma studio
 
 **External Services:**
 - Stripe SDK (payment processing)
-- Resend (email delivery)
+- Nodemailer (email delivery via SMTP)
 - html5-qrcode (QR scanning)
+- qrcode (QR generation)
 
 **Testing:**
 - Playwright 1.44 (E2E)
@@ -314,8 +329,9 @@ Proprietary - CEO Gala registration system
 
 ---
 
-**Verzió:** 0.1.0 (Development)
-**Utolsó frissítés:** 2025-11-27
-**Karbantartó:** Javo
+**Verzió:** 2.17.0 (Production)
+**Utolsó frissítés:** 2026-01-22
+**Karbantartó:** MyForge Labs
 
-**Support:** [GitHub Issues](https://github.com/YOUR_USERNAME/ceog-gala/issues)
+**Telepítési útmutató:** [INSTALL.md](INSTALL.md)
+**Support:** [GitHub Issues](https://github.com/zolijavos/bbje-ceog/issues)
