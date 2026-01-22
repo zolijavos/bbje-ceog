@@ -9,12 +9,12 @@ export const EVENT_CONFIG = {
   year: 2026,
 
   // Event timing
-  date: '2026-04-26',
-  startTime: '18:00',
-  dateTime: new Date('2026-04-26T18:00:00'),
+  date: '2026-03-27',
+  startTime: '19:00',
+  dateTime: new Date('2026-03-27T19:00:00'),
 
   // QR code expiry (end of event day)
-  ticketExpiry: new Date('2026-04-26T23:59:59'),
+  ticketExpiry: new Date('2026-03-27T23:59:59'),
 
   // Venue
   venue: {
@@ -37,7 +37,7 @@ export const EVENT_CONFIG = {
  * Format event date for display (Hungarian)
  */
 export function formatEventDate(): string {
-  return 'Sunday, April 26, 2026';
+  return 'Friday, March 27, 2026';
 }
 
 /**

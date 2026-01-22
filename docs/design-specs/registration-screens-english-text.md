@@ -14,7 +14,7 @@
 | Label above name | Dear |
 | Guest title | Invited Guest |
 | Event title | CEO Gala 2026 |
-| Date/Time | Friday, March 27, 2026 • 6:00 PM |
+| Date/Time | Friday, March 27, 2026 • 7:00 PM |
 | Location | Budapest, Corinthia Hotel |
 | Primary button | YES, I WILL ATTEND |
 | Secondary button | I CANNOT ATTEND |
@@ -70,7 +70,7 @@
 | Heading | Registration Complete! |
 | Subtext | We hope you will have a wonderful time at the event. |
 | Event title | CEO Gala 2026 |
-| Date/Time | Friday, March 27, 2026 • 6:00 PM |
+| Date/Time | Friday, March 27, 2026 • 7:00 PM |
 | Location | Budapest, Corinthia Hotel |
 | Closing text | Enjoy the event! |
 | Footer | Built By MyForge Labs |

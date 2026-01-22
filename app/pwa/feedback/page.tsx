@@ -16,7 +16,7 @@ import Skeleton from '../components/ui/Skeleton';
 import { useHaptic } from '../hooks/useHaptic';
 
 // Feedback is only available after the event
-const EVENT_DATE = new Date('2026-02-27T18:00:00');
+const EVENT_DATE = new Date('2026-03-27T19:00:00');
 const FEEDBACK_AVAILABLE = false; // Set to true after the event
 
 interface FeedbackData {

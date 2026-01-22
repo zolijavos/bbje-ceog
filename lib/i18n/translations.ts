@@ -675,7 +675,7 @@ export const translations = {
     // Event info
     eventName: 'CEO Gála 2026',
     eventDate: '2026. március 27., péntek',
-    eventTime: '18:00',
+    eventTime: '19:00',
     eventVenue: 'Budapest, Corinthia Hotel',
     registration: 'Regisztráció',
 
