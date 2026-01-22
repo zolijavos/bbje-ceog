@@ -30,6 +30,10 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
   - EN: Fixed checkbox column disappearing when filter changed from "Pending" to "All Statuses". Checkboxes now visible regardless of filter setting.
   - HU: Javítva a checkbox oszlop eltűnése, amikor a szűrő "Pending"-ről "All Statuses"-ra változott. Checkboxok most láthatóak a szűrő beállítástól függetlenül.
 
+- **🚨 CRITICAL: Magic Link URL in Bulk Emails** / **🚨 KRITIKUS: Magic Link URL Tömeges Emailekben**
+  - EN: Fixed REGISTRATION button not working in bulk/scheduled invitation emails. The `magicLinkUrl` was not being generated. Now the scheduler automatically generates proper registration URLs with hash and email parameters.
+  - HU: Javítva a REGISTRATION gomb nem működött a tömeges/ütemezett meghívó emailekben. A `magicLinkUrl` nem lett generálva. Az ütemező most automatikusan generál megfelelő regisztrációs URL-eket hash és email paraméterekkel.
+
 ---
 
 ## v2.16.0 (2026-01-22)

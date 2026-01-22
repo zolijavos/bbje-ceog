@@ -76,6 +76,14 @@ const changelogData: ChangelogEntry[] = [
         descriptionEn: 'Fixed checkbox column disappearing when filter changed. Checkboxes now visible regardless of filter setting.',
         descriptionHu: 'Javítva a checkbox oszlop eltűnése szűrő váltáskor. Checkboxok most mindig láthatóak.',
       },
+      {
+        type: 'fix',
+        category: 'email',
+        titleEn: '🚨 CRITICAL: Magic Link URL in Bulk Emails',
+        titleHu: '🚨 KRITIKUS: Magic Link URL Tömeges Emailekben',
+        descriptionEn: 'Fixed REGISTRATION button not working in bulk/scheduled invitation emails. The magicLinkUrl was not being generated.',
+        descriptionHu: 'Javítva a REGISTRATION gomb nem működött a tömeges/ütemezett meghívó emailekben.',
+      },
     ],
   },
   {
