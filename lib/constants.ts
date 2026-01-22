@@ -18,7 +18,7 @@ export const EVENT_NAME_EN = 'CEO Gala 2026';
 // ========================================
 
 export const GUEST_TYPE_LABELS: Record<GuestType, string> = {
-  vip: 'VIP (Free)',
+  vip: 'VIP',
   invited: 'Invited (Free)',
   paying_single: 'Paying (Single)',
   paying_paired: 'Paying (Paired)',

@@ -76,7 +76,7 @@ export default function GuestFormModal({
     phone: null,
     company: null,
     position: null,
-    guest_type: 'vip',
+    guest_type: 'invited',
     status: 'invited',
     dietary_requirements: null,
     seating_preferences: null,
@@ -96,7 +96,7 @@ export default function GuestFormModal({
         phone: (initialData as { phone?: string | null })?.phone || null,
         company: initialData?.company || null,
         position: initialData?.position || null,
-        guest_type: initialData?.guest_type || 'vip',
+        guest_type: initialData?.guest_type || 'invited',
         status: initialData?.status || 'invited',
         dietary_requirements: initialData?.dietary_requirements || null,
         seating_preferences: initialData?.seating_preferences || null,
@@ -376,7 +376,6 @@ export default function GuestFormModal({
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   data-testid="guest-type-select"
                 >
-                  <option value="vip">VIP (Free)</option>
                   <option value="invited">Invited (Free)</option>
                   <option value="paying_single">Paying (Single)</option>
                   <option value="paying_paired">Paying (Paired)</option>

@@ -89,7 +89,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
           className="text-2xl font-bold text-white mb-4"
           data-testid="success-title"
         >
-          {isPaid ? 'Registration Saved!' : 'Thank You for Confirming!'}
+          {isPaid ? 'Registration Saved!' : 'Your registration is complete'}
         </h1>
 
         {/* Success Message */}
@@ -105,7 +105,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
 
         {/* Guest Info */}
         <div className="bg-black/20 rounded-lg p-4 mb-6 border-l-4 border-[#d1aa67]">
-          <h3 className="font-semibold text-[#d1aa67] mb-3 text-lg">Registration Details</h3>
+          <h3 className="font-semibold text-[#d1aa67] mb-3 text-lg">Your Details</h3>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-white/60">Name:</span>

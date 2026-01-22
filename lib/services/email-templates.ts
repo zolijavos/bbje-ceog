@@ -865,10 +865,10 @@ CEO Gála Organizing Team`,
       <p>The event will take place on <span class="highlight">Friday, March 27, 2026</span>; be sure to mark your calendar!</p>
 
       {{#if hasPartner}}
-      <p>Attached below are your and your partner's personal QR codes, which will grant you access to the gala. Kindly <span class="highlight">download our CEO Gala 2026 application</span> on your mobile device to find your personal QR code and more, or bring a printed copy to the event to ensure smooth entry. Please note that this <span class="highlight">personal invitation</span> is dedicated to the addressee and is <span class="highlight">not transferable</span>.</p>
+      <p>Attached below are your and your partner's personal QR codes, which will grant you access to the gala. Please bring a printed copy to the event to ensure smooth entry. Please note that this <span class="highlight">personal invitation</span> is dedicated to the addressee and is <span class="highlight">not transferable</span>.</p>
       {{/if}}
       {{#if hasPartner}}{{else}}
-      <p>Attached below is your personal QR code, which will grant you access to the gala. Kindly <span class="highlight">download our CEO Gala 2026 application</span> on your mobile device to find your personal QR code and more, or bring a printed copy to the event to ensure smooth entry. Please note that this <span class="highlight">personal invitation</span> is dedicated to the addressee and is <span class="highlight">not transferable</span>.</p>
+      <p>Attached below is your personal QR code, which will grant you access to the gala. Please bring a printed copy to the event to ensure smooth entry. Please note that this <span class="highlight">personal invitation</span> is dedicated to the addressee and is <span class="highlight">not transferable</span>.</p>
       {{/if}}
 
       <div class="details-section">
@@ -884,7 +884,7 @@ CEO Gála Organizing Team`,
 
       <div class="notice">
         <p>We kindly remind you that any <span class="highlight">cancellations</span> or changes to your registration must be made at least <span class="highlight">10 business days</span> prior to the gala. Cancellations should be sent to <a href="mailto:event@bbj.hu">event@bbj.hu</a>.</p>
-        <p style="margin-top: 10px;">Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a <span class="highlight">no-show fee</span> of HUF 99,000 per person.</p>
+        <p style="margin-top: 10px;">Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a <span class="highlight">no-show fee</span> of HUF 99,000 + VAT per person.</p>
       </div>
 
       <p>We look forward to meeting you at the gala and celebrating this outstanding CEO Community with you.</p>
@@ -933,7 +933,7 @@ The event will take place on Friday, March 27, 2026; be sure to mark your calend
 {{#if hasPartner}}Attached below are your and your partner's personal QR codes, which will grant you access to the gala.{{/if}}
 {{#if hasPartner}}{{else}}Attached below is your personal QR code, which will grant you access to the gala.{{/if}}
 
-Kindly download our CEO Gala 2026 application on your mobile device to find your personal QR code and more, or bring a printed copy to the event to ensure smooth entry.
+Please bring a printed copy to the event to ensure smooth entry.
 
 Please note that this personal invitation is dedicated to the addressee and is not transferable.
 
@@ -949,7 +949,7 @@ Black tie for men, ballgown or cocktail dress for women
 
 We kindly remind you that any cancellations or changes to your registration must be made at least 10 business days prior to the gala. Cancellations should be sent to event@bbj.hu.
 
-Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 per person.
+Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 + VAT per person.
 
 We look forward to meeting you at the gala and celebrating this outstanding CEO Community with you.
 
@@ -1016,7 +1016,7 @@ Event website: ceogala.com`,
 
       <p>The event will take place on <span class="highlight">Friday, March 27, 2026</span>; be sure to mark your calendar!</p>
 
-      <p>Attached below are your and your partner's personal QR codes, which will grant you access to the gala. Kindly <span class="highlight">download our CEO Gala 2026 application</span> on your mobile device to find your personal QR code and more, or bring a printed copy to the event to ensure smooth entry. Please note that this <span class="highlight">personal invitation</span> is dedicated to the addressee and is <span class="highlight">not transferable</span>.</p>
+      <p>Attached below are your and your partner's personal QR codes, which will grant you access to the gala. Please bring a printed copy to the event to ensure smooth entry. Please note that this <span class="highlight">personal invitation</span> is dedicated to the addressee and is <span class="highlight">not transferable</span>.</p>
 
       <div class="details-section">
         <p class="label">Date:</p>
@@ -1031,7 +1031,7 @@ Event website: ceogala.com`,
 
       <div class="notice">
         <p>Should you be unable to attend, we kindly ask that any changes be communicated via <span class="highlight">{{mainGuestTitle}} {{mainGuestName}}</span>. We kindly remind you that any <span class="highlight">cancellations</span> or changes to your registration must be made at least <span class="highlight">10 business days</span> prior to the gala.</p>
-        <p style="margin-top: 10px;">Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a <span class="highlight">no-show fee</span> of HUF 99,000 per person.</p>
+        <p style="margin-top: 10px;">Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a <span class="highlight">no-show fee</span> of HUF 99,000 + VAT per person.</p>
       </div>
 
       <p>We look forward to meeting you at the gala and celebrating this outstanding CEO Community with you.</p>
@@ -1074,7 +1074,7 @@ Your attendance has been registered by {{mainGuestTitle}} {{mainGuestName}}, and
 
 The event will take place on Friday, March 27, 2026; be sure to mark your calendar!
 
-Attached below are your and your partner's personal QR codes, which will grant you access to the gala. Kindly download our CEO Gala 2026 application on your mobile device to find your personal QR code and more, or bring a printed copy to the event to ensure smooth entry.
+Attached below are your and your partner's personal QR codes, which will grant you access to the gala. Please bring a printed copy to the event to ensure smooth entry.
 
 Please note that this personal invitation is dedicated to the addressee and is not transferable.
 
@@ -1090,7 +1090,7 @@ Black tie for men, ballgown or cocktail dress for women
 
 Should you be unable to attend, we kindly ask that any changes be communicated via {{mainGuestTitle}} {{mainGuestName}}. We kindly remind you that any cancellations or changes to your registration must be made at least 10 business days prior to the gala.
 
-Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 per person.
+Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 + VAT per person.
 
 We look forward to meeting you at the gala and celebrating this outstanding CEO Community with you.
 

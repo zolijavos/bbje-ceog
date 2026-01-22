@@ -102,7 +102,7 @@ export function getMagicLinkEmailTemplate(params: MagicLinkEmailParams): {
 
       <p>We remind you that any cancellations or changes to your registration must be made at least ten business days before the gala. Cancellations should be sent to <a href="mailto:event@bbj.hu" style="color: #333333;">event@bbj.hu</a>.</p>
 
-      <p>Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 per person.</p>
+      <p>Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 + VAT per person.</p>
 
       <p>We look forward to meeting you at the gala and celebrating our outstanding CEO Community.</p>
 
@@ -181,7 +181,7 @@ For more details about the event and the award, including previous winners, visi
 
 We remind you that any cancellations or changes to your registration must be made at least ten business days before the gala. Cancellations should be sent to event@bbj.hu.
 
-Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 per person.
+Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 + VAT per person.
 
 We look forward to meeting you at the gala and celebrating our outstanding CEO Community.
 
