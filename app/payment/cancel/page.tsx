@@ -77,18 +77,18 @@ export default async function PaymentCancelPage({
         </div>
 
         {/* Contact Info */}
-        <p className="text-sm text-neutral-500 mt-6 font-sans">
+        <p className="text-[10px] text-neutral-500 mt-6 font-sans">
           <Link href="/help" className="text-accent-teal hover:underline">
             Need help?
           </Link>
         </p>
-        <p className="text-sm text-neutral-500 mt-2 font-sans">
+        <p className="text-[10px] text-neutral-500 mt-2 font-sans">
           Having problems?{' '}
           <Link
             href="/help"
             className="text-accent-teal hover:text-accent-teal-dark"
           >
-            View Registration Guide
+            Find answers in our FAQs
           </Link>
         </p>
       </div>

@@ -1597,6 +1597,33 @@ Please provide:
 • Status persists across sessions`,
     keywords: ['release', 'testing', 'test', 'version', 'manual', 'changelog'],
   },
+  {
+    id: 'registration-flow-v216',
+    category: 'System & Technical',
+    question: 'How does the simplified registration flow work? (v2.16.0)',
+    answer: `As of **v2.16.0**, the guest registration flow has been simplified:
+
+**Magic Link Flow**:
+• When guests click their magic link, they go **directly to the registration form**
+• No intermediate "Welcome" page anymore
+• VIP guests → VIP registration form
+• Paying guests → Paid registration form
+
+**VIP Registration**:
+• Invitation screen with "Yes, I Will Attend" button
+• Clicking "Yes" goes **directly to the registration form**
+• No "Thank You for Your Response" intermediate screen
+• Faster, more streamlined experience
+
+**GDPR Consent**:
+• Simplified to a brief one-line statement
+• Links to the full Privacy Policy at bbj.hu/about/privacy/
+
+**Footer Updates**:
+• "View Registration Guide" changed to "Find answers in our FAQs"
+• Footer text size reduced for better visual hierarchy`,
+    keywords: ['registration', 'flow', 'simplified', 'vip', 'magic link', 'gdpr', 'v2.16'],
+  },
 ];
 
 // Guide content - Hungarian version
@@ -3089,6 +3116,33 @@ Kérlek add meg:
 • Minden funkció külön jelölhető
 • A státusz megmarad a munkamenetek között`,
     keywords: ['release', 'tesztelés', 'teszt', 'verzió', 'manuális', 'changelog'],
+  },
+  {
+    id: 'registration-flow-v216-hu',
+    category: 'System & Technical',
+    question: 'Hogyan működik az egyszerűsített regisztrációs folyamat? (v2.16.0)',
+    answer: `A **v2.16.0** verzió óta a vendég regisztrációs folyamat egyszerűsítve lett:
+
+**Magic Link Folyamat**:
+• A magic linkre kattintva a vendég **közvetlenül a regisztrációs űrlapra** kerül
+• Nincs már közbülső "Üdvözlő" oldal
+• VIP vendégek → VIP regisztrációs űrlap
+• Fizetős vendégek → Fizetős regisztrációs űrlap
+
+**VIP Regisztráció**:
+• Meghívó képernyő "Yes, I Will Attend" gombbal
+• A "Yes" gombra kattintva **közvetlenül a regisztrációs űrlapra** kerül
+• Nincs "Thank You for Your Response" közbülső képernyő
+• Gyorsabb, egyszerűbb élmény
+
+**GDPR Hozzájárulás**:
+• Egyszerűsítve egy rövid, egysoros nyilatkozatra
+• Linkkel a teljes Privacy Policy-hoz (bbj.hu/about/privacy/)
+
+**Footer Frissítések**:
+• "View Registration Guide" szöveg cserélve "Find answers in our FAQs"-ra
+• Footer szövegméret csökkentve a jobb vizuális hierarchia érdekében`,
+    keywords: ['regisztráció', 'folyamat', 'egyszerűsített', 'vip', 'magic link', 'gdpr', 'v2.16'],
   },
 ];
 

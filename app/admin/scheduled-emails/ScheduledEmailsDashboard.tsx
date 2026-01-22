@@ -38,7 +38,7 @@ interface ScheduledEmail {
   schedule_type: string;
   created_at: string;
   sent_at: string | null;
-  guest?: { name: string; email: string } | null;
+  guest?: { first_name: string; last_name: string; email: string } | null;
 }
 
 interface Stats {
@@ -50,7 +50,8 @@ interface Stats {
 
 interface Guest {
   id: number;
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   guest_type: string;
   registration_status: string;
@@ -80,7 +81,7 @@ interface EmailLog {
   status: string;
   error_message: string | null;
   sent_at: string;
-  guest: { id: number; name: string; email: string } | null;
+  guest: { id: number; first_name: string; last_name: string; email: string } | null;
 }
 
 interface EmailLogStats {
@@ -122,6 +123,7 @@ export default function ScheduledEmailsDashboard() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>('pending');
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [selectedEmailIds, setSelectedEmailIds] = useState<number[]>([]);
 
   const STATUS_CONFIG = {
     pending: { ...STATUS_CONFIG_BASE.pending, label: t('pending') },
@@ -153,7 +155,7 @@ export default function ScheduledEmailsDashboard() {
   // Localized type labels
   const getLocalizedTypeLabel = (type: string): string => {
     const typeMap: Record<string, string> = {
-      vip: t('vip'),
+      invited: t('invited'),
       paying_single: t('payingSingle'),
       paying_paired: t('payingPaired'),
       applicant: t('applicant'),
@@ -322,6 +324,71 @@ export default function ScheduledEmailsDashboard() {
       }
     } catch {
       setMessage({ type: 'error', text: t('failedToCancelEmail') });
+    }
+  };
+
+  const handleCancelAllPending = async () => {
+    if (!confirm(`Are you sure you want to cancel ALL ${stats?.pending || 0} pending emails?`)) return;
+
+    try {
+      const res = await fetch('/api/admin/scheduled-emails', {
+        method: 'DELETE',
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setMessage({ type: 'success', text: `Cancelled ${data.cancelled} pending emails` });
+        setSelectedEmailIds([]);
+        fetchEmails();
+      } else {
+        setMessage({ type: 'error', text: 'Failed to cancel pending emails' });
+      }
+    } catch {
+      setMessage({ type: 'error', text: 'Failed to cancel pending emails' });
+    }
+  };
+
+  const handleCancelSelected = async () => {
+    if (selectedEmailIds.length === 0) return;
+    if (!confirm(`Are you sure you want to cancel ${selectedEmailIds.length} selected email(s)?`)) return;
+
+    try {
+      const res = await fetch('/api/admin/scheduled-emails', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: selectedEmailIds }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setMessage({ type: 'success', text: `Cancelled ${data.cancelled} email(s)` });
+        setSelectedEmailIds([]);
+        fetchEmails();
+      } else {
+        setMessage({ type: 'error', text: 'Failed to cancel selected emails' });
+      }
+    } catch {
+      setMessage({ type: 'error', text: 'Failed to cancel selected emails' });
+    }
+  };
+
+  const pendingEmails = emails.filter(e => e.status === 'pending');
+  const allPendingSelected = pendingEmails.length > 0 && pendingEmails.every(e => selectedEmailIds.includes(e.id));
+  const somePendingSelected = pendingEmails.some(e => selectedEmailIds.includes(e.id));
+
+  const handleSelectAll = () => {
+    if (allPendingSelected) {
+      setSelectedEmailIds([]);
+    } else {
+      setSelectedEmailIds(pendingEmails.map(e => e.id));
+    }
+  };
+
+  const handleSelectEmail = (id: number, checked: boolean) => {
+    if (checked) {
+      setSelectedEmailIds([...selectedEmailIds, id]);
+    } else {
+      setSelectedEmailIds(selectedEmailIds.filter(eid => eid !== id));
     }
   };
 
@@ -504,7 +571,7 @@ export default function ScheduledEmailsDashboard() {
 
   const filteredGuests = guests.filter(
     (g) =>
-      g.name.toLowerCase().includes(guestSearch.toLowerCase()) ||
+      `${g.first_name} ${g.last_name}`.toLowerCase().includes(guestSearch.toLowerCase()) ||
       g.email.toLowerCase().includes(guestSearch.toLowerCase())
   );
 
@@ -676,6 +743,24 @@ export default function ScheduledEmailsDashboard() {
               >
                 Run Schedulers
               </button>
+              {selectedEmailIds.length > 0 && (
+                <button
+                  onClick={handleCancelSelected}
+                  className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-orange-600 rounded-lg hover:bg-orange-700"
+                >
+                  <Trash size={16} />
+                  Cancel Selected ({selectedEmailIds.length})
+                </button>
+              )}
+              {stats && stats.pending > 0 && (
+                <button
+                  onClick={handleCancelAllPending}
+                  className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700"
+                >
+                  <Prohibit size={16} />
+                  Cancel All ({stats.pending})
+                </button>
+              )}
               <button
                 onClick={fetchEmails}
                 className="inline-flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900"
@@ -690,6 +775,19 @@ export default function ScheduledEmailsDashboard() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
+                  {pendingEmails.length > 0 && (
+                    <th className="px-4 py-3 text-left">
+                      <input
+                        type="checkbox"
+                        checked={allPendingSelected}
+                        ref={(el) => {
+                          if (el) el.indeterminate = somePendingSelected && !allPendingSelected;
+                        }}
+                        onChange={handleSelectAll}
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                    </th>
+                  )}
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                     {t('status')}
                   </th>
@@ -713,7 +811,7 @@ export default function ScheduledEmailsDashboard() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {emails.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
+                    <td colSpan={pendingEmails.length > 0 ? 7 : 6} className="px-6 py-12 text-center text-gray-500">
                       <EnvelopeSimple size={48} className="mx-auto text-gray-300 mb-4" />
                       <p>{t('noScheduledEmails')}</p>
                     </td>
@@ -724,7 +822,19 @@ export default function ScheduledEmailsDashboard() {
                     const StatusIcon = statusConfig.icon;
 
                     return (
-                      <tr key={email.id} className="hover:bg-gray-50">
+                      <tr key={email.id} className={`hover:bg-gray-50 ${selectedEmailIds.includes(email.id) ? 'bg-blue-50' : ''}`}>
+                        {pendingEmails.length > 0 && (
+                          <td className="px-4 py-4 whitespace-nowrap">
+                            {email.status === 'pending' && (
+                              <input
+                                type="checkbox"
+                                checked={selectedEmailIds.includes(email.id)}
+                                onChange={(e) => handleSelectEmail(email.id, e.target.checked)}
+                                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                              />
+                            )}
+                          </td>
+                        )}
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
                             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${statusConfig.bg} ${statusConfig.color}`}
@@ -742,7 +852,7 @@ export default function ScheduledEmailsDashboard() {
                           {email.guest ? (
                             <div>
                               <div className="text-sm font-medium text-gray-900">
-                                {email.guest.name}
+                                {email.guest.first_name} {email.guest.last_name}
                               </div>
                               <div className="text-xs text-gray-500">{email.guest.email}</div>
                             </div>
@@ -919,7 +1029,7 @@ export default function ScheduledEmailsDashboard() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
                           <div className="text-sm font-medium text-gray-900">
-                            {log.guest?.name || '-'}
+                            {log.guest ? `${log.guest.first_name} ${log.guest.last_name}` : '-'}
                           </div>
                           <div className="text-xs text-gray-500">{log.recipient}</div>
                         </div>
@@ -1022,7 +1132,7 @@ export default function ScheduledEmailsDashboard() {
                       className="mr-3"
                     />
                     <div>
-                      <div className="text-sm font-medium">{guest.name}</div>
+                      <div className="text-sm font-medium">{guest.first_name} {guest.last_name}</div>
                       <div className="text-xs text-gray-500">{guest.email}</div>
                     </div>
                   </label>
@@ -1066,7 +1176,7 @@ export default function ScheduledEmailsDashboard() {
                   Guest Types
                 </label>
                 <div className="space-y-2">
-                  {['vip', 'paying_single', 'paying_paired', 'applicant'].map((type) => (
+                  {['invited', 'paying_single', 'paying_paired', 'applicant'].map((type) => (
                     <label key={type} className="flex items-center">
                       <input
                         type="checkbox"
@@ -1257,7 +1367,7 @@ export default function ScheduledEmailsDashboard() {
                     <tbody className="bg-white divide-y divide-gray-200">
                       {bulkPreviewGuests.slice(0, 50).map((guest) => (
                         <tr key={guest.id} className="hover:bg-gray-50">
-                          <td className="px-4 py-2 text-sm font-medium text-gray-900">{guest.name}</td>
+                          <td className="px-4 py-2 text-sm font-medium text-gray-900">{guest.first_name} {guest.last_name}</td>
                           <td className="px-4 py-2 text-sm text-gray-500">{guest.email}</td>
                           <td className="px-4 py-2 text-xs">
                             <span className="px-2 py-1 bg-gray-100 rounded">{getLocalizedTypeLabel(guest.guest_type)}</span>
@@ -1532,7 +1642,7 @@ export default function ScheduledEmailsDashboard() {
                       Guest Types
                     </label>
                     <div className="space-y-2">
-                      {['vip', 'paying_single', 'paying_paired', 'applicant'].map((type) => (
+                      {['invited', 'paying_single', 'paying_paired', 'applicant'].map((type) => (
                         <label key={type} className="flex items-center">
                           <input
                             type="checkbox"

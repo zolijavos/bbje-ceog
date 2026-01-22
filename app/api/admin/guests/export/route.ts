@@ -96,7 +96,7 @@ export async function GET() {
     // Generate CSV rows with all fields
     const rows = guests.map(guest => {
       const guestTypeLabels: Record<string, string> = {
-        vip: 'VIP (Free)',
+        vip: 'VIP',
         invited: 'Invited (Free)',
         paying_single: 'Paying (Single)',
         paying_paired: 'Paying (Paired)',
@@ -161,7 +161,7 @@ export async function GET() {
         // Payment
         guest.registration?.payment?.payment_status
           ? paymentStatusLabels[guest.registration.payment.payment_status]
-          : (guest.guest_type === 'vip' ? 'Free' : ''),
+          : (guest.guest_type === 'invited' ? 'Free' : ''),
         guest.registration?.payment?.payment_method || '',
         guest.registration?.payment?.amount?.toString() || '',
         guest.registration?.payment?.currency || '',

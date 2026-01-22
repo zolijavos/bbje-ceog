@@ -119,7 +119,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
   // Localized type labels
   const getLocalizedTypeLabel = (type: string): string => {
     const typeMap: Record<string, string> = {
-      vip: t('vip'),
+      invited: t('invited'),
       paying_single: t('payingSingle'),
       paying_paired: t('payingPaired'),
       applicant: t('applicant'),
@@ -488,7 +488,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
   // Check if guest can have payment approved (pending bank transfer)
   const canApprovePayment = (guest: Guest) => {
     return (
-      guest.guestType !== 'vip' &&
+      guest.guestType !== 'invited' &&
       guest.hasRegistration &&
       guest.paymentStatus === 'pending'
     );
@@ -635,9 +635,10 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
             data-testid="type-filter"
           >
             <option value="all">{t('allTypes')}</option>
-            <option value="vip">{t('vip')}</option>
+            <option value="invited">{t('invited')}</option>
             <option value="paying_single">{t('payingSingle')}</option>
             <option value="paying_paired">{t('payingPaired')}</option>
+            <option value="applicant">{t('applicant')}</option>
           </select>
         </div>
 
@@ -1057,7 +1058,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                 phone: editingGuest.phone,
                 company: editingGuest.company,
                 position: editingGuest.position,
-                guest_type: editingGuest.guestType as 'vip' | 'invited' | 'paying_single' | 'paying_paired',
+                guest_type: editingGuest.guestType as 'invited' | 'paying_single' | 'paying_paired' | 'applicant',
                 status: editingGuest.status as 'pending' | 'invited' | 'registered' | 'approved' | 'declined',
                 dietary_requirements: editingGuest.dietaryRequirements,
                 seating_preferences: editingGuest.seatingPreferences,

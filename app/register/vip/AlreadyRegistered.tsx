@@ -213,7 +213,6 @@ export default function AlreadyRegistered({
               </h3>
               <p className={`text-sm ${t.successText}`}>
                 ✓ Attendance confirmed
-                <br />✓ VIP guest status
               </p>
             </div>
           </>
@@ -232,16 +231,16 @@ export default function AlreadyRegistered({
         </div>
 
         {/* Help Links */}
-        <div className={`text-xs ${t.textMuted} text-center space-y-1`}>
+        <div className={`text-[10px] ${t.textMuted} text-center space-y-1`}>
           <p>
             Questions?{' '}
             <a href="https://bbj.hu/events/ceogala/#faq" target="_blank" rel="noopener noreferrer" className={t.linkColor}>
-              View Registration Guide
+              Find answers in our FAQs
             </a>
           </p>
           <p>
             Need more help:{' '}
-            <a href="mailto:event@bbj.hu" className={t.linkColor}>
+            <a href="mailto:event@bbj.hu?subject=Inquiry%20regarding%20CEO%20Gala%202026" className={t.linkColor}>
               event@bbj.hu
             </a>
           </p>

@@ -25,22 +25,22 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'CEO Gála 2026 - Event Platform',
-  description: 'CEO Gála 2026 event registration and check-in system',
+  title: 'CEO Gala 2026',
+  description: 'CEO Gala 2026 event registration and check-in system',
   manifest: '/manifest.json',
   themeColor: '#1e293b',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'CEO Gála 2026',
+    title: 'CEO Gala 2026',
   },
   formatDetection: {
     telephone: false,
   },
   icons: {
-    icon: '/myforgelabs-logo.png',
-    shortcut: '/myforgelabs-logo.png',
-    apple: '/myforgelabs-logo.png',
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
   },
   other: {
     'mobile-web-app-capable': 'yes',

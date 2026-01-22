@@ -1,12 +1,12 @@
 /**
  * Registration Landing Page
- * Validates magic link and displays welcome or error page
+ * Validates magic link and redirects to appropriate registration form
  *
  * Story 1.5: Magic Link Validation & Registration Landing
  */
 
+import { redirect } from 'next/navigation';
 import { validateMagicLink, type MagicLinkErrorType } from '@/lib/auth/magic-link';
-import RegisterWelcome from './RegisterWelcome';
 import RegisterError from './RegisterError';
 
 interface RegisterPageProps {
@@ -45,18 +45,13 @@ export default async function RegisterPage({ searchParams }: RegisterPageProps) 
     );
   }
 
-  // Validation successful - show welcome page
-  return (
-    <RegisterWelcome
-      guest={{
-        id: result.guest.id,
-        name: result.guest.name,
-        title: result.guest.title,
-        email: result.guest.email,
-        guestType: result.guest.guestType,
-        status: result.guest.status,
-      }}
-      code={code}
-    />
-  );
+  // Validation successful - redirect directly to appropriate registration form
+  const guestType = result.guest.guestType;
+  const guestId = result.guest.id;
+
+  if (guestType === 'invited') {
+    redirect(`/register/vip?guest_id=${guestId}`);
+  } else {
+    redirect(`/register/paid?guest_id=${guestId}`);
+  }
 }

@@ -1,0 +1,21 @@
+email,title,first_name,last_name,guest_type,phone,company,position,status
+zolijavos+vip01@gmail.com,Dr.,James,Harrison,vip,+36301234501,TechVentures Ltd.,CEO,pending
+zolijavos+vip02@gmail.com,Prof.,Elizabeth,Mitchell,vip,+36301234502,Innovation Hub Inc.,Chief Scientist,pending
+agnestordai+vip01@gmail.com,Mr.,Robert,Anderson,vip,+36301234503,Global Dynamics Kft.,Managing Director,pending
+agnestordai+vip02@gmail.com,Ms.,Catherine,Thompson,vip,+36301234504,Quantum Solutions Zrt.,Chairwoman,pending
+zolijavos+vip03@gmail.com,Dr.,William,Clarke,vip,+36301234505,Future Labs Corp.,Founder,pending
+zolijavos+inv01@gmail.com,Mr.,Michael,Roberts,invited,+36301234506,Bright Ideas Kft.,Marketing Director,pending
+zolijavos+inv02@gmail.com,Ms.,Sarah,Williams,invited,+36301234507,Creative Minds Ltd.,Head of Design,pending
+agnestordai+inv01@gmail.com,Mr.,David,Brown,invited,+36301234508,Digital Wave Zrt.,CTO,pending
+agnestordai+inv02@gmail.com,Ms.,Jennifer,Davis,invited,+36301234509,Smart Systems Inc.,VP of Sales,pending
+zolijavos+inv03@gmail.com,Mr.,Thomas,Miller,invited,+36301234510,Peak Performance Kft.,Operations Manager,pending
+zolijavos+single01@gmail.com,Ms.,Amanda,Wilson,paying_single,+36301234511,Urban Consulting Ltd.,Senior Consultant,pending
+zolijavos+single02@gmail.com,Mr.,Christopher,Taylor,paying_single,+36301234512,Metro Finance Zrt.,Financial Analyst,pending
+agnestordai+single01@gmail.com,Ms.,Rebecca,Martinez,paying_single,+36301234513,Health Plus Kft.,Medical Director,pending
+agnestordai+single02@gmail.com,Mr.,Daniel,Garcia,paying_single,+36301234514,Green Energy Corp.,Project Manager,pending
+zolijavos+single03@gmail.com,Ms.,Laura,Johnson,paying_single,+36301234515,Media Connect Inc.,PR Specialist,pending
+zolijavos+paired01@gmail.com,Mr.,Andrew,White,paying_paired,+36301234516,Luxury Brands Kft.,Brand Manager,pending
+zolijavos+paired02@gmail.com,Ms.,Emily,Jackson,paying_paired,+36301234517,Event Masters Ltd.,Event Coordinator,pending
+agnestordai+paired01@gmail.com,Mr.,Benjamin,Lee,paying_paired,+36301234518,Travel Excellence Zrt.,Travel Director,pending
+agnestordai+paired02@gmail.com,Ms.,Olivia,Harris,paying_paired,+36301234519,Gourmet Catering Inc.,Head Chef,pending
+zolijavos+paired03@gmail.com,Dr.,Richard,King,paying_paired,+36301234520,Research Institute Ltd.,Research Director,pending

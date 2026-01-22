@@ -143,5 +143,6 @@ Ha problémába ütközöl, nézd át az [INSTALL.md](INSTALL.md) dokumentáció
 
 ---
 
-**Verzió**: 1.0.0
+**Verzió**: 2.17.0
 **Licenc**: Proprietary
+**Karbantartó**: MyForge Labs

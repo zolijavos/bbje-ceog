@@ -65,7 +65,7 @@ export default function StatusContent({
   payment,
   ticket,
 }: StatusContentProps) {
-  const isVIP = guest.guestType === 'vip';
+  const isInvited = guest.guestType === 'invited';
   const isPending = payment?.status === 'pending';
   const isPaid = payment?.status === 'paid';
   const isFailed = payment?.status === 'failed';
@@ -83,7 +83,7 @@ export default function StatusContent({
 
   // Get payment status badge
   const getPaymentBadge = () => {
-    if (isVIP) {
+    if (isInvited) {
       return (
         <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-accent-teal/10 text-accent-teal">
           Invited - Free
@@ -271,7 +271,7 @@ export default function StatusContent({
                 </a>
               </div>
             )}
-            {isVIP && (
+            {isInvited && (
               <p className="text-neutral-600 font-sans">
                 As an invited guest, you have received a free invitation to the event.
               </p>
@@ -337,7 +337,7 @@ export default function StatusContent({
         </div>
 
         {/* Footer */}
-        <div className="mt-6 text-center text-sm text-white/50 font-sans">
+        <div className="mt-6 text-center text-[10px] text-white/50 font-sans">
           <p>
             <Link href="/help" className="text-accent-gold hover:underline">
               Need help?
@@ -345,7 +345,7 @@ export default function StatusContent({
           </p>
           <p className="mt-2">
             <Link href="/help" className="text-accent-gold hover:underline">
-              View Registration Guide
+              Find answers in our FAQs
             </Link>
           </p>
           <p className="mt-2">© 2026 BBJ Events - Event Platform</p>

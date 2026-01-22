@@ -18,7 +18,6 @@ export const EVENT_NAME_EN = 'CEO Gala 2026';
 // ========================================
 
 export const GUEST_TYPE_LABELS: Record<GuestType, string> = {
-  vip: 'VIP (Free)',
   invited: 'Invited (Free)',
   paying_single: 'Paying (Single)',
   paying_paired: 'Paying (Paired)',
@@ -163,14 +162,14 @@ export function getRegistrationStatusInfo(status: RegistrationStatus): StatusInf
 }
 
 /**
- * Get payment status info (with special VIP handling)
+ * Get payment status info (with special handling for invited guests)
  */
 export function getPaymentStatusInfo(
   paymentStatus: PaymentStatus | null,
   guestType: GuestType
 ): StatusInfo {
-  // VIP and invited guests don't need payment
-  if (guestType === 'vip' || guestType === 'invited') {
+  // Invited guests don't need payment
+  if (guestType === 'invited') {
     return VIP_PAYMENT_STATUS_INFO;
   }
 

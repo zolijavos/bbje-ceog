@@ -39,7 +39,7 @@ If you wish to reserve your place at the gala now, click the REGISTRATION button
 Registration link:
 {magicLinkUrl}
 
-Please note that any failure to provide due cancellation notice may result in a no-show fee of HUF 99,000 per person.
+Please note that any failure to provide due cancellation notice may result in a no-show fee of HUF 99,000 + VAT per person.
 
 Best regards,
 Tamas Botka, Publisher, BBJ

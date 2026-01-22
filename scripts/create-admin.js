@@ -65,7 +65,17 @@ async function main() {
     process.exit(1);
   }
 
-  const name = await question('Name (optional, press Enter to skip): ');
+  const firstName = await question('First name: ');
+  if (!firstName || firstName.trim().length === 0) {
+    console.error('First name is required.');
+    process.exit(1);
+  }
+
+  const lastName = await question('Last name: ');
+  if (!lastName || lastName.trim().length === 0) {
+    console.error('Last name is required.');
+    process.exit(1);
+  }
 
   // Hash password
   const passwordHash = await bcrypt.hash(password, 12);
@@ -75,7 +85,8 @@ async function main() {
     data: {
       email,
       password_hash: passwordHash,
-      name: name || null,
+      first_name: firstName.trim(),
+      last_name: lastName.trim(),
       role: 'admin'
     }
   });

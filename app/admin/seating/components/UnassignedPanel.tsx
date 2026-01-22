@@ -30,10 +30,10 @@ export function UnassignedPanel({ guests, isReceiving }: UnassignedPanelProps) {
     },
   });
 
-  // Filter guests by search
+  // Filter guests by search (with null safety)
   const filteredGuests = guests.filter(g =>
-    g.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    g.email.toLowerCase().includes(searchQuery.toLowerCase())
+    (g.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (g.email || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // Count actual guests (not cards) - paired guests count as 2

@@ -365,9 +365,23 @@ A tanúsítvány automatikusan megújul (certbot timer).
 
 ## Első bejelentkezés
 
-### Admin felhasználó létrehozása
+### Teszt adatok betöltése (opcionális)
 
-Az első alkalmazás indítás után hozz létre egy admin felhasználót az interaktív szkripttel:
+Ha szeretnél teszt felhasználókat és asztalokat létrehozni:
+
+```bash
+cd /var/www/ceog
+node scripts/seed-production.js
+```
+
+Ez létrehozza:
+- Admin: `admin@ceogala.test` / `Admin123!`
+- Staff: `staff@ceogala.test` / `Staff123!`
+- 4 minta asztalt
+
+### Admin felhasználó létrehozása (manuális)
+
+Ha saját admin felhasználót szeretnél:
 
 ```bash
 cd /var/www/ceog
@@ -377,13 +391,15 @@ node scripts/create-admin.js
 A szkript interaktívan bekéri:
 - Email cím
 - Jelszó (minimum 8 karakter)
-- Név (opcionális)
+- Vezetéknév
+- Keresztnév
 
 Példa:
 ```
 Admin email: admin@ceogala.hu
 Password (min 8 chars): TitkosJelszo123
-Name (optional): Gála Admin
+First name: Gála
+Last name: Admin
 
 Admin user created successfully!
   Email: admin@ceogala.hu

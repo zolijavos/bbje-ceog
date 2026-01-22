@@ -40,7 +40,7 @@ function GoldLine() {
 export default async function SuccessPage({ searchParams }: SuccessPageProps) {
   const params = await searchParams;
   const guestIdParam = params.guest_id;
-  const registrationType = params.type || 'vip';
+  const registrationType = params.type || 'invited';
 
   // Validate guest_id parameter
   if (!guestIdParam) {
@@ -63,7 +63,6 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
     redirect('/register?error=not_found');
   }
 
-  const isVIP = registrationType === 'vip' || guest.guest_type === 'vip';
   const isInvited = guest.guest_type === 'invited';
   const isPaid = registrationType === 'paid' || guest.guest_type === 'paying_single' || guest.guest_type === 'paying_paired';
   const ticketType = guest.registration?.ticket_type;
@@ -71,6 +70,15 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
   const ticketPrice = isPairedTicket ? '180,000 Ft' : '100,000 Ft';
   const fullName = getFullName(guest.first_name, guest.last_name);
   const displayName = guest.title ? `${guest.title} ${fullName}` : fullName;
+
+  // Partner info
+  const hasPartner = guest.registration?.partner_first_name && guest.registration?.partner_last_name;
+  const partnerFullName = hasPartner
+    ? getFullName(guest.registration!.partner_first_name!, guest.registration!.partner_last_name!)
+    : null;
+  const partnerDisplayName = hasPartner && partnerFullName
+    ? (guest.registration?.partner_title ? `${guest.registration.partner_title} ${partnerFullName}` : partnerFullName)
+    : null;
 
   return (
     <div className="min-h-screen bg-[#0c0d0e] flex items-center justify-center p-4">
@@ -89,12 +97,12 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
           className="text-2xl font-bold text-white mb-4"
           data-testid="success-title"
         >
-          {isPaid ? 'Registration Saved!' : 'Thank You for Confirming!'}
+          {isPaid ? 'Registration Saved!' : 'Your registration is complete'}
         </h1>
 
         {/* Success Message */}
         <p className="text-white/70 mb-6 text-sm" data-testid="success-message">
-          {isVIP || isInvited
+          {isInvited
             ? 'Your QR ticket will arrive via email shortly.'
             : isPaid
             ? 'Payment options will be available soon.'
@@ -105,7 +113,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
 
         {/* Guest Info */}
         <div className="bg-black/20 rounded-lg p-4 mb-6 border-l-4 border-[#d1aa67]">
-          <h3 className="font-semibold text-[#d1aa67] mb-3 text-lg">Registration Details</h3>
+          <h3 className="font-semibold text-[#d1aa67] mb-3 text-lg">Your Details</h3>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-white/60">Name:</span>
@@ -115,12 +123,12 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
               <span className="text-white/60">Email:</span>
               <span className="text-white font-medium">{guest.email}</span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-white/60">Status:</span>
-              <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#d1aa67] text-[#0c0d0e]">
-                {isVIP ? 'VIP Guest' : isInvited ? 'Invited Guest' : isPairedTicket ? 'Paired Ticket' : 'Single Ticket'}
-              </span>
-            </div>
+            {hasPartner && (
+              <div className="flex justify-between pt-2 mt-2 border-t border-white/10">
+                <span className="text-white/60">Partner:</span>
+                <span className="text-white font-medium">{partnerDisplayName}</span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -198,7 +206,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
         <GoldLine />
 
         {/* Contact Info */}
-        <div className="text-xs text-white/50 space-y-1">
+        <div className="text-[10px] text-white/50 space-y-1">
           <p>
             Questions?{' '}
             <a
@@ -207,12 +215,12 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
               rel="noopener noreferrer"
               className="text-[#d1aa67] hover:underline"
             >
-              View Registration Guide
+              Find answers in our FAQs
             </a>
           </p>
           <p>
             Need more help:{' '}
-            <a href="mailto:event@bbj.hu" className="text-[#d1aa67] hover:underline">
+            <a href="mailto:event@bbj.hu?subject=Inquiry%20regarding%20CEO%20Gala%202026" className="text-[#d1aa67] hover:underline">
               event@bbj.hu
             </a>
           </p>

@@ -20,6 +20,7 @@ import Link from 'next/link';
 import GuestProfileFields from '../components/GuestProfileFields';
 import BillingForm, { type BillingFormData } from '../components/BillingForm';
 import ConsentCheckboxes from '../components/ConsentCheckboxes';
+import { titleOptions } from '@/lib/validations/guest-profile';
 
 // Theme definitions
 type Theme = 'dark' | 'dark-blue' | 'light';
@@ -703,18 +704,15 @@ export default function PaidRegistrationForm({
                 <select
                   value={formData.partnerTitle}
                   onChange={(e) => updateFormData('partnerTitle', e.target.value)}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#d1aa67] focus:border-[#d1aa67] ${
-                    errors.partnerTitle ? t.inputBgError : t.inputBg
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#d1aa67] focus:border-[#d1aa67] bg-white text-gray-900 ${
+                    errors.partnerTitle ? 'border-red-500' : 'border-[#d1aa67]/30'
                   }`}
                   data-testid="partner-title-select"
                 >
                   <option value="">-- Please select --</option>
-                  <option value="Mr.">Mr.</option>
-                  <option value="Ms.">Ms.</option>
-                  <option value="Mrs.">Mrs.</option>
-                  <option value="Dr.">Dr.</option>
-                  <option value="Prof.">Prof.</option>
-                  <option value="Prof. Dr.">Prof. Dr.</option>
+                  {titleOptions.filter(t => t !== '').map((option) => (
+                    <option key={option} value={option}>{option}</option>
+                  ))}
                 </select>
                 {errors.partnerTitle && (
                   <p className={`${t.errorText} text-sm mt-1`}>{errors.partnerTitle}</p>
@@ -925,16 +923,16 @@ export default function PaidRegistrationForm({
         </div>
 
         {/* Help Links */}
-        <div className={`mt-6 text-xs ${t.textMuted} text-center space-y-1`}>
+        <div className={`mt-6 text-[10px] ${t.textMuted} text-center space-y-1`}>
           <p>
             Questions?{' '}
             <a href="https://bbj.hu/events/ceogala/#faq" target="_blank" rel="noopener noreferrer" className="text-[#d1aa67] hover:underline">
-              View Registration Guide
+              Find answers in our FAQs
             </a>
           </p>
           <p>
             Need more help:{' '}
-            <a href="mailto:event@bbj.hu" className="text-[#d1aa67] hover:underline">
+            <a href="mailto:event@bbj.hu?subject=Inquiry%20regarding%20CEO%20Gala%202026" className="text-[#d1aa67] hover:underline">
               event@bbj.hu
             </a>
           </p>

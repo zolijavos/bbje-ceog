@@ -13,6 +13,7 @@ import { sendEmail, logEmailDelivery } from '@/lib/services/email';
 import { logInfo, logError } from '@/lib/utils/logger';
 import { EVENT_CONFIG } from '@/lib/config/event';
 import { getFullName, getDisplayName } from '@/lib/utils/name';
+import { generateMagicLinkHash } from '@/lib/auth/magic-link';
 import type { ScheduledEmailStatus, Guest } from '@prisma/client';
 
 // Extract event constants for convenience
@@ -117,13 +118,41 @@ export async function processScheduledEmails(): Promise<{
         : {};
 
       // Build variables with guest data
+      const appUrl = process.env.APP_URL || 'https://ceogala.mflevents.space';
       const variables: Record<string, string | undefined> = {
         ...storedVariables,
+        baseUrl: appUrl,
       };
 
       if (guest) {
         variables.guestName = getDisplayName(guest.first_name, guest.last_name, guest.title);
-        // Add other guest fields as needed
+
+        // Generate magic link URL for invitation templates
+        const magicLinkTemplates = ['magic_link', 'magic-link', 'invitation', 'applicant_approval'];
+        if (magicLinkTemplates.includes(scheduled.template_slug)) {
+          // Check if guest already has a magic link hash
+          let magicHash = guest.magic_link_hash;
+
+          if (!magicHash) {
+            // Generate new magic link
+            const { hash, expiresAt } = generateMagicLinkHash(guest.email);
+            magicHash = hash;
+
+            // Save to database
+            await prisma.guest.update({
+              where: { id: guest.id },
+              data: {
+                magic_link_hash: hash,
+                magic_link_expires_at: expiresAt,
+              },
+            });
+
+            logInfo(`[SCHEDULER] Generated new magic link for guest ${guest.id}`);
+          }
+
+          // Build the full magic link URL
+          variables.magicLinkUrl = `${appUrl}/register?code=${magicHash}&email=${encodeURIComponent(guest.email)}`;
+        }
       }
 
       // Render template

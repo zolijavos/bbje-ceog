@@ -66,6 +66,7 @@ model Registration {
   id                  Int              @id @default(autoincrement())
   guest_id            Int              @unique
   ticket_type         TicketType       // vip_free, paid_single, paid_paired
+  partner_title       String?          @db.VarChar(50)  // Mr., Ms., Dr., etc.
   partner_first_name  String?          @db.VarChar(127)
   partner_last_name   String?          @db.VarChar(127)
   partner_email       String?          @db.VarChar(255)
@@ -388,7 +389,6 @@ model AuditLog {
 // ==================================
 
 enum GuestType {
-  vip
   invited         // Free ticket guest (meghívott vendég)
   paying_single
   paying_paired

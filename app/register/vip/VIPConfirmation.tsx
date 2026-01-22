@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import GuestProfileFields from '../components/GuestProfileFields';
 import ConsentCheckboxes from '../components/ConsentCheckboxes';
+import { titleOptions } from '@/lib/validations/guest-profile';
 
 // Theme definitions
 type Theme = 'dark' | 'dark-blue' | 'light';
@@ -331,7 +332,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
       }
 
       const data = await response.json();
-      router.push(`/register/success?guest_id=${guest.id}&type=vip`);
+      router.push(`/register/success?guest_id=${guest.id}&type=invited`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred');
       setIsLoading(false);
@@ -415,7 +416,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
           {/* Action Buttons */}
           <div className="space-y-3 mt-6">
             <button
-              onClick={() => setScreenState('confirmation')}
+              onClick={() => setScreenState('registration')}
               disabled={isLoading}
               className={`w-full py-4 px-6 rounded-lg font-bold text-sm uppercase tracking-wider transition-all ${t.buttonPrimary}`}
               data-testid="confirm-attendance-button"
@@ -519,12 +520,6 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
               <div className="flex justify-between">
                 <span className={t.textMuted}>Email:</span>
                 <span className={`${t.text} font-medium`}>{guest.email}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className={t.textMuted}>Status:</span>
-                <span className={`px-3 py-1 rounded-full text-xs font-bold ${t.goldBg} text-[#0c0d0e]`}>
-                  VIP Guest
-                </span>
               </div>
             </div>
           </div>
@@ -650,15 +645,12 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
                 <select
                   value={formData.partnerTitle}
                   onChange={(e) => setFormData((prev) => ({ ...prev, partnerTitle: e.target.value }))}
-                  className={`w-full px-4 py-3 rounded-lg border ${t.inputBg} ${errors.partner_title ? 'border-red-500' : ''}`}
+                  className={`w-full px-4 py-3 rounded-lg border bg-white text-gray-900 ${errors.partner_title ? 'border-red-500' : 'border-[#d1aa67]/30'}`}
                 >
                   <option value="">-- Please select --</option>
-                  <option value="Mr.">Mr.</option>
-                  <option value="Ms.">Ms.</option>
-                  <option value="Mrs.">Mrs.</option>
-                  <option value="Dr.">Dr.</option>
-                  <option value="Prof.">Prof.</option>
-                  <option value="Prof. Dr.">Prof. Dr.</option>
+                  {titleOptions.filter(t => t !== '').map((option) => (
+                    <option key={option} value={option}>{option}</option>
+                  ))}
                 </select>
                 {errors.partner_title && (
                   <p className="text-red-400 text-sm mt-1">{errors.partner_title}</p>
@@ -828,7 +820,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
         {/* Action Buttons */}
         <div className="flex gap-3">
           <button
-            onClick={() => setScreenState('confirmation')}
+            onClick={() => setScreenState('invitation')}
             disabled={isLoading}
             className={`flex-1 py-3 px-6 rounded-lg font-medium text-sm uppercase tracking-wider transition-all ${t.buttonSecondary}`}
           >
@@ -853,16 +845,16 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
         </div>
 
         {/* Help Links */}
-        <div className={`mt-6 text-xs ${t.textMuted} text-center space-y-1`}>
+        <div className={`mt-6 text-[10px] ${t.textMuted} text-center space-y-1`}>
           <p>
             Questions?{' '}
             <a href="https://bbj.hu/events/ceogala/#faq" target="_blank" rel="noopener noreferrer" className="text-[#d1aa67] hover:underline">
-              View Registration Guide
+              Find answers in our FAQs
             </a>
           </p>
           <p>
             Need more help:{' '}
-            <a href="mailto:event@bbj.hu" className="text-[#d1aa67] hover:underline">
+            <a href="mailto:event@bbj.hu?subject=Inquiry%20regarding%20CEO%20Gala%202026" className="text-[#d1aa67] hover:underline">
               event@bbj.hu
             </a>
           </p>

@@ -182,7 +182,7 @@ export default function RegisterError({
         </div>
 
         {/* Footer */}
-        <div className="text-center text-xs text-white/70 mt-6 font-sans space-y-1">
+        <div className="text-center text-[10px] text-white/70 mt-6 font-sans space-y-1">
           <p>
             Questions?{' '}
             <a
@@ -191,12 +191,12 @@ export default function RegisterError({
               rel="noopener noreferrer"
               className="text-accent-teal hover:text-accent-teal-light"
             >
-              View Registration Guide
+              Find answers in our FAQs
             </a>
           </p>
           <p>
             Need more help:{' '}
-            <a href="mailto:event@bbj.hu" className="text-accent-teal hover:text-accent-teal-light">
+            <a href="mailto:event@bbj.hu?subject=Inquiry%20regarding%20CEO%20Gala%202026" className="text-accent-teal hover:text-accent-teal-light">
               event@bbj.hu
             </a>
           </p>

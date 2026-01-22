@@ -76,7 +76,7 @@ export const DEFAULT_TEMPLATES = {
 
       <p>This personal invitation is dedicated to the addressee and is not transferable. Due to the event's popularity and the limited seating, early registration is strongly recommended to ensure participation. When you register, please let us know if you have any special dietary requirements. We will send you a feedback email after successful registration. Please kindly note that your registration will only be finalised after having the official confirmation received.</p>
 
-      <p>We remind you that any cancellations or changes to your registration must be made at least ten business days before the gala. Cancellations should be sent to <a href="mailto:event@bbj.hu" style="color: #333333;">event@bbj.hu</a>.</p>
+      <p>We remind you that any cancellations or changes to your registration must be made at least ten business days before the gala. Cancellations should be sent to <a href="mailto:event@bbj.hu?subject=Inquiry%20regarding%20CEO%20Gala%202026" style="color: #333333;">event@bbj.hu</a>.</p>
 
       <p>Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of <strong>HUF 99,000 + VAT</strong> per person.</p>
 
@@ -108,7 +108,7 @@ export const DEFAULT_TEMPLATES = {
         <p><a href="https://bbj.hu" style="color: #333333; text-decoration: underline;">Business Publishing Services Kft.</a></p>
         <p>For more details about the event and the award, <a href="https://www.ceogala.com">including previous winners</a>,<br>visit our website at <a href="https://www.ceogala.com">www.ceogala.com</a>.</p>
         <p style="margin-top: 12px; font-size: 11px;">© Copyright, 2024-26<br>1075 Budapest, Madách I. út 13-14, Hungary</p>
-        <p style="font-size: 11px;">This email has been sent to you, because you are a customer or subscriber of<br>BUSINESS PUBLISHING SERVICES KFT.<br><a href="https://www.ceogala.com">www.ceogala.com</a> - <a href="mailto:event@bbj.hu">event@bbj.hu</a></p>
+        <p style="font-size: 11px;">This email has been sent to you, because you are a customer or subscriber of<br>BUSINESS PUBLISHING SERVICES KFT.<br><a href="https://www.ceogala.com">www.ceogala.com</a> - <a href="mailto:event@bbj.hu?subject=Inquiry%20regarding%20CEO%20Gala%202026">event@bbj.hu</a></p>
       </div>
     </div>
   </div>
@@ -258,7 +258,7 @@ CEO Gála Organizing Team`,
 
       <p>Please note that only those on the invitation list can register for the event. Although we would be happy to invite many more guests, unfortunately, due to the limited number of seats, <span class="highlight">we are unable to accommodate you</span> at the Gala this time.</p>
 
-      <p>If you believe that, despite our best efforts, a mistake has been made, please contact our staff at <a href="mailto:event@bbj.hu" style="color: #333333;">event@bbj.hu</a>.</p>
+      <p>If you believe that, despite our best efforts, a mistake has been made, please contact our staff at <a href="mailto:event@bbj.hu?subject=Inquiry%20regarding%20CEO%20Gala%202026" style="color: #333333;">event@bbj.hu</a>.</p>
 
       <p>We appreciate your understanding.</p>
 
@@ -865,10 +865,10 @@ CEO Gála Organizing Team`,
       <p>The event will take place on <span class="highlight">Friday, March 27, 2026</span>; be sure to mark your calendar!</p>
 
       {{#if hasPartner}}
-      <p>Attached below are your and your partner's personal QR codes, which will grant you access to the gala. Kindly <span class="highlight">download our CEO Gala 2026 application</span> on your mobile device to find your personal QR code and more, or bring a printed copy to the event to ensure smooth entry. Please note that this <span class="highlight">personal invitation</span> is dedicated to the addressee and is <span class="highlight">not transferable</span>.</p>
+      <p>Attached below are your and your partner's personal QR codes, which will grant you access to the gala. Please bring a printed copy to the event to ensure smooth entry. Please note that this <span class="highlight">personal invitation</span> is dedicated to the addressee and is <span class="highlight">not transferable</span>.</p>
       {{/if}}
       {{#if hasPartner}}{{else}}
-      <p>Attached below is your personal QR code, which will grant you access to the gala. Kindly <span class="highlight">download our CEO Gala 2026 application</span> on your mobile device to find your personal QR code and more, or bring a printed copy to the event to ensure smooth entry. Please note that this <span class="highlight">personal invitation</span> is dedicated to the addressee and is <span class="highlight">not transferable</span>.</p>
+      <p>Attached below is your personal QR code, which will grant you access to the gala. Please bring a printed copy to the event to ensure smooth entry. Please note that this <span class="highlight">personal invitation</span> is dedicated to the addressee and is <span class="highlight">not transferable</span>.</p>
       {{/if}}
 
       <div class="details-section">
@@ -883,8 +883,8 @@ CEO Gála Organizing Team`,
       </div>
 
       <div class="notice">
-        <p>We kindly remind you that any <span class="highlight">cancellations</span> or changes to your registration must be made at least <span class="highlight">10 business days</span> prior to the gala. Cancellations should be sent to <a href="mailto:event@bbj.hu">event@bbj.hu</a>.</p>
-        <p style="margin-top: 10px;">Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a <span class="highlight">no-show fee</span> of HUF 99,000 per person.</p>
+        <p>We kindly remind you that any <span class="highlight">cancellations</span> or changes to your registration must be made at least <span class="highlight">10 business days</span> prior to the gala. Cancellations should be sent to <a href="mailto:event@bbj.hu?subject=Inquiry%20regarding%20CEO%20Gala%202026">event@bbj.hu</a>.</p>
+        <p style="margin-top: 10px;">Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a <span class="highlight">no-show fee</span> of HUF 99,000 + VAT per person.</p>
       </div>
 
       <p>We look forward to meeting you at the gala and celebrating this outstanding CEO Community with you.</p>
@@ -933,7 +933,7 @@ The event will take place on Friday, March 27, 2026; be sure to mark your calend
 {{#if hasPartner}}Attached below are your and your partner's personal QR codes, which will grant you access to the gala.{{/if}}
 {{#if hasPartner}}{{else}}Attached below is your personal QR code, which will grant you access to the gala.{{/if}}
 
-Kindly download our CEO Gala 2026 application on your mobile device to find your personal QR code and more, or bring a printed copy to the event to ensure smooth entry.
+Please bring a printed copy to the event to ensure smooth entry.
 
 Please note that this personal invitation is dedicated to the addressee and is not transferable.
 
@@ -949,7 +949,7 @@ Black tie for men, ballgown or cocktail dress for women
 
 We kindly remind you that any cancellations or changes to your registration must be made at least 10 business days prior to the gala. Cancellations should be sent to event@bbj.hu.
 
-Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 per person.
+Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 + VAT per person.
 
 We look forward to meeting you at the gala and celebrating this outstanding CEO Community with you.
 
@@ -1016,7 +1016,7 @@ Event website: ceogala.com`,
 
       <p>The event will take place on <span class="highlight">Friday, March 27, 2026</span>; be sure to mark your calendar!</p>
 
-      <p>Attached below are your and your partner's personal QR codes, which will grant you access to the gala. Kindly <span class="highlight">download our CEO Gala 2026 application</span> on your mobile device to find your personal QR code and more, or bring a printed copy to the event to ensure smooth entry. Please note that this <span class="highlight">personal invitation</span> is dedicated to the addressee and is <span class="highlight">not transferable</span>.</p>
+      <p>Attached below are your and your partner's personal QR codes, which will grant you access to the gala. Please bring a printed copy to the event to ensure smooth entry. Please note that this <span class="highlight">personal invitation</span> is dedicated to the addressee and is <span class="highlight">not transferable</span>.</p>
 
       <div class="details-section">
         <p class="label">Date:</p>
@@ -1031,7 +1031,7 @@ Event website: ceogala.com`,
 
       <div class="notice">
         <p>Should you be unable to attend, we kindly ask that any changes be communicated via <span class="highlight">{{mainGuestTitle}} {{mainGuestName}}</span>. We kindly remind you that any <span class="highlight">cancellations</span> or changes to your registration must be made at least <span class="highlight">10 business days</span> prior to the gala.</p>
-        <p style="margin-top: 10px;">Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a <span class="highlight">no-show fee</span> of HUF 99,000 per person.</p>
+        <p style="margin-top: 10px;">Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a <span class="highlight">no-show fee</span> of HUF 99,000 + VAT per person.</p>
       </div>
 
       <p>We look forward to meeting you at the gala and celebrating this outstanding CEO Community with you.</p>
@@ -1074,7 +1074,7 @@ Your attendance has been registered by {{mainGuestTitle}} {{mainGuestName}}, and
 
 The event will take place on Friday, March 27, 2026; be sure to mark your calendar!
 
-Attached below are your and your partner's personal QR codes, which will grant you access to the gala. Kindly download our CEO Gala 2026 application on your mobile device to find your personal QR code and more, or bring a printed copy to the event to ensure smooth entry.
+Attached below are your and your partner's personal QR codes, which will grant you access to the gala. Please bring a printed copy to the event to ensure smooth entry.
 
 Please note that this personal invitation is dedicated to the addressee and is not transferable.
 
@@ -1090,7 +1090,7 @@ Black tie for men, ballgown or cocktail dress for women
 
 Should you be unable to attend, we kindly ask that any changes be communicated via {{mainGuestTitle}} {{mainGuestName}}. We kindly remind you that any cancellations or changes to your registration must be made at least 10 business days prior to the gala.
 
-Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 per person.
+Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 + VAT per person.
 
 We look forward to meeting you at the gala and celebrating this outstanding CEO Community with you.
 
@@ -1285,7 +1285,7 @@ CEO Gála Organizing Team`,
       </div>
 
       <div class="notice">
-        <p>Should you notice any inaccuracies in the information above, please contact us at <a href="mailto:event@bbj.hu">event@bbj.hu</a>.</p>
+        <p>Should you notice any inaccuracies in the information above, please contact us at <a href="mailto:event@bbj.hu?subject=Inquiry%20regarding%20CEO%20Gala%202026">event@bbj.hu</a>.</p>
       </div>
 
       <p><span class="highlight">Thank you for your registration! Please kindly await our official confirmation letter, which will be sent to you shortly.</span></p>
@@ -1425,7 +1425,7 @@ Event website: ceogala.com`,
       </div>
 
       <div class="notice">
-        <p>Should you notice any inaccuracies in the information above, or if you have any questions regarding the declarations listed, please contact us at <a href="mailto:event@bbj.hu">event@bbj.hu</a>.</p>
+        <p>Should you notice any inaccuracies in the information above, or if you have any questions regarding the declarations listed, please contact us at <a href="mailto:event@bbj.hu?subject=Inquiry%20regarding%20CEO%20Gala%202026">event@bbj.hu</a>.</p>
         <p>Please note that attendance-related administration, including cancellations, is handled through the guest who completed the registration on your behalf.</p>
       </div>
 
@@ -1556,7 +1556,7 @@ Event website: ceogala.com`,
         <p>1075 Budapest, Madách 11-13 14. Hungary</p>
         <p>This email has been sent to you, because you are a customer or subscriber of</p>
         <p>BUSINESS PUBLISHING SERVICES KFT.</p>
-        <p><a href="https://ceogala.com">www.ceogala.com</a> - <a href="mailto:event@bbj.hu">event@bbj.hu</a></p>
+        <p><a href="https://ceogala.com">www.ceogala.com</a> - <a href="mailto:event@bbj.hu?subject=Inquiry%20regarding%20CEO%20Gala%202026">event@bbj.hu</a></p>
         <p class="small-note"><a href="{{baseUrl}}/unsubscribe">Unsubscribe</a> | <a href="{{baseUrl}}/privacy">Manage my subscription</a></p>
       </div>
 

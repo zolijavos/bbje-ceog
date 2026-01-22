@@ -46,8 +46,8 @@ export default async function PaidPage({ searchParams }: PaidPageProps) {
 
   // Not a paying guest - redirect to appropriate page
   if (guest.guest_type !== 'paying_single' && guest.guest_type !== 'paying_paired') {
-    // Redirect to VIP registration if VIP guest
-    if (guest.guest_type === 'vip') {
+    // Redirect to VIP registration if invited guest
+    if (guest.guest_type === 'invited') {
       redirect(`/register/vip?guest_id=${guestId}`);
     }
     redirect('/register?error=invalid_guest_type');

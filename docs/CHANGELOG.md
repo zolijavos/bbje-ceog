@@ -4,6 +4,90 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
 
 ---
 
+## v2.17.0 (2026-01-22)
+
+### New Features / Új funkciók
+
+- **Cancel All Pending Scheduled Emails** / **Összes Függőben Lévő Ütemezett Email Törlése**
+  - EN: New "Cancel All (X)" button in Scheduled Emails dashboard to bulk cancel all pending emails with one click.
+  - HU: Új "Cancel All (X)" gomb az Ütemezett Emailek dashboardban az összes függőben lévő email egyszerre való törléséhez.
+
+- **Individual Email Selection for Cancel** / **Egyedi Email Kiválasztás Törléshez**
+  - EN: Checkboxes added to scheduled emails table for selecting individual emails. "Cancel Selected (X)" button appears when emails are selected. Select all checkbox in header for convenience.
+  - HU: Checkboxok hozzáadva az ütemezett emailek táblázatához egyedi emailek kiválasztásához. "Cancel Selected (X)" gomb jelenik meg, ha emailek vannak kiválasztva. "Mindet kiválaszt" checkbox a fejlécben a kényelem érdekében.
+
+### Fixes / Hibajavítások
+
+- **baseUrl Fix in Bulk/Scheduled Emails** / **baseUrl Javítás Tömeges/Ütemezett Emailekben**
+  - EN: Fixed image rendering in bulk and scheduled emails. Images (logos, QR codes) now display correctly with proper baseUrl configuration.
+  - HU: Javítva a képek megjelenítése tömeges és ütemezett emailekben. Képek (logók, QR kódok) most helyesen jelennek meg a megfelelő baseUrl konfigurációval.
+
+- **mailto Subject Added** / **mailto Tárgy Hozzáadva**
+  - EN: Email links to event@bbj.hu now include pre-filled subject line "Inquiry regarding CEO Gala 2026" for better support tracking.
+  - HU: Az event@bbj.hu email linkek mostantól előre kitöltött tárgysorral rendelkeznek "Inquiry regarding CEO Gala 2026" a jobb támogatás követésért.
+
+- **Checkbox Visibility Fix** / **Checkbox Láthatóság Javítás**
+  - EN: Fixed checkbox column disappearing when filter changed from "Pending" to "All Statuses". Checkboxes now visible regardless of filter setting.
+  - HU: Javítva a checkbox oszlop eltűnése, amikor a szűrő "Pending"-ről "All Statuses"-ra változott. Checkboxok most láthatóak a szűrő beállítástól függetlenül.
+
+- **🚨 CRITICAL: Magic Link URL in Bulk Emails** / **🚨 KRITIKUS: Magic Link URL Tömeges Emailekben**
+  - EN: Fixed REGISTRATION button not working in bulk/scheduled invitation emails. The `magicLinkUrl` was not being generated. Now the scheduler automatically generates proper registration URLs with hash and email parameters.
+  - HU: Javítva a REGISTRATION gomb nem működött a tömeges/ütemezett meghívó emailekben. A `magicLinkUrl` nem lett generálva. Az ütemező most automatikusan generál megfelelő regisztrációs URL-eket hash és email paraméterekkel.
+
+---
+
+## v2.16.0 (2026-01-22)
+
+### New Features / Új funkciók
+
+- **Simplified VIP Registration Flow** / **Egyszerűsített VIP Regisztrációs Folyamat**
+  - EN: Removed unnecessary intermediate "Thank You for Your Response" screen from VIP registration. Users now go directly from invitation to registration form.
+  - HU: Eltávolítottuk a felesleges "Thank You for Your Response" közbülső képernyőt a VIP regisztrációból. A felhasználók most közvetlenül a meghívóról a regisztrációs űrlapra kerülnek.
+
+- **Streamlined Magic Link Flow** / **Egyszerűsített Magic Link Folyamat**
+  - EN: Magic link now redirects directly to the appropriate registration form (VIP or Paid) without intermediate welcome page.
+  - HU: A magic link most közvetlenül a megfelelő regisztrációs űrlapra irányít (VIP vagy fizetős) közbülső üdvözlő oldal nélkül.
+
+### Improvements / Javítások
+
+- **Shortened GDPR Consent Text** / **Rövidített GDPR Hozzájárulás Szöveg**
+  - EN: GDPR consent text simplified to a brief statement with link to Privacy Policy. Easier to read and understand.
+  - HU: GDPR hozzájárulás szöveg egyszerűsítve rövid nyilatkozatra a Privacy Policy linkjével. Könnyebben olvasható és érthető.
+
+- **Updated Footer Links** / **Frissített Footer Linkek**
+  - EN: Changed "View Registration Guide" to "Find answers in our FAQs" across all guest-facing pages.
+  - HU: "View Registration Guide" szöveg cserélve "Find answers in our FAQs"-ra minden vendégoldal footerében.
+
+- **Smaller Footer Text** / **Kisebb Footer Szöveg**
+  - EN: Footer text size reduced from 12px to 10px for better visual hierarchy.
+  - HU: Footer szövegméret csökkentve 12px-ről 10px-re a jobb vizuális hierarchia érdekében.
+
+- **Removed VIP Status Display** / **VIP Státusz Megjelenítés Eltávolítva**
+  - EN: Removed "VIP guest status" indicator from guest pages. "Attendance confirmed" status remains visible.
+  - HU: "VIP vendég státusz" jelző eltávolítva a vendég oldalakról. "Részvétel megerősítve" státusz továbbra is látható.
+
+### Email Templates / Email Sablonok
+
+- **Feedback Email** / **Visszajelzés Email**
+  - EN: Updated feedback email template with improved formatting.
+  - HU: Frissített visszajelzés email sablon javított formázással.
+
+- **Confirmation Email** / **Visszaigazolás Email**
+  - EN: Updated confirmation email template with improved formatting.
+  - HU: Frissített visszaigazolás email sablon javított formázással.
+
+### Fixes / Hibajavítások
+
+- **Favicon Corrected** / **Favicon Javítva**
+  - EN: Fixed favicon to display correct BBJ icon in browser tab.
+  - HU: Favicon javítva, a helyes BBJ ikon jelenik meg a böngésző fülön.
+
+- **Page Title Standardized** / **Oldal Cím Egységesítve**
+  - EN: Standardized page title to "CEO Gala 2026" across all pages (removed accent and "- Event Platform" suffix).
+  - HU: Oldal cím egységesítve "CEO Gala 2026"-ra minden oldalon (ékezet és "- Event Platform" utótag eltávolítva).
+
+---
+
 ## v2.15.0 (2026-01-21)
 
 ### Breaking Changes / Törő Változások

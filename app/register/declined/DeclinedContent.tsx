@@ -151,16 +151,16 @@ export default function DeclinedContent({ guest }: DeclinedContentProps) {
         </div>
 
         {/* Help Links */}
-        <div className={`mt-6 text-xs ${t.textMuted} text-center space-y-1`}>
+        <div className={`mt-6 text-[10px] ${t.textMuted} text-center space-y-1`}>
           <p>
             Questions?{' '}
             <a href="https://bbj.hu/events/ceogala/#faq" target="_blank" rel="noopener noreferrer" className="text-[#d1aa67] hover:underline">
-              View Registration Guide
+              Find answers in our FAQs
             </a>
           </p>
           <p>
             Need more help:{' '}
-            <a href="mailto:event@bbj.hu" className="text-[#d1aa67] hover:underline">
+            <a href="mailto:event@bbj.hu?subject=Inquiry%20regarding%20CEO%20Gala%202026" className="text-[#d1aa67] hover:underline">
               event@bbj.hu
             </a>
           </p>
