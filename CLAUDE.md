@@ -9,7 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **Current Status**: ✅ **PRODUCTION READY** - All 7 epics completed (38/38 stories done). See [docs/sprint-artifacts/sprint-status.yaml](docs/sprint-artifacts/sprint-status.yaml) for full status tracking. Original functional requirements documented in [docs/FUNKCIONALIS-KOVETELMENY.md](docs/FUNKCIONALIS-KOVETELMENY.md) (Hungarian).
 
 **Multi-Role System**:
-- VIP & paying guests (magic link authentication, registration flows)
+- Invited & paying guests (magic link authentication, registration flows)
 - Administrators (guest management, seating arrangements, reports)
 - Check-in staff (mobile QR scanner for event entry)
 
@@ -90,7 +90,7 @@ app/                        # Next.js App Router
 │   ├── ticket/           # QR ticket display
 │   └── table/            # Table info
 ├── register/             # Magic link registration
-│   ├── vip/              # VIP flow
+│   ├── vip/              # Invited guest flow (free ticket)
 │   └── paid/             # Paid flow with billing
 ├── payment/              # Payment pages
 │   ├── success/          # Stripe success redirect
@@ -142,7 +142,7 @@ tests/
 - **RateLimitEntry** - Rate limiting (key UNIQUE, attempts, expires_at)
 
 ### Enums
-- GuestType: `vip`, `paying_single`, `paying_paired`, `applicant`
+- GuestType: `invited`, `paying_single`, `paying_paired`, `applicant`
 - RegistrationStatus: `invited`, `registered`, `approved`, `declined`, `pending_approval`, `rejected`
 - TicketType: `vip_free`, `paid_single`, `paid_paired`
 - PaymentMethod: `card`, `bank_transfer`
@@ -164,7 +164,7 @@ npm run dev                                  # Start Next.js dev server (localho
 
 # Database Management
 npx prisma studio                           # Open database GUI browser
-npx prisma db seed                          # Seed database with test data
+node scripts/seed-production.js             # Seed database with test data (production-ready JS)
 npx prisma migrate reset                    # Reset database (dev only)
 
 # Testing
@@ -284,7 +284,7 @@ NEXTAUTH_SECRET=generate_random_32_char_string
 ### Epic 1: Core Registration ✅
 - CSV guest list import with validation
 - Magic link email sending (Nodemailer + SMTP)
-- VIP registration flow (free, immediate ticket)
+- Invited registration flow (free, immediate ticket)
 - Paid registration flow with billing form
 - Admin dashboard with filtering & pagination
 
@@ -313,7 +313,7 @@ NEXTAUTH_SECRET=generate_random_32_char_string
 - Extended guest profile (title, phone, company, position)
 - Dietary requirements & seating preferences
 - Zod validation schemas
-- VIP & paying registration profile forms
+- Invited & paying registration profile forms
 
 ### Epic 6: PWA Guest App ✅
 - Progressive Web App (manifest.json, service worker)
@@ -332,7 +332,7 @@ NEXTAUTH_SECRET=generate_random_32_char_string
 
 ## Guest Registration Flows
 
-### VIP Flow (Free)
+### Invited Flow (Free)
 1. Click magic link → auto-authenticate
 2. Confirm attendance (Yes/No)
 3. Immediate QR ticket generation and email delivery
@@ -508,6 +508,47 @@ Ez biztosítja, hogy a static fájlok mindig elérhetők legyenek build után.
 ```
 Admin: admin@ceogala.test / Admin123!
 Staff: staff@ceogala.test / Staff123!
+```
+
+### Database Seed Script
+
+**Location:** `scripts/seed-production.js` (JavaScript, no ts-node required)
+
+**Run:** `node scripts/seed-production.js`
+
+**Test Data Created (~22 guests covering all cases):**
+
+| Category | Count | Description |
+|----------|-------|-------------|
+| Users | 2 | Admin + Staff accounts |
+| Tables | 5 | 2 VIP + 3 Standard tables |
+| Invited Guests | 3 | invited/registered/approved statuses |
+| Paying Single | 2 | paid (card) + pending (bank transfer) |
+| Paying Paired | 5 pairs | Various payment methods & statuses |
+| Unassigned | 6 | 5 single + 1 paired for DnD testing |
+| Applicants | 2 | pending_approval + rejected |
+
+**Test Email Addresses:**
+```
+# Invited (free)
+vip1@ceogala.test - Kovács János (invited)
+vip2@ceogala.test - Nagy Éva (registered)
+vip3@ceogala.test - Szabó Péter (approved, seated)
+
+# Paying Single
+paying1@ceogala.test - Kiss Anna (paid, card)
+paying2@ceogala.test - Tóth Gábor (pending, bank_transfer)
+
+# Paying Paired (with partners)
+paired1@ceogala.test - Molnár László + Réka (paid, bank_transfer)
+paired2@ceogala.test - Horváth Attila + Krisztina (paid, card)
+paired3@ceogala.test - Szilágyi Márton + Nóra (pending, card)
+paired4@ceogala.test - Bíró Tamás + Eszter (paid, bank_transfer)
+paired5@ceogala.test - Vincze Gergő + Lilla (pending, bank_transfer)
+
+# Unassigned (for seating DnD testing)
+unassigned1-5@ceogala.test - 5 single guests
+paired-unassigned@ceogala.test - Papp Zoltán + Judit (paired)
 ```
 
 ### Server Paths
