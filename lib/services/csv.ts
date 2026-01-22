@@ -16,12 +16,13 @@ import { GuestType, RegistrationStatus } from '@prisma/client';
 
 export interface CSVRow {
   email: string;
+  title?: string;
   first_name: string;
   last_name: string;
   guest_type: string;
-  phone: string;
-  company: string;
-  position: string;
+  phone?: string | null;
+  company?: string | null;
+  position?: string | null;
   status?: string;
 }
 
@@ -55,6 +56,10 @@ const csvRowSchema = z.object({
     .string()
     .email('Invalid email format')
     .transform((val) => val.toLowerCase().trim()),
+  title: z
+    .string()
+    .optional()
+    .transform((val) => val?.trim() || null),
   first_name: z
     .string()
     .min(1, 'First name is required')
@@ -70,16 +75,16 @@ const csvRowSchema = z.object({
   }),
   phone: z
     .string()
-    .min(1, 'Phone is required')
-    .transform((val) => val.trim()),
+    .optional()
+    .transform((val) => val?.trim() || null),
   company: z
     .string()
-    .min(1, 'Company is required')
-    .transform((val) => val.trim()),
+    .optional()
+    .transform((val) => val?.trim() || null),
   position: z
     .string()
-    .min(1, 'Position is required')
-    .transform((val) => val.trim()),
+    .optional()
+    .transform((val) => val?.trim() || null),
   status: z
     .enum(statusValues, {
       errorMap: () => ({
@@ -131,6 +136,7 @@ export function parseCSV(content: string): ParseResult {
     // Map CSV columns (support various column name formats)
     const mappedRow: CSVRow = {
       email: row.email || row['e-mail'] || '',
+      title: row.title || row['megszólítás'] || '',
       first_name: row.first_name || row['first name'] || row['firstname'] || row['keresztnév'] || '',
       last_name: row.last_name || row['last name'] || row['lastname'] || row['vezetéknév'] || '',
       guest_type:
@@ -140,7 +146,7 @@ export function parseCSV(content: string): ParseResult {
         '',
       phone: row.phone || row['telephone'] || row['tel'] || '',
       company: row.company || row['organization'] || row['cég'] || '',
-      position: row.position || row['beosztás'] || row['title'] || '',
+      position: row.position || row['beosztás'] || '',
       status: row.status || row['státusz'] || row['állapot'] || undefined,
     };
 
@@ -355,13 +361,14 @@ export async function bulkInsertGuests(rows: CSVRow[]): Promise<number> {
   const result = await prisma.guest.createMany({
     data: rows.map((row) => ({
       email: row.email.toLowerCase().trim(),
+      title: row.title || null,
       first_name: row.first_name.trim(),
       last_name: row.last_name.trim(),
       guest_type: row.guest_type as GuestType,
       registration_status: (row.status || 'invited') as RegistrationStatus,
-      phone: row.phone,
-      company: row.company,
-      position: row.position,
+      phone: row.phone || null,
+      company: row.company || null,
+      position: row.position || null,
     })),
     skipDuplicates: false, // We want to catch duplicates explicitly
   });

@@ -709,7 +709,8 @@ export default function PaidRegistrationForm({
                   data-testid="partner-title-select"
                 >
                   <option value="">-- Please select --</option>
-                  <option value="H.E.">H.E.</option>
+                  <option value="H.E. Mr.">H.E. Mr.</option>
+                  <option value="H.E. Ms.">H.E. Ms.</option>
                   <option value="Mr.">Mr.</option>
                   <option value="Ms.">Ms.</option>
                   <option value="Mrs.">Mrs.</option>

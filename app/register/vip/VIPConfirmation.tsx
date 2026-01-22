@@ -647,7 +647,8 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
                   className={`w-full px-4 py-3 rounded-lg border bg-white text-gray-900 ${errors.partner_title ? 'border-red-500' : 'border-[#d1aa67]/30'}`}
                 >
                   <option value="">-- Please select --</option>
-                  <option value="H.E.">H.E.</option>
+                  <option value="H.E. Mr.">H.E. Mr.</option>
+                  <option value="H.E. Ms.">H.E. Ms.</option>
                   <option value="Mr.">Mr.</option>
                   <option value="Ms.">Ms.</option>
                   <option value="Mrs.">Mrs.</option>
