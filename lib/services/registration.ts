@@ -199,9 +199,9 @@ export interface VIPRegistrationInput {
 }
 
 /**
- * Process VIP guest registration
+ * Process invited guest registration
  *
- * For VIP guests (guest_type = 'vip'):
+ * For invited guests (guest_type = 'invited'):
  * - confirm: Update status to 'registered', create registration with ticket_type='vip_free'
  * - decline: Update status to 'declined', no registration record
  *
@@ -213,7 +213,7 @@ export async function processVIPRegistration(
 ): Promise<VIPRegistrationResult> {
   const { guest_id: guestId, attendance } = data;
   try {
-    // 1. Get guest and verify they are VIP
+    // 1. Get guest and verify they are invited
     const guest = await prisma.guest.findUnique({
       where: { id: guestId },
       include: { registration: true },
@@ -226,8 +226,8 @@ export async function processVIPRegistration(
       };
     }
 
-    // Both 'vip' and 'invited' are free ticket guests
-    if (guest.guest_type !== 'vip' && guest.guest_type !== 'invited') {
+    // Invited guests get free tickets
+    if (guest.guest_type !== 'invited') {
       return {
         success: false,
         error: 'This page is only accessible to invited guests',
@@ -291,6 +291,7 @@ export async function processVIPRegistration(
           cancellation_accepted: data.cancellation_accepted ?? false,
           cancellation_accepted_at: data.cancellation_accepted ? new Date() : null,
           // Store partner info in registration (for reference)
+          partner_title: data.has_partner ? data.partner_title : null,
           partner_first_name: data.has_partner ? data.partner_first_name : null,
           partner_last_name: data.has_partner ? data.partner_last_name : null,
           partner_email: data.has_partner ? data.partner_email : null,
@@ -549,6 +550,7 @@ export interface PaidRegistrationData {
   guest_id: number;
   ticket_type: 'paid_single' | 'paid_paired';
   billing_info: BillingInfoData;
+  partner_title?: string | null;
   partner_first_name?: string | null;
   partner_last_name?: string | null;
   partner_email?: string | null;
@@ -660,6 +662,7 @@ export async function processPaidRegistration(
         data: {
           guest_id: data.guest_id,
           ticket_type: data.ticket_type,
+          partner_title: data.partner_title || null,
           partner_first_name: data.partner_first_name || null,
           partner_last_name: data.partner_last_name || null,
           partner_email: data.partner_email || null,
@@ -822,11 +825,11 @@ export async function getGuestStatus(guestId: number): Promise<GuestStatusResult
     }
 
     // Determine ticket availability
-    // Both 'vip' and 'invited' are free ticket guests
-    const isVIP = guest.guest_type === 'vip' || guest.guest_type === 'invited';
+    // Invited guests get free tickets
+    const isInvited = guest.guest_type === 'invited';
     const isPaid = guest.registration?.payment?.payment_status === 'paid';
     const hasQRCode = !!guest.registration?.qr_code_hash;
-    const ticketAvailable = isVIP || (isPaid && hasQRCode);
+    const ticketAvailable = isInvited || (isPaid && hasQRCode);
 
     return {
       success: true,
@@ -851,9 +854,9 @@ export async function getGuestStatus(guestId: number): Promise<GuestStatusResult
             method: guest.registration.payment.payment_method,
             paidAt: guest.registration.payment.paid_at,
           }
-        : isVIP
+        : isInvited
         ? {
-            // VIP guests have implicit "paid" status
+            // Invited guests have implicit "paid" status (free ticket)
             status: 'paid' as PaymentStatus,
             method: null,
             paidAt: guest.registration?.registered_at || null,
