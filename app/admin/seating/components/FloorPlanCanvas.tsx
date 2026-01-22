@@ -587,7 +587,10 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
                   .filter(a => !a.guest.paired_with_id) // Only show main guests, not partners
                   .map((assignment) => {
                     const isPaired = assignment.guest.guest_type === 'paying_paired';
-                    const partnerName = assignment.guest.registration?.partner_name;
+                    const partnerName = assignment.guest.registration?.partner_first_name
+                      ? `${assignment.guest.registration.partner_first_name} ${assignment.guest.registration.partner_last_name || ''}`.trim()
+                      : null;
+                    const guestName = `${assignment.guest.first_name || ''} ${assignment.guest.last_name || ''}`.trim() || 'Unknown';
 
                     return (
                       <li key={assignment.id} className="flex items-start gap-2 text-sm">
@@ -597,7 +600,7 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
                           <User size={16} weight="duotone" className="text-blue-500 mt-0.5 flex-shrink-0" />
                         )}
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-neutral-800 truncate">{assignment.guest.name}</p>
+                          <p className="font-medium text-neutral-800 truncate">{guestName}</p>
                           {isPaired && partnerName && (
                             <p className="text-xs text-neutral-500 truncate">+ {partnerName}</p>
                           )}

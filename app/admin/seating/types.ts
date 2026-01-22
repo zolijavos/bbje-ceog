@@ -5,18 +5,21 @@
 
 export interface Guest {
   id: number;
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   guest_type: 'vip' | 'invited' | 'paying_single' | 'paying_paired';
   registration?: {
     ticket_type: string;
-    partner_name: string | null;
+    partner_first_name: string | null;
+    partner_last_name: string | null;
     partner_email?: string | null;
   } | null;
   // Partner relation - if this guest has a partner linked via paired_with_id
   partner_of?: {
     id: number;
-    name: string;
+    first_name: string;
+    last_name: string;
   } | null;
 }
 
@@ -25,17 +28,20 @@ export interface Assignment {
   seat_number: number | null;
   guest: {
     id: number;
-    name: string;
+    first_name: string;
+    last_name: string;
     email: string;
     guest_type: string;
     paired_with_id?: number | null; // If set, this guest is a partner (not main guest)
     registration?: {
       ticket_type: string;
-      partner_name: string | null;
+      partner_first_name: string | null;
+      partner_last_name: string | null;
     } | null;
     partner_of?: {
       id: number;
-      name: string;
+      first_name: string;
+      last_name: string;
     } | null;
   };
 }
@@ -103,6 +109,13 @@ export function extractTableId(containerId: string): number {
   return parseInt(containerId.replace('table-', ''), 10);
 }
 
+// Helper to combine first and last name
+function formatFullName(firstName: string | null | undefined, lastName: string | null | undefined): string {
+  const first = firstName || '';
+  const last = lastName || '';
+  return `${first} ${last}`.trim() || 'Unknown';
+}
+
 // Transform API guest to DraggableGuest
 export function toDraggableGuest(
   guest: Guest,
@@ -113,19 +126,23 @@ export function toDraggableGuest(
   // 1. paying_paired guest type
   // 2. paid_paired ticket type
   // 3. Has partner_of relation (VIP/invited with linked partner)
-  // 4. Has registration.partner_name (VIP registration with partner info)
+  // 4. Has registration.partner_first_name (VIP registration with partner info)
   const hasPartner = guest.guest_type === 'paying_paired' ||
     guest.registration?.ticket_type === 'paid_paired' ||
     !!guest.partner_of ||
-    !!guest.registration?.partner_name;
+    !!guest.registration?.partner_first_name;
 
   // Get partner name from registration or partner_of relation
-  const partnerName = guest.registration?.partner_name || guest.partner_of?.name;
+  const partnerName = guest.registration?.partner_first_name
+    ? formatFullName(guest.registration.partner_first_name, guest.registration.partner_last_name)
+    : guest.partner_of
+      ? formatFullName(guest.partner_of.first_name, guest.partner_of.last_name)
+      : null;
 
   return {
     id: createDraggableId(guest.id),
     guestId: guest.id,
-    name: guest.name,
+    name: formatFullName(guest.first_name, guest.last_name),
     email: guest.email,
     guestType: guest.guest_type,
     type: hasPartner ? 'paired' : 'single',
@@ -152,15 +169,19 @@ export function assignmentToDraggableGuest(
   const hasPartner = guest.guest_type === 'paying_paired' ||
     guest.registration?.ticket_type === 'paid_paired' ||
     !!guest.partner_of ||
-    !!guest.registration?.partner_name;
+    !!guest.registration?.partner_first_name;
 
-  // Get partner name from either registration.partner_name or partner_of relation
-  const partnerName = guest.registration?.partner_name || guest.partner_of?.name;
+  // Get partner name from either registration.partner_first_name or partner_of relation
+  const partnerName = guest.registration?.partner_first_name
+    ? formatFullName(guest.registration.partner_first_name, guest.registration.partner_last_name)
+    : guest.partner_of
+      ? formatFullName(guest.partner_of.first_name, guest.partner_of.last_name)
+      : null;
 
   return {
     id: createDraggableId(guest.id),
     guestId: guest.id,
-    name: guest.name,
+    name: formatFullName(guest.first_name, guest.last_name),
     email: guest.email,
     guestType: guest.guest_type as 'vip' | 'invited' | 'paying_single' | 'paying_paired',
     type: hasPartner ? 'paired' : 'single',

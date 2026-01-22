@@ -644,9 +644,10 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
                 <select
                   value={formData.partnerTitle}
                   onChange={(e) => setFormData((prev) => ({ ...prev, partnerTitle: e.target.value }))}
-                  className={`w-full px-4 py-3 rounded-lg border ${t.inputBg} ${errors.partner_title ? 'border-red-500' : ''}`}
+                  className={`w-full px-4 py-3 rounded-lg border bg-white text-gray-900 ${errors.partner_title ? 'border-red-500' : 'border-[#d1aa67]/30'}`}
                 >
                   <option value="">-- Please select --</option>
+                  <option value="H.E.">H.E.</option>
                   <option value="Mr.">Mr.</option>
                   <option value="Ms.">Ms.</option>
                   <option value="Mrs.">Mrs.</option>

@@ -72,6 +72,12 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
   const fullName = getFullName(guest.first_name, guest.last_name);
   const displayName = guest.title ? `${guest.title} ${fullName}` : fullName;
 
+  // Partner info
+  const hasPartner = guest.registration?.partner_first_name && guest.registration?.partner_last_name;
+  const partnerFullName = hasPartner
+    ? getFullName(guest.registration!.partner_first_name!, guest.registration!.partner_last_name!)
+    : null;
+
   return (
     <div className="min-h-screen bg-[#0c0d0e] flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-[#1a1a1f] rounded-2xl shadow-2xl p-8 text-center border border-[#d1aa67]/30">
@@ -115,6 +121,12 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
               <span className="text-white/60">Email:</span>
               <span className="text-white font-medium">{guest.email}</span>
             </div>
+            {hasPartner && (
+              <div className="flex justify-between pt-2 mt-2 border-t border-white/10">
+                <span className="text-white/60">Partner:</span>
+                <span className="text-white font-medium">{partnerFullName}</span>
+              </div>
+            )}
           </div>
         </div>
 

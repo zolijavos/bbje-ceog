@@ -703,12 +703,13 @@ export default function PaidRegistrationForm({
                 <select
                   value={formData.partnerTitle}
                   onChange={(e) => updateFormData('partnerTitle', e.target.value)}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#d1aa67] focus:border-[#d1aa67] ${
-                    errors.partnerTitle ? t.inputBgError : t.inputBg
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#d1aa67] focus:border-[#d1aa67] bg-white text-gray-900 ${
+                    errors.partnerTitle ? 'border-red-500' : 'border-[#d1aa67]/30'
                   }`}
                   data-testid="partner-title-select"
                 >
                   <option value="">-- Please select --</option>
+                  <option value="H.E.">H.E.</option>
                   <option value="Mr.">Mr.</option>
                   <option value="Ms.">Ms.</option>
                   <option value="Mrs.">Mrs.</option>
