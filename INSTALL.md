@@ -418,13 +418,70 @@ https://DOMAIN/admin/login
 
 ## Frissítés és karbantartás
 
-### Alkalmazás frissítése
+### Automatikus frissítés (ajánlott)
+
+A legegyszerűbb módszer az automatizált deploy szkript használata:
+
+```bash
+cd /var/www/ceog
+sudo bash deploy/deploy.sh [branch]
+```
+
+Például a `feature/first-last-name` branch telepítéséhez:
+
+```bash
+sudo bash deploy/deploy.sh feature/first-last-name
+```
+
+**Mit csinál a szkript automatikusan:**
+1. ✅ Pre-flight ellenőrzések (Node.js, PM2, fájlok)
+2. ✅ Adatbázis backup készítése
+3. ✅ Git pull a megadott branch-ről
+4. ✅ Függőségek telepítése
+5. ✅ Prisma client generálása
+6. ✅ Adatbázis migráció
+7. ✅ Production build
+8. ✅ PM2 újraindítás
+9. ✅ Health check ellenőrzés
+10. ✅ Régi backupok törlése (utolsó 5 megtartása)
+
+**Környezeti változók (opcionális):**
+```bash
+INSTALL_PATH=/var/www/ceog           # Telepítési útvonal
+PM2_APP_NAME=ceog                    # PM2 alkalmazás neve
+HEALTH_CHECK_URL=http://localhost:3000/api/health  # Health check URL
+```
+
+### Health Check Endpoint
+
+A `/api/health` endpoint segítségével ellenőrizheted az alkalmazás állapotát:
+
+```bash
+curl http://localhost:3000/api/health
+```
+
+Válasz:
+```json
+{
+  "status": "healthy",
+  "version": "0.1.0",
+  "timestamp": "2026-01-21T18:47:32.225Z",
+  "checks": {
+    "database": { "status": "ok", "latency": 16 },
+    "environment": { "status": "ok" }
+  }
+}
+```
+
+Státuszok: `healthy` | `degraded` | `unhealthy`
+
+### Manuális frissítés (legacy)
 
 ```bash
 sudo bash deploy/update.sh
 ```
 
-Vagy manuálisan:
+Vagy kézzel:
 
 ```bash
 cd /var/www/ceog
@@ -438,11 +495,14 @@ pm2 restart ceog
 
 ### Adatbázis backup
 
+Automatikus backup az `deploy/deploy.sh` futtatásakor.
+
+Manuális backup:
 ```bash
 sudo bash deploy/backup.sh
 ```
 
-A backupok itt találhatók: `/var/backups/ceog/`
+A backupok itt találhatók: `/var/www/backups/`
 
 ### Logok megtekintése
 
