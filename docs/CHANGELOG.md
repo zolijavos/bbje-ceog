@@ -4,6 +4,34 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
 
 ---
 
+## v2.17.0 (2026-01-22)
+
+### New Features / Új funkciók
+
+- **Cancel All Pending Scheduled Emails** / **Összes Függőben Lévő Ütemezett Email Törlése**
+  - EN: New "Cancel All (X)" button in Scheduled Emails dashboard to bulk cancel all pending emails with one click.
+  - HU: Új "Cancel All (X)" gomb az Ütemezett Emailek dashboardban az összes függőben lévő email egyszerre való törléséhez.
+
+- **Individual Email Selection for Cancel** / **Egyedi Email Kiválasztás Törléshez**
+  - EN: Checkboxes added to scheduled emails table for selecting individual emails. "Cancel Selected (X)" button appears when emails are selected. Select all checkbox in header for convenience.
+  - HU: Checkboxok hozzáadva az ütemezett emailek táblázatához egyedi emailek kiválasztásához. "Cancel Selected (X)" gomb jelenik meg, ha emailek vannak kiválasztva. "Mindet kiválaszt" checkbox a fejlécben a kényelem érdekében.
+
+### Fixes / Hibajavítások
+
+- **baseUrl Fix in Bulk/Scheduled Emails** / **baseUrl Javítás Tömeges/Ütemezett Emailekben**
+  - EN: Fixed image rendering in bulk and scheduled emails. Images (logos, QR codes) now display correctly with proper baseUrl configuration.
+  - HU: Javítva a képek megjelenítése tömeges és ütemezett emailekben. Képek (logók, QR kódok) most helyesen jelennek meg a megfelelő baseUrl konfigurációval.
+
+- **mailto Subject Added** / **mailto Tárgy Hozzáadva**
+  - EN: Email links to event@bbj.hu now include pre-filled subject line "Inquiry regarding CEO Gala 2026" for better support tracking.
+  - HU: Az event@bbj.hu email linkek mostantól előre kitöltött tárgysorral rendelkeznek "Inquiry regarding CEO Gala 2026" a jobb támogatás követésért.
+
+- **Checkbox Visibility Fix** / **Checkbox Láthatóság Javítás**
+  - EN: Fixed checkbox column disappearing when filter changed from "Pending" to "All Statuses". Checkboxes now visible regardless of filter setting.
+  - HU: Javítva a checkbox oszlop eltűnése, amikor a szűrő "Pending"-ről "All Statuses"-ra változott. Checkboxok most láthatóak a szűrő beállítástól függetlenül.
+
+---
+
 ## v2.16.0 (2026-01-22)
 
 ### New Features / Új funkciók

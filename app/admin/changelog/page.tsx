@@ -33,6 +33,52 @@ interface ChangelogEntry {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: '2.17.0',
+    date: '2026-01-22',
+    changes: [
+      {
+        type: 'feature',
+        category: 'email',
+        titleEn: 'Cancel All Pending Scheduled Emails',
+        titleHu: 'Összes Függőben Lévő Email Törlése',
+        descriptionEn: 'New "Cancel All (X)" button in Scheduled Emails dashboard to bulk cancel all pending emails with one click.',
+        descriptionHu: 'Új "Cancel All (X)" gomb az Ütemezett Emailek dashboardban az összes függőben lévő email törléséhez.',
+      },
+      {
+        type: 'feature',
+        category: 'email',
+        titleEn: 'Individual Email Selection for Cancel',
+        titleHu: 'Egyedi Email Kiválasztás Törléshez',
+        descriptionEn: 'Checkboxes added to scheduled emails table for selecting individual emails. Select all checkbox in header.',
+        descriptionHu: 'Checkboxok hozzáadva az ütemezett emailek táblázatához egyedi kiválasztáshoz. Mindet kiválaszt checkbox a fejlécben.',
+      },
+      {
+        type: 'fix',
+        category: 'email',
+        titleEn: 'baseUrl Fix in Bulk/Scheduled Emails',
+        titleHu: 'baseUrl Javítás Emailekben',
+        descriptionEn: 'Fixed image rendering (logos, QR codes) in bulk and scheduled emails with proper baseUrl configuration.',
+        descriptionHu: 'Javítva a képek (logók, QR kódok) megjelenítése tömeges és ütemezett emailekben a megfelelő baseUrl-lel.',
+      },
+      {
+        type: 'fix',
+        category: 'ui',
+        titleEn: 'mailto Subject Added',
+        titleHu: 'mailto Tárgy Hozzáadva',
+        descriptionEn: 'Email links to event@bbj.hu now include pre-filled subject "Inquiry regarding CEO Gala 2026".',
+        descriptionHu: 'Az event@bbj.hu email linkek mostantól előre kitöltött tárgysorral rendelkeznek.',
+      },
+      {
+        type: 'fix',
+        category: 'ui',
+        titleEn: 'Checkbox Visibility Fix',
+        titleHu: 'Checkbox Láthatóság Javítás',
+        descriptionEn: 'Fixed checkbox column disappearing when filter changed. Checkboxes now visible regardless of filter setting.',
+        descriptionHu: 'Javítva a checkbox oszlop eltűnése szűrő váltáskor. Checkboxok most mindig láthatóak.',
+      },
+    ],
+  },
+  {
     version: '2.16.0',
     date: '2026-01-22',
     changes: [

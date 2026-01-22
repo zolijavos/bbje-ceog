@@ -153,3 +153,56 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+/**
+ * DELETE - Cancel scheduled emails (bulk cancel)
+ * Body: { ids?: number[] } - if provided, cancel only those IDs; otherwise cancel all pending
+ */
+export async function DELETE(request: NextRequest) {
+  try {
+    const auth = await requireAuth();
+    if (!auth.success) return auth.response;
+
+    if (auth.session.user.role !== 'admin') {
+      return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
+    }
+
+    // Check if specific IDs are provided
+    let ids: number[] | undefined;
+    try {
+      const body = await request.json();
+      ids = body.ids;
+    } catch {
+      // No body or invalid JSON - cancel all pending
+    }
+
+    let result;
+    if (ids && Array.isArray(ids) && ids.length > 0) {
+      // Cancel specific IDs (only if they are pending)
+      result = await prisma.scheduledEmail.updateMany({
+        where: {
+          id: { in: ids },
+          status: 'pending',
+        },
+        data: { status: 'cancelled' },
+      });
+    } else {
+      // Cancel all pending emails
+      result = await prisma.scheduledEmail.updateMany({
+        where: { status: 'pending' },
+        data: { status: 'cancelled' },
+      });
+    }
+
+    return NextResponse.json({
+      success: true,
+      cancelled: result.count,
+    });
+  } catch (error) {
+    logError('[SCHEDULED-EMAILS] Error bulk cancelling:', error);
+    return NextResponse.json(
+      { error: 'Failed to cancel scheduled emails' },
+      { status: 500 }
+    );
+  }
+}
