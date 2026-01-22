@@ -925,11 +925,11 @@ export default function PaidRegistrationForm({
         </div>
 
         {/* Help Links */}
-        <div className={`mt-6 text-xs ${t.textMuted} text-center space-y-1`}>
+        <div className={`mt-6 text-[10px] ${t.textMuted} text-center space-y-1`}>
           <p>
             Questions?{' '}
             <a href="https://bbj.hu/events/ceogala/#faq" target="_blank" rel="noopener noreferrer" className="text-[#d1aa67] hover:underline">
-              View Registration Guide
+              Find answers in our FAQs
             </a>
           </p>
           <p>

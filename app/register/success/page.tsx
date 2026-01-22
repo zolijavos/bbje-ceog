@@ -115,12 +115,6 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
               <span className="text-white/60">Email:</span>
               <span className="text-white font-medium">{guest.email}</span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-white/60">Status:</span>
-              <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#d1aa67] text-[#0c0d0e]">
-                {isVIP ? 'VIP Guest' : isInvited ? 'Invited Guest' : isPairedTicket ? 'Paired Ticket' : 'Single Ticket'}
-              </span>
-            </div>
           </div>
         </div>
 
@@ -198,7 +192,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
         <GoldLine />
 
         {/* Contact Info */}
-        <div className="text-xs text-white/50 space-y-1">
+        <div className="text-[10px] text-white/50 space-y-1">
           <p>
             Questions?{' '}
             <a
@@ -207,7 +201,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
               rel="noopener noreferrer"
               className="text-[#d1aa67] hover:underline"
             >
-              View Registration Guide
+              Find answers in our FAQs
             </a>
           </p>
           <p>

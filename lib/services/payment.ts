@@ -8,12 +8,28 @@ import Stripe from 'stripe';
 import { prisma } from '@/lib/db/prisma';
 import { PaymentStatus, PaymentMethod, TicketType } from '@prisma/client';
 
-// Initialize Stripe with secret key
+// Initialize Stripe with secret key (optional - payment features disabled if not configured)
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
-if (!STRIPE_SECRET_KEY) {
-  throw new Error('STRIPE_SECRET_KEY environment variable is required');
+const stripe = STRIPE_SECRET_KEY ? new Stripe(STRIPE_SECRET_KEY) : null;
+
+/**
+ * Check if Stripe is configured and available
+ */
+export function isStripeConfigured(): boolean {
+  return stripe !== null;
 }
-const stripe = new Stripe(STRIPE_SECRET_KEY);
+
+/**
+ * Get Stripe client (throws if not configured)
+ */
+function getStripe(): Stripe {
+  if (!stripe) {
+    throw new Error(
+      'Stripe is not configured. Set STRIPE_SECRET_KEY environment variable to enable payments.'
+    );
+  }
+  return stripe;
+}
 
 // Ticket prices in HUF fillér (smallest unit for Stripe)
 // Stripe requires amounts in smallest currency unit (fillér for HUF)
@@ -101,7 +117,7 @@ export async function createCheckoutSession(registrationId: number): Promise<{
   const cancelUrl = `${baseUrl}/payment/cancel?registration_id=${registrationId}`;
 
   // Create Stripe Checkout Session
-  const session = await stripe.checkout.sessions.create({
+  const session = await getStripe().checkout.sessions.create({
     payment_method_types: ['card'],
     mode: 'payment',
     customer_email: registration.guest.email,
@@ -336,8 +352,10 @@ export function constructWebhookEvent(
     throw new Error('WEBHOOK_SECRET_NOT_CONFIGURED');
   }
 
-  return stripe.webhooks.constructEvent(payload, signature, webhookSecret);
+  return getStripe().webhooks.constructEvent(payload, signature, webhookSecret);
 }
 
-// Export Stripe instance for direct use if needed
-export { stripe };
+// Export function to get Stripe instance (for direct use if needed)
+export function getStripeInstance(): Stripe | null {
+  return stripe;
+}

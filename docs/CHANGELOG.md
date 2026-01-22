@@ -4,6 +4,58 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
 
 ---
 
+## v2.16.0 (2026-01-22)
+
+### New Features / Új funkciók
+
+- **Simplified VIP Registration Flow** / **Egyszerűsített VIP Regisztrációs Folyamat**
+  - EN: Removed unnecessary intermediate "Thank You for Your Response" screen from VIP registration. Users now go directly from invitation to registration form.
+  - HU: Eltávolítottuk a felesleges "Thank You for Your Response" közbülső képernyőt a VIP regisztrációból. A felhasználók most közvetlenül a meghívóról a regisztrációs űrlapra kerülnek.
+
+- **Streamlined Magic Link Flow** / **Egyszerűsített Magic Link Folyamat**
+  - EN: Magic link now redirects directly to the appropriate registration form (VIP or Paid) without intermediate welcome page.
+  - HU: A magic link most közvetlenül a megfelelő regisztrációs űrlapra irányít (VIP vagy fizetős) közbülső üdvözlő oldal nélkül.
+
+### Improvements / Javítások
+
+- **Shortened GDPR Consent Text** / **Rövidített GDPR Hozzájárulás Szöveg**
+  - EN: GDPR consent text simplified to a brief statement with link to Privacy Policy. Easier to read and understand.
+  - HU: GDPR hozzájárulás szöveg egyszerűsítve rövid nyilatkozatra a Privacy Policy linkjével. Könnyebben olvasható és érthető.
+
+- **Updated Footer Links** / **Frissített Footer Linkek**
+  - EN: Changed "View Registration Guide" to "Find answers in our FAQs" across all guest-facing pages.
+  - HU: "View Registration Guide" szöveg cserélve "Find answers in our FAQs"-ra minden vendégoldal footerében.
+
+- **Smaller Footer Text** / **Kisebb Footer Szöveg**
+  - EN: Footer text size reduced from 12px to 10px for better visual hierarchy.
+  - HU: Footer szövegméret csökkentve 12px-ről 10px-re a jobb vizuális hierarchia érdekében.
+
+- **Removed VIP Status Display** / **VIP Státusz Megjelenítés Eltávolítva**
+  - EN: Removed "VIP guest status" indicator from guest pages. "Attendance confirmed" status remains visible.
+  - HU: "VIP vendég státusz" jelző eltávolítva a vendég oldalakról. "Részvétel megerősítve" státusz továbbra is látható.
+
+### Email Templates / Email Sablonok
+
+- **Feedback Email** / **Visszajelzés Email**
+  - EN: Updated feedback email template with improved formatting.
+  - HU: Frissített visszajelzés email sablon javított formázással.
+
+- **Confirmation Email** / **Visszaigazolás Email**
+  - EN: Updated confirmation email template with improved formatting.
+  - HU: Frissített visszaigazolás email sablon javított formázással.
+
+### Fixes / Hibajavítások
+
+- **Favicon Corrected** / **Favicon Javítva**
+  - EN: Fixed favicon to display correct BBJ icon in browser tab.
+  - HU: Favicon javítva, a helyes BBJ ikon jelenik meg a böngésző fülön.
+
+- **Page Title Standardized** / **Oldal Cím Egységesítve**
+  - EN: Standardized page title to "CEO Gala 2026" across all pages (removed accent and "- Event Platform" suffix).
+  - HU: Oldal cím egységesítve "CEO Gala 2026"-ra minden oldalon (ékezet és "- Event Platform" utótag eltávolítva).
+
+---
+
 ## v2.15.0 (2026-01-21)
 
 ### Breaking Changes / Törő Változások

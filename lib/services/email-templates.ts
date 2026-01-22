@@ -229,69 +229,60 @@ CEO Gála Organizing Team`,
   applicant_rejection: {
     slug: 'applicant_rejection',
     name: 'Applicant Rejection',
-    subject: 'CEO Gála 2026 - Application Status',
+    subject: 'Registration Update for the CEO Gala 2026',
     variables: ['guestName', 'rejectionReason'],
     html_body: `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CEO Gála -Application Status</title>
+  <title>Registration Update for the CEO Gala 2026</title>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5; }
-    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-    .card { background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); padding: 40px; }
-    .header { text-align: center; margin-bottom: 30px; }
-    .header h1 { color: #1a1a2e; font-size: 28px; margin: 0; }
-    .content { margin-bottom: 30px; }
-    .greeting { font-size: 18px; margin-bottom: 20px; }
-    .guest-name { font-size: 24px; font-weight: 700; color: #1a1a2e; display: block; margin-top: 8px; }
-    .reason-box { background-color: #f8f9fa; border-left: 4px solid #6b7280; padding: 15px 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
-    .footer { text-align: center; padding-top: 30px; border-top: 1px solid #e5e7eb; margin-top: 30px; }
-    .footer p { font-size: 14px; color: #6b7280; margin: 5px 0; }
+    body { font-family: Arial, Helvetica, sans-serif; line-height: 1.8; color: #333333; margin: 0; padding: 0; background-color: #ffffff; }
+    .container { max-width: 680px; margin: 0 auto; padding: 20px; background-color: #ffffff; }
+    .content { padding: 0 20px; text-align: center; }
+    p { margin: 0 0 18px 0; font-size: 15px; color: #333333; }
+    .greeting { font-size: 15px; margin-bottom: 20px; }
+    .guest-name { font-weight: 700; }
+    .highlight { font-weight: bold; }
+    .footer { text-align: center; padding-top: 30px; margin-top: 30px; }
+    .footer p { font-size: 14px; color: #333333; margin: 5px 0; }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="card">
-      <div class="header">
-        <h1>CEO Gála</h1>
-      </div>
-      <div class="content">
-        <p class="greeting">Dear<span class="guest-name">{{guestName}}</span></p>
-        <p>Thank you for your interest in attending the CEO Gála 2026.</p>
-        <p>After careful consideration, we regret to inform you that we are unable to accommodate your application at this time.</p>
-        {{#if rejectionReason}}
-        <div class="reason-box">
-          <p><strong>Note:</strong> {{rejectionReason}}</p>
-        </div>
-        {{/if}}
-        <p>We appreciate your understanding and hope to welcome you at future events.</p>
-      </div>
+    <div class="content">
+      <p class="greeting">Dear <span class="guest-name">{{guestName}}</span>,</p>
+
+      <p><span class="highlight">We regret to inform you</span> that we cannot register you for the CEO of the Year Gala.</p>
+
+      <p>Please note that only those on the invitation list can register for the event. Although we would be happy to invite many more guests, unfortunately, due to the limited number of seats, <span class="highlight">we are unable to accommodate you</span> at the Gala this time.</p>
+
+      <p>If you believe that, despite our best efforts, a mistake has been made, please contact our staff at <a href="mailto:event@bbj.hu" style="color: #333333;">event@bbj.hu</a>.</p>
+
+      <p>We appreciate your understanding.</p>
+
       <div class="footer">
-        <p>If you have any questions, please contact us.</p>
-        <p>Best regards,<br>CEO Gála Organizing Team</p>
+        <p>Best regards,<br>The BBJ Team</p>
       </div>
     </div>
   </div>
 </body>
 </html>`,
-    text_body: `CEO Gála -Application Status
+    text_body: `Registration Update for the CEO Gala 2026
 
 Dear {{guestName}},
 
-Thank you for your interest in attending the CEO Gála 2026.
+We regret to inform you that we cannot register you for the CEO of the Year Gala.
 
-After careful consideration, we regret to inform you that we are unable to accommodate your application at this time.
+Please note that only those on the invitation list can register for the event. Although we would be happy to invite many more guests, unfortunately, due to the limited number of seats, we are unable to accommodate you at the Gala this time.
 
-{{#if rejectionReason}}Note: {{rejectionReason}}{{/if}}
+If you believe that, despite our best efforts, a mistake has been made, please contact our staff at event@bbj.hu.
 
-We appreciate your understanding and hope to welcome you at future events.
-
-If you have any questions, please contact us.
+We appreciate your understanding.
 
 Best regards,
-CEO Gála Organizing Team`,
+The BBJ Team`,
   },
   payment_reminder: {
     slug: 'payment_reminder',

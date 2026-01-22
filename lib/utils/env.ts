@@ -75,18 +75,48 @@ function validateSecret(name: keyof EnvConfig, minLength: number = 32): string {
 }
 
 /**
- * Validates email configuration
+ * Validates Stripe configuration
+ * Stripe credentials are optional - payment will be disabled if not configured
  */
-function validateEmail(): void {
-  validateEnvVar('SMTP_HOST');
-  validateEnvVar('SMTP_PORT');
-  validateEnvVar('SMTP_USER');
-  validateEnvVar('SMTP_PASS');
+function validateStripe(): boolean {
+  const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+  const secretKey = process.env.STRIPE_SECRET_KEY;
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-  const port = parseInt(process.env.SMTP_PORT || '587', 10);
-  if (isNaN(port) || port < 1 || port > 65535) {
-    throw new Error(`Invalid SMTP_PORT: ${process.env.SMTP_PORT}. Must be a valid port number (1-65535).`);
+  // Check if any key is missing or is a placeholder
+  const isPlaceholder = (key: string | undefined) =>
+    !key || key.includes('YOUR_KEY') || key === 'pk_test_' || key === 'sk_test_' || key === 'whsec_';
+
+  if (isPlaceholder(publishableKey) || isPlaceholder(secretKey) || isPlaceholder(webhookSecret)) {
+    console.warn('⚠️  Stripe not fully configured - payment functionality will be disabled');
+    return false;
   }
+
+  return true;
+}
+
+/**
+ * Validates email configuration
+ * SMTP credentials are optional - email will be disabled if not configured
+ */
+function validateEmail(): boolean {
+  const host = process.env.SMTP_HOST;
+  const port = process.env.SMTP_PORT;
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASS;
+
+  // All SMTP vars must be set for email to work
+  if (!host || !port || !user || !pass) {
+    console.warn('⚠️  SMTP not fully configured - email functionality will be disabled');
+    return false;
+  }
+
+  const portNum = parseInt(port, 10);
+  if (isNaN(portNum) || portNum < 1 || portNum > 65535) {
+    throw new Error(`Invalid SMTP_PORT: ${port}. Must be a valid port number (1-65535).`);
+  }
+
+  return true;
 }
 
 /**
@@ -106,13 +136,17 @@ export function validateEnv(): void {
     validateSecret('APP_SECRET', 64);
     validateSecret('QR_SECRET', 64);
 
-    // Stripe
-    validateEnvVar('STRIPE_SECRET_KEY');
-    validateEnvVar('STRIPE_WEBHOOK_SECRET');
-    validateEnvVar('NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY');
+    // Stripe (optional - warns if not configured)
+    const stripeConfigured = validateStripe();
+    if (!stripeConfigured) {
+      console.warn('   Payment features will not work until Stripe is configured.');
+    }
 
-    // Email
-    validateEmail();
+    // Email (optional - warns if not configured)
+    const emailConfigured = validateEmail();
+    if (!emailConfigured) {
+      console.warn('   Email features (magic links, tickets) will not work until SMTP is configured.');
+    }
 
     // NextAuth (must be at least 64 chars for security - prevents brute force attacks)
     validateEnvVar('NEXTAUTH_URL');

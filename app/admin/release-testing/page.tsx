@@ -52,6 +52,151 @@ interface TestResultData {
 
 const releaseTests: ReleaseTest[] = [
   {
+    version: '2.16.0',
+    date: '2026-01-22',
+    features: [
+      {
+        nameEn: 'Simplified VIP Registration Flow',
+        nameHu: 'Egyszerűsített VIP Regisztrációs Folyamat',
+        steps: [
+          { en: 'Open a VIP guest magic link', hu: 'Nyiss meg egy VIP vendég magic linket' },
+          { en: 'Click "YES, I WILL ATTEND" button', hu: 'Kattints a "YES, I WILL ATTEND" gombra' },
+          { en: 'Verify you go DIRECTLY to registration form', hu: 'Ellenőrizd, hogy KÖZVETLENÜL a regisztrációs űrlapra kerülsz' },
+          { en: 'Verify NO "Thank You for Your Response" intermediate screen appears', hu: 'Ellenőrizd, hogy NINCS "Thank You for Your Response" közbülső képernyő' },
+          { en: 'Fill out the form and submit', hu: 'Töltsd ki az űrlapot és küldd el' },
+          { en: 'Verify registration succeeds', hu: 'Ellenőrizd, hogy a regisztráció sikeres' },
+        ],
+        expected: { en: 'VIP registration goes directly from invitation to form without intermediate screen', hu: 'VIP regisztráció közvetlenül a meghívóról az űrlapra megy közbülső képernyő nélkül' }
+      },
+      {
+        nameEn: 'Streamlined Magic Link Flow',
+        nameHu: 'Egyszerűsített Magic Link Folyamat',
+        steps: [
+          { en: 'Create a new VIP guest and send magic link', hu: 'Hozz létre új VIP vendéget és küldj magic linket' },
+          { en: 'Click the magic link in the email', hu: 'Kattints a magic linkre az emailben' },
+          { en: 'Verify you go DIRECTLY to VIP registration form', hu: 'Ellenőrizd, hogy KÖZVETLENÜL a VIP regisztrációs űrlapra kerülsz' },
+          { en: 'Verify NO welcome/landing page appears', hu: 'Ellenőrizd, hogy NINCS üdvözlő/landing oldal' },
+          { en: 'Create a paying guest and send magic link', hu: 'Hozz létre fizető vendéget és küldj magic linket' },
+          { en: 'Click magic link - verify direct redirect to paid registration', hu: 'Kattints a magic linkre - ellenőrizd a közvetlen átirányítást a paid regisztrációra' },
+        ],
+        expected: { en: 'Magic link redirects directly to appropriate registration form without intermediate pages', hu: 'Magic link közvetlenül a megfelelő regisztrációs űrlapra irányít közbülső oldalak nélkül' }
+      },
+      {
+        nameEn: 'Shortened GDPR Consent Text',
+        nameHu: 'Rövidített GDPR Hozzájárulás',
+        steps: [
+          { en: 'Open VIP or Paid registration form', hu: 'Nyisd meg a VIP vagy Paid regisztrációs űrlapot' },
+          { en: 'Scroll to the consent checkboxes section', hu: 'Görgess a beleegyezés checkboxok szekcióhoz' },
+          { en: 'Verify GDPR text is SHORT (1-2 sentences)', hu: 'Ellenőrizd, hogy a GDPR szöveg RÖVID (1-2 mondat)' },
+          { en: 'Verify "Privacy Policy" link is present', hu: 'Ellenőrizd, hogy a "Privacy Policy" link jelen van' },
+          { en: 'Click Privacy Policy link - should open bbj.hu/about/privacy/', hu: 'Kattints a Privacy Policy linkre - meg kell nyílnia a bbj.hu/about/privacy/ oldalnak' },
+        ],
+        expected: { en: 'GDPR consent is brief with working Privacy Policy link', hu: 'GDPR hozzájárulás rövid, működő Privacy Policy linkkel' }
+      },
+      {
+        nameEn: 'Updated Footer Links',
+        nameHu: 'Frissített Footer Linkek',
+        steps: [
+          { en: 'Visit VIP registration page', hu: 'Látogasd meg a VIP regisztrációs oldalt' },
+          { en: 'Scroll to footer, verify "Find answers in our FAQs" text', hu: 'Görgess a footerhez, ellenőrizd a "Find answers in our FAQs" szöveget' },
+          { en: 'Visit registration success page', hu: 'Látogasd meg a regisztráció sikeres oldalt' },
+          { en: 'Verify same FAQ link text in footer', hu: 'Ellenőrizd ugyanazt a FAQ link szöveget a footerben' },
+          { en: 'Check /status page footer', hu: 'Ellenőrizd a /status oldal footerét' },
+          { en: 'Check /pwa pages footer', hu: 'Ellenőrizd a /pwa oldalak footerét' },
+        ],
+        expected: { en: 'All pages show "Find answers in our FAQs" instead of "View Registration Guide"', hu: 'Minden oldal "Find answers in our FAQs" szöveget mutat "View Registration Guide" helyett' }
+      },
+      {
+        nameEn: 'Removed VIP Status Display',
+        nameHu: 'VIP Státusz Eltávolítva',
+        steps: [
+          { en: 'Register as VIP guest and go to AlreadyRegistered page', hu: 'Regisztrálj VIP vendégként és menj az AlreadyRegistered oldalra' },
+          { en: 'Verify "✓ Attendance confirmed" status IS shown', hu: 'Ellenőrizd, hogy "✓ Részvétel megerősítve" státusz LÁTHATÓ' },
+          { en: 'Verify "VIP guest status" or similar IS NOT shown', hu: 'Ellenőrizd, hogy "VIP vendég státusz" vagy hasonló NEM látható' },
+          { en: 'Check registration success page for VIP', hu: 'Ellenőrizd a regisztráció sikeres oldalt VIP esetén' },
+          { en: 'Verify no VIP-specific status badge appears', hu: 'Ellenőrizd, hogy nem jelenik meg VIP-specifikus státusz badge' },
+        ],
+        expected: { en: 'VIP status indicator removed, attendance confirmation remains', hu: 'VIP státusz jelző eltávolítva, részvétel megerősítés megmaradt' }
+      },
+      {
+        nameEn: 'Favicon and Title Correction',
+        nameHu: 'Favicon és Cím Javítás',
+        steps: [
+          { en: 'Visit any page on ceogala.mflevents.space', hu: 'Látogass meg bármely oldalt a ceogala.mflevents.space-en' },
+          { en: 'Check browser tab - verify BBJ favicon (not default Next.js)', hu: 'Ellenőrizd a böngésző fület - BBJ favicon legyen (nem default Next.js)' },
+          { en: 'Verify page title is "CEO Gala 2026" (no accent, no suffix)', hu: 'Ellenőrizd, hogy az oldal címe "CEO Gala 2026" (ékezet és utótag nélkül)' },
+          { en: 'Check multiple pages - title should be consistent', hu: 'Ellenőrizz több oldalt - a cím legyen konzisztens' },
+        ],
+        expected: { en: 'BBJ favicon and "CEO Gala 2026" title on all pages', hu: 'BBJ favicon és "CEO Gala 2026" cím minden oldalon' }
+      },
+    ],
+  },
+  {
+    version: '2.15.0',
+    date: '2026-01-21',
+    features: [
+      {
+        nameEn: 'Name Field Split (first_name / last_name)',
+        nameHu: 'Név Mező Szétbontás (first_name / last_name)',
+        steps: [
+          { en: 'Open admin guest list', hu: 'Nyisd meg az admin vendéglistát' },
+          { en: 'Click "Add Guest" button', hu: 'Kattints az "Add Guest" gombra' },
+          { en: 'Verify separate "First Name" and "Last Name" fields exist', hu: 'Ellenőrizd, hogy külön "Keresztnév" és "Vezetéknév" mezők vannak' },
+          { en: 'Create a guest with both name fields', hu: 'Hozz létre vendéget mindkét név mezővel' },
+          { en: 'Edit the guest and verify names saved correctly', hu: 'Szerkeszd a vendéget és ellenőrizd, hogy a nevek helyesen mentődtek' },
+          { en: 'Check guest appears correctly in list (full name displayed)', hu: 'Ellenőrizd, hogy a vendég helyesen jelenik meg a listában (teljes név)' },
+        ],
+        expected: { en: 'Name fields split into first_name and last_name across the system', hu: 'Név mezők szétbontva first_name és last_name mezőkre a rendszerben' }
+      },
+      {
+        nameEn: 'Dark Theme Registration Pages',
+        nameHu: 'Sötét Téma Regisztrációs Oldalakon',
+        steps: [
+          { en: 'Open VIP registration page via magic link', hu: 'Nyisd meg a VIP regisztrációs oldalt magic linkkel' },
+          { en: 'Verify dark background (#0c0d0e or similar)', hu: 'Ellenőrizd a sötét hátteret (#0c0d0e vagy hasonló)' },
+          { en: 'Verify gold accent colors (#d1aa67)', hu: 'Ellenőrizd az arany akcentszíneket (#d1aa67)' },
+          { en: 'Check paid registration page', hu: 'Ellenőrizd a paid regisztrációs oldalt' },
+          { en: 'Verify consistent dark theme', hu: 'Ellenőrizd a konzisztens sötét témát' },
+        ],
+        expected: { en: 'Registration pages have elegant dark theme with gold accents', hu: 'Regisztrációs oldalak elegáns sötét témával és arany kiemelésekkel' }
+      },
+      {
+        nameEn: 'Title Display in All Emails',
+        nameHu: 'Címzés Megjelenítés Minden Emailben',
+        steps: [
+          { en: 'Create a VIP guest with title (e.g., Dr.)', hu: 'Hozz létre VIP vendéget címzéssel (pl. Dr.)' },
+          { en: 'Send magic link email', hu: 'Küldj magic link emailt' },
+          { en: 'Verify greeting includes title: "Dear Dr. Name,"', hu: 'Ellenőrizd, hogy a megszólítás tartalmazza a címzést: "Dear Dr. Név,"' },
+          { en: 'Complete registration and receive ticket email', hu: 'Fejezd be a regisztrációt és kapj jegy emailt' },
+          { en: 'Verify title in ticket email greeting', hu: 'Ellenőrizd a címzést a jegy email megszólításában' },
+        ],
+        expected: { en: 'Guest titles appear in all email greetings', hu: 'Vendég címzések megjelennek minden email megszólításban' }
+      },
+      {
+        nameEn: 'Subtle Decline Button',
+        nameHu: 'Visszafogott Elutasítás Gomb',
+        steps: [
+          { en: 'Open VIP registration invitation page', hu: 'Nyisd meg a VIP regisztrációs meghívó oldalt' },
+          { en: 'Verify "YES, I WILL ATTEND" button is prominent (solid, red)', hu: 'Ellenőrizd, hogy a "YES, I WILL ATTEND" gomb hangsúlyos (egyszínű, piros)' },
+          { en: 'Verify "I cannot attend" button is subtle (outline style, muted)', hu: 'Ellenőrizd, hogy az "I cannot attend" gomb visszafogott (körvonal stílus, halványabb)' },
+          { en: 'Verify visual hierarchy encourages acceptance', hu: 'Ellenőrizd, hogy a vizuális hierarchia a részvételt ösztönzi' },
+        ],
+        expected: { en: 'Decline button is less prominent than accept button', hu: 'Elutasítás gomb kevésbé hangsúlyos mint az elfogadás gomb' }
+      },
+      {
+        nameEn: 'Updated Attendance Commitment Text',
+        nameHu: 'Frissített Részvételi Kötelezettség',
+        steps: [
+          { en: 'Open VIP registration form', hu: 'Nyisd meg a VIP regisztrációs űrlapot' },
+          { en: 'Scroll to "Attendance Commitment" checkbox', hu: 'Görgess az "Attendance Commitment" checkboxhoz' },
+          { en: 'Verify text mentions "10 business days" cancellation notice', hu: 'Ellenőrizd, hogy a szöveg említi a "10 munkanap" lemondási határidőt' },
+          { en: 'Verify text mentions "HUF 99,000 + VAT" no-show fee', hu: 'Ellenőrizd, hogy a szöveg említi a "HUF 99,000 + ÁFA" no-show díjat' },
+        ],
+        expected: { en: 'Attendance commitment includes cancellation policy and no-show fee', hu: 'Részvételi kötelezettség tartalmazza a lemondási szabályzatot és no-show díjat' }
+      },
+    ],
+  },
+  {
     version: '2.13.0',
     date: '2026-01-16',
     features: [

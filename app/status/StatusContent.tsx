@@ -337,7 +337,7 @@ export default function StatusContent({
         </div>
 
         {/* Footer */}
-        <div className="mt-6 text-center text-sm text-white/50 font-sans">
+        <div className="mt-6 text-center text-[10px] text-white/50 font-sans">
           <p>
             <Link href="/help" className="text-accent-gold hover:underline">
               Need help?
@@ -345,7 +345,7 @@ export default function StatusContent({
           </p>
           <p className="mt-2">
             <Link href="/help" className="text-accent-gold hover:underline">
-              View Registration Guide
+              Find answers in our FAQs
             </Link>
           </p>
           <p className="mt-2">© 2026 BBJ Events - Event Platform</p>

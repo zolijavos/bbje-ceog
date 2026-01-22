@@ -43,15 +43,7 @@ export default function ConsentCheckboxes({
               GDPR Data Processing Consent *
             </span>
             <p className="text-xs text-slate-500 mt-1">
-              I consent to CEO Gala collecting and processing my personal data
-              (name, email, phone, company, position, dietary requirements) for the
-              purpose of organizing and managing the CEO Gala 2026 event.
-              This includes guest list management, seating arrangements, catering
-              coordination, and event communications. My data will be retained for
-              up to 12 months after the event and will not be shared with third
-              parties except as required for event operations. I understand I can
-              request access, correction, or deletion of my data at any time.
-              Full privacy policy available{' '}
+              I consent to the processing of my personal data for CEO Gala 2026 event management.{' '}
               <a
                 href="https://bbj.hu/about/privacy/"
                 target="_blank"
@@ -59,8 +51,8 @@ export default function ConsentCheckboxes({
                 className="text-amber-600 underline hover:text-amber-700"
                 onClick={(e) => e.stopPropagation()}
               >
-                here
-              </a>.
+                Privacy Policy
+              </a>
             </p>
           </div>
         </label>

@@ -415,7 +415,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
           {/* Action Buttons */}
           <div className="space-y-3 mt-6">
             <button
-              onClick={() => setScreenState('confirmation')}
+              onClick={() => setScreenState('registration')}
               disabled={isLoading}
               className={`w-full py-4 px-6 rounded-lg font-bold text-sm uppercase tracking-wider transition-all ${t.buttonPrimary}`}
               data-testid="confirm-attendance-button"
@@ -519,12 +519,6 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
               <div className="flex justify-between">
                 <span className={t.textMuted}>Email:</span>
                 <span className={`${t.text} font-medium`}>{guest.email}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className={t.textMuted}>Status:</span>
-                <span className={`px-3 py-1 rounded-full text-xs font-bold ${t.goldBg} text-[#0c0d0e]`}>
-                  VIP Guest
-                </span>
               </div>
             </div>
           </div>
@@ -828,7 +822,7 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
         {/* Action Buttons */}
         <div className="flex gap-3">
           <button
-            onClick={() => setScreenState('confirmation')}
+            onClick={() => setScreenState('invitation')}
             disabled={isLoading}
             className={`flex-1 py-3 px-6 rounded-lg font-medium text-sm uppercase tracking-wider transition-all ${t.buttonSecondary}`}
           >
@@ -853,11 +847,11 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
         </div>
 
         {/* Help Links */}
-        <div className={`mt-6 text-xs ${t.textMuted} text-center space-y-1`}>
+        <div className={`mt-6 text-[10px] ${t.textMuted} text-center space-y-1`}>
           <p>
             Questions?{' '}
             <a href="https://bbj.hu/events/ceogala/#faq" target="_blank" rel="noopener noreferrer" className="text-[#d1aa67] hover:underline">
-              View Registration Guide
+              Find answers in our FAQs
             </a>
           </p>
           <p>

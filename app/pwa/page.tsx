@@ -183,10 +183,10 @@ export default function PWALoginPage() {
           <div className="mt-3">
             <Link
               href="/help"
-              className="inline-flex items-center gap-1 pwa-text-tertiary text-sm hover:opacity-80 transition-opacity"
+              className="inline-flex items-center gap-1 pwa-text-tertiary text-[10px] hover:opacity-80 transition-opacity"
             >
-              <Question size={16} />
-              View Registration Guide
+              <Question size={14} />
+              Find answers in our FAQs
             </Link>
           </div>
         </div>

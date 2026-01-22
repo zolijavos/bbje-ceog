@@ -99,7 +99,7 @@ export default async function DeclinedPage({ searchParams }: DeclinedPageProps) 
         </div>
 
         {/* Contact Info */}
-        <div className="text-xs space-y-1">
+        <div className="text-[10px] space-y-1">
           <p className="text-white/40">
             Questions?{' '}
             <a
@@ -108,7 +108,7 @@ export default async function DeclinedPage({ searchParams }: DeclinedPageProps) 
               rel="noopener noreferrer"
               className="text-[#d1aa67] hover:text-[#e5c078]"
             >
-              View Registration Guide
+              Find answers in our FAQs
             </a>
           </p>
           <p className="text-white/40">

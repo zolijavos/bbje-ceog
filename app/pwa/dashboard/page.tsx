@@ -232,24 +232,6 @@ export default function PWADashboardPage() {
     );
   }
 
-  const getGuestTypeBadge = (type: string) => {
-    // BBJ Events 2026 - Monochrome navy palette for guest types
-    switch (type) {
-      case 'vip':
-        return { text: 'VIP Guest', bg: 'rgba(0, 13, 56, 0.15)', color: '#000D38' };
-      case 'paid_single':
-        return { text: 'Single Ticket', bg: 'rgba(10, 26, 74, 0.15)', color: '#0A1A4A' };
-      case 'paid_paired':
-        return { text: 'Paired Ticket', bg: 'rgba(26, 45, 92, 0.15)', color: '#1A2D5C' };
-      case 'applicant':
-        return { text: 'Applicant', bg: 'rgba(5, 150, 105, 0.15)', color: '#059669' };
-      default:
-        return { text: type, bg: 'var(--color-bg-elevated)', color: 'var(--color-text-secondary)' };
-    }
-  };
-
-  const badge = getGuestTypeBadge(data.guest.guest_type);
-
   return (
     <div className="min-h-screen pwa-bg-base pb-20">
       {/* Welcome Modal */}
@@ -281,12 +263,6 @@ export default function PWADashboardPage() {
         </div>
         <div>
           <p className="text-2xl font-medium pwa-text-inverse">{data.guest.name}</p>
-          <span
-            className="inline-block mt-2 px-3 py-1 text-xs font-semibold uppercase tracking-wide"
-            style={{ background: badge.bg, color: badge.color }}
-          >
-            {badge.text}
-          </span>
         </div>
       </header>
 
