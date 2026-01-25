@@ -859,7 +859,8 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                               </div>
                             )}
                             {/* Fallback: show legacy partner data from registration if no Guest relation */}
-                            {!guest.partnerGuest && guest.partnerName && (
+                            {/* Don't show for partner guests (isPartner) - they don't have partners */}
+                            {!guest.partnerGuest && guest.partnerName && !guest.isPartner && guest.partnerName !== 'Unknown' && (
                               <div className="text-xs text-purple-600 mt-0.5">
                                 + {guest.partnerName}
                               </div>
