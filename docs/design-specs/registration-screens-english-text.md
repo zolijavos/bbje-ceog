@@ -49,8 +49,6 @@
 | Heading | Registration Details |
 | Label 1 | Name: |
 | Label 2 | Email: |
-| Label 3 | Status: |
-| Status badge | VIP Guest |
 | Section heading | Next Steps |
 | Step 1 | Download your QR ticket |
 | Step 2 | Add event to calendar |
@@ -58,7 +56,6 @@
 | Footer | Built By MyForge Labs |
 
 **Notes:**
-- Status badge: Gold background (#d4af37), dark text
 - Step icons: phone/QR, calendar, party
 
 ---
@@ -115,9 +112,7 @@ These fields will be replaced with actual data:
 | Placeholder | Source |
 |-------------|--------|
 | Jane Smith | guest.firstName + guest.lastName |
-| Invited Guest | guest.guestType (VIP Guest / Paying Guest) |
 | jane@company.com | guest.email |
-| VIP Guest | registration.ticketType |
 
 ---
 
