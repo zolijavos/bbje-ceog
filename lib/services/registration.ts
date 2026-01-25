@@ -430,18 +430,18 @@ export async function processVIPRegistration(
 
     // Generate QR ticket and send confirmation email(s)
     // For paired registrations: both guests get emails with BOTH QR codes
-    // DELAY: Wait 5 minutes after feedback email before sending QR confirmation
-    const QR_EMAIL_DELAY_MS = 5 * 60 * 1000; // 5 minutes
+    // DELAY: Wait 3 minutes after feedback email before sending QR confirmation
+    const QR_EMAIL_DELAY_MS = 3 * 60 * 1000; // 3 minutes
 
     if (result.partnerRegistrationId) {
       // Paired registration - send both confirmation emails with both QR codes
-      logInfo(`[VIP_REGISTRATION] Scheduling paired tickets for main=${result.registration.id}, partner=${result.partnerRegistrationId} (delay: 5 min)`);
+      logInfo(`[VIP_REGISTRATION] Scheduling paired tickets for main=${result.registration.id}, partner=${result.partnerRegistrationId} (delay: 3 min)`);
       setTimeout(() => {
         void generatePairedTicketsWithRetry(result.registration.id, result.partnerRegistrationId!, 3);
       }, QR_EMAIL_DELAY_MS);
     } else {
       // Single registration - send confirmation email with just their QR code
-      logInfo(`[VIP_REGISTRATION] Scheduling ticket for registration ${result.registration.id} (delay: 5 min)`);
+      logInfo(`[VIP_REGISTRATION] Scheduling ticket for registration ${result.registration.id} (delay: 3 min)`);
       setTimeout(() => {
         void generateTicketWithRetry(result.registration.id, 3);
       }, QR_EMAIL_DELAY_MS);
