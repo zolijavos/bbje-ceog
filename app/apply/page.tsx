@@ -294,7 +294,6 @@ export default function ApplyPage() {
                   company: errors.company,
                   position: errors.position,
                   dietary_requirements: errors.dietaryRequirements,
-                  seating_preferences: errors.seatingPreferences,
                 }}
               />
             </div>

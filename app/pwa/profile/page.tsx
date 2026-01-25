@@ -371,24 +371,7 @@ export default function PWAProfilePage() {
                 />
               </div>
 
-              <div>
-                <label className="flex items-center gap-1 text-sm font-medium pwa-text-primary mb-1">
-                  <UsersThree size={16} />
-                  Seating Preference
-                </label>
-                <textarea
-                  value={seatingPreferences}
-                  onChange={(e) => setSeatingPreferences(e.target.value)}
-                  placeholder="Who would you like to sit with? (Name, company)"
-                  rows={3}
-                  className="w-full px-4 py-3 resize-none transition-colors"
-                  style={{
-                    background: 'var(--color-bg-elevated)',
-                    color: 'var(--color-text-primary)',
-                    border: '1px solid var(--color-border-subtle)',
-                  }}
-                />
-              </div>
+              {/* Seating Preferences - Removed from guest profile, admin-only */}
             </div>
           </Card>
 

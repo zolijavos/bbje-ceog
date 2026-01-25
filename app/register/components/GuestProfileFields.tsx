@@ -9,7 +9,8 @@
  * - Company (required)
  * - Position (required)
  * - Dietary requirements (optional)
- * - Seating preferences (optional)
+ *
+ * Note: Seating preferences removed from guest registration - only admin can set these
  */
 
 import { titleOptions, type TitleOption } from '@/lib/validations/guest-profile';
@@ -20,20 +21,19 @@ interface GuestProfileFieldsProps {
   company: string;
   position: string;
   dietaryRequirements: string;
-  seatingPreferences: string;
+  seatingPreferences?: string; // Kept for backwards compatibility but not displayed
   onTitleChange: (value: string) => void;
   onPhoneChange: (value: string) => void;
   onCompanyChange: (value: string) => void;
   onPositionChange: (value: string) => void;
   onDietaryChange: (value: string) => void;
-  onSeatingChange: (value: string) => void;
+  onSeatingChange?: (value: string) => void; // Optional - no longer used
   errors?: {
     title?: string;
     phone?: string;
     company?: string;
     position?: string;
     dietary_requirements?: string;
-    seating_preferences?: string;
   };
 }
 
@@ -43,13 +43,11 @@ export default function GuestProfileFields({
   company,
   position,
   dietaryRequirements,
-  seatingPreferences,
   onTitleChange,
   onPhoneChange,
   onCompanyChange,
   onPositionChange,
   onDietaryChange,
-  onSeatingChange,
   errors,
 }: GuestProfileFieldsProps) {
   return (
@@ -167,31 +165,7 @@ export default function GuestProfileFields({
         </div>
       </div>
 
-      {/* Seating Preferences */}
-      <div>
-        <label className="block text-sm font-medium text-neutral-800 mb-1">
-          Seating Preferences (optional)
-        </label>
-        <textarea
-          value={seatingPreferences}
-          onChange={(e) => onSeatingChange(e.target.value)}
-          maxLength={500}
-          rows={2}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 ${
-            errors?.seating_preferences ? 'border-red-500' : 'border-slate-300'
-          }`}
-          placeholder="Who would you like to sit with? (e.g., John Smith, the Marketing team)"
-          data-testid="seating-input"
-        />
-        <div className="flex justify-between mt-1">
-          {errors?.seating_preferences ? (
-            <p className="text-red-600 text-sm">{errors.seating_preferences}</p>
-          ) : (
-            <span />
-          )}
-          <span className="text-xs text-neutral-400">{seatingPreferences.length}/500</span>
-        </div>
-      </div>
+      {/* Seating Preferences - Removed from guest registration, admin-only */}
     </div>
   );
 }

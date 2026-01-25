@@ -8,22 +8,29 @@
 /**
  * Get display name with optional title
  * Format: "Title FirstName LastName" or "FirstName LastName"
+ * Handles null/undefined values gracefully
  */
 export function getDisplayName(
-  firstName: string,
-  lastName: string,
+  firstName: string | null | undefined,
+  lastName: string | null | undefined,
   title?: string | null
 ): string {
   const titlePart = title ? `${title} ` : '';
-  return `${titlePart}${firstName} ${lastName}`.trim();
+  const first = firstName || '';
+  const last = lastName || '';
+  const fullName = `${first} ${last}`.trim();
+  return `${titlePart}${fullName}`.trim() || 'Unknown';
 }
 
 /**
  * Get full name without title
  * Format: "FirstName LastName"
+ * Handles null/undefined values gracefully
  */
-export function getFullName(firstName: string, lastName: string): string {
-  return `${firstName} ${lastName}`.trim();
+export function getFullName(firstName: string | null | undefined, lastName: string | null | undefined): string {
+  const first = firstName || '';
+  const last = lastName || '';
+  return `${first} ${last}`.trim() || 'Unknown';
 }
 
 /**
@@ -52,11 +59,12 @@ export function splitName(fullName: string): { firstName: string; lastName: stri
 /**
  * Get initials from first and last name
  * Format: "JD" for "John Doe"
+ * Handles null/undefined values gracefully
  */
-export function getInitials(firstName: string, lastName: string): string {
-  const firstInitial = firstName.charAt(0).toUpperCase();
-  const lastInitial = lastName.charAt(0).toUpperCase();
-  return `${firstInitial}${lastInitial}`;
+export function getInitials(firstName: string | null | undefined, lastName: string | null | undefined): string {
+  const firstInitial = (firstName || '').charAt(0).toUpperCase();
+  const lastInitial = (lastName || '').charAt(0).toUpperCase();
+  return `${firstInitial}${lastInitial}` || '??';
 }
 
 /**
