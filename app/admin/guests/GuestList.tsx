@@ -853,14 +853,20 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                               {guest.email}
                             </div>
                             {/* Show partner info inline - from Guest relation or Registration */}
+                            {/* Case 1: Main guest with partner (partner_of relation) */}
                             {guest.partnerGuest && (
                               <div className="text-xs text-purple-600 mt-0.5">
                                 + {guest.partnerGuest.title ? `${guest.partnerGuest.title} ` : ''}{guest.partnerGuest.name}
                               </div>
                             )}
-                            {/* Fallback: show legacy partner data from registration if no Guest relation */}
-                            {/* Don't show for partner guests (isPartner) - they don't have partners */}
-                            {!guest.partnerGuest && guest.partnerName && !guest.isPartner && guest.partnerName !== 'Unknown' && (
+                            {/* Case 2: Partner guest - show their main guest (pairedWith relation) */}
+                            {guest.isPartner && guest.pairedWith && (
+                              <div className="text-xs text-purple-600 mt-0.5">
+                                + {guest.pairedWith.name}
+                              </div>
+                            )}
+                            {/* Case 3: Fallback - legacy partner data from registration (main guests only) */}
+                            {!guest.partnerGuest && !guest.isPartner && guest.partnerName && guest.partnerName !== 'Unknown' && (
                               <div className="text-xs text-purple-600 mt-0.5">
                                 + {guest.partnerName}
                               </div>
