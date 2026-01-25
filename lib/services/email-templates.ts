@@ -854,10 +854,10 @@ CEO Gála Organizing Team`,
       <p><span class="highlight">Thank you for your registration!</span></p>
 
       {{#if hasPartner}}
-      <p>We are pleased to confirm that you and your partner, <span class="highlight">{{partnerName}}</span>, have successfully registered for our 13th edition of the CEO Gala!</p>
+      <p>We are pleased to confirm that you and your partner, <span class="highlight">{{partnerName}}</span>, have successfully registered for our 12th CEO Gala!</p>
       {{/if}}
       {{#if hasPartner}}{{else}}
-      <p>We are pleased to confirm that you have successfully registered for our 13th edition of the CEO Gala!</p>
+      <p>We are pleased to confirm that you have successfully registered for our 12th CEO Gala!</p>
       {{/if}}
 
       <p>The Budapest Business Journal and our esteemed event partner, the Hungarian Investment Promotion Agency (HIPA), are delighted to welcome you officially to this special occasion.</p>
@@ -923,8 +923,8 @@ Dear {{guestTitle}} {{guestName}},
 
 Thank you for your registration!
 
-{{#if hasPartner}}We are pleased to confirm that you and your partner, {{partnerName}}, have successfully registered for our 13th edition of the CEO Gala!{{/if}}
-{{#if hasPartner}}{{else}}We are pleased to confirm that you have successfully registered for our 13th edition of the CEO Gala!{{/if}}
+{{#if hasPartner}}We are pleased to confirm that you and your partner, {{partnerName}}, have successfully registered for our 12th CEO Gala!{{/if}}
+{{#if hasPartner}}{{else}}We are pleased to confirm that you have successfully registered for our 12th CEO Gala!{{/if}}
 
 The Budapest Business Journal and our esteemed event partner, the Hungarian Investment Promotion Agency (HIPA), are delighted to welcome you officially to this special occasion.
 
@@ -1010,7 +1010,7 @@ Event website: ceogala.com`,
 
       <p><span class="highlight">Thank you for your registration!</span></p>
 
-      <p>We are pleased to confirm your registration as a <span class="highlight">Partner guest</span> for the 13th CEO Gala.</p>
+      <p>We are pleased to confirm your registration as a <span class="highlight">Partner guest</span> for the 12th CEO Gala.</p>
 
       <p>Your attendance has been registered by <span class="highlight">{{mainGuestTitle}} {{mainGuestName}}</span>, and we are delighted to welcome you to this distinguished occasion organised by the Budapest Business Journal, together with its official event partner, the Hungarian Investment Promotion Agency (HIPA).</p>
 
@@ -1068,7 +1068,7 @@ Dear {{partnerTitle}} {{partnerName}},
 
 Thank you for your registration!
 
-We are pleased to confirm your registration as a Partner guest for the 13th CEO Gala.
+We are pleased to confirm your registration as a Partner guest for the 12th CEO Gala.
 
 Your attendance has been registered by {{mainGuestTitle}} {{mainGuestName}}, and we are delighted to welcome you to this distinguished occasion organised by the Budapest Business Journal, together with its official event partner, the Hungarian Investment Promotion Agency (HIPA).
 

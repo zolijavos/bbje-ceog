@@ -141,7 +141,7 @@ export async function sendEmail(options: {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       await transport.sendMail({
-        from: process.env.SMTP_FROM || 'noreply@ceogala.test',
+        from: `"CEO Gala 2026" <${process.env.SMTP_FROM || 'noreply@ceogala.test'}>`,
         to: options.to,
         subject: options.subject,
         html: options.html,
