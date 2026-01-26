@@ -97,9 +97,15 @@ export default function UsersDashboard() {
         : '/api/admin/users';
       const method = editingUser ? 'PATCH' : 'POST';
 
+      // Split name into first_name and last_name for API
+      const nameParts = formData.name.trim().split(/\s+/);
+      const first_name = nameParts[0] || '';
+      const last_name = nameParts.slice(1).join(' ') || nameParts[0] || '';
+
       const body: Record<string, string> = {
         email: formData.email,
-        name: formData.name,
+        first_name,
+        last_name,
         role: formData.role,
       };
 
