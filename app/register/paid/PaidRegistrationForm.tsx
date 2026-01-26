@@ -5,7 +5,7 @@
  *
  * Multi-step form for paying guests:
  * - Step 1: Ticket type (if paired allowed)
- * - Step 2: Guest profile (title, dietary, seating)
+ * - Step 2: Guest profile (title, phone, company, position, dietary)
  * - Step 3: Billing information (structured form)
  * - Step 4: Partner details (if paired selected)
  * - Step 5: Consent (GDPR, cancellation)
@@ -135,7 +135,6 @@ interface Guest {
   company?: string | null;
   position?: string | null;
   dietary_requirements?: string | null;
-  seating_preferences?: string | null;
 }
 
 interface PaidRegistrationFormProps {
@@ -153,7 +152,6 @@ interface FormData {
   company: string;
   position: string;
   dietaryRequirements: string;
-  seatingPreferences: string;
   // Billing fields
   billing: BillingFormData;
   // Partner fields
@@ -164,7 +162,6 @@ interface FormData {
   partnerCompany: string;
   partnerPosition: string;
   partnerDietaryRequirements: string;
-  partnerSeatingPreferences: string;
   partnerGdprConsent: boolean;
   // Consent fields
   gdprConsent: boolean;
@@ -177,7 +174,6 @@ interface FormErrors {
   company?: string;
   position?: string;
   dietary_requirements?: string;
-  seating_preferences?: string;
   billingName?: string;
   companyName?: string;
   taxNumber?: string;
@@ -231,7 +227,6 @@ export default function PaidRegistrationForm({
     company: guest.company || '',
     position: guest.position || '',
     dietaryRequirements: guest.dietary_requirements || '',
-    seatingPreferences: guest.seating_preferences || '',
     // Billing
     billing: {
       billingName: `${guest.first_name} ${guest.last_name}`,
@@ -251,7 +246,6 @@ export default function PaidRegistrationForm({
     partnerCompany: '',
     partnerPosition: '',
     partnerDietaryRequirements: '',
-    partnerSeatingPreferences: '',
     partnerGdprConsent: false,
     // Consent
     gdprConsent: false,
@@ -433,7 +427,6 @@ export default function PaidRegistrationForm({
           company: formData.company,
           position: formData.position,
           dietary_requirements: formData.dietaryRequirements || null,
-          seating_preferences: formData.seatingPreferences || null,
           // Billing info (structured)
           billing_info: {
             billing_name: formData.billing.billingName,
@@ -453,7 +446,6 @@ export default function PaidRegistrationForm({
           partner_company: formData.ticketType === 'paid_paired' ? (formData.partnerCompany || null) : null,
           partner_position: formData.ticketType === 'paid_paired' ? (formData.partnerPosition || null) : null,
           partner_dietary_requirements: formData.ticketType === 'paid_paired' ? (formData.partnerDietaryRequirements || null) : null,
-          partner_seating_preferences: formData.ticketType === 'paid_paired' ? (formData.partnerSeatingPreferences || null) : null,
           partner_gdpr_consent: formData.ticketType === 'paid_paired' ? formData.partnerGdprConsent : null,
           // Consent
           gdpr_consent: formData.gdprConsent,
@@ -668,13 +660,11 @@ export default function PaidRegistrationForm({
             company={formData.company}
             position={formData.position}
             dietaryRequirements={formData.dietaryRequirements}
-            seatingPreferences={formData.seatingPreferences}
             onTitleChange={(value) => updateFormData('title', value)}
             onPhoneChange={(value) => updateFormData('phone', value)}
             onCompanyChange={(value) => updateFormData('company', value)}
             onPositionChange={(value) => updateFormData('position', value)}
             onDietaryChange={(value) => updateFormData('dietaryRequirements', value)}
-            onSeatingChange={(value) => updateFormData('seatingPreferences', value)}
             errors={errors}
           />
         )}

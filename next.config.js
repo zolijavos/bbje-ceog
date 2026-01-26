@@ -15,8 +15,8 @@ const nextConfig = {
       {
         source: '/(.*)',
         headers: [
-          // Prevent clickjacking
-          { key: 'X-Frame-Options', value: 'DENY' },
+          // Prevent clickjacking (SAMEORIGIN allows same-domain iframes for testing)
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
           // Prevent MIME type sniffing
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           // Control referrer information
@@ -44,8 +44,8 @@ const nextConfig = {
               "font-src 'self' data:",
               // API connections: self + Stripe API
               "connect-src 'self' https://api.stripe.com",
-              // Frames: Stripe checkout iframe
-              "frame-src https://js.stripe.com https://hooks.stripe.com",
+              // Frames: Stripe checkout iframe + same-origin iframes
+              "frame-src 'self' https://js.stripe.com https://hooks.stripe.com",
               // Form submissions
               "form-action 'self'",
               // Base URI restriction

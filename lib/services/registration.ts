@@ -396,17 +396,18 @@ export async function processVIPRegistration(
           guestFirstName: guest.first_name,
           guestLastName: guest.last_name,
           guestCompany: data.company || undefined,
+          guestPosition: data.position || undefined,
           guestPhone: data.phone || undefined,
           guestDiet: data.dietary_requirements || undefined,
-          guestSeating: data.seating_preferences || undefined,
           hasPartner: data.has_partner || false,
           partnerTitle: data.partner_title || undefined,
           partnerFirstName: data.partner_first_name || undefined,
           partnerLastName: data.partner_last_name || undefined,
+          partnerCompany: data.partner_company || undefined,
+          partnerPosition: data.partner_position || undefined,
           partnerPhone: data.partner_phone || undefined,
           partnerEmail: data.partner_email || undefined,
           partnerDiet: data.partner_dietary_requirements || undefined,
-          partnerSeating: data.partner_seating_preferences || undefined,
         });
 
         if (feedbackResult.mainResult.success) {

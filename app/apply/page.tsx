@@ -21,7 +21,6 @@ interface FormData {
   company: string;
   position: string;
   dietaryRequirements: string;
-  seatingPreferences: string;
   gdprConsent: boolean;
 }
 
@@ -32,7 +31,6 @@ interface FormErrors {
   company?: string;
   position?: string;
   dietaryRequirements?: string;
-  seatingPreferences?: string;
   gdprConsent?: string;
 }
 
@@ -50,7 +48,6 @@ export default function ApplyPage() {
     company: '',
     position: '',
     dietaryRequirements: '',
-    seatingPreferences: '',
     gdprConsent: false,
   });
 
@@ -129,7 +126,6 @@ export default function ApplyPage() {
           company: formData.company.trim(),
           position: formData.position.trim(),
           dietary_requirements: formData.dietaryRequirements.trim() || null,
-          seating_preferences: formData.seatingPreferences.trim() || null,
           gdpr_consent: formData.gdprConsent,
         }),
       });
@@ -282,13 +278,11 @@ export default function ApplyPage() {
                 company={formData.company}
                 position={formData.position}
                 dietaryRequirements={formData.dietaryRequirements}
-                seatingPreferences={formData.seatingPreferences}
                 onTitleChange={(value) => setFormData({ ...formData, title: value })}
                 onPhoneChange={(value) => setFormData({ ...formData, phone: value })}
                 onCompanyChange={(value) => setFormData({ ...formData, company: value })}
                 onPositionChange={(value) => setFormData({ ...formData, position: value })}
                 onDietaryChange={(value) => setFormData({ ...formData, dietaryRequirements: value })}
-                onSeatingChange={(value) => setFormData({ ...formData, seatingPreferences: value })}
                 errors={{
                   phone: errors.phone,
                   company: errors.company,

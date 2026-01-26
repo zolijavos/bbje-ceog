@@ -1212,17 +1212,18 @@ export async function sendRegistrationFeedbackEmail(params: {
   guestFirstName: string;
   guestLastName: string;
   guestCompany?: string;
+  guestPosition?: string;
   guestPhone?: string;
   guestDiet?: string;
-  guestSeating?: string;
   hasPartner: boolean;
   partnerTitle?: string;
   partnerFirstName?: string;
   partnerLastName?: string;
+  partnerCompany?: string;
+  partnerPosition?: string;
   partnerPhone?: string;
   partnerEmail?: string;
   partnerDiet?: string;
-  partnerSeating?: string;
 }): Promise<EmailResult> {
   try {
     const appUrl = process.env.APP_URL || 'https://ceogala.mflevents.space';
@@ -1232,19 +1233,20 @@ export async function sendRegistrationFeedbackEmail(params: {
       guestTitle: params.guestTitle || '',
       guestName: getFullName(params.guestFirstName, params.guestLastName),
       guestCompany: params.guestCompany || '-',
+      guestPosition: params.guestPosition || '-',
       guestPhone: params.guestPhone || '-',
       guestEmail: params.guestEmail,
       guestDiet: params.guestDiet || 'No special requirements',
-      guestSeating: params.guestSeating || 'No preferences',
       hasPartner: params.hasPartner ? 'Yes' : 'No',
       partnerTitle: params.partnerTitle || '',
       partnerName: params.partnerFirstName && params.partnerLastName
         ? getFullName(params.partnerFirstName, params.partnerLastName)
         : '',
+      partnerCompany: params.partnerCompany || '-',
+      partnerPosition: params.partnerPosition || '-',
       partnerPhone: params.partnerPhone || '-',
       partnerEmail: params.partnerEmail || '-',
       partnerDiet: params.partnerDiet || 'No special requirements',
-      partnerSeating: params.partnerSeating || 'No preferences',
       headerImage: headerImageUrl,
       baseUrl: appUrl,
     });
@@ -1296,9 +1298,9 @@ export async function sendRegistrationFeedbackPartnerEmail(params: {
   partnerFirstName: string;
   partnerLastName: string;
   partnerCompany?: string;
+  partnerPosition?: string;
   partnerPhone?: string;
   partnerDiet?: string;
-  partnerSeating?: string;
   mainGuestTitle?: string;
   mainGuestFirstName: string;
   mainGuestLastName: string;
@@ -1312,10 +1314,10 @@ export async function sendRegistrationFeedbackPartnerEmail(params: {
       partnerTitle: params.partnerTitle || '',
       partnerName: getFullName(params.partnerFirstName, params.partnerLastName),
       partnerCompany: params.partnerCompany || '-',
+      partnerPosition: params.partnerPosition || '-',
       partnerPhone: params.partnerPhone || '-',
       partnerEmail: params.partnerEmail,
       partnerDiet: params.partnerDiet || 'No special requirements',
-      partnerSeating: params.partnerSeating || 'No preferences',
       mainGuestTitle: params.mainGuestTitle || '',
       mainGuestName: getFullName(params.mainGuestFirstName, params.mainGuestLastName),
       headerImage: headerImageUrl,
@@ -1370,18 +1372,19 @@ export async function sendRegistrationFeedbackEmails(params: {
   guestFirstName: string;
   guestLastName: string;
   guestCompany?: string;
+  guestPosition?: string;
   guestPhone?: string;
   guestDiet?: string;
-  guestSeating?: string;
   hasPartner: boolean;
   partnerGuestId?: number;
   partnerTitle?: string;
   partnerFirstName?: string;
   partnerLastName?: string;
+  partnerCompany?: string;
+  partnerPosition?: string;
   partnerPhone?: string;
   partnerEmail?: string;
   partnerDiet?: string;
-  partnerSeating?: string;
 }): Promise<{ mainResult: EmailResult; partnerResult?: EmailResult }> {
   // Send feedback to main guest
   const mainResult = await sendRegistrationFeedbackEmail({
@@ -1391,17 +1394,18 @@ export async function sendRegistrationFeedbackEmails(params: {
     guestFirstName: params.guestFirstName,
     guestLastName: params.guestLastName,
     guestCompany: params.guestCompany,
+    guestPosition: params.guestPosition,
     guestPhone: params.guestPhone,
     guestDiet: params.guestDiet,
-    guestSeating: params.guestSeating,
     hasPartner: params.hasPartner,
     partnerTitle: params.partnerTitle,
     partnerFirstName: params.partnerFirstName,
     partnerLastName: params.partnerLastName,
+    partnerCompany: params.partnerCompany,
+    partnerPosition: params.partnerPosition,
     partnerPhone: params.partnerPhone,
     partnerEmail: params.partnerEmail,
     partnerDiet: params.partnerDiet,
-    partnerSeating: params.partnerSeating,
   });
 
   // Send feedback to partner if they have an email
@@ -1413,10 +1417,10 @@ export async function sendRegistrationFeedbackEmails(params: {
       partnerTitle: params.partnerTitle,
       partnerFirstName: params.partnerFirstName,
       partnerLastName: params.partnerLastName,
-      partnerCompany: params.guestCompany, // Partner typically shares company with main guest
+      partnerCompany: params.partnerCompany,
+      partnerPosition: params.partnerPosition,
       partnerPhone: params.partnerPhone,
       partnerDiet: params.partnerDiet,
-      partnerSeating: params.partnerSeating,
       mainGuestTitle: params.guestTitle,
       mainGuestFirstName: params.guestFirstName,
       mainGuestLastName: params.guestLastName,

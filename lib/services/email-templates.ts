@@ -1205,8 +1205,8 @@ CEO Gála Organizing Team`,
     name: 'Registration Feedback (Main Guest)',
     subject: 'Automatic feedback message CEO Gala 2026',
     variables: [
-      'guestTitle', 'guestName', 'guestCompany', 'guestPhone', 'guestEmail', 'guestDiet', 'guestSeating',
-      'hasPartner', 'partnerTitle', 'partnerName', 'partnerPhone', 'partnerEmail', 'partnerDiet',
+      'guestTitle', 'guestName', 'guestCompany', 'guestPosition', 'guestPhone', 'guestEmail', 'guestDiet',
+      'hasPartner', 'partnerTitle', 'partnerName', 'partnerCompany', 'partnerPosition', 'partnerPhone', 'partnerEmail', 'partnerDiet',
       'headerImage', 'baseUrl'
     ],
     html_body: `<!DOCTYPE html>
@@ -1258,10 +1258,10 @@ CEO Gála Organizing Team`,
         <div class="detail-row"><span class="detail-label">Prefix:</span> <span class="detail-value">{{guestTitle}}</span></div>
         <div class="detail-row"><span class="detail-label">Name:</span> <span class="detail-value">{{guestName}}</span></div>
         <div class="detail-row"><span class="detail-label">Company name:</span> <span class="detail-value">{{guestCompany}}</span></div>
+        <div class="detail-row"><span class="detail-label">Position:</span> <span class="detail-value">{{guestPosition}}</span></div>
         <div class="detail-row"><span class="detail-label">Phone number:</span> <span class="detail-value">{{guestPhone}}</span></div>
         <div class="detail-row"><span class="detail-label">Email address:</span> <span class="detail-value">{{guestEmail}}</span></div>
         <div class="detail-row"><span class="detail-label">Special diet:</span> <span class="detail-value">{{guestDiet}}</span></div>
-        <div class="detail-row"><span class="detail-label">Seating preferences:</span> <span class="detail-value">{{guestSeating}}</span></div>
         <div class="detail-row"><span class="detail-label">Partner:</span> <span class="detail-value">{{hasPartner}}</span></div>
 
         {{#if hasPartner}}
@@ -1269,6 +1269,8 @@ CEO Gála Organizing Team`,
           <h4>Partner details:</h4>
           <div class="detail-row"><span class="detail-label">Partner's prefix:</span> <span class="detail-value">{{partnerTitle}}</span></div>
           <div class="detail-row"><span class="detail-label">Partner's name:</span> <span class="detail-value">{{partnerName}}</span></div>
+          <div class="detail-row"><span class="detail-label">Partner's company:</span> <span class="detail-value">{{partnerCompany}}</span></div>
+          <div class="detail-row"><span class="detail-label">Partner's position:</span> <span class="detail-value">{{partnerPosition}}</span></div>
           <div class="detail-row"><span class="detail-label">Partner's phone:</span> <span class="detail-value">{{partnerPhone}}</span></div>
           <div class="detail-row"><span class="detail-label">Partner's email:</span> <span class="detail-value">{{partnerEmail}}</span></div>
           <div class="detail-row"><span class="detail-label">Partner's special diet:</span> <span class="detail-value">{{partnerDiet}}</span></div>
@@ -1317,10 +1319,10 @@ ORDER DETAILS
 Prefix: {{guestTitle}}
 Name: {{guestName}}
 Company name: {{guestCompany}}
+Position: {{guestPosition}}
 Phone number: {{guestPhone}}
 Email address: {{guestEmail}}
 Special diet: {{guestDiet}}
-Seating preferences: {{guestSeating}}
 Partner: {{hasPartner}}
 
 {{#if hasPartner}}
@@ -1328,6 +1330,8 @@ PARTNER DETAILS
 ---------------
 Partner's prefix: {{partnerTitle}}
 Partner's name: {{partnerName}}
+Partner's company: {{partnerCompany}}
+Partner's position: {{partnerPosition}}
 Partner's phone: {{partnerPhone}}
 Partner's email: {{partnerEmail}}
 Partner's special diet: {{partnerDiet}}
@@ -1360,7 +1364,7 @@ Event website: ceogala.com`,
     name: 'Registration Feedback (Partner)',
     subject: 'Registration details received: CEO Gala 2026',
     variables: [
-      'partnerTitle', 'partnerName', 'partnerCompany', 'partnerPhone', 'partnerEmail', 'partnerDiet',
+      'partnerTitle', 'partnerName', 'partnerCompany', 'partnerPosition', 'partnerPhone', 'partnerEmail', 'partnerDiet',
       'mainGuestTitle', 'mainGuestName', 'headerImage', 'baseUrl'
     ],
     html_body: `<!DOCTYPE html>
@@ -1412,6 +1416,7 @@ Event website: ceogala.com`,
         <div class="detail-row"><span class="detail-label">Prefix:</span> <span class="detail-value">{{partnerTitle}}</span></div>
         <div class="detail-row"><span class="detail-label">Name:</span> <span class="detail-value">{{partnerName}}</span></div>
         <div class="detail-row"><span class="detail-label">Company name:</span> <span class="detail-value">{{partnerCompany}}</span></div>
+        <div class="detail-row"><span class="detail-label">Position:</span> <span class="detail-value">{{partnerPosition}}</span></div>
         <div class="detail-row"><span class="detail-label">Phone number:</span> <span class="detail-value">{{partnerPhone}}</span></div>
         <div class="detail-row"><span class="detail-label">Email address:</span> <span class="detail-value">{{partnerEmail}}</span></div>
         <div class="detail-row"><span class="detail-label">Special diet:</span> <span class="detail-value">{{partnerDiet}}</span></div>
@@ -1458,6 +1463,7 @@ REGISTRATION DETAILS (AS PROVIDED)
 Prefix: {{partnerTitle}}
 Name: {{partnerName}}
 Company name: {{partnerCompany}}
+Position: {{partnerPosition}}
 Phone number: {{partnerPhone}}
 Email address: {{partnerEmail}}
 Special diet: {{partnerDiet}}

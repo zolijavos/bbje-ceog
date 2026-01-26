@@ -80,7 +80,6 @@ export default async function PaidPage({ searchParams }: PaidPageProps) {
         company: guest.company,
         position: guest.position,
         dietary_requirements: guest.dietary_requirements,
-        seating_preferences: guest.seating_preferences,
       }}
       canSelectPaired={canSelectPaired}
     />

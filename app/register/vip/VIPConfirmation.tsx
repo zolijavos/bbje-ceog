@@ -83,7 +83,6 @@ interface Guest {
   company?: string | null;
   position?: string | null;
   dietary_requirements?: string | null;
-  seating_preferences?: string | null;
 }
 
 interface VIPConfirmationProps {
@@ -96,7 +95,6 @@ interface FormData {
   company: string;
   position: string;
   dietaryRequirements: string;
-  seatingPreferences: string;
   gdprConsent: boolean;
   cancellationAccepted: boolean;
   // Partner fields (optional for VIP)
@@ -109,7 +107,6 @@ interface FormData {
   partnerCompany: string;
   partnerPosition: string;
   partnerDietaryRequirements: string;
-  partnerSeatingPreferences: string;
   partnerGdprConsent: boolean;
 }
 
@@ -119,7 +116,6 @@ interface FormErrors {
   company?: string;
   position?: string;
   dietary_requirements?: string;
-  seating_preferences?: string;
   gdpr_consent?: string;
   cancellation_accepted?: string;
   partner_title?: string;
@@ -189,7 +185,6 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
     company: guest.company || '',
     position: guest.position || '',
     dietaryRequirements: guest.dietary_requirements || '',
-    seatingPreferences: guest.seating_preferences || '',
     gdprConsent: false,
     cancellationAccepted: false,
     hasPartner: false,
@@ -201,7 +196,6 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
     partnerCompany: '',
     partnerPosition: '',
     partnerDietaryRequirements: '',
-    partnerSeatingPreferences: '',
     partnerGdprConsent: false,
   });
 
@@ -295,7 +289,6 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
           company: formData.company,
           position: formData.position,
           dietary_requirements: formData.dietaryRequirements || null,
-          seating_preferences: formData.seatingPreferences || null,
           gdpr_consent: formData.gdprConsent,
           cancellation_accepted: formData.cancellationAccepted,
           // Partner info (optional for VIP)
@@ -308,7 +301,6 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
           partner_company: formData.hasPartner ? (formData.partnerCompany || null) : null,
           partner_position: formData.hasPartner ? (formData.partnerPosition || null) : null,
           partner_dietary_requirements: formData.hasPartner ? (formData.partnerDietaryRequirements || null) : null,
-          partner_seating_preferences: formData.hasPartner ? (formData.partnerSeatingPreferences || null) : null,
           partner_gdpr_consent: formData.hasPartner ? formData.partnerGdprConsent : null,
         }),
       });
@@ -575,13 +567,11 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
             company={formData.company}
             position={formData.position}
             dietaryRequirements={formData.dietaryRequirements}
-            seatingPreferences={formData.seatingPreferences}
             onTitleChange={(value) => setFormData((prev) => ({ ...prev, title: value }))}
             onPhoneChange={(value) => setFormData((prev) => ({ ...prev, phone: value }))}
             onCompanyChange={(value) => setFormData((prev) => ({ ...prev, company: value }))}
             onPositionChange={(value) => setFormData((prev) => ({ ...prev, position: value }))}
             onDietaryChange={(value) => setFormData((prev) => ({ ...prev, dietaryRequirements: value }))}
-            onSeatingChange={(value) => setFormData((prev) => ({ ...prev, seatingPreferences: value }))}
             errors={errors}
           />
         </div>
@@ -615,7 +605,6 @@ export default function VIPConfirmation({ guest }: VIPConfirmationProps) {
                     partnerCompany: '',
                     partnerPosition: '',
                     partnerDietaryRequirements: '',
-                    partnerSeatingPreferences: '',
                     partnerGdprConsent: false
                   }),
                 }));
