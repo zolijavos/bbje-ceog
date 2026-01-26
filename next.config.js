@@ -34,14 +34,14 @@ const nextConfig = {
             value: [
               // Default: only same origin
               "default-src 'self'",
-              // Scripts: self + Stripe + inline (for Next.js)
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com",
-              // Styles: self + inline (for Tailwind/styled-jsx)
-              "style-src 'self' 'unsafe-inline'",
+              // Scripts: self + Stripe + Alpine.js CDN + inline (for Next.js)
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://cdn.jsdelivr.net",
+              // Styles: self + inline + Google Fonts (for Tailwind/styled-jsx)
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               // Images: self + data URLs (for QR codes) + HTTPS
               "img-src 'self' data: https:",
-              // Fonts: self + data URLs
-              "font-src 'self' data:",
+              // Fonts: self + data URLs + Google Fonts
+              "font-src 'self' data: https://fonts.gstatic.com",
               // API connections: self + Stripe API
               "connect-src 'self' https://api.stripe.com",
               // Frames: Stripe checkout iframe + same-origin iframes
