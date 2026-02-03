@@ -3,7 +3,6 @@ import { cookies } from 'next/headers';
 import { prisma } from '@/lib/db/prisma';
 import { verifyPWASession } from '@/lib/services/pwa-auth';
 import { EVENT_CONFIG } from '@/lib/config/event';
-import { checkRateLimit, RATE_LIMITS } from '@/lib/services/rate-limit';
 
 const CANCELLATION_DEADLINE_DAYS = 7;
 
@@ -25,16 +24,6 @@ export async function GET() {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
-      );
-    }
-
-    // Rate limit check - use API limit for status check
-    const rateLimitKey = `cancel-status:${session.guestId}`;
-    const rateLimit = await checkRateLimit(rateLimitKey, RATE_LIMITS.API);
-    if (!rateLimit.allowed) {
-      return NextResponse.json(
-        { error: 'Too many requests. Please try again later.' },
-        { status: 429 }
       );
     }
 

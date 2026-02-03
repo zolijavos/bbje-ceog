@@ -8,6 +8,21 @@ import { prisma } from '@/lib/db/prisma';
 import { GuestType, RegistrationStatus, Prisma } from '@prisma/client';
 
 /**
+ * Valid sort columns for guest list
+ */
+export type GuestSortBy = 'name' | 'status' | 'type' | 'payment' | 'created_at' | 'updated_at' | 'last_magic_link';
+
+/**
+ * Magic link filter categories
+ */
+export type MagicLinkFilter = 'all' | 'ready' | 'recent' | 'never' | 'sendable';
+
+/**
+ * Magic link time category
+ */
+export type MagicLinkCategory = 'ready' | 'warning' | 'recent' | 'never';
+
+/**
  * Guest list query parameters
  */
 export interface GuestListParams {
@@ -24,6 +39,11 @@ export interface GuestListParams {
   hasTable?: boolean;
   // Special filter: guests who are approved but not checked in
   notCheckedIn?: boolean;
+  // Sorting
+  sortBy?: GuestSortBy;
+  sortOrder?: 'asc' | 'desc';
+  // Magic link filter for bulk email
+  magicLinkFilter?: MagicLinkFilter;
 }
 
 /**
@@ -50,6 +70,10 @@ export interface GuestListItem {
     id: number;
     ticket_type: string;
   } | null;
+  // Magic link email tracking
+  lastMagicLinkAt: Date | null;
+  magicLinkCount: number;
+  magicLinkCategory: MagicLinkCategory;
 }
 
 /**
@@ -84,7 +108,15 @@ export async function getGuestList(
     hasTicket,
     hasTable,
     notCheckedIn,
+    sortBy = 'created_at',
+    sortOrder = 'desc',
+    magicLinkFilter,
   } = params;
+
+  // Time boundaries for magic link categories
+  const now = new Date();
+  const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+  const fortyEightHoursAgo = new Date(now.getTime() - 48 * 60 * 60 * 1000);
 
   // Build where clause
   const where: Prisma.GuestWhereInput = {};
@@ -137,6 +169,62 @@ export async function getGuestList(
     where.table_assignment = null;
   }
 
+  // Magic link filter (for bulk email feature)
+  if (magicLinkFilter && magicLinkFilter !== 'all') {
+    switch (magicLinkFilter) {
+      case 'ready':
+        // 48+ hours since last magic link
+        where.OR = [
+          { magic_link_expires_at: null },
+          { magic_link_expires_at: { lt: fortyEightHoursAgo } },
+        ];
+        break;
+      case 'recent':
+        // Within last 48 hours
+        where.magic_link_expires_at = { gte: fortyEightHoursAgo };
+        break;
+      case 'never':
+        // Never sent
+        where.magic_link_expires_at = null;
+        break;
+      case 'sendable':
+        // Ready to send: either 48h+ ago OR never sent
+        where.OR = [
+          { magic_link_expires_at: null },
+          { magic_link_expires_at: { lt: fortyEightHoursAgo } },
+        ];
+        break;
+    }
+  }
+
+  // Build orderBy clause based on sortBy parameter
+  let orderBy: Prisma.GuestOrderByWithRelationInput | Prisma.GuestOrderByWithRelationInput[] = { created_at: 'desc' };
+
+  switch (sortBy) {
+    case 'name':
+      orderBy = [
+        { first_name: sortOrder },
+        { last_name: sortOrder },
+      ];
+      break;
+    case 'status':
+      orderBy = { registration_status: sortOrder };
+      break;
+    case 'type':
+      orderBy = { guest_type: sortOrder };
+      break;
+    case 'created_at':
+      orderBy = { created_at: sortOrder };
+      break;
+    case 'updated_at':
+      orderBy = { updated_at: sortOrder };
+      break;
+    case 'last_magic_link':
+      orderBy = { magic_link_expires_at: sortOrder };
+      break;
+    // 'payment' sorting handled after fetch (computed field)
+  }
+
   // Calculate pagination
   const skip = (page - 1) * limit;
 
@@ -146,7 +234,7 @@ export async function getGuestList(
       where,
       skip,
       take: limit,
-      orderBy: { created_at: 'desc' },
+      orderBy,
       include: {
         table_assignment: {
           include: {
@@ -159,6 +247,20 @@ export async function getGuestList(
           select: {
             id: true,
             ticket_type: true,
+            payment: true,
+          },
+        },
+        // Include magic link email count
+        email_logs: {
+          where: {
+            email_type: 'magic_link',
+            status: 'sent',
+          },
+          select: {
+            sent_at: true,
+          },
+          orderBy: {
+            sent_at: 'desc',
           },
         },
       },
@@ -166,8 +268,33 @@ export async function getGuestList(
     prisma.guest.count({ where }),
   ]);
 
+  // Helper to determine magic link category
+  const getMagicLinkCategory = (lastSentAt: Date | null): MagicLinkCategory => {
+    if (!lastSentAt) return 'never';
+    if (lastSentAt < fortyEightHoursAgo) return 'ready';
+    if (lastSentAt < twentyFourHoursAgo) return 'warning';
+    return 'recent';
+  };
+
+  // Transform guests to add magic link data
+  const guestsWithMagicLink: GuestListItem[] = guests.map((guest) => {
+    const lastMagicLinkAt = guest.email_logs.length > 0 ? guest.email_logs[0].sent_at : null;
+    const magicLinkCount = guest.email_logs.length;
+    const magicLinkCategory = getMagicLinkCategory(lastMagicLinkAt);
+
+    // Remove email_logs from the response (we've extracted what we need)
+    const { email_logs, ...guestWithoutLogs } = guest;
+
+    return {
+      ...guestWithoutLogs,
+      lastMagicLinkAt,
+      magicLinkCount,
+      magicLinkCategory,
+    } as GuestListItem;
+  });
+
   return {
-    guests: guests as GuestListItem[],
+    guests: guestsWithMagicLink,
     total,
     page,
     limit,

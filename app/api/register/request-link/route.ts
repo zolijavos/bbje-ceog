@@ -9,7 +9,6 @@
  * Security layers:
  * - reCAPTCHA v3 verification (bot protection)
  * - IP-based rate limiting (10 requests/hour per IP)
- * - Email-based rate limiting (5 per hour per email type)
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -22,7 +21,6 @@ interface RequestLinkBody {
   email: string;
   reason?: 'expired' | 'resend';
   recaptchaToken?: string;
-  // Note: bypassRateLimit removed - server validates expiry independently
 }
 
 /**
@@ -196,31 +194,10 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // SECURITY FIX: Only bypass rate limit if the link is ACTUALLY expired
-    // Server-side verification prevents clients from faking 'expired' reason
-    const isActuallyExpired = guest.magic_link_expires_at
-      ? new Date() > guest.magic_link_expires_at
-      : false;
-
-    const shouldBypassRateLimit = reason === 'expired' && isActuallyExpired;
-
-    // Send magic link with verified rate limit bypass
-    const result = await sendMagicLinkEmail(guest.id, {
-      bypassRateLimit: shouldBypassRateLimit,
-    });
+    // Send magic link (rate limiting removed per business requirement)
+    const result = await sendMagicLinkEmail(guest.id);
 
     if (!result.success) {
-      // Check if it's a rate limit error
-      if (result.error?.includes('Rate limit')) {
-        return NextResponse.json(
-          {
-            success: false,
-            error: 'Too many requests. Please wait an hour before trying again.',
-          },
-          { status: 429 }
-        );
-      }
-
       return NextResponse.json(
         { success: false, error: result.error || 'Email sending error' },
         { status: 500 }

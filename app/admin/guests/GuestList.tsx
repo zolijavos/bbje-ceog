@@ -21,6 +21,9 @@ import {
   SpinnerGap,
   ArrowsClockwise,
   DownloadSimple,
+  CaretUp,
+  CaretDown,
+  CaretUpDown,
 } from '@phosphor-icons/react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
@@ -90,6 +93,10 @@ interface Guest {
   cancellationReason?: string | null;
   hasCheckedIn?: boolean;
   checkedInAt?: string | null;
+  // Magic link tracking for bulk email feature
+  lastMagicLinkAt?: string | null;
+  magicLinkCount?: number;
+  magicLinkCategory?: 'ready' | 'warning' | 'recent' | 'never';
 }
 
 interface SendResult {
@@ -113,8 +120,14 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [vipFilter, setVipFilter] = useState<string>('all');
   const [paymentFilter, setPaymentFilter] = useState<string>('all');
+  const [magicLinkFilter, setMagicLinkFilter] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(25);
+
+  // Sorting state
+  type SortColumn = 'name' | 'type' | 'status' | 'payment' | 'lastMagicLink' | 'magicLinkCount' | 'createdAt';
+  const [sortColumn, setSortColumn] = useState<SortColumn>('createdAt');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
 
   // Localized type labels
   const getLocalizedTypeLabel = (type: string): string => {
@@ -182,12 +195,9 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
   // State for refresh button
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // Apply filters when they change
+  // Apply filters and sorting when they change
   useEffect(() => {
     let result = [...initialGuests];
-
-    // Sort by last updated (newest first)
-    result.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 
     // Search filter
     if (search) {
@@ -235,9 +245,71 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
       }
     }
 
+    // Magic link filter (for bulk email feature)
+    if (magicLinkFilter !== 'all') {
+      const now = new Date();
+      const fortyEightHoursAgo = new Date(now.getTime() - 48 * 60 * 60 * 1000);
+
+      switch (magicLinkFilter) {
+        case 'ready': // 48+ hours since last magic link
+          result = result.filter(g => {
+            if (!g.lastMagicLinkAt) return true; // Never sent = ready
+            return new Date(g.lastMagicLinkAt) < fortyEightHoursAgo;
+          });
+          break;
+        case 'recent': // Within last 48 hours
+          result = result.filter(g => {
+            if (!g.lastMagicLinkAt) return false;
+            return new Date(g.lastMagicLinkAt) >= fortyEightHoursAgo;
+          });
+          break;
+        case 'never': // Never sent
+          result = result.filter(g => !g.lastMagicLinkAt);
+          break;
+        case 'sendable': // Ready to send = ready OR never
+          result = result.filter(g => {
+            if (!g.lastMagicLinkAt) return true;
+            return new Date(g.lastMagicLinkAt) < fortyEightHoursAgo;
+          });
+          break;
+      }
+    }
+
+    // Apply sorting
+    result.sort((a, b) => {
+      let comparison = 0;
+      switch (sortColumn) {
+        case 'name':
+          comparison = a.name.localeCompare(b.name);
+          break;
+        case 'type':
+          comparison = a.guestType.localeCompare(b.guestType);
+          break;
+        case 'status':
+          comparison = a.status.localeCompare(b.status);
+          break;
+        case 'payment':
+          comparison = (a.paymentStatus || '').localeCompare(b.paymentStatus || '');
+          break;
+        case 'lastMagicLink':
+          const aTime = a.lastMagicLinkAt ? new Date(a.lastMagicLinkAt).getTime() : 0;
+          const bTime = b.lastMagicLinkAt ? new Date(b.lastMagicLinkAt).getTime() : 0;
+          comparison = aTime - bTime;
+          break;
+        case 'magicLinkCount':
+          comparison = (a.magicLinkCount || 0) - (b.magicLinkCount || 0);
+          break;
+        case 'createdAt':
+        default:
+          comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+          break;
+      }
+      return sortDirection === 'asc' ? comparison : -comparison;
+    });
+
     setFilteredGuests(result);
     setCurrentPage(1); // Reset to first page when filters change
-  }, [initialGuests, search, typeFilter, statusFilter, vipFilter, paymentFilter]);
+  }, [initialGuests, search, typeFilter, statusFilter, vipFilter, paymentFilter, magicLinkFilter, sortColumn, sortDirection]);
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredGuests.length / pageSize);
@@ -257,6 +329,28 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
       return next;
     });
   }, []);
+
+  // Handle column sort click
+  const handleSort = useCallback((column: SortColumn) => {
+    if (sortColumn === column) {
+      // Toggle direction if same column
+      setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+    } else {
+      // Set new column with default desc direction
+      setSortColumn(column);
+      setSortDirection('desc');
+    }
+  }, [sortColumn]);
+
+  // Sort indicator component
+  const SortIndicator = ({ column }: { column: SortColumn }) => {
+    if (sortColumn !== column) {
+      return <CaretUpDown size={14} className="ml-1 text-gray-400" />;
+    }
+    return sortDirection === 'asc'
+      ? <CaretUp size={14} weight="bold" className="ml-1 text-blue-600" />
+      : <CaretDown size={14} weight="bold" className="ml-1 text-blue-600" />;
+  };
 
   // Toggle all guests on current page
   const toggleAll = useCallback(() => {
@@ -705,6 +799,26 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
             <option value="none">{t('paymentNone')}</option>
           </select>
         </div>
+
+        {/* Magic link filter (for bulk email) */}
+        <div>
+          <label htmlFor="magiclink-filter" className="sr-only">
+            Magic Link Filter
+          </label>
+          <select
+            id="magiclink-filter"
+            value={magicLinkFilter}
+            onChange={e => setMagicLinkFilter(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            data-testid="magiclink-filter"
+          >
+            <option value="all">{t('allMagicLinks') || 'All (Magic Link)'}</option>
+            <option value="sendable">{t('readyToSend') || '📧 Ready to send (48h+)'}</option>
+            <option value="ready">{t('mlReady') || '🟢 48h+ ago'}</option>
+            <option value="recent">{t('mlRecent') || '🔴 Within 48h'}</option>
+            <option value="never">{t('mlNever') || '⚪ Never sent'}</option>
+          </select>
+        </div>
       </div>
 
       {/* Results summary */}
@@ -775,20 +889,64 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                     aria-label="Select all on this page"
                   />
                 </th>
-                <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                  {t('guest').toUpperCase()}
+                <th
+                  className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer hover:bg-gray-100 select-none"
+                  onClick={() => handleSort('name')}
+                >
+                  <span className="flex items-center">
+                    {t('guest').toUpperCase()}
+                    <SortIndicator column="name" />
+                  </span>
                 </th>
-                <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase hidden md:table-cell">
-                  {t('type').toUpperCase()}
+                <th
+                  className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase hidden md:table-cell cursor-pointer hover:bg-gray-100 select-none"
+                  onClick={() => handleSort('type')}
+                >
+                  <span className="flex items-center">
+                    {t('type').toUpperCase()}
+                    <SortIndicator column="type" />
+                  </span>
                 </th>
-                <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                  {t('status').toUpperCase()}
+                <th
+                  className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer hover:bg-gray-100 select-none"
+                  onClick={() => handleSort('status')}
+                >
+                  <span className="flex items-center">
+                    {t('status').toUpperCase()}
+                    <SortIndicator column="status" />
+                  </span>
                 </th>
                 <th className="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase hidden sm:table-cell" title={t('vipReception')}>
                   VIP
                 </th>
-                <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase hidden lg:table-cell">
-                  {t('payment').toUpperCase()}
+                <th
+                  className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase hidden lg:table-cell cursor-pointer hover:bg-gray-100 select-none"
+                  onClick={() => handleSort('payment')}
+                >
+                  <span className="flex items-center">
+                    {t('payment').toUpperCase()}
+                    <SortIndicator column="payment" />
+                  </span>
+                </th>
+                <th
+                  className="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase hidden xl:table-cell cursor-pointer hover:bg-gray-100 select-none"
+                  onClick={() => handleSort('lastMagicLink')}
+                  title={t('lastMagicLinkTooltip') || 'Last magic link sent'}
+                >
+                  <span className="flex items-center justify-center">
+                    {t('lastML') || 'ML'}
+                    <SortIndicator column="lastMagicLink" />
+                  </span>
+                </th>
+                <th
+                  className="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase hidden xl:table-cell cursor-pointer hover:bg-gray-100 select-none"
+                  onClick={() => handleSort('magicLinkCount')}
+                  title={t('magicLinkCountTooltip') || 'Number of magic links sent'}
+                >
+                  <span className="flex items-center justify-center">
+                    #
+                    <SortIndicator column="magicLinkCount" />
+                  </span>
                 </th>
                 <th className="px-2 py-2 text-right text-xs font-medium text-gray-500 uppercase">
                   {t('actions').toUpperCase()}
@@ -798,7 +956,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
             <tbody className="bg-white divide-y divide-gray-200">
               {paginatedGuests.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-8 text-center text-gray-500">
+                  <td colSpan={9} className="px-4 py-8 text-center text-gray-500">
                     {filteredGuests.length === 0 && initialGuests.length > 0
                       ? t('noFilterResults')
                       : t('noGuestsYet')}
@@ -916,6 +1074,41 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                           data-testid={`guest-payment-${guest.id}`}
                         >
                           {getLocalizedPaymentStatusLabel(guest.paymentStatus)}
+                        </span>
+                      </td>
+                      {/* Last Magic Link column */}
+                      <td className="px-2 py-2 text-center hidden xl:table-cell">
+                        {guest.lastMagicLinkAt ? (
+                          <span
+                            className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
+                              guest.magicLinkCategory === 'ready'
+                                ? 'bg-green-100 text-green-800'
+                                : guest.magicLinkCategory === 'warning'
+                                ? 'bg-yellow-100 text-yellow-800'
+                                : guest.magicLinkCategory === 'recent'
+                                ? 'bg-red-100 text-red-800'
+                                : 'bg-gray-100 text-gray-500'
+                            }`}
+                            title={new Date(guest.lastMagicLinkAt).toLocaleString()}
+                          >
+                            {(() => {
+                              const sent = new Date(guest.lastMagicLinkAt!);
+                              const now = new Date();
+                              const diffMs = now.getTime() - sent.getTime();
+                              const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+                              const diffDays = Math.floor(diffHours / 24);
+                              if (diffDays > 0) return `${diffDays}d`;
+                              return `${diffHours}h`;
+                            })()}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-gray-400">—</span>
+                        )}
+                      </td>
+                      {/* Magic Link Count column */}
+                      <td className="px-2 py-2 text-center hidden xl:table-cell">
+                        <span className="text-xs text-gray-600">
+                          {guest.magicLinkCount || 0}
                         </span>
                       </td>
                       <td className="px-2 py-2 text-right">

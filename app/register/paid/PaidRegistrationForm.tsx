@@ -455,19 +455,45 @@ export default function PaidRegistrationForm({
 
       // Check response before parsing JSON
       if (!response.ok) {
+        // Try to parse error response
+        let errorData: { error?: string; field?: string } = {};
+        try {
+          errorData = await response.json();
+        } catch {
+          // Response was not JSON
+        }
+
         if (response.status === 409) {
+          // Check if it's a partner email uniqueness error
+          if (errorData.field === 'partner_email') {
+            // Set field-specific error and go back to partner step
+            setErrors((prev) => ({
+              ...prev,
+              partnerEmail: errorData.error || 'Ez az email cím már regisztrálva van',
+            }));
+            // Go back to partner details step (step 4)
+            setStep(4);
+            setIsLoading(false);
+            return;
+          }
+          // Otherwise it's an "already registered" error
           router.push(`/register/paid?guest_id=${guest.id}&error=already_registered`);
           return;
         }
-        // Try to parse error message from JSON, fallback to generic error
-        let errorMessage = 'An error occurred';
-        try {
-          const data = await response.json();
-          errorMessage = data.error || errorMessage;
-        } catch {
-          // Response was not JSON (likely HTML error page)
-          errorMessage = `Server error (${response.status}). Please try again.`;
+
+        // Handle 400 errors with field-specific messages
+        if (response.status === 400 && errorData.field === 'partner_email') {
+          setErrors((prev) => ({
+            ...prev,
+            partnerEmail: errorData.error || 'Érvénytelen partner email',
+          }));
+          setStep(4);
+          setIsLoading(false);
+          return;
         }
+
+        // Generic error handling
+        const errorMessage = errorData.error || `Server error (${response.status}). Please try again.`;
         throw new Error(errorMessage);
       }
 

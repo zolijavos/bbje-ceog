@@ -494,6 +494,16 @@ export const translations = {
     byPaymentMethod: 'By Payment Method',
     filters: 'Filters',
     unknown: 'Unknown',
+
+    // Magic link / bulk email filters
+    allMagicLinks: 'All (Magic Link)',
+    readyToSend: '📧 Ready to send (48h+)',
+    mlReady: '🟢 48h+ ago',
+    mlRecent: '🔴 Within 48h',
+    mlNever: '⚪ Never sent',
+    lastML: 'Last ML',
+    lastMagicLinkTooltip: 'Last magic link sent',
+    magicLinkCountTooltip: 'Number of magic links sent',
   },
   hu: {
     // Dashboard
@@ -959,6 +969,16 @@ export const translations = {
     byPaymentMethod: 'Fizetési mód szerint',
     filters: 'Szűrők',
     unknown: 'Ismeretlen',
+
+    // Magic link / bulk email filters
+    allMagicLinks: 'Mind (Magic Link)',
+    readyToSend: '📧 Küldésre kész (48ó+)',
+    mlReady: '🟢 48 órája+',
+    mlRecent: '🔴 48 órán belül',
+    mlNever: '⚪ Még nem küldtünk',
+    lastML: 'Utolsó ML',
+    lastMagicLinkTooltip: 'Utolsó magic link küldés',
+    magicLinkCountTooltip: 'Elküldött magic linkek száma',
   }
 };
 

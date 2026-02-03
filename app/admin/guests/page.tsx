@@ -62,8 +62,23 @@ export default async function GuestsPage() {
           email_logs: {
             where: {
               email_type: 'magic_link',
+              status: 'sent',
             },
           },
+        },
+      },
+      // Last magic link sent time
+      email_logs: {
+        where: {
+          email_type: 'magic_link',
+          status: 'sent',
+        },
+        orderBy: {
+          sent_at: 'desc',
+        },
+        take: 1,
+        select: {
+          sent_at: true,
         },
       },
       table_assignment: {
@@ -118,8 +133,24 @@ export default async function GuestsPage() {
     },
   });
 
+  // Helper to determine magic link category based on last sent time
+  const getMagicLinkCategory = (lastSentAt: Date | null): 'ready' | 'warning' | 'recent' | 'never' => {
+    if (!lastSentAt) return 'never';
+    const now = new Date();
+    const fortyEightHoursAgo = new Date(now.getTime() - 48 * 60 * 60 * 1000);
+    const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    if (lastSentAt < fortyEightHoursAgo) return 'ready';
+    if (lastSentAt < twentyFourHoursAgo) return 'warning';
+    return 'recent';
+  };
+
   // Transform for client component
-  const guestData = guests.map(g => ({
+  const guestData = guests.map(g => {
+    const lastMagicLinkAt = g.email_logs.length > 0 ? g.email_logs[0].sent_at : null;
+    const magicLinkCount = g._count.email_logs;
+    const magicLinkCategory = getMagicLinkCategory(lastMagicLinkAt);
+
+    return {
     id: g.id,
     firstName: g.first_name,
     lastName: g.last_name,
@@ -190,7 +221,12 @@ export default async function GuestsPage() {
     cancellationReason: g.registration?.cancellation_reason || null,
     hasCheckedIn: !!g.checkin,
     checkedInAt: g.checkin?.checked_in_at?.toISOString() || null,
-  }));
+    // Magic link tracking for bulk email feature
+    lastMagicLinkAt: lastMagicLinkAt?.toISOString() || null,
+    magicLinkCount,
+    magicLinkCategory,
+  };
+  });
 
   return (
     <div className="min-h-screen bg-gray-100">

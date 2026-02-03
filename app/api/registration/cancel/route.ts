@@ -4,7 +4,6 @@ import { prisma } from '@/lib/db/prisma';
 import { z } from 'zod';
 import { verifyPWASession } from '@/lib/services/pwa-auth';
 import { EVENT_CONFIG } from '@/lib/config/event';
-import { checkRateLimit, RATE_LIMITS } from '@/lib/services/rate-limit';
 
 const CANCELLATION_DEADLINE_DAYS = 7;
 
@@ -30,16 +29,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
-      );
-    }
-
-    // Rate limit check - prevent abuse (3 attempts per hour per guest)
-    const rateLimitKey = `cancel:${session.guestId}`;
-    const rateLimit = await checkRateLimit(rateLimitKey, RATE_LIMITS.CANCEL);
-    if (!rateLimit.allowed) {
-      return NextResponse.json(
-        { error: 'Too many cancellation attempts. Please try again later.' },
-        { status: 429 }
       );
     }
 

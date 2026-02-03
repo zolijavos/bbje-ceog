@@ -8,7 +8,6 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { processVIPRegistration } from '@/lib/services/registration';
-import { checkRateLimit, RATE_LIMITS } from '@/lib/services/rate-limit';
 import { logError } from '@/lib/utils/logger';
 
 interface ConfirmBody {
@@ -38,25 +37,6 @@ interface ConfirmBody {
 
 export async function POST(request: NextRequest) {
   try {
-    // Rate limit by IP address
-    const clientIp =
-      request.headers.get('x-forwarded-for')?.split(',')[0] ||
-      request.headers.get('x-real-ip') ||
-      'unknown';
-    const rateLimitKey = `registration-confirm:${clientIp}`;
-
-    const rateLimit = await checkRateLimit(rateLimitKey, RATE_LIMITS.AUTH);
-    if (!rateLimit.allowed) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Too many requests. Please try again later.',
-          resetAt: rateLimit.resetAt,
-        },
-        { status: 429 }
-      );
-    }
-
     const body: ConfirmBody = await request.json();
     const { guest_id, attendance, title, phone, company, position, dietary_requirements, seating_preferences, gdpr_consent, cancellation_accepted, has_partner, partner_title, partner_first_name, partner_last_name, partner_email, partner_phone, partner_company, partner_position, partner_dietary_requirements, partner_seating_preferences, partner_gdpr_consent } = body;
 

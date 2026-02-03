@@ -9,6 +9,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { processPaidRegistration, PaidRegistrationData, BillingInfoData } from '@/lib/services/registration';
 import { logError } from '@/lib/utils/logger';
+import { prisma } from '@/lib/db/prisma';
 
 interface BillingInfoInput {
   billing_first_name: string;
@@ -204,6 +205,58 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           { success: false, error: 'Invalid partner email format' },
           { status: 400 }
+        );
+      }
+
+      // Fetch the main guest to compare emails
+      const mainGuest = await prisma.guest.findUnique({
+        where: { id: guest_id },
+        select: { email: true }
+      });
+
+      // Check: Partner email cannot be the same as main guest's email
+      if (mainGuest && partner_email.toLowerCase() === mainGuest.email.toLowerCase()) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'A partner email címe nem egyezhet meg a saját email címeddel',
+            field: 'partner_email'
+          },
+          { status: 400 }
+        );
+      }
+
+      // Check: Partner email must be unique (not already registered as guest)
+      const existingGuest = await prisma.guest.findUnique({
+        where: { email: partner_email.toLowerCase() }
+      });
+
+      if (existingGuest) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'Ez az email cím már regisztrálva van a rendszerben. Kérjük, adj meg másik email címet a partnered számára.',
+            field: 'partner_email'
+          },
+          { status: 409 }
+        );
+      }
+
+      // Check: Partner email must not be used as partner in another registration
+      const existingPartnerRegistration = await prisma.registration.findFirst({
+        where: {
+          partner_email: partner_email.toLowerCase()
+        }
+      });
+
+      if (existingPartnerRegistration) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'Ez az email cím már használatban van egy másik regisztrációnál. Kérjük, adj meg másik email címet a partnered számára.',
+            field: 'partner_email'
+          },
+          { status: 409 }
         );
       }
 

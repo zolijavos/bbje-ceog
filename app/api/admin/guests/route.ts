@@ -74,6 +74,22 @@ export async function GET(request: NextRequest) {
     const hasTicket = hasTicketParam === 'true' ? true : hasTicketParam === 'false' ? false : undefined;
     const hasTable = hasTableParam === 'true' ? true : hasTableParam === 'false' ? false : undefined;
 
+    // Sorting parameters
+    const sortByParam = searchParams.get('sortBy');
+    const sortOrderParam = searchParams.get('sortOrder');
+    const validSortBy = ['name', 'status', 'type', 'payment', 'created_at', 'updated_at', 'last_magic_link'];
+    const sortBy = sortByParam && validSortBy.includes(sortByParam)
+      ? sortByParam as 'name' | 'status' | 'type' | 'payment' | 'created_at' | 'updated_at' | 'last_magic_link'
+      : undefined;
+    const sortOrder = sortOrderParam === 'asc' || sortOrderParam === 'desc' ? sortOrderParam : undefined;
+
+    // Magic link filter for bulk email
+    const magicLinkFilterParam = searchParams.get('magicLinkFilter');
+    const validMagicLinkFilters = ['all', 'ready', 'recent', 'never', 'sendable'];
+    const magicLinkFilter = magicLinkFilterParam && validMagicLinkFilters.includes(magicLinkFilterParam)
+      ? magicLinkFilterParam as 'all' | 'ready' | 'recent' | 'never' | 'sendable'
+      : undefined;
+
     // Special filter: not checked in (approved but no checkin record)
     const notCheckedIn = statusParam === 'not_checked_in';
 
@@ -106,6 +122,9 @@ export async function GET(request: NextRequest) {
       hasTicket,
       hasTable,
       notCheckedIn,
+      sortBy,
+      sortOrder,
+      magicLinkFilter,
     });
 
     // Optionally include stats

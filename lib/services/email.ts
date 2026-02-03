@@ -167,58 +167,7 @@ export async function sendEmail(options: {
   };
 }
 
-// Rate limit constants
-const RATE_LIMIT_PER_TYPE_PER_HOUR = 5;  // Max 5 emails of same type per hour
-const RATE_LIMIT_GLOBAL_PER_HOUR = 20;   // Max 20 emails total per hour per guest
-
-/**
- * Check rate limit for guest emails
- *
- * Enforces two limits:
- * - Per-type limit: Max 5 emails of the same type per hour (e.g., max 5 magic links)
- * - Global limit: Max 20 emails total per hour per guest (prevents DoS via multiple types)
- *
- * @param guestId - Guest ID to check
- * @param emailType - Optional email type for per-type limit (if not provided, only global limit applies)
- * @returns true if within rate limit, false if exceeded
- */
-export async function checkRateLimit(
-  guestId: number,
-  emailType?: string
-): Promise<boolean> {
-  const oneHourAgo = new Date(Date.now() - 3600000);
-
-  // Check global rate limit (all email types)
-  const globalCount = await prisma.emailLog.count({
-    where: {
-      guest_id: guestId,
-      sent_at: { gte: oneHourAgo },
-    },
-  });
-
-  if (globalCount >= RATE_LIMIT_GLOBAL_PER_HOUR) {
-    logInfo(`[RATE_LIMIT] Guest ${guestId} exceeded global rate limit (${globalCount}/${RATE_LIMIT_GLOBAL_PER_HOUR})`);
-    return false;
-  }
-
-  // Check per-type rate limit if email type provided
-  if (emailType) {
-    const typeCount = await prisma.emailLog.count({
-      where: {
-        guest_id: guestId,
-        email_type: emailType,
-        sent_at: { gte: oneHourAgo },
-      },
-    });
-
-    if (typeCount >= RATE_LIMIT_PER_TYPE_PER_HOUR) {
-      logInfo(`[RATE_LIMIT] Guest ${guestId} exceeded ${emailType} rate limit (${typeCount}/${RATE_LIMIT_PER_TYPE_PER_HOUR})`);
-      return false;
-    }
-  }
-
-  return true;
-}
+// Rate limiting removed per business requirement - no email sending limits
 
 /**
  * Log email delivery attempt to database
@@ -260,19 +209,15 @@ export type EmailResult = {
  * Send magic link email to a guest
  *
  * 1. Lookup guest by ID
- * 2. Check rate limit (unless bypassed)
- * 3. Generate magic link hash
- * 4. Update guest record with hash and expiry
- * 5. Compose and send email
- * 6. Log delivery attempt
+ * 2. Generate magic link hash
+ * 3. Update guest record with hash and expiry
+ * 4. Compose and send email
+ * 5. Log delivery attempt
  *
  * @param guestId - Guest ID to send email to
- * @param options - Optional settings
- * @param options.bypassRateLimit - Skip rate limit check (for expired link requests)
  */
 export async function sendMagicLinkEmail(
-  guestId: number,
-  options: { bypassRateLimit?: boolean } = {}
+  guestId: number
 ): Promise<EmailResult> {
   try {
     // 1. Lookup guest
@@ -288,19 +233,7 @@ export async function sendMagicLinkEmail(
       };
     }
 
-    // 2. Check rate limit (unless bypassed)
-    if (!options.bypassRateLimit) {
-      const withinLimit = await checkRateLimit(guestId, 'magic_link');
-      if (!withinLimit) {
-        return {
-          success: false,
-          guestId,
-          error: 'Rate limit exceeded. Please try again later.',
-        };
-      }
-    }
-
-    // 3. Generate magic link hash
+    // 2. Generate magic link hash
     const { hash, expiresAt } = generateMagicLinkHash(guest.email);
 
     // 4. Update guest record - set status to 'invited' when magic link is sent

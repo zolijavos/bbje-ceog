@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
-import { checkRateLimit, resetRateLimit, RATE_LIMITS } from '@/lib/services/rate-limit';
 import { logError } from '@/lib/utils/logger';
 
 const PWA_SESSION_SECRET = process.env.APP_SECRET;
@@ -28,30 +27,6 @@ interface PWASessionPayload {
 // POST /api/pwa/auth - Login with QR token or code
 export async function POST(request: NextRequest) {
   try {
-    // Get client IP for rate limiting
-    const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0] ||
-                     request.headers.get('x-real-ip') ||
-                     'unknown';
-    const rateLimitKey = `pwa-auth:${clientIp}`;
-
-    // Check rate limit
-    const rateLimit = await checkRateLimit(rateLimitKey, RATE_LIMITS.AUTH);
-    if (!rateLimit.allowed) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Too many login attempts. Please try again later.',
-          retryAfter: Math.ceil((rateLimit.resetAt.getTime() - Date.now()) / 1000),
-        },
-        {
-          status: 429,
-          headers: {
-            'Retry-After': String(Math.ceil((rateLimit.resetAt.getTime() - Date.now()) / 1000)),
-          },
-        }
-      );
-    }
-
     const body = await request.json();
     const { token, code } = body;
 
@@ -160,9 +135,6 @@ export async function POST(request: NextRequest) {
       maxAge: PWA_SESSION_EXPIRY,
       path: '/',
     });
-
-    // Reset rate limit on successful login
-    await resetRateLimit(rateLimitKey);
 
     return NextResponse.json({
       success: true,

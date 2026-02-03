@@ -3,7 +3,6 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { prisma } from '@/lib/db/prisma';
 import bcrypt from 'bcryptjs';
 import { logError } from '@/lib/utils/logger';
-import { checkRateLimit, resetRateLimit, RATE_LIMITS } from '@/lib/services/rate-limit';
 import { getFullName } from '@/lib/utils/name';
 
 export const authOptions: AuthOptions = {
@@ -20,13 +19,6 @@ export const authOptions: AuthOptions = {
         }
 
         const email = credentials.email.toLowerCase().trim();
-        const rateLimitKey = `auth:${email}`;
-
-        // Check rate limiting (DB-based)
-        const rateLimitResult = await checkRateLimit(rateLimitKey, RATE_LIMITS.AUTH);
-        if (!rateLimitResult.allowed) {
-          throw new Error('Too many login attempts');
-        }
 
         try {
           // Find user in database
@@ -44,9 +36,6 @@ export const authOptions: AuthOptions = {
           if (!isValidPassword) {
             return null;
           }
-
-          // Clear failed attempts on successful login
-          await resetRateLimit(rateLimitKey);
 
           // Return user object (will be passed to JWT callback)
           return {
