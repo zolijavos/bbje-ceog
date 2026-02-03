@@ -1082,12 +1082,12 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                           <span
                             className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
                               guest.magicLinkCategory === 'ready'
-                                ? 'bg-green-100 text-green-800'
+                                ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300'
                                 : guest.magicLinkCategory === 'warning'
-                                ? 'bg-yellow-100 text-yellow-800'
+                                ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300'
                                 : guest.magicLinkCategory === 'recent'
-                                ? 'bg-red-100 text-red-800'
-                                : 'bg-gray-100 text-gray-500'
+                                ? 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300'
+                                : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400'
                             }`}
                             title={new Date(guest.lastMagicLinkAt).toLocaleString()}
                           >
@@ -1102,12 +1102,12 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
                             })()}
                           </span>
                         ) : (
-                          <span className="text-xs text-gray-400">—</span>
+                          <span className="text-xs text-gray-400 dark:text-gray-500">—</span>
                         )}
                       </td>
                       {/* Magic Link Count column */}
                       <td className="px-2 py-2 text-center hidden xl:table-cell">
-                        <span className="text-xs text-gray-600">
+                        <span className="text-xs text-gray-600 dark:text-gray-400">
                           {guest.magicLinkCount || 0}
                         </span>
                       </td>
