@@ -2934,6 +2934,218 @@ www.ceogala.com - event@bbj.hu
 Email Marketing
 Powered by MailPoet`,
   },
+  invitation_reminder: {
+    slug: 'invitation_reminder',
+    name: 'Invitation Reminder',
+    subject: 'Invitation to the CEO Gala 2026',
+    variables: ['guestName', 'magicLinkUrl', 'baseUrl'],
+    html_body: `<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <![endif]-->
+  <title>Invitation to the CEO Gala 2026</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #ffffff; font-family: Verdana, Geneva, sans-serif; font-size: 15px; line-height: 1.6; color: #333333;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff;">
+    <tr>
+      <td align="center" style="padding: 0;">
+        <table role="presentation" width="680" cellpadding="0" cellspacing="0" border="0" style="max-width: 680px; width: 100%;">
+          <!-- Header Image -->
+          <tr>
+            <td align="center" style="padding: 0;">
+              <img src="{{baseUrl}}/email-assets/CEO_Gala_2026_invitation_header_709x213.jpg" alt="CEO Gala 2026 - March 27, 2026" width="680" style="width: 100%; max-width: 680px; height: auto; display: block; border: 0;" />
+            </td>
+          </tr>
+          <!-- Content -->
+          <tr>
+            <td style="padding: 20px 15px; text-align: center;">
+              <!-- Greeting -->
+              <p style="margin: 0 0 18px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Dear <strong>{{guestName}}</strong>,</p>
+
+              <!-- Reminder intro -->
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">We would like to kindly remind you of your invitation to the</p>
+
+              <!-- CEO Gala 2026 title -->
+              <p style="margin: 0 0 12px 0; font-size: 22px; font-weight: bold; line-height: 1.4; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">CEO Gala 2026</p>
+
+              <p style="margin: 0 0 18px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">hosted at Corinthia Hotel Budapest on Friday, March 27, 2026.</p>
+
+              <!-- Urgency paragraphs -->
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">As this is a limited-capacity event, we wanted to share a gentle reminder that registrations are filling up quickly, and we will need to close registration soon.</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Your presence would mean a great deal to us, and we would truly regret having to celebrate the evening without you.</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">To confirm your attendance, please click the REGISTRATION button now. If you already know that you will not be able to attend, we would also appreciate it if you could kindly indicate your non-attendance by clicking the registration button.</p>
+
+              <!-- CTA Button -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 25px auto 20px auto;">
+                <tr>
+                  <td align="center" style="background-color: #c41e3a; padding: 12px 35px;">
+                    <a href="{{magicLinkUrl}}" target="_blank" style="color: #ffffff; text-decoration: none; font-size: 14px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; font-family: Arial, Helvetica, sans-serif; display: inline-block;">REGISTRATION</a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- BBJ/HIPA welcome -->
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">The Budapest Business Journal and our official event partner, the <strong>Hungarian Investment Promotion Agency (HIPA)</strong>, are delighted to welcome you at our CEO Gala.</p>
+
+              <!-- Awards info -->
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">As has now become a tradition of several years, two awards will be presented during the evening: the <strong>Expat CEO Award</strong> and the <strong>CEO Community Award</strong>. Two professional awards committees will select the winners minutes before the gala starts, each from its own shortlist of three candidates.</p>
+
+              <!-- Rolling basis note -->
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Kindly note that registrations will be accepted only until capacity allows, and confirmations will be sent on a rolling basis.</p>
+
+              <!-- Details Section -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 20px 0;">
+                <tr>
+                  <td align="center" style="padding: 3px 0; font-size: 15px; line-height: 1.6; color: #333333; font-family: Verdana, Geneva, sans-serif;"><strong>Date:</strong> Friday, March 27, 2026, 7 p.m.</td>
+                </tr>
+                <tr><td style="padding: 8px 0;"></td></tr>
+                <tr>
+                  <td align="center" style="padding: 3px 0; font-size: 15px; line-height: 1.6; color: #333333; font-family: Verdana, Geneva, sans-serif;"><strong>Location:</strong> The Grand Ballroom of the Corinthia Hotel Budapest</td>
+                </tr>
+                <tr>
+                  <td align="center" style="padding: 3px 0; font-size: 15px; line-height: 1.6; color: #333333; font-family: Verdana, Geneva, sans-serif;">1073 Budapest, Erzsébet krt. 43-49</td>
+                </tr>
+                <tr><td style="padding: 8px 0;"></td></tr>
+                <tr>
+                  <td align="center" style="padding: 3px 0; font-size: 15px; line-height: 1.6; color: #333333; font-family: Verdana, Geneva, sans-serif;"><strong>Dress Code:</strong> Black tie for men, ball gown or cocktail dress for women</td>
+                </tr>
+              </table>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Should you wish to reserve an exclusive table for yourself, your guests or your company, our team will be pleased to assist you upon request. Please message us at <a href="mailto:event@bbj.hu?subject=Table%20reservation%20-%20CEO%20Gala%202026" style="color: #333333; text-decoration: underline;">event@bbj.hu</a>.</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">This personal invitation is dedicated to the addressee and is not transferable.</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">When you register, please let us know if you have any special dietary requirements. We will send you a feedback email after successful registration.</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Please kindly note that your registration will only be finalised after having the official confirmation received.</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">For more details about the event and the award, including previous winners, visit our website at <a href="https://www.ceogala.com" style="color: #333333; text-decoration: underline;">www.ceogala.com</a>.</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">We remind you that any cancellations or changes to your registration must be made at least ten business days before the gala. Cancellations should be sent to <a href="mailto:event@bbj.hu?subject=Cancellation%20-%20CEO%20Gala%202026" style="color: #333333; text-decoration: underline;">event@bbj.hu</a>.</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of <strong>HUF 99,000 + VAT</strong> per person.</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">We look forward to meeting you at the gala and celebrating our outstanding CEO Community.</p>
+
+              <!-- Signatures -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0 25px 0;">
+                <tr>
+                  <td width="50%" align="center" valign="top" style="padding: 0 10px;">
+                    <p style="margin: 0 0 2px 0; font-weight: bold; font-size: 15px; color: #1a1a2e; font-family: Verdana, Geneva, sans-serif;">Tamas Botka</p>
+                    <p style="margin: 0; font-size: 14px; color: #333333; font-family: Verdana, Geneva, sans-serif;">Publisher, BBJ</p>
+                  </td>
+                  <td width="50%" align="center" valign="top" style="padding: 0 10px;">
+                    <p style="margin: 0 0 2px 0; font-weight: bold; font-size: 15px; color: #1a1a2e; font-family: Verdana, Geneva, sans-serif;">Balazs Roman</p>
+                    <p style="margin: 0; font-size: 14px; color: #333333; font-family: Verdana, Geneva, sans-serif;">CEO, BBJ</p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- BBJ Logo -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0;">
+                <tr>
+                  <td align="center">
+                    <img src="{{baseUrl}}/email-assets/bbj-logo.png" alt="Budapest Business Journal" width="300" style="max-width: 300px; height: auto; border: 0;" />
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Divider -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 25px 0;">
+                <tr>
+                  <td style="border-top: 1px solid #cccccc; font-size: 1px; line-height: 1px;">&nbsp;</td>
+                </tr>
+              </table>
+
+              <!-- Footer -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" style="padding: 15px 0;">
+                    <p style="margin: 4px 0; font-size: 12px; color: #666666; font-family: Verdana, Geneva, sans-serif;"><a href="https://bbj.hu" style="color: #333333; text-decoration: underline;">Business Publishing Services Kft.</a></p>
+                    <p style="margin: 4px 0; font-size: 12px; color: #666666; font-family: Verdana, Geneva, sans-serif;">1075 Budapest, Madách Imre út 13–14., Hungary</p>
+                    <p style="margin: 4px 0; font-size: 12px; color: #666666; font-family: Verdana, Geneva, sans-serif;">Publisher of Budapest Business Journal</p>
+                    <p style="margin: 12px 0 4px 0; font-size: 11px; color: #666666; font-family: Verdana, Geneva, sans-serif;">Event website: <a href="https://www.ceogala.com" style="color: #333333; text-decoration: underline;">ceogala.com</a></p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`,
+    text_body: `Invitation to the CEO Gala 2026
+
+Dear {{guestName}},
+
+We would like to kindly remind you of your invitation to the
+
+CEO Gala 2026
+
+hosted at Corinthia Hotel Budapest on Friday, March 27, 2026.
+
+As this is a limited-capacity event, we wanted to share a gentle reminder that registrations are filling up quickly, and we will need to close registration soon.
+
+Your presence would mean a great deal to us, and we would truly regret having to celebrate the evening without you.
+
+To confirm your attendance, please click the REGISTRATION link now. If you already know that you will not be able to attend, we would also appreciate it if you could kindly indicate your non-attendance by clicking the registration link.
+
+>>> REGISTRATION: {{magicLinkUrl}} <<<
+
+The Budapest Business Journal and our official event partner, the Hungarian Investment Promotion Agency (HIPA), are delighted to welcome you at our CEO Gala.
+
+As has now become a tradition of several years, two awards will be presented during the evening: the Expat CEO Award and the CEO Community Award. Two professional awards committees will select the winners minutes before the gala starts, each from its own shortlist of three candidates.
+
+Kindly note that registrations will be accepted only until capacity allows, and confirmations will be sent on a rolling basis.
+
+Date: Friday, March 27, 2026, 7 p.m.
+
+Location: The Grand Ballroom of the Corinthia Hotel Budapest
+1073 Budapest, Erzsébet krt. 43-49
+
+Dress Code: Black tie for men, ball gown or cocktail dress for women
+
+Should you wish to reserve an exclusive table for yourself, your guests or your company, our team will be pleased to assist you upon request. Please message us at event@bbj.hu.
+
+This personal invitation is dedicated to the addressee and is not transferable.
+
+When you register, please let us know if you have any special dietary requirements. We will send you a feedback email after successful registration.
+
+Please kindly note that your registration will only be finalised after having the official confirmation received.
+
+For more details about the event and the award, including previous winners, visit our website at www.ceogala.com.
+
+We remind you that any cancellations or changes to your registration must be made at least ten business days before the gala. Cancellations should be sent to event@bbj.hu.
+
+Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 + VAT per person.
+
+We look forward to meeting you at the gala and celebrating our outstanding CEO Community.
+
+Tamas Botka                    Balazs Roman
+Publisher, BBJ                 CEO, BBJ
+
+---
+
+Business Publishing Services Kft.
+1075 Budapest, Madách Imre út 13–14., Hungary
+Publisher of Budapest Business Journal
+Event website: ceogala.com`,
+  },
 } as const;
 
 export type TemplateSlug = keyof typeof DEFAULT_TEMPLATES;
