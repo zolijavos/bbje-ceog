@@ -128,7 +128,7 @@ export async function processScheduledEmails(): Promise<{
         variables.guestName = getDisplayName(guest.first_name, guest.last_name, guest.title);
 
         // Generate magic link URL for invitation templates
-        const magicLinkTemplates = ['magic_link', 'magic-link', 'invitation', 'applicant_approval'];
+        const magicLinkTemplates = ['magic_link', 'magic-link', 'invitation', 'applicant_approval', 'invitation_reminder', 'invitation_reminder_v2'];
         if (magicLinkTemplates.includes(scheduled.template_slug)) {
           // Check if guest already has a magic link hash
           let magicHash = guest.magic_link_hash;
@@ -190,6 +190,8 @@ export async function processScheduledEmails(): Promise<{
           subject: rendered.subject,
           success: true,
           emailType: scheduled.template_slug,
+          htmlBody: rendered.html,
+          textBody: rendered.text,
         });
 
         stats.sent++;
@@ -711,7 +713,7 @@ export async function getScheduledEmails(params?: {
     schedule_type: string;
     created_at: Date;
     sent_at: Date | null;
-    guest?: { first_name: string; last_name: string; email: string } | null;
+    guest?: { first_name: string; last_name: string; email: string; registration_status: string } | null;
   }>;
   total: number;
 }> {
@@ -748,7 +750,7 @@ export async function getScheduledEmails(params?: {
   const guestIds = emails.filter(e => e.guest_id).map(e => e.guest_id as number);
   const guests = await prisma.guest.findMany({
     where: { id: { in: guestIds } },
-    select: { id: true, first_name: true, last_name: true, email: true },
+    select: { id: true, first_name: true, last_name: true, email: true, registration_status: true },
   });
   const guestMap = new Map(guests.map(g => [g.id, g]));
 

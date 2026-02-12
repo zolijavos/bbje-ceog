@@ -7,7 +7,7 @@
  * Includes: email list, create new, bulk scheduling, and auto-config management.
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import {
   Clock,
@@ -25,6 +25,10 @@ import {
   X,
   MagnifyingGlass,
   CaretDown,
+  CaretUp,
+  CaretUpDown,
+  CaretLeft,
+  CaretRight,
   ClockCounterClockwise,
   PaperPlaneTilt,
 } from '@phosphor-icons/react';
@@ -38,8 +42,11 @@ interface ScheduledEmail {
   schedule_type: string;
   created_at: string;
   sent_at: string | null;
-  guest?: { first_name: string; last_name: string; email: string } | null;
+  guest?: { first_name: string; last_name: string; email: string; registration_status: string } | null;
 }
+
+type SortColumn = 'status' | 'template_slug' | 'guest' | 'guest_status' | 'scheduled_for' | 'schedule_type';
+type SortDirection = 'asc' | 'desc';
 
 interface Stats {
   pending: number;
@@ -110,6 +117,7 @@ const TEMPLATE_LABELS: Record<string, string> = {
   event_reminder: 'Event Reminder',
   principal_invitation: 'Principal Invitation',
   invitation_reminder: 'Invitation Reminder',
+  invitation_reminder_v2: 'Invitation Reminder V2',
 };
 
 const TEMPLATES = Object.entries(TEMPLATE_LABELS);
@@ -125,6 +133,11 @@ export default function ScheduledEmailsDashboard() {
   const [filter, setFilter] = useState<string>('pending');
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [selectedEmailIds, setSelectedEmailIds] = useState<number[]>([]);
+  const [sortColumn, setSortColumn] = useState<SortColumn>('scheduled_for');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
+  const [nameSearch, setNameSearch] = useState('');
+  const [pageSize, setPageSize] = useState<number>(50);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const STATUS_CONFIG = {
     pending: { ...STATUS_CONFIG_BASE.pending, label: t('pending') },
@@ -181,6 +194,9 @@ export default function ScheduledEmailsDashboard() {
   const [bulkScheduledDate, setBulkScheduledDate] = useState('');
   const [bulkScheduledTime, setBulkScheduledTime] = useState('10:00');
   const [bulkScheduling, setBulkScheduling] = useState(false);
+  const [showAllBulkGuests, setShowAllBulkGuests] = useState(false);
+  const [showBulkConfirmModal, setShowBulkConfirmModal] = useState(false);
+  const [showProcessConfirmModal, setShowProcessConfirmModal] = useState(false);
 
   // Automation config state
   const [configs, setConfigs] = useState<SchedulerConfig[]>([]);
@@ -193,9 +209,130 @@ export default function ScheduledEmailsDashboard() {
   const [logFilter, setLogFilter] = useState<string>('');
   const [logTypeFilter, setLogTypeFilter] = useState<string>('');
 
+  // Status breakdown for bulk email confirmation modal
+  const bulkStatusBreakdown = useMemo(() => {
+    const counts: Record<string, number> = {};
+    bulkPreviewGuests.forEach(g => {
+      const status = g.registration_status || 'unknown';
+      counts[status] = (counts[status] || 0) + 1;
+    });
+    return Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  }, [bulkPreviewGuests]);
+
+  // Pending emails breakdown for Process Now confirmation modal
+  const pendingEmailsBreakdown = useMemo(() => {
+    const pending = emails.filter(e => e.status === 'pending');
+    const templateCounts: Record<string, number> = {};
+    const typeCounts: Record<string, number> = {};
+
+    pending.forEach(e => {
+      // Template breakdown
+      const template = e.template_slug || 'unknown';
+      templateCounts[template] = (templateCounts[template] || 0) + 1;
+
+      // Schedule type breakdown (bulk vs manual)
+      const schedType = e.schedule_type || 'manual';
+      typeCounts[schedType] = (typeCounts[schedType] || 0) + 1;
+    });
+
+    return {
+      total: pending.length,
+      byTemplate: Object.entries(templateCounts).sort((a, b) => b[1] - a[1]),
+      byType: Object.entries(typeCounts).sort((a, b) => b[1] - a[1]),
+    };
+  }, [emails]);
+
+  // Filtered and sorted emails
+  const filteredAndSortedEmails = useMemo(() => {
+    // First filter by name search
+    let filtered = emails;
+    if (nameSearch.trim()) {
+      const searchLower = nameSearch.toLowerCase();
+      filtered = emails.filter(e => {
+        if (!e.guest) return false;
+        const fullName = `${e.guest.first_name} ${e.guest.last_name}`.toLowerCase();
+        const email = e.guest.email.toLowerCase();
+        return fullName.includes(searchLower) || email.includes(searchLower);
+      });
+    }
+
+    // Then sort
+    return [...filtered].sort((a, b) => {
+      let aVal: string | number = '';
+      let bVal: string | number = '';
+
+      switch (sortColumn) {
+        case 'status':
+          aVal = a.status;
+          bVal = b.status;
+          break;
+        case 'template_slug':
+          aVal = a.template_slug;
+          bVal = b.template_slug;
+          break;
+        case 'guest':
+          aVal = a.guest ? `${a.guest.first_name} ${a.guest.last_name}`.toLowerCase() : '';
+          bVal = b.guest ? `${b.guest.first_name} ${b.guest.last_name}`.toLowerCase() : '';
+          break;
+        case 'guest_status':
+          aVal = a.guest?.registration_status || '';
+          bVal = b.guest?.registration_status || '';
+          break;
+        case 'scheduled_for':
+          aVal = new Date(a.scheduled_for).getTime();
+          bVal = new Date(b.scheduled_for).getTime();
+          break;
+        case 'schedule_type':
+          aVal = a.schedule_type;
+          bVal = b.schedule_type;
+          break;
+      }
+
+      if (aVal < bVal) return sortDirection === 'asc' ? -1 : 1;
+      if (aVal > bVal) return sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }, [emails, sortColumn, sortDirection, nameSearch]);
+
+  // Pagination calculations
+  const totalPages = useMemo(() => {
+    return Math.ceil(filteredAndSortedEmails.length / pageSize);
+  }, [filteredAndSortedEmails.length, pageSize]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [nameSearch, filter, pageSize]);
+
+  // Paginated emails for display
+  const displayedEmails = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    return filteredAndSortedEmails.slice(startIndex, endIndex);
+  }, [filteredAndSortedEmails, currentPage, pageSize]);
+
+  const handleSort = (column: SortColumn) => {
+    if (sortColumn === column) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(column);
+      setSortDirection('asc');
+    }
+  };
+
+  const SortIcon = ({ column }: { column: SortColumn }) => {
+    if (sortColumn !== column) {
+      return <CaretUpDown size={14} className="text-gray-400" />;
+    }
+    return sortDirection === 'asc'
+      ? <CaretUp size={14} className="text-blue-600" />
+      : <CaretDown size={14} className="text-blue-600" />;
+  };
+
   const fetchEmails = useCallback(async () => {
     try {
-      const url = `/api/admin/scheduled-emails?stats=true${filter ? `&status=${filter}` : ''}`;
+      // Request all emails (limit=2000) for client-side pagination
+      const url = `/api/admin/scheduled-emails?stats=true&limit=2000${filter ? `&status=${filter}` : ''}`;
       const res = await fetch(url);
       const data = await res.json();
 
@@ -715,25 +852,65 @@ export default function ScheduledEmailsDashboard() {
         <>
           {/* Actions */}
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <label className="text-sm text-gray-600">{t('filter')}:</label>
-              <select
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">{t('allStatuses')}</option>
-                <option value="pending">{t('pending')}</option>
-                <option value="sent">{t('sent')}</option>
-                <option value="failed">{t('failed')}</option>
-                <option value="cancelled">{t('emailCancelled')}</option>
-              </select>
+            <div className="flex items-center gap-4 flex-wrap">
+              {/* Status filter */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm text-gray-600">{t('filter')}:</label>
+                <select
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value)}
+                  className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">{t('allStatuses')}</option>
+                  <option value="pending">{t('pending')}</option>
+                  <option value="sent">{t('sent')}</option>
+                  <option value="failed">{t('failed')}</option>
+                  <option value="cancelled">{t('emailCancelled')}</option>
+                </select>
+              </div>
+
+              {/* Name search */}
+              <div className="flex items-center gap-2">
+                <div className="relative">
+                  <MagnifyingGlass size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search by name..."
+                    value={nameSearch}
+                    onChange={(e) => setNameSearch(e.target.value)}
+                    className="pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 w-48"
+                  />
+                  {nameSearch && (
+                    <button
+                      onClick={() => setNameSearch('')}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    >
+                      <X size={16} />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Page size */}
+              <div className="flex items-center gap-2">
+                <label className="text-sm text-gray-600">Show:</label>
+                <select
+                  value={pageSize}
+                  onChange={(e) => setPageSize(Number(e.target.value))}
+                  className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value={25}>25</option>
+                  <option value={50}>50</option>
+                  <option value={100}>100</option>
+                </select>
+              </div>
             </div>
 
             <div className="flex items-center gap-2">
               <button
-                onClick={() => handleTrigger('process')}
-                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                onClick={() => setShowProcessConfirmModal(true)}
+                disabled={!stats || stats.pending === 0}
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Play size={16} />
                 Process Now
@@ -789,20 +966,59 @@ export default function ScheduledEmailsDashboard() {
                       />
                     </th>
                   )}
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    {t('status')}
+                  <th
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer hover:bg-gray-100"
+                    onClick={() => handleSort('status')}
+                  >
+                    <span className="flex items-center gap-1">
+                      {t('status')}
+                      <SortIcon column="status" />
+                    </span>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    {t('type')}
+                  <th
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer hover:bg-gray-100"
+                    onClick={() => handleSort('template_slug')}
+                  >
+                    <span className="flex items-center gap-1">
+                      Template
+                      <SortIcon column="template_slug" />
+                    </span>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    {t('recipient')}
+                  <th
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer hover:bg-gray-100"
+                    onClick={() => handleSort('guest')}
+                  >
+                    <span className="flex items-center gap-1">
+                      {t('recipient')}
+                      <SortIcon column="guest" />
+                    </span>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    {t('scheduled')}
+                  <th
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer hover:bg-gray-100"
+                    onClick={() => handleSort('guest_status')}
+                  >
+                    <span className="flex items-center gap-1">
+                      Guest Status
+                      <SortIcon column="guest_status" />
+                    </span>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    {t('type')}
+                  <th
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer hover:bg-gray-100"
+                    onClick={() => handleSort('scheduled_for')}
+                  >
+                    <span className="flex items-center gap-1">
+                      {t('scheduled')}
+                      <SortIcon column="scheduled_for" />
+                    </span>
+                  </th>
+                  <th
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer hover:bg-gray-100"
+                    onClick={() => handleSort('schedule_type')}
+                  >
+                    <span className="flex items-center gap-1">
+                      {t('type')}
+                      <SortIcon column="schedule_type" />
+                    </span>
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
                     {t('actions')}
@@ -810,17 +1026,30 @@ export default function ScheduledEmailsDashboard() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {emails.length === 0 ? (
+                {displayedEmails.length === 0 ? (
                   <tr>
-                    <td colSpan={pendingEmails.length > 0 ? 7 : 6} className="px-6 py-12 text-center text-gray-500">
+                    <td colSpan={pendingEmails.length > 0 ? 8 : 7} className="px-6 py-12 text-center text-gray-500">
                       <EnvelopeSimple size={48} className="mx-auto text-gray-300 mb-4" />
-                      <p>{t('noScheduledEmails')}</p>
+                      <p>{nameSearch ? 'No emails match your search' : t('noScheduledEmails')}</p>
                     </td>
                   </tr>
                 ) : (
-                  emails.map((email) => {
+                  displayedEmails.map((email) => {
                     const statusConfig = STATUS_CONFIG[email.status];
                     const StatusIcon = statusConfig.icon;
+
+                    // Guest status color mapping
+                    const guestStatusColorMap: Record<string, string> = {
+                      invited: 'bg-yellow-100 text-yellow-700',
+                      registered: 'bg-blue-100 text-blue-700',
+                      approved: 'bg-green-100 text-green-700',
+                      declined: 'bg-red-100 text-red-700',
+                      pending: 'bg-gray-100 text-gray-700',
+                      pending_approval: 'bg-orange-100 text-orange-700',
+                      rejected: 'bg-red-100 text-red-700',
+                    };
+                    const guestStatus = email.guest?.registration_status || '';
+                    const guestStatusColor = guestStatusColorMap[guestStatus] || 'bg-gray-100 text-gray-600';
 
                     return (
                       <tr key={email.id} className={`hover:bg-gray-50 ${selectedEmailIds.includes(email.id) ? 'bg-blue-50' : ''}`}>
@@ -861,6 +1090,15 @@ export default function ScheduledEmailsDashboard() {
                             <span className="text-gray-400">-</span>
                           )}
                         </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {guestStatus ? (
+                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded ${guestStatusColor}`}>
+                              {getLocalizedStatusLabel(guestStatus)}
+                            </span>
+                          ) : (
+                            <span className="text-gray-400">-</span>
+                          )}
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                           {formatDate(email.scheduled_for)}
                         </td>
@@ -887,6 +1125,90 @@ export default function ScheduledEmailsDashboard() {
               </tbody>
             </table>
           </div>
+
+          {/* Pagination */}
+          {filteredAndSortedEmails.length > 0 && (
+            <div className="flex items-center justify-between mt-4 text-sm text-gray-600">
+              <div>
+                Showing {((currentPage - 1) * pageSize) + 1}-{Math.min(currentPage * pageSize, filteredAndSortedEmails.length)} of {filteredAndSortedEmails.length}
+                {nameSearch && ` (filtered from ${emails.length} total)`}
+              </div>
+
+              {/* Page Navigation */}
+              {totalPages > 1 && (
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="p-2 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <CaretLeft size={18} />
+                  </button>
+
+                  <div className="flex items-center gap-1">
+                    {/* First page */}
+                    {currentPage > 2 && (
+                      <>
+                        <button
+                          onClick={() => setCurrentPage(1)}
+                          className="px-3 py-1 rounded hover:bg-gray-100"
+                        >
+                          1
+                        </button>
+                        {currentPage > 3 && <span className="px-1">...</span>}
+                      </>
+                    )}
+
+                    {/* Previous page */}
+                    {currentPage > 1 && (
+                      <button
+                        onClick={() => setCurrentPage(currentPage - 1)}
+                        className="px-3 py-1 rounded hover:bg-gray-100"
+                      >
+                        {currentPage - 1}
+                      </button>
+                    )}
+
+                    {/* Current page */}
+                    <button className="px-3 py-1 rounded bg-blue-600 text-white font-medium">
+                      {currentPage}
+                    </button>
+
+                    {/* Next page */}
+                    {currentPage < totalPages && (
+                      <button
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                        className="px-3 py-1 rounded hover:bg-gray-100"
+                      >
+                        {currentPage + 1}
+                      </button>
+                    )}
+
+                    {/* Last page */}
+                    {currentPage < totalPages - 1 && (
+                      <>
+                        {currentPage < totalPages - 2 && <span className="px-1">...</span>}
+                        <button
+                          onClick={() => setCurrentPage(totalPages)}
+                          className="px-3 py-1 rounded hover:bg-gray-100"
+                        >
+                          {totalPages}
+                        </button>
+                      </>
+                    )}
+                  </div>
+
+                  <button
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                    className="p-2 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <CaretRight size={18} />
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </>
       )}
 
@@ -1366,7 +1688,7 @@ export default function ScheduledEmailsDashboard() {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {bulkPreviewGuests.slice(0, 50).map((guest) => (
+                      {(showAllBulkGuests ? bulkPreviewGuests : bulkPreviewGuests.slice(0, 50)).map((guest) => (
                         <tr key={guest.id} className="hover:bg-gray-50">
                           <td className="px-4 py-2 text-sm font-medium text-gray-900">{guest.first_name} {guest.last_name}</td>
                           <td className="px-4 py-2 text-sm text-gray-500">{guest.email}</td>
@@ -1381,17 +1703,28 @@ export default function ScheduledEmailsDashboard() {
                     </tbody>
                   </table>
                 )}
-                {bulkPreviewGuests.length > 50 && (
-                  <div className="px-4 py-2 bg-gray-50 text-center text-sm text-gray-500">
-                    + {bulkPreviewGuests.length - 50} more guests...
-                  </div>
+                {bulkPreviewGuests.length > 50 && !showAllBulkGuests && (
+                  <button
+                    onClick={() => setShowAllBulkGuests(true)}
+                    className="w-full px-4 py-2 bg-yellow-100 text-center text-sm text-yellow-700 hover:bg-yellow-200 cursor-pointer"
+                  >
+                    + {bulkPreviewGuests.length - 50} more guests... (click to show all)
+                  </button>
+                )}
+                {bulkPreviewGuests.length > 50 && showAllBulkGuests && (
+                  <button
+                    onClick={() => setShowAllBulkGuests(false)}
+                    className="w-full px-4 py-2 bg-gray-100 text-center text-sm text-gray-600 hover:bg-gray-200 cursor-pointer"
+                  >
+                    Show less
+                  </button>
                 )}
               </div>
             </div>
 
-            {/* Submit */}
+            {/* Submit - Opens confirmation modal */}
             <button
-              onClick={handleBulkSchedule}
+              onClick={() => setShowBulkConfirmModal(true)}
               disabled={bulkScheduling || !bulkTemplate || !bulkScheduledDate || !bulkScheduledTime || bulkPreviewGuests.length === 0}
               className="w-full px-4 py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
             >
@@ -1739,6 +2072,205 @@ export default function ScheduledEmailsDashboard() {
                 className="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700"
               >
                 {t('save')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Bulk Email Confirmation Modal */}
+      {showBulkConfirmModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full">
+            {/* Header */}
+            <div className="px-6 py-4 border-b bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-xl">
+              <h3 className="text-lg font-semibold flex items-center gap-3">
+                <span className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-xl">
+                  <EnvelopeSimple size={24} className="text-blue-600" />
+                </span>
+                <span>Bulk Email Küldés Megerősítése</span>
+              </h3>
+            </div>
+
+            {/* Body */}
+            <div className="px-6 py-5 space-y-5">
+              {/* Summary Card */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Template</p>
+                  <p className="font-semibold text-gray-800">{bulkTemplate}</p>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Ütemezés</p>
+                  <p className="font-semibold text-gray-800">{bulkScheduledDate} {bulkScheduledTime}</p>
+                </div>
+              </div>
+
+              {/* Status Breakdown with Bar Chart */}
+              <div className="border rounded-lg overflow-hidden">
+                <div className="bg-gray-50 px-4 py-3 border-b">
+                  <p className="font-semibold text-gray-700">Címzettek státusz szerinti bontása</p>
+                </div>
+
+                <div className="p-4 space-y-3">
+                  {bulkStatusBreakdown.map(([status, count]) => {
+                    const maxCount = bulkStatusBreakdown[0]?.[1] || 1;
+                    const percentage = (count / maxCount) * 100;
+                    const colorMap: Record<string, string> = {
+                      invited: 'bg-yellow-500',
+                      registered: 'bg-blue-500',
+                      declined: 'bg-red-500',
+                      pending: 'bg-gray-400',
+                      approved: 'bg-green-500',
+                      pending_approval: 'bg-orange-500',
+                      rejected: 'bg-red-700',
+                      unknown: 'bg-gray-300',
+                    };
+                    const barColor = colorMap[status] || 'bg-gray-400';
+
+                    return (
+                      <div key={status} className="flex items-center gap-3">
+                        <div className="w-28 flex items-center gap-2">
+                          <span className={`w-3 h-3 rounded-full ${barColor}`}></span>
+                          <span className="text-sm text-gray-700 capitalize">{getLocalizedStatusLabel(status)}</span>
+                        </div>
+                        <span className="w-10 text-sm font-bold text-right text-gray-800">{count}</span>
+                        <div className="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+                          <div
+                            className={`${barColor} h-5 rounded-full transition-all duration-500`}
+                            style={{ width: `${percentage}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Total */}
+                <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-4 py-3 border-t">
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold text-gray-700">Összesen</span>
+                    <span className="text-xl font-bold text-gray-800">{bulkPreviewGuests.length} vendég</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Info text */}
+              <p className="text-sm text-gray-500 text-center">
+                A fenti státusz bontás ellenőrzése után kattints a &quot;Jóváhagyás&quot; gombra a küldéshez.
+              </p>
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 py-4 border-t bg-gray-50 rounded-b-xl flex gap-3 justify-end">
+              <button
+                onClick={() => setShowBulkConfirmModal(false)}
+                className="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition-colors"
+              >
+                Mégsem
+              </button>
+              <button
+                onClick={() => {
+                  setShowBulkConfirmModal(false);
+                  handleBulkSchedule();
+                }}
+                disabled={bulkScheduling}
+                className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors flex items-center gap-2 disabled:opacity-50"
+              >
+                <CheckCircle size={20} />
+                {bulkScheduling ? 'Küldés...' : 'Jóváhagyás és Küldés'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Process Now Confirmation Modal */}
+      {showProcessConfirmModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full">
+            {/* Header */}
+            <div className="px-6 py-4 border-b bg-gradient-to-r from-green-50 to-emerald-50 rounded-t-xl">
+              <h3 className="text-lg font-semibold flex items-center gap-3">
+                <span className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                  <Play size={24} className="text-green-600" />
+                </span>
+                <span>Ütemezett Emailek Feldolgozása</span>
+              </h3>
+            </div>
+
+            {/* Body */}
+            <div className="px-6 py-5 space-y-5">
+              {/* Summary */}
+              <div className="bg-green-50 rounded-lg p-4 text-center">
+                <p className="text-sm text-green-700 mb-1">Feldolgozandó emailek</p>
+                <p className="text-3xl font-bold text-green-800">{stats?.pending || 0}</p>
+              </div>
+
+              {/* Template Breakdown */}
+              {pendingEmailsBreakdown.byTemplate.length > 0 && (
+                <div className="border rounded-lg overflow-hidden">
+                  <div className="bg-gray-50 px-4 py-3 border-b">
+                    <p className="font-semibold text-gray-700">Template szerinti bontás</p>
+                  </div>
+                  <div className="p-4 space-y-3">
+                    {pendingEmailsBreakdown.byTemplate.map(([template, count]) => {
+                      const maxCount = pendingEmailsBreakdown.byTemplate[0]?.[1] || 1;
+                      const percentage = (count / maxCount) * 100;
+                      return (
+                        <div key={template} className="flex items-center gap-3">
+                          <div className="w-40 truncate">
+                            <span className="text-sm text-gray-700">{template.replace(/_/g, ' ')}</span>
+                          </div>
+                          <span className="w-10 text-sm font-bold text-right text-gray-800">{count}</span>
+                          <div className="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+                            <div
+                              className="bg-green-500 h-5 rounded-full transition-all duration-500"
+                              style={{ width: `${percentage}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Type Breakdown */}
+              {pendingEmailsBreakdown.byType.length > 0 && (
+                <div className="flex gap-4">
+                  {pendingEmailsBreakdown.byType.map(([type, count]) => (
+                    <div key={type} className="flex-1 bg-gray-50 rounded-lg p-3 text-center">
+                      <p className="text-xs text-gray-500 uppercase">{type}</p>
+                      <p className="text-lg font-bold text-gray-800">{count}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Info text */}
+              <p className="text-sm text-gray-500 text-center">
+                A &quot;Feldolgozás&quot; gombra kattintva az összes függőben lévő email azonnal kiküldésre kerül.
+              </p>
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 py-4 border-t bg-gray-50 rounded-b-xl flex gap-3 justify-end">
+              <button
+                onClick={() => setShowProcessConfirmModal(false)}
+                className="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition-colors"
+              >
+                Mégsem
+              </button>
+              <button
+                onClick={() => {
+                  setShowProcessConfirmModal(false);
+                  handleTrigger('process');
+                }}
+                className="px-6 py-2.5 bg-green-600 hover:bg-green-700 rounded-lg text-white font-medium transition-colors flex items-center gap-2"
+              >
+                <Play size={20} />
+                Feldolgozás ({stats?.pending || 0} email)
               </button>
             </div>
           </div>
