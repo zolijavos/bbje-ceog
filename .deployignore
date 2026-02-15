@@ -1,0 +1,43 @@
+# CEO Gala - Files to exclude from VPS deployment
+# Use with: rsync -av --exclude-from='.deployignore' ./ user@vps:/var/www/ceog/
+
+# Documentation & Design
+docs/
+screenshots/
+*.excalidraw
+*.md
+!README.md
+
+# BMAD Framework (dev only)
+.bmad/
+.agent/
+.claude/
+.codex/
+.gemini/
+
+# Testing
+tests/
+test-results/
+playwright-report/
+playwright.config.ts
+vitest.config.ts
+coverage/
+
+# Development scripts
+scripts/generate-*.js
+scripts/*screenshot*.mjs
+scripts/debug-*.mjs
+
+# IDE & Git
+.vscode/
+.idea/
+.git/
+.gitignore
+
+# Build artifacts (rebuilt on VPS)
+.next/
+node_modules/
+
+# Local environment
+.env.local
+.env.development

@@ -1,0 +1,101 @@
+email,title,first_name,last_name,guest_type,phone,company,position,status
+agnestordai+rem001@gmail.com,Mr.,Gábor,Kovács,invited,+36301234001,TechCorp Kft.,CEO,invited
+agnestordai+rem002@gmail.com,Ms.,Eszter,Nagy,invited,+36301234002,InnoSoft Zrt.,Marketing Director,invited
+agnestordai+rem003@gmail.com,Dr.,Péter,Szabó,invited,+36301234003,MediHealth Kft.,Managing Director,invited
+agnestordai+rem004@gmail.com,Mr.,András,Tóth,invited,+36301234004,FinanceHub Zrt.,CFO,invited
+agnestordai+rem005@gmail.com,Ms.,Katalin,Horváth,invited,+36301234005,GreenEnergy Kft.,Operations Director,invited
+agnestordai+rem006@gmail.com,Mr.,László,Varga,invited,+36301234006,AutoParts Zrt.,Sales Director,invited
+agnestordai+rem007@gmail.com,Ms.,Zsófia,Kiss,invited,+36301234007,MediaGroup Kft.,PR Manager,invited
+agnestordai+rem008@gmail.com,Dr.,Tamás,Molnár,invited,+36301234008,PharmaLab Zrt.,R&D Director,invited
+agnestordai+rem009@gmail.com,Mr.,Béla,Fekete,invited,+36301234009,BuildCon Kft.,Project Manager,invited
+agnestordai+rem010@gmail.com,Ms.,Réka,Balogh,invited,+36301234010,RetailMax Zrt.,Store Director,invited
+agnestordai+rem011@gmail.com,Mr.,Zoltán,Papp,invited,+36301234011,LogiTrans Kft.,Logistics Director,invited
+agnestordai+rem012@gmail.com,Ms.,Nóra,Lakatos,invited,+36301234012,DesignStudio Zrt.,Creative Director,invited
+agnestordai+rem013@gmail.com,Dr.,István,Németh,invited,+36301234013,LegalPartners Kft.,Senior Partner,invited
+agnestordai+rem014@gmail.com,Mr.,Márton,Takács,invited,+36301234014,DataTech Zrt.,CTO,invited
+agnestordai+rem015@gmail.com,Ms.,Dóra,Juhász,invited,+36301234015,HRConsult Kft.,HR Director,invited
+agnestordai+rem016@gmail.com,Mr.,Kristóf,Simon,invited,+36301234016,FoodIndustry Zrt.,Production Manager,invited
+agnestordai+rem017@gmail.com,Ms.,Lilla,Oláh,invited,+36301234017,TravelWorld Kft.,General Manager,invited
+agnestordai+rem018@gmail.com,Dr.,Gergő,Szilágyi,invited,+36301234018,ConsultPro Zrt.,Managing Partner,invited
+agnestordai+rem019@gmail.com,Mr.,Ádám,Vincze,invited,+36301234019,SportClub Kft.,Director,invited
+agnestordai+rem020@gmail.com,Ms.,Boglárka,Farkas,invited,+36301234020,BeautyBrand Zrt.,Brand Manager,invited
+agnestordai+rem021@gmail.com,Mr.,Dániel,Pásztor,invited,+36301234021,AgriCorp Kft.,Regional Director,invited
+agnestordai+rem022@gmail.com,Ms.,Fanni,Bíró,invited,+36301234022,EventPro Zrt.,Event Manager,invited
+agnestordai+rem023@gmail.com,Dr.,Máté,Kocsis,invited,+36301234023,HealthCare Kft.,Medical Director,invited
+agnestordai+rem024@gmail.com,Mr.,Bence,Hegedűs,invited,+36301234024,MusicLabel Zrt.,A&R Director,invited
+agnestordai+rem025@gmail.com,Ms.,Vivien,Rácz,invited,+36301234025,FashionHouse Kft.,Design Director,invited
+agnestordai+rem026@gmail.com,Mr.,Norbert,Sándor,invited,+36301234026,AutoDealer Zrt.,Sales Manager,registered
+agnestordai+rem027@gmail.com,Ms.,Anett,Mészáros,invited,+36301234027,BankCentral Kft.,Branch Director,registered
+agnestordai+rem028@gmail.com,Dr.,Balázs,Váradi,invited,+36301234028,LawFirm Zrt.,Partner,registered
+agnestordai+rem029@gmail.com,Mr.,Csaba,Szűcs,invited,+36301234029,ITSolutions Kft.,Development Lead,registered
+agnestordai+rem030@gmail.com,Ms.,Enikő,Hajdu,invited,+36301234030,MarketingPro Zrt.,CMO,registered
+agnestordai+rem031@gmail.com,Mr.,Ferenc,Bogdán,invited,+36301234031,ConstructMax Kft.,Site Manager,registered
+agnestordai+rem032@gmail.com,Ms.,Henrietta,Fehér,invited,+36301234032,CosmeticLab Zrt.,Lab Director,registered
+agnestordai+rem033@gmail.com,Dr.,Imre,Orbán,invited,+36301234033,BioTech Kft.,Research Director,registered
+agnestordai+rem034@gmail.com,Mr.,József,Pintér,invited,+36301234034,EnergyPlus Zrt.,Plant Manager,registered
+agnestordai+rem035@gmail.com,Ms.,Klára,Soós,invited,+36301234035,InsuranceCo Kft.,Underwriting Director,registered
+agnestordai+rem036@gmail.com,Mr.,Levente,Tímár,invited,+36301234036,ChemicalWorks Zrt.,Production Director,registered
+agnestordai+rem037@gmail.com,Ms.,Maja,Bodnár,invited,+36301234037,PublishingHouse Kft.,Editor in Chief,registered
+agnestordai+rem038@gmail.com,Dr.,Olivér,Veres,invited,+36301234038,ClinicHealth Zrt.,Chief Physician,registered
+agnestordai+rem039@gmail.com,Mr.,Patrik,Török,invited,+36301234039,LogisticsHub Kft.,Operations Manager,registered
+agnestordai+rem040@gmail.com,Ms.,Renáta,Kozma,invited,+36301234040,RealEstate Zrt.,Property Manager,registered
+agnestordai+rem041@gmail.com,Mr.,Sándor,Kelemen,invited,+36301234041,FurnitureCo Kft.,Showroom Director,registered
+agnestordai+rem042@gmail.com,Ms.,Tímea,Pál,invited,+36301234042,TextileWorks Zrt.,Quality Director,registered
+agnestordai+rem043@gmail.com,Dr.,Viktor,Barna,invited,+36301234043,VetClinic Kft.,Veterinary Director,registered
+agnestordai+rem044@gmail.com,Mr.,Zénó,Dobos,invited,+36301234044,PackagingPro Zrt.,Factory Manager,registered
+agnestordai+rem045@gmail.com,Ms.,Adrienn,Fodor,invited,+36301234045,CateringMax Kft.,Catering Director,registered
+agnestordai+rem046@gmail.com,Mr.,Attila,Gál,invited,+36301234046,ElectroCom Zrt.,Engineering Director,registered
+agnestordai+rem047@gmail.com,Ms.,Bernadett,Halász,invited,+36301234047,WellnessCenter Kft.,Spa Director,registered
+agnestordai+rem048@gmail.com,Dr.,Ervin,Illés,invited,+36301234048,DentalCare Zrt.,Chief Dentist,registered
+agnestordai+rem049@gmail.com,Mr.,Kornél,Jakab,invited,+36301234049,MetalWorks Kft.,Production Chief,registered
+agnestordai+rem050@gmail.com,Ms.,Laura,Kertész,invited,+36301234050,GardenDesign Zrt.,Landscape Director,registered
+agnestordai+rem051@gmail.com,Mr.,Milán,Lengyel,invited,+36301234051,SportEquip Kft.,Retail Director,registered
+agnestordai+rem052@gmail.com,Ms.,Noémi,Major,invited,+36301234052,WineEstate Zrt.,Cellar Master,registered
+agnestordai+rem053@gmail.com,Dr.,Ottó,Nádor,invited,+36301234053,EyeClinic Kft.,Ophthalmologist,registered
+agnestordai+rem054@gmail.com,Mr.,Richárd,Orosz,invited,+36301234054,ToolFactory Zrt.,Factory Director,registered
+agnestordai+rem055@gmail.com,Ms.,Sára,Pető,invited,+36301234055,ArtGallery Kft.,Gallery Director,registered
+agnestordai+rem056@gmail.com,Mr.,Tibor,Rózsa,invited,+36301234056,FlowerShop Zrt.,Chain Director,registered
+agnestordai+rem057@gmail.com,Ms.,Vanda,Seres,invited,+36301234057,JewelryBrand Kft.,Brand Director,registered
+agnestordai+rem058@gmail.com,Dr.,Zsombor,Szalai,invited,+36301234058,PsychClinic Zrt.,Clinical Director,registered
+agnestordai+rem059@gmail.com,Mr.,Árpád,Tamás,invited,+36301234059,PrintHouse Kft.,Print Director,registered
+agnestordai+rem060@gmail.com,Ms.,Csenge,Udvardy,invited,+36301234060,SchoolGroup Zrt.,Principal,registered
+agnestordai+rem061@gmail.com,Mr.,Dénes,Vass,invited,+36301234061,CarRental Kft.,Fleet Director,declined
+agnestordai+rem062@gmail.com,Ms.,Emese,Zoltán,invited,+36301234062,HotelChain Zrt.,General Manager,declined
+agnestordai+rem063@gmail.com,Dr.,György,Antal,invited,+36301234063,SurgeryCenter Kft.,Chief Surgeon,declined
+agnestordai+rem064@gmail.com,Mr.,Hunor,Balázs,invited,+36301234064,SteelWorks Zrt.,Plant Director,declined
+agnestordai+rem065@gmail.com,Ms.,Ibolya,Csonka,invited,+36301234065,BakeryChain Kft.,Operations Director,declined
+agnestordai+rem066@gmail.com,Mr.,Jenő,Dékány,invited,+36301234066,GlassFactory Zrt.,Quality Manager,declined
+agnestordai+rem067@gmail.com,Ms.,Kamilla,Erdős,invited,+36301234067,PhotoStudio Kft.,Studio Director,declined
+agnestordai+rem068@gmail.com,Dr.,Lajos,Fülöp,invited,+36301234068,LabServices Zrt.,Lab Director,declined
+agnestordai+rem069@gmail.com,Mr.,Mihály,Gergely,invited,+36301234069,PlasticWorks Kft.,Technical Director,pending
+agnestordai+rem070@gmail.com,Ms.,Olívia,Hornyák,invited,+36301234070,CoffeeChain Zrt.,Franchise Director,pending
+agnestordai+rem071@gmail.com,Mrs.,Anikó,Kovács,invited,+36301234071,TechCorp Kft.,Partner of CEO,registered
+agnestordai+rem072@gmail.com,Mrs.,Mónika,Nagy,invited,+36301234072,InnoSoft Zrt.,Partner,registered
+agnestordai+rem073@gmail.com,Mrs.,Gabriella,Szabó,invited,+36301234073,MediHealth Kft.,Partner,registered
+agnestordai+rem074@gmail.com,Mrs.,Ágnes,Tóth,invited,+36301234074,FinanceHub Zrt.,Partner,registered
+agnestordai+rem075@gmail.com,Mrs.,Judit,Horváth,invited,+36301234075,GreenEnergy Kft.,Partner,registered
+agnestordai+rem076@gmail.com,Mrs.,Krisztina,Varga,invited,+36301234076,AutoParts Zrt.,Partner,registered
+agnestordai+rem077@gmail.com,Mrs.,Edit,Kiss,invited,+36301234077,MediaGroup Kft.,Partner,registered
+agnestordai+rem078@gmail.com,Mrs.,Szilvia,Molnár,invited,+36301234078,PharmaLab Zrt.,Partner,registered
+agnestordai+rem079@gmail.com,Mrs.,Zsuzsanna,Fekete,invited,+36301234079,BuildCon Kft.,Partner,registered
+agnestordai+rem080@gmail.com,Mrs.,Melinda,Balogh,invited,+36301234080,RetailMax Zrt.,Partner,registered
+agnestordai+rem081@gmail.com,Mrs.,Andrea,Papp,invited,+36301234081,LogiTrans Kft.,Partner,registered
+agnestordai+rem082@gmail.com,Mrs.,Beáta,Lakatos,invited,+36301234082,DesignStudio Zrt.,Partner,registered
+agnestordai+rem083@gmail.com,Mrs.,Cecília,Németh,invited,+36301234083,LegalPartners Kft.,Partner,registered
+agnestordai+rem084@gmail.com,Mrs.,Diána,Takács,invited,+36301234084,DataTech Zrt.,Partner,registered
+agnestordai+rem085@gmail.com,Mrs.,Etelka,Juhász,invited,+36301234085,HRConsult Kft.,Partner,registered
+agnestordai+rem086@gmail.com,Mrs.,Fruzsina,Simon,invited,+36301234086,FoodIndustry Zrt.,Partner,registered
+agnestordai+rem087@gmail.com,Mrs.,Gizella,Oláh,invited,+36301234087,TravelWorld Kft.,Partner,registered
+agnestordai+rem088@gmail.com,Mrs.,Helga,Szilágyi,invited,+36301234088,ConsultPro Zrt.,Partner,registered
+agnestordai+rem089@gmail.com,Mrs.,Ildikó,Vincze,invited,+36301234089,SportClub Kft.,Partner,registered
+agnestordai+rem090@gmail.com,Mrs.,Jolán,Farkas,invited,+36301234090,BeautyBrand Zrt.,Partner,registered
+agnestordai+rem091@gmail.com,Mrs.,Kinga,Pásztor,invited,+36301234091,AgriCorp Kft.,Partner,registered
+agnestordai+rem092@gmail.com,Mrs.,Lívia,Bíró,invited,+36301234092,EventPro Zrt.,Partner,registered
+agnestordai+rem093@gmail.com,Mrs.,Margit,Kocsis,invited,+36301234093,HealthCare Kft.,Partner,registered
+agnestordai+rem094@gmail.com,Mrs.,Nikolett,Hegedűs,invited,+36301234094,MusicLabel Zrt.,Partner,registered
+agnestordai+rem095@gmail.com,Mrs.,Orsolya,Rácz,invited,+36301234095,FashionHouse Kft.,Partner,registered
+agnestordai+rem096@gmail.com,Mrs.,Piroska,Sándor,invited,+36301234096,AutoDealer Zrt.,Partner,registered
+agnestordai+rem097@gmail.com,Mrs.,Renáta,Mészáros,invited,+36301234097,BankCentral Kft.,Partner,registered
+agnestordai+rem098@gmail.com,Mrs.,Sarolta,Váradi,invited,+36301234098,LawFirm Zrt.,Partner,registered
+agnestordai+rem099@gmail.com,Mrs.,Teréz,Szűcs,invited,+36301234099,ITSolutions Kft.,Partner,registered
+agnestordai+rem100@gmail.com,Mrs.,Veronika,Hajdu,invited,+36301234100,MarketingPro Zrt.,Partner,registered

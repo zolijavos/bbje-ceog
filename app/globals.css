@@ -1,0 +1,1332 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========================================
+   PWA THEME SYSTEM - Light/Dark Mode
+   CSS Custom Properties for dynamic theming
+   ======================================== */
+
+:root {
+  /* Light mode (default) - BBJ Events 2026 Palette */
+  --color-bg-base: #F9FAFB;
+  --color-bg-card: #FFFFFF;
+  --color-bg-elevated: #FFFFFF;
+  --color-bg-header: #000D38;
+
+  --color-text-primary: #111827;
+  --color-text-secondary: #6B7280;
+  --color-text-tertiary: #9CA3AF;
+  --color-text-disabled: #D1D5DB;
+  --color-text-inverse: #FFFFFF;
+
+  --color-btn-primary-bg: #000D38;
+  --color-btn-primary-text: #FFFFFF;
+  --color-btn-secondary-bg: #F3F4F6;
+  --color-btn-secondary-text: #000D38;
+
+  --color-border-subtle: #E5E7EB;
+  --color-border-emphasis: #D1D5DB;
+
+  --color-accent: #000D38;
+  --color-accent-light: #0A1A4A;
+  --color-accent-glow: rgba(0, 13, 56, 0.2);
+
+  /* Shadows - Light mode */
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-card-hover: 0 8px 25px rgba(0,0,0,0.12);
+  --shadow-btn-3d: 0 4px 0 #D1D5DB, 0 6px 12px rgba(0,0,0,0.1);
+  --shadow-btn-3d-hover: 0 6px 0 #D1D5DB, 0 10px 20px rgba(0,0,0,0.15);
+  --shadow-btn-3d-active: 0 1px 0 #D1D5DB, 0 2px 4px rgba(0,0,0,0.1);
+  --shadow-glow: 0 0 20px rgba(0, 13, 56, 0.3);
+
+  /* Skeleton */
+  --skeleton-base: #E5E7EB;
+  --skeleton-shimmer: #F3F4F6;
+
+  /* Status colors */
+  --color-success: #059669;
+  --color-success-bg: #D1FAE5;
+  --color-warning: #D97706;
+  --color-warning-bg: #FEF3C7;
+  --color-error: #DC2626;
+  --color-error-bg: #FEE2E2;
+}
+
+[data-theme="dark"],
+.dark {
+  /* Dark mode - BBJ Events 2026 Navy Palette */
+  --color-bg-base: #000D38;
+  --color-bg-card: #0A1A4A;
+  --color-bg-elevated: #1A2D5C;
+  --color-bg-header: #000D38;
+
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #9CA3AF;
+  --color-text-tertiary: #6B7280;
+  --color-text-disabled: #6B7280;
+  --color-text-inverse: #000D38;
+
+  --color-btn-primary-bg: #FFFFFF;
+  --color-btn-primary-text: #000D38;
+  --color-btn-secondary-bg: transparent;
+  --color-btn-secondary-text: #FFFFFF;
+
+  --color-border-subtle: #2A4070;
+  --color-border-emphasis: #3A5070;
+
+  --color-accent: #FFFFFF;
+  --color-accent-light: #E5E7EB;
+  --color-accent-glow: rgba(255, 255, 255, 0.15);
+
+  /* Shadows - Dark mode (subtle navy glow) */
+  --shadow-card: 0 0 0 1px rgba(42, 64, 112, 0.5);
+  --shadow-card-hover: 0 0 30px rgba(255,255,255,0.08), 0 0 0 1px rgba(42, 64, 112, 0.8);
+  --shadow-btn-3d: 0 4px 0 #000820, 0 0 20px rgba(0,0,0,0.5);
+  --shadow-btn-3d-hover: 0 6px 0 #000820, 0 0 25px rgba(255,255,255,0.1);
+  --shadow-btn-3d-active: 0 1px 0 #000820, 0 0 10px rgba(0,0,0,0.3);
+  --shadow-glow: 0 0 30px rgba(255, 255, 255, 0.2);
+
+  /* Skeleton */
+  --skeleton-base: #0A1A4A;
+  --skeleton-shimmer: #1A2D5C;
+
+  /* Status colors - Dark mode (muted for navy bg) */
+  --color-success: #059669;
+  --color-success-bg: #064E3B;
+  --color-warning: #D97706;
+  --color-warning-bg: #78350F;
+  --color-error: #DC2626;
+  --color-error-bg: #7F1D1D;
+}
+
+/* Smooth theme transition */
+[data-theme-transition] * {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* ========================================
+   CEO GALA DESIGN SYSTEM
+   Monochrome palette with teal accent (BBJ CEO Gala branding)
+   Fonts: Playfair Display (headlines), Open Sans (body)
+   Colors: Teal (#00A0A0), Neutral grays, Gold (awards only)
+   See docs/DESIGN-GUIDE.md for full specification
+   ======================================== */
+
+/* Base layer overrides */
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 antialiased font-sans;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* CEO Gala Typography */
+  h1 {
+    @apply font-display text-4xl md:text-5xl font-semibold text-neutral-800 dark:text-neutral-100 tracking-tight;
+  }
+
+  h2 {
+    @apply font-display text-3xl md:text-4xl font-semibold text-neutral-800 dark:text-neutral-100 tracking-tight;
+  }
+
+  h3 {
+    @apply font-display text-2xl md:text-3xl font-medium text-neutral-800 dark:text-neutral-100;
+  }
+
+  h4 {
+    @apply font-display text-xl md:text-2xl font-medium text-neutral-800 dark:text-neutral-100;
+  }
+
+  h5 {
+    @apply font-display text-lg md:text-xl font-medium text-neutral-800 dark:text-neutral-100;
+  }
+
+  h6 {
+    @apply font-sans text-base md:text-lg font-semibold text-neutral-800 dark:text-neutral-100 uppercase tracking-wider;
+  }
+
+  p {
+    @apply font-sans text-base text-neutral-600 dark:text-neutral-300 leading-relaxed;
+  }
+
+  /* Links - inherit color by default, specific components style their own links */
+  a {
+    @apply transition-colors;
+  }
+
+  /* Content area links (not in navigation) get accent color */
+  main a:not([class*="text-"]),
+  .prose a,
+  article a {
+    @apply text-accent-teal hover:text-accent-teal-dark dark:text-accent-teal-light dark:hover:text-accent-teal;
+  }
+}
+
+/* ========================================
+   FORM INPUT STYLES - CEO Gala branded
+   ======================================== */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="tel"],
+select,
+textarea {
+  @apply border border-neutral-300 dark:border-neutral-600 px-4 py-3 text-base font-sans
+         bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100
+         transition-all duration-200 ease-out
+         focus:outline-none focus:border-neutral-800 dark:focus:border-neutral-400 focus:ring-2 focus:ring-neutral-800/20 dark:focus:ring-neutral-400/20;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  box-shadow: 0 0 0 3px rgba(38, 38, 38, 0.1);
+}
+
+input:hover:not(:focus),
+select:hover:not(:focus),
+textarea:hover:not(:focus) {
+  @apply border-neutral-400;
+}
+
+/* Placeholder styling */
+input::placeholder,
+textarea::placeholder {
+  @apply text-neutral-400 dark:text-neutral-500 font-sans;
+}
+
+/* ========================================
+   CEO GALA BUTTON SYSTEM
+   Elegant, sophisticated buttons
+   ======================================== */
+
+/* Base button */
+.btn {
+  @apply inline-flex items-center justify-center gap-2
+         px-6 py-3 text-sm font-sans font-semibold uppercase tracking-wider
+         border-0
+         transition-all duration-200 ease-out
+         select-none cursor-pointer;
+}
+
+/* Primary Button - Teal accent */
+.btn-primary {
+  @apply bg-accent-teal text-white;
+  box-shadow: 0 2px 8px rgba(0, 160, 160, 0.35);
+}
+
+.btn-primary:hover {
+  @apply bg-accent-teal-dark;
+  box-shadow: 0 4px 12px rgba(0, 160, 160, 0.45);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  @apply bg-accent-teal-dark;
+  box-shadow: 0 1px 4px rgba(0, 160, 160, 0.25);
+  transform: translateY(0);
+}
+
+/* Secondary Button - Charcoal */
+.btn-secondary {
+  @apply bg-neutral-800 text-white;
+  box-shadow: 0 2px 8px rgba(38, 38, 38, 0.25);
+}
+
+.btn-secondary:hover {
+  @apply bg-neutral-700;
+  box-shadow: 0 4px 12px rgba(38, 38, 38, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-secondary:active {
+  @apply bg-neutral-800;
+  box-shadow: 0 1px 4px rgba(38, 38, 38, 0.2);
+  transform: translateY(0);
+}
+
+/* Ghost Button - Outlined */
+.btn-ghost {
+  @apply bg-transparent text-neutral-800 border-2 border-neutral-300;
+  box-shadow: none;
+}
+
+.btn-ghost:hover {
+  @apply bg-neutral-100 border-neutral-400;
+}
+
+.btn-ghost:active {
+  @apply bg-neutral-200;
+}
+
+/* Teal Outline Button */
+.btn-teal-outline {
+  @apply bg-transparent text-accent-teal border-2 border-accent-teal;
+}
+
+.btn-teal-outline:hover {
+  @apply bg-accent-teal text-white;
+}
+
+/* Danger Button - Red accent */
+.btn-danger {
+  @apply bg-red-600 text-white;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+}
+
+.btn-danger:hover {
+  @apply bg-red-700;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-danger:active {
+  @apply bg-red-800;
+  transform: translateY(0);
+}
+
+/* Success Button - Green accent */
+.btn-success {
+  @apply bg-emerald-600 text-white;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
+}
+
+.btn-success:hover {
+  @apply bg-emerald-700;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-success:active {
+  @apply bg-emerald-800;
+  transform: translateY(0);
+}
+
+/* Small Button variant */
+.btn-sm {
+  @apply px-4 py-2 text-xs;
+}
+
+/* Large Button variant */
+.btn-lg {
+  @apply px-8 py-4 text-base;
+}
+
+/* Icon-only Button */
+.btn-icon {
+  @apply p-3;
+}
+
+/* Disabled state */
+.btn:disabled {
+  @apply opacity-50 cursor-not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ========================================
+   CARD / PANEL SYSTEM - CEO Gala styled
+   ======================================== */
+.panel {
+  @apply bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.panel-hover {
+  @apply transition-all duration-300;
+}
+
+.panel-hover:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Teal accent panel */
+.panel-accent {
+  @apply bg-white dark:bg-neutral-800 border-l-4 border-l-accent-teal border border-neutral-200 dark:border-neutral-700;
+}
+
+/* ========================================
+   TABLE STYLES - Elegant tables
+   ======================================== */
+table {
+  @apply w-full font-sans;
+}
+
+th {
+  @apply text-left font-semibold text-neutral-800 dark:text-neutral-200 text-xs uppercase tracking-wider py-3 px-4;
+  @apply border-b-2 border-neutral-300 dark:border-neutral-600;
+}
+
+td {
+  @apply text-neutral-900 dark:text-neutral-100 py-3 px-4 border-b border-neutral-100 dark:border-neutral-700;
+}
+
+tr:hover td {
+  @apply bg-neutral-50 dark:bg-neutral-800;
+}
+
+/* ========================================
+   BADGE / TAG STYLES - Refined badges
+   ======================================== */
+.badge {
+  @apply inline-flex items-center px-3 py-1 text-xs font-sans font-semibold uppercase tracking-wider;
+}
+
+.badge-primary {
+  @apply bg-accent-teal/10 text-accent-teal-dark;
+}
+
+.badge-success {
+  @apply bg-emerald-50 text-emerald-700;
+}
+
+.badge-warning {
+  @apply bg-amber-50 text-amber-700;
+}
+
+.badge-danger {
+  @apply bg-red-50 text-red-700;
+}
+
+.badge-neutral {
+  @apply bg-neutral-100 text-neutral-600;
+}
+
+.badge-vip {
+  @apply bg-primary text-white;
+}
+
+/* ========================================
+   ICON BUTTON (for toolbar icons)
+   ======================================== */
+.icon-btn {
+  @apply p-2.5 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400
+         border border-neutral-200 dark:border-neutral-700
+         transition-all duration-200 ease-out
+         hover:bg-accent-teal/10 hover:text-accent-teal hover:border-accent-teal/30
+         active:bg-accent-teal/20;
+}
+
+.icon-btn-active {
+  @apply bg-accent-teal/10 text-accent-teal border-accent-teal/30;
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s ease-out;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.4s ease-out;
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ========================================
+   LOADING SPINNER - Teal themed
+   ======================================== */
+.spinner {
+  @apply w-5 h-5 border-2 border-accent-teal/30 border-t-accent-teal;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.spinner-lg {
+  @apply w-8 h-8;
+  border-width: 3px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   CEO GALA SPECIAL COMPONENTS
+   ======================================== */
+
+/* Decorative teal line */
+.accent-line {
+  @apply h-1 bg-gradient-to-r from-transparent via-accent-teal to-transparent;
+}
+
+/* VIP highlight (uses gold for special/award status) */
+.vip-highlight {
+  @apply relative;
+}
+
+.vip-highlight::before {
+  content: '';
+  @apply absolute -left-3 top-0 bottom-0 w-1 bg-primary;
+}
+
+/* Elegant section divider */
+.section-divider {
+  @apply flex items-center gap-4 my-8;
+}
+
+.section-divider::before,
+.section-divider::after {
+  content: '';
+  @apply flex-1 h-px bg-gradient-to-r from-transparent via-neutral-300 to-transparent;
+}
+
+/* Page header with teal accent */
+.page-header {
+  @apply relative pb-4 mb-8;
+}
+
+.page-header::after {
+  content: '';
+  @apply absolute bottom-0 left-0 w-16 h-1 bg-accent-teal;
+}
+
+/* Halftone pattern (BBJ-style decorative background) */
+.halftone-pattern {
+  background-image: radial-gradient(#D4D4D4 1px, transparent 1px);
+  background-size: 8px 8px;
+  opacity: 0.5;
+}
+
+/* ========================================
+   PWA SPECIFIC STYLES
+   3D buttons, floating cards, shimmer effects
+   ======================================== */
+
+/* === 3D BUTTON === */
+.btn-3d {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: none;
+  cursor: pointer;
+  transform: translateY(0);
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--color-btn-primary-bg);
+  color: var(--color-btn-primary-text);
+  box-shadow: var(--shadow-btn-3d);
+  overflow: hidden;
+}
+
+.btn-3d:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-btn-3d-hover);
+}
+
+.btn-3d:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-btn-3d-active);
+}
+
+.btn-3d:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Ripple effect */
+.btn-3d::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.4s ease-out;
+  pointer-events: none;
+}
+
+.btn-3d:active::after {
+  opacity: 1;
+  transform: scale(2.5);
+}
+
+/* Secondary 3D button */
+.btn-3d-secondary {
+  background: var(--color-btn-secondary-bg);
+  color: var(--color-btn-secondary-text);
+  box-shadow: var(--shadow-card);
+}
+
+.btn-3d-secondary:hover:not(:disabled) {
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* Accent outline 3D button - high visibility with teal border */
+.btn-3d-accent {
+  background: transparent;
+  color: var(--color-accent);
+  border: 2px solid var(--color-accent);
+  box-shadow: 0 3px 0 var(--color-accent), var(--shadow-card);
+}
+
+.btn-3d-accent:hover:not(:disabled) {
+  background: var(--color-accent);
+  color: #FFFFFF;
+  box-shadow: 0 4px 0 #0D9488, var(--shadow-card-hover);
+}
+
+.btn-3d-accent:active:not(:disabled) {
+  box-shadow: 0 1px 0 #0D9488;
+}
+
+/* === FLOATING CARD === */
+.card-float {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-card);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-float:hover,
+.card-float:focus-within {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* Card without hover effect */
+.card-static {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-card);
+}
+
+/* Elevated card */
+.card-elevated {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-card);
+}
+
+/* === QR CODE SHIMMER === */
+.qr-container {
+  position: relative;
+  display: inline-block;
+  padding: 1rem;
+  background: white;
+  border: 2px solid var(--color-border-subtle);
+}
+
+.qr-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.qr-shimmer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    -45deg,
+    transparent 40%,
+    rgba(255,255,255,0.15) 50%,
+    transparent 60%
+  );
+  animation: qr-shimmer 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes qr-shimmer {
+  0% { transform: translateX(-150%) translateY(-150%); }
+  100% { transform: translateX(150%) translateY(150%); }
+}
+
+.qr-glow {
+  animation: qr-glow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes qr-glow-pulse {
+  0%, 100% { box-shadow: 0 0 15px var(--color-accent-glow); }
+  50% { box-shadow: 0 0 30px var(--color-accent-glow), var(--shadow-glow); }
+}
+
+/* === SKELETON LOADING === */
+.skeleton {
+  background: var(--skeleton-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--skeleton-shimmer) 50%,
+    transparent 100%
+  );
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.skeleton-text {
+  height: 1rem;
+  border-radius: 0.25rem;
+}
+
+.skeleton-title {
+  height: 1.5rem;
+  width: 60%;
+  border-radius: 0.25rem;
+}
+
+.skeleton-avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+}
+
+.skeleton-card {
+  height: 6rem;
+  border-radius: 0;
+}
+
+/* === TOAST NOTIFICATIONS === */
+.toast-container {
+  position: fixed;
+  top: env(safe-area-inset-top, 0);
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border-radius: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  pointer-events: auto;
+  animation: toast-slide-in 0.3s ease-out;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.toast-success {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+  border: 1px solid var(--color-success);
+}
+
+.toast-error {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+  border: 1px solid var(--color-error);
+}
+
+.toast-warning {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+  border: 1px solid var(--color-warning);
+}
+
+@keyframes toast-slide-in {
+  0% { transform: translateY(-100%); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes toast-slide-out {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-100%); opacity: 0; }
+}
+
+.toast-exit {
+  animation: toast-slide-out 0.2s ease-in forwards;
+}
+
+/* === FLIP CLOCK === */
+.flip-clock {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.flip-clock-segment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.flip-clock-digits {
+  display: flex;
+  gap: 0.125rem;
+}
+
+.flip-clock-digit {
+  width: 2.5rem;
+  height: 3.5rem;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+.flip-clock-digit::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: var(--color-border-subtle);
+}
+
+.flip-clock-label {
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-tertiary);
+}
+
+.flip-clock-digit.flip {
+  animation: flip-digit 0.6s ease-in-out;
+}
+
+@keyframes flip-digit {
+  0% { transform: rotateX(0deg); }
+  50% { transform: rotateX(90deg); }
+  100% { transform: rotateX(0deg); }
+}
+
+/* === BOTTOM SHEET === */
+.bottom-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 50;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.bottom-sheet-backdrop.open {
+  opacity: 1;
+}
+
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-bg-card);
+  border-top: 1px solid var(--color-border-subtle);
+  z-index: 51;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding-bottom: env(safe-area-inset-bottom, 1rem);
+}
+
+.bottom-sheet.open {
+  transform: translateY(0);
+}
+
+.bottom-sheet-handle {
+  width: 2.5rem;
+  height: 0.25rem;
+  background: var(--color-border-emphasis);
+  border-radius: 9999px;
+  margin: 0.75rem auto;
+}
+
+/* === THEME TOGGLE === */
+.theme-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle-track {
+  position: relative;
+  width: 2.5rem;
+  height: 1.25rem;
+  background: var(--color-border-emphasis);
+  border-radius: 9999px;
+  transition: background 0.3s ease;
+}
+
+.theme-toggle-knob {
+  position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 1rem;
+  height: 1rem;
+  background: var(--color-btn-primary-bg);
+  border-radius: 9999px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[data-theme="dark"] .theme-toggle-knob {
+  transform: translateX(1.25rem);
+}
+
+.theme-toggle-icon {
+  font-size: 0.75rem;
+  transition: opacity 0.2s ease;
+}
+
+/* === PWA PAGE TRANSITIONS === */
+.page-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.2s ease-out;
+}
+
+.page-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.15s ease-in;
+}
+
+/* === REDUCED MOTION === */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .card-float:hover {
+    transform: none;
+  }
+
+  .btn-3d:hover,
+  .btn-3d:active {
+    transform: none;
+  }
+}
+
+/* === PWA SPECIFIC BACKGROUNDS === */
+.pwa-bg-base {
+  background-color: var(--color-bg-base);
+}
+
+.pwa-bg-card {
+  background-color: var(--color-bg-card);
+}
+
+.pwa-bg-elevated {
+  background-color: var(--color-bg-elevated);
+}
+
+.pwa-bg-header {
+  background-color: var(--color-bg-header);
+}
+
+/* PWA Text colors */
+.pwa-text-primary {
+  color: var(--color-text-primary);
+}
+
+.pwa-text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.pwa-text-tertiary {
+  color: var(--color-text-tertiary);
+}
+
+.pwa-text-inverse {
+  color: var(--color-text-inverse);
+}
+
+.pwa-text-accent {
+  color: var(--color-accent);
+}
+
+/* PWA Border colors */
+.pwa-border-subtle {
+  border-color: var(--color-border-subtle);
+}
+
+.pwa-border-emphasis {
+  border-color: var(--color-border-emphasis);
+}
+
+/* ========================================
+   LANDING PAGE THEME SYSTEM
+   For homepage, request-link, apply pages
+   ======================================== */
+
+:root {
+  /* Landing page - Light mode (BBJ Events 2026) */
+  --landing-bg-gradient-from: #F9FAFB;
+  --landing-bg-gradient-via: #F3F4F6;
+  --landing-bg-gradient-to: #E5E7EB;
+  --landing-card-bg: #FFFFFF;
+  --landing-card-bg-gradient-from: #FFFFFF;
+  --landing-card-bg-gradient-to: #F9FAFB;
+  --landing-card-border: rgba(0, 13, 56, 0.15);
+  --landing-btn-bg: rgba(243, 244, 246, 0.9);
+  --landing-btn-bg-hover: rgba(229, 231, 235, 0.95);
+  --landing-btn-border: rgba(0, 13, 56, 0.2);
+  --landing-btn-shadow: 0 4px 0 rgba(0, 13, 56, 0.15);
+  --landing-btn-shadow-hover: 0 2px 0 rgba(0, 13, 56, 0.15);
+  --landing-text-heading: #000D38;
+  --landing-text-primary: #111827;
+  --landing-text-secondary: #6B7280;
+  --landing-text-tertiary: #9CA3AF;
+  --landing-divider: rgba(0, 13, 56, 0.15);
+  --landing-icon-bg-teal: rgba(0, 13, 56, 0.08);
+  --landing-icon-bg-amber: rgba(0, 13, 56, 0.08);
+  --landing-footer-text: #6B7280;
+}
+
+[data-theme="dark"],
+.dark {
+  /* Landing page - Dark mode (BBJ Events 2026 Navy) */
+  --landing-bg-gradient-from: #000D38;
+  --landing-bg-gradient-via: #000820;
+  --landing-bg-gradient-to: #000D38;
+  --landing-card-bg: #0A1A4A;
+  --landing-card-bg-gradient-from: #0A1A4A;
+  --landing-card-bg-gradient-to: #000D38;
+  --landing-card-border: rgba(42, 64, 112, 0.5);
+  --landing-btn-bg: rgba(10, 26, 74, 0.8);
+  --landing-btn-bg-hover: rgba(26, 45, 92, 0.9);
+  --landing-btn-border: rgba(42, 64, 112, 0.5);
+  --landing-btn-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
+  --landing-btn-shadow-hover: 0 2px 0 rgba(0, 0, 0, 0.4);
+  --landing-text-heading: #FFFFFF;
+  --landing-text-primary: #FFFFFF;
+  --landing-text-secondary: #9CA3AF;
+  --landing-text-tertiary: #6B7280;
+  --landing-divider: rgba(42, 64, 112, 0.5);
+  --landing-icon-bg-teal: rgba(255, 255, 255, 0.1);
+  --landing-icon-bg-amber: rgba(255, 255, 255, 0.1);
+  --landing-footer-text: #6B7280;
+}
+
+/* Landing page utility classes */
+.landing-bg {
+  background: linear-gradient(to bottom right, var(--landing-bg-gradient-from), var(--landing-bg-gradient-via), var(--landing-bg-gradient-to));
+}
+
+.landing-card {
+  background: linear-gradient(to bottom, var(--landing-card-bg-gradient-from), var(--landing-card-bg-gradient-to));
+  border-color: var(--landing-card-border);
+}
+
+.landing-btn {
+  background: var(--landing-btn-bg);
+  border-color: var(--landing-btn-border);
+  box-shadow: var(--landing-btn-shadow);
+  transition: all 0.15s ease-out;
+}
+
+.landing-btn:hover {
+  background: var(--landing-btn-bg-hover);
+  box-shadow: var(--landing-btn-shadow-hover);
+  transform: translateY(2px);
+}
+
+.landing-text-heading {
+  color: var(--landing-text-heading);
+}
+
+.landing-text-primary {
+  color: var(--landing-text-primary);
+}
+
+.landing-text-secondary {
+  color: var(--landing-text-secondary);
+}
+
+.landing-text-tertiary {
+  color: var(--landing-text-tertiary);
+}
+
+.landing-divider {
+  border-color: var(--landing-divider);
+}
+
+.landing-icon-teal {
+  background: var(--landing-icon-bg-teal);
+}
+
+.landing-icon-amber {
+  background: var(--landing-icon-bg-amber);
+}
+
+.landing-footer {
+  color: var(--landing-footer-text);
+}
+
+/* ========================================
+   ADMIN DARK MODE OVERRIDES
+   Global dark mode support for admin pages
+   ======================================== */
+
+/* Admin page backgrounds */
+.dark .bg-white {
+  @apply !bg-neutral-800;
+}
+
+.dark .bg-gray-50,
+.dark .bg-neutral-50 {
+  @apply !bg-neutral-900;
+}
+
+.dark .bg-gray-100,
+.dark .bg-neutral-100 {
+  @apply !bg-neutral-800;
+}
+
+/* Admin text colors */
+.dark .text-gray-900,
+.dark .text-neutral-900 {
+  @apply !text-neutral-100;
+}
+
+.dark .text-gray-800,
+.dark .text-neutral-800 {
+  @apply !text-neutral-200;
+}
+
+.dark .text-gray-700,
+.dark .text-neutral-700 {
+  @apply !text-neutral-300;
+}
+
+.dark .text-gray-600,
+.dark .text-neutral-600 {
+  @apply !text-neutral-400;
+}
+
+.dark .text-gray-500,
+.dark .text-neutral-500 {
+  @apply !text-neutral-400;
+}
+
+/* Admin border colors */
+.dark .border-gray-200,
+.dark .border-neutral-200 {
+  @apply !border-neutral-700;
+}
+
+.dark .border-gray-300,
+.dark .border-neutral-300 {
+  @apply !border-neutral-600;
+}
+
+/* Admin divide colors */
+.dark .divide-gray-200 > * + *,
+.dark .divide-neutral-200 > * + * {
+  @apply !border-neutral-700;
+}
+
+/* Admin shadows */
+.dark .shadow {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* Admin hover states */
+.dark .hover\:bg-gray-50:hover,
+.dark .hover\:bg-neutral-50:hover {
+  @apply !bg-neutral-800;
+}
+
+.dark .hover\:bg-gray-100:hover {
+  @apply !bg-neutral-700;
+}
+
+/* Admin selection states */
+.dark .bg-blue-50 {
+  @apply !bg-blue-900/30;
+}
+
+.dark .text-blue-800 {
+  @apply !text-blue-300;
+}
+
+.dark .border-blue-200 {
+  @apply !border-blue-800;
+}
+
+/* Admin notification states */
+.dark .bg-green-50 {
+  @apply !bg-green-900/30;
+}
+
+.dark .text-green-800 {
+  @apply !text-green-300;
+}
+
+.dark .border-green-200 {
+  @apply !border-green-800;
+}
+
+.dark .bg-red-50 {
+  @apply !bg-red-900/30;
+}
+
+.dark .text-red-800 {
+  @apply !text-red-300;
+}
+
+.dark .border-red-200 {
+  @apply !border-red-800;
+}
+
+.dark .bg-yellow-50,
+.dark .bg-amber-50 {
+  @apply !bg-amber-900/30;
+}
+
+.dark .text-yellow-800,
+.dark .text-amber-800 {
+  @apply !text-amber-300;
+}
+
+.dark .bg-purple-50 {
+  @apply !bg-purple-900/30;
+}
+
+.dark .text-purple-700 {
+  @apply !text-purple-300;
+}
+
+.dark .border-purple-200 {
+  @apply !border-purple-800;
+}
+
+/* Admin modal/dialog backgrounds */
+.dark .bg-black.bg-opacity-50 {
+  @apply !bg-black/70;
+}
+
+/* Admin disabled/readonly inputs */
+.dark .bg-gray-100.cursor-not-allowed,
+.dark input:disabled,
+.dark select:disabled,
+.dark textarea:disabled {
+  @apply !bg-neutral-700 !text-neutral-400;
+}
+
+/* Admin focus ring adjustments */
+.dark .focus\:ring-blue-500:focus {
+  --tw-ring-color: rgba(59, 130, 246, 0.5);
+}
+
+.dark .focus\:border-blue-500:focus {
+  @apply !border-blue-400;
+}
+
+/* Admin table row hover */
+.dark tbody tr:hover td {
+  @apply !bg-neutral-700/50;
+}
+
+/* Admin badge colors for dark mode */
+.dark .bg-purple-100 {
+  @apply !bg-purple-900/50;
+}
+
+.dark .bg-pink-100 {
+  @apply !bg-pink-900/50;
+}
+
+.dark .text-pink-700 {
+  @apply !text-pink-300;
+}
+
+/* Admin pagination */
+.dark .bg-gray-50.border-t {
+  @apply !bg-neutral-800 !border-neutral-700;
+}

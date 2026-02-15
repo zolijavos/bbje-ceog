@@ -1,0 +1,197 @@
+/**
+ * Environment Variable Validation
+ *
+ * Validates required environment variables at startup to prevent runtime errors.
+ * Import this file in layout.tsx or middleware to ensure validation runs early.
+ */
+
+interface EnvConfig {
+  // Database
+  DATABASE_URL: string;
+
+  // App secrets
+  APP_SECRET: string;
+  QR_SECRET: string;
+
+  // Stripe
+  STRIPE_SECRET_KEY: string;
+  STRIPE_WEBHOOK_SECRET: string;
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: string;
+
+  // Email (SMTP)
+  SMTP_HOST: string;
+  SMTP_PORT: string;
+  SMTP_USER: string;
+  SMTP_PASS: string;
+  SMTP_FROM?: string; // Optional, has default
+
+  // NextAuth
+  NEXTAUTH_URL: string;
+  NEXTAUTH_SECRET: string;
+
+  // App URL
+  APP_URL?: string; // Optional, has default
+  NEXT_PUBLIC_APP_URL?: string; // Optional
+
+  // Event config
+  EVENT_DATE?: string; // Optional, has default
+}
+
+/**
+ * Validates a single environment variable
+ */
+function validateEnvVar(name: keyof EnvConfig, required: boolean = true): string {
+  const value = process.env[name];
+
+  if (!value) {
+    if (required) {
+      throw new Error(
+        `Missing required environment variable: ${name}\n` +
+          `Please add it to your .env.local file.\n` +
+          `See .env.example for reference.`
+      );
+    }
+    return ''; // Optional var
+  }
+
+  return value;
+}
+
+/**
+ * Validates minimum length for secrets
+ */
+function validateSecret(name: keyof EnvConfig, minLength: number = 32): string {
+  const value = validateEnvVar(name);
+
+  if (value.length < minLength) {
+    throw new Error(
+      `Environment variable ${name} must be at least ${minLength} characters long.\n` +
+        `Current length: ${value.length}\n` +
+        `Use a cryptographically secure random string.`
+    );
+  }
+
+  return value;
+}
+
+/**
+ * Validates Stripe configuration
+ * Stripe credentials are optional - payment will be disabled if not configured
+ */
+function validateStripe(): boolean {
+  const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+  const secretKey = process.env.STRIPE_SECRET_KEY;
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+  // Check if any key is missing or is a placeholder
+  const isPlaceholder = (key: string | undefined) =>
+    !key || key.includes('YOUR_KEY') || key === 'pk_test_' || key === 'sk_test_' || key === 'whsec_';
+
+  if (isPlaceholder(publishableKey) || isPlaceholder(secretKey) || isPlaceholder(webhookSecret)) {
+    console.warn('⚠️  Stripe not fully configured - payment functionality will be disabled');
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * Validates email configuration
+ * SMTP credentials are optional - email will be disabled if not configured
+ */
+function validateEmail(): boolean {
+  const host = process.env.SMTP_HOST;
+  const port = process.env.SMTP_PORT;
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASS;
+
+  // All SMTP vars must be set for email to work
+  if (!host || !port || !user || !pass) {
+    console.warn('⚠️  SMTP not fully configured - email functionality will be disabled');
+    return false;
+  }
+
+  const portNum = parseInt(port, 10);
+  if (isNaN(portNum) || portNum < 1 || portNum > 65535) {
+    throw new Error(`Invalid SMTP_PORT: ${port}. Must be a valid port number (1-65535).`);
+  }
+
+  return true;
+}
+
+/**
+ * Validates all required environment variables
+ *
+ * Call this function at app startup (e.g., in root layout or middleware)
+ * to fail fast if critical config is missing.
+ */
+export function validateEnv(): void {
+  const errors: string[] = [];
+
+  try {
+    // Database
+    validateEnvVar('DATABASE_URL');
+
+    // App secrets (must be at least 64 chars)
+    validateSecret('APP_SECRET', 64);
+    validateSecret('QR_SECRET', 64);
+
+    // Stripe (optional - warns if not configured)
+    const stripeConfigured = validateStripe();
+    if (!stripeConfigured) {
+      console.warn('   Payment features will not work until Stripe is configured.');
+    }
+
+    // Email (optional - warns if not configured)
+    const emailConfigured = validateEmail();
+    if (!emailConfigured) {
+      console.warn('   Email features (magic links, tickets) will not work until SMTP is configured.');
+    }
+
+    // NextAuth (must be at least 64 chars for security - prevents brute force attacks)
+    validateEnvVar('NEXTAUTH_URL');
+    validateSecret('NEXTAUTH_SECRET', 64);
+
+    // Optional vars (don't throw if missing)
+    validateEnvVar('APP_URL', false);
+    validateEnvVar('NEXT_PUBLIC_APP_URL', false);
+    validateEnvVar('EVENT_DATE', false);
+    validateEnvVar('SMTP_FROM', false);
+
+    console.log('✅ Environment variables validated successfully');
+  } catch (error) {
+    if (error instanceof Error) {
+      errors.push(error.message);
+    }
+  }
+
+  if (errors.length > 0) {
+    console.error('\n❌ Environment validation failed:\n');
+    errors.forEach((err) => console.error(`  - ${err}\n`));
+    throw new Error('Environment validation failed. Fix the errors above and restart the application.');
+  }
+}
+
+/**
+ * Get validated environment variables (use after validateEnv)
+ */
+export function getEnv(): EnvConfig {
+  return {
+    DATABASE_URL: process.env.DATABASE_URL!,
+    APP_SECRET: process.env.APP_SECRET!,
+    QR_SECRET: process.env.QR_SECRET!,
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY!,
+    STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET!,
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
+    SMTP_HOST: process.env.SMTP_HOST!,
+    SMTP_PORT: process.env.SMTP_PORT!,
+    SMTP_USER: process.env.SMTP_USER!,
+    SMTP_PASS: process.env.SMTP_PASS!,
+    SMTP_FROM: process.env.SMTP_FROM,
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL!,
+    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET!,
+    APP_URL: process.env.APP_URL,
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    EVENT_DATE: process.env.EVENT_DATE,
+  };
+}

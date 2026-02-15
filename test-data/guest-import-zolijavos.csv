@@ -1,0 +1,101 @@
+email,title,first_name,last_name,guest_type,phone,company,position,status
+zolijavos+rem001@gmail.com,Mr.,Róbert,Szentes,invited,+36302234001,GlobalTech Kft.,CEO,invited
+zolijavos+rem002@gmail.com,Ms.,Kitti,Pethő,invited,+36302234002,DigiSoft Zrt.,Marketing Director,invited
+zolijavos+rem003@gmail.com,Dr.,Bálint,Kerekes,invited,+36302234003,HealthPlus Kft.,Managing Director,invited
+zolijavos+rem004@gmail.com,Mr.,Szabolcs,Boros,invited,+36302234004,CapitalBank Zrt.,CFO,invited
+zolijavos+rem005@gmail.com,Ms.,Petra,Vadász,invited,+36302234005,SolarPower Kft.,Operations Director,invited
+zolijavos+rem006@gmail.com,Mr.,Roland,Virág,invited,+36302234006,MotorWorks Zrt.,Sales Director,invited
+zolijavos+rem007@gmail.com,Ms.,Hanna,Budai,invited,+36302234007,NewsMedia Kft.,PR Manager,invited
+zolijavos+rem008@gmail.com,Dr.,Csongor,Faragó,invited,+36302234008,BioPharm Zrt.,R&D Director,invited
+zolijavos+rem009@gmail.com,Mr.,Ernő,Gáspár,invited,+36302234009,ConcreteCo Kft.,Project Manager,invited
+zolijavos+rem010@gmail.com,Ms.,Bianka,Hegyi,invited,+36302234010,ShopWorld Zrt.,Store Director,invited
+zolijavos+rem011@gmail.com,Mr.,Domonkos,Joó,invited,+36302234011,TransLog Kft.,Logistics Director,invited
+zolijavos+rem012@gmail.com,Ms.,Emília,Király,invited,+36302234012,ArtDesign Zrt.,Creative Director,invited
+zolijavos+rem013@gmail.com,Dr.,Győző,Lovas,invited,+36302234013,LegalExperts Kft.,Senior Partner,invited
+zolijavos+rem014@gmail.com,Mr.,Henrik,Miklós,invited,+36302234014,CloudTech Zrt.,CTO,invited
+zolijavos+rem015@gmail.com,Ms.,Izabella,Novák,invited,+36302234015,PeopleFirst Kft.,HR Director,invited
+zolijavos+rem016@gmail.com,Mr.,Kálmán,Ormos,invited,+36302234016,FoodFactory Zrt.,Production Manager,invited
+zolijavos+rem017@gmail.com,Ms.,Luca,Pataki,invited,+36302234017,VoyageWorld Kft.,General Manager,invited
+zolijavos+rem018@gmail.com,Dr.,Nándor,Rigó,invited,+36302234018,StrategyPro Zrt.,Managing Partner,invited
+zolijavos+rem019@gmail.com,Mr.,Oszkár,Somogyi,invited,+36302234019,FitClub Kft.,Director,invited
+zolijavos+rem020@gmail.com,Ms.,Regina,Tolnai,invited,+36302234020,GlamourBrand Zrt.,Brand Manager,invited
+zolijavos+rem021@gmail.com,Mr.,Péter,Uri,invited,+36302234021,FarmCorp Kft.,Regional Director,invited
+zolijavos+rem022@gmail.com,Ms.,Sarolta,Vörös,invited,+36302234022,FestivalPro Zrt.,Event Manager,invited
+zolijavos+rem023@gmail.com,Dr.,Tivadar,Závodi,invited,+36302234023,MedCenter Kft.,Medical Director,invited
+zolijavos+rem024@gmail.com,Mr.,Vencel,Ács,invited,+36302234024,SoundStudio Zrt.,A&R Director,invited
+zolijavos+rem025@gmail.com,Ms.,Zsanett,Beke,invited,+36302234025,StyleHouse Kft.,Design Director,invited
+zolijavos+rem026@gmail.com,Mr.,Ambrus,Csete,invited,+36302234026,CarWorld Zrt.,Sales Manager,registered
+zolijavos+rem027@gmail.com,Ms.,Dalma,Deák,invited,+36302234027,MoneyBank Kft.,Branch Director,registered
+zolijavos+rem028@gmail.com,Dr.,Elemér,Erdélyi,invited,+36302234028,JusticeFirm Zrt.,Partner,registered
+zolijavos+rem029@gmail.com,Mr.,Frigyes,Fehérvári,invited,+36302234029,SoftwareLab Kft.,Development Lead,registered
+zolijavos+rem030@gmail.com,Ms.,Györgyi,Garai,invited,+36302234030,BrandMaster Zrt.,CMO,registered
+zolijavos+rem031@gmail.com,Mr.,Huba,Hajnal,invited,+36302234031,BuildersPro Kft.,Site Manager,registered
+zolijavos+rem032@gmail.com,Ms.,Inez,Ivánka,invited,+36302234032,BeautyLab Zrt.,Lab Director,registered
+zolijavos+rem033@gmail.com,Dr.,Jakab,Jónás,invited,+36302234033,GeneTech Kft.,Research Director,registered
+zolijavos+rem034@gmail.com,Mr.,Kelemen,Kalmár,invited,+36302234034,PowerPlant Zrt.,Plant Manager,registered
+zolijavos+rem035@gmail.com,Ms.,Liza,Lendvai,invited,+36302234035,ProtectInsure Kft.,Underwriting Director,registered
+zolijavos+rem036@gmail.com,Mr.,Menyhért,Mezei,invited,+36302234036,ChemLab Zrt.,Production Director,registered
+zolijavos+rem037@gmail.com,Ms.,Natasa,Nyíri,invited,+36302234037,BookHouse Kft.,Editor in Chief,registered
+zolijavos+rem038@gmail.com,Dr.,Oszkár,Ódor,invited,+36302234038,WellnessClinic Zrt.,Chief Physician,registered
+zolijavos+rem039@gmail.com,Mr.,Pál,Péntek,invited,+36302234039,DeliveryPro Kft.,Operations Manager,registered
+zolijavos+rem040@gmail.com,Ms.,Rebeka,Rónai,invited,+36302234040,PropertyMax Zrt.,Property Manager,registered
+zolijavos+rem041@gmail.com,Mr.,Soma,Sáfrány,invited,+36302234041,HomeDeco Kft.,Showroom Director,registered
+zolijavos+rem042@gmail.com,Ms.,Titanilla,Takó,invited,+36302234042,FabricWorks Zrt.,Quality Director,registered
+zolijavos+rem043@gmail.com,Dr.,Ubul,Unger,invited,+36302234043,AnimalCare Kft.,Veterinary Director,registered
+zolijavos+rem044@gmail.com,Mr.,Vazul,Vágó,invited,+36302234044,BoxFactory Zrt.,Factory Manager,registered
+zolijavos+rem045@gmail.com,Ms.,Xénia,Zámbó,invited,+36302234045,ChefMax Kft.,Catering Director,registered
+zolijavos+rem046@gmail.com,Mr.,Ármin,Asztalos,invited,+36302234046,PowerGrid Zrt.,Engineering Director,registered
+zolijavos+rem047@gmail.com,Ms.,Blanka,Balla,invited,+36302234047,RelaxCenter Kft.,Spa Director,registered
+zolijavos+rem048@gmail.com,Dr.,Cézár,Csapó,invited,+36302234048,SmileDental Zrt.,Chief Dentist,registered
+zolijavos+rem049@gmail.com,Mr.,Dávid,Darvas,invited,+36302234049,IronWorks Kft.,Production Chief,registered
+zolijavos+rem050@gmail.com,Ms.,Elvira,Eszes,invited,+36302234050,GreenSpace Zrt.,Landscape Director,registered
+zolijavos+rem051@gmail.com,Mr.,Fülöp,Fóris,invited,+36302234051,GymWorld Kft.,Retail Director,registered
+zolijavos+rem052@gmail.com,Ms.,Glória,Gonda,invited,+36302234052,VineValley Zrt.,Cellar Master,registered
+zolijavos+rem053@gmail.com,Dr.,Hugó,Hajós,invited,+36302234053,VisionClinic Kft.,Ophthalmologist,registered
+zolijavos+rem054@gmail.com,Mr.,Illés,Igaz,invited,+36302234054,MachineFactory Zrt.,Factory Director,registered
+zolijavos+rem055@gmail.com,Ms.,Julianna,Járai,invited,+36302234055,ModernArt Kft.,Gallery Director,registered
+zolijavos+rem056@gmail.com,Mr.,Kende,Komjáti,invited,+36302234056,BloomShop Zrt.,Chain Director,registered
+zolijavos+rem057@gmail.com,Ms.,Leonóra,Lányi,invited,+36302234057,GemBrand Kft.,Brand Director,registered
+zolijavos+rem058@gmail.com,Dr.,Miksa,Mester,invited,+36302234058,MindCare Zrt.,Clinical Director,registered
+zolijavos+rem059@gmail.com,Mr.,Noel,Német,invited,+36302234059,GraphicHouse Kft.,Print Director,registered
+zolijavos+rem060@gmail.com,Ms.,Olga,Orbán,invited,+36302234060,EduGroup Zrt.,Principal,registered
+zolijavos+rem061@gmail.com,Mr.,Pál,Pozsonyi,invited,+36302234061,RentACar Kft.,Fleet Director,declined
+zolijavos+rem062@gmail.com,Ms.,Rita,Réti,invited,+36302234062,GrandHotel Zrt.,General Manager,declined
+zolijavos+rem063@gmail.com,Dr.,Sámuel,Sebestyén,invited,+36302234063,OperaCenter Kft.,Chief Surgeon,declined
+zolijavos+rem064@gmail.com,Mr.,Tihamér,Túri,invited,+36302234064,AlloyWorks Zrt.,Plant Director,declined
+zolijavos+rem065@gmail.com,Ms.,Úrsula,Utasi,invited,+36302234065,BreadChain Kft.,Operations Director,declined
+zolijavos+rem066@gmail.com,Mr.,Valér,Várkonyi,invited,+36302234066,CrystalFactory Zrt.,Quality Manager,declined
+zolijavos+rem067@gmail.com,Ms.,Wilma,Weisz,invited,+36302234067,ImageStudio Kft.,Studio Director,declined
+zolijavos+rem068@gmail.com,Dr.,Zalán,Zólyomi,invited,+36302234068,TestLab Zrt.,Lab Director,declined
+zolijavos+rem069@gmail.com,Mr.,Achilles,Almási,invited,+36302234069,PolymerWorks Kft.,Technical Director,pending
+zolijavos+rem070@gmail.com,Ms.,Brigita,Bánki,invited,+36302234070,BeanChain Zrt.,Franchise Director,pending
+zolijavos+rem071@gmail.com,Mrs.,Adriána,Szentes,invited,+36302234071,GlobalTech Kft.,Partner of CEO,registered
+zolijavos+rem072@gmail.com,Mrs.,Bettina,Pethő,invited,+36302234072,DigiSoft Zrt.,Partner,registered
+zolijavos+rem073@gmail.com,Mrs.,Csilla,Kerekes,invited,+36302234073,HealthPlus Kft.,Partner,registered
+zolijavos+rem074@gmail.com,Mrs.,Dorottya,Boros,invited,+36302234074,CapitalBank Zrt.,Partner,registered
+zolijavos+rem075@gmail.com,Mrs.,Erika,Vadász,invited,+36302234075,SolarPower Kft.,Partner,registered
+zolijavos+rem076@gmail.com,Mrs.,Flóra,Virág,invited,+36302234076,MotorWorks Zrt.,Partner,registered
+zolijavos+rem077@gmail.com,Mrs.,Gerda,Budai,invited,+36302234077,NewsMedia Kft.,Partner,registered
+zolijavos+rem078@gmail.com,Mrs.,Hedvig,Faragó,invited,+36302234078,BioPharm Zrt.,Partner,registered
+zolijavos+rem079@gmail.com,Mrs.,Irma,Gáspár,invited,+36302234079,ConcreteCo Kft.,Partner,registered
+zolijavos+rem080@gmail.com,Mrs.,Johanna,Hegyi,invited,+36302234080,ShopWorld Zrt.,Partner,registered
+zolijavos+rem081@gmail.com,Mrs.,Klaudia,Joó,invited,+36302234081,TransLog Kft.,Partner,registered
+zolijavos+rem082@gmail.com,Mrs.,Loretta,Király,invited,+36302234082,ArtDesign Zrt.,Partner,registered
+zolijavos+rem083@gmail.com,Mrs.,Mirella,Lovas,invited,+36302234083,LegalExperts Kft.,Partner,registered
+zolijavos+rem084@gmail.com,Mrs.,Nikoletta,Miklós,invited,+36302234084,CloudTech Zrt.,Partner,registered
+zolijavos+rem085@gmail.com,Mrs.,Otília,Novák,invited,+36302234085,PeopleFirst Kft.,Partner,registered
+zolijavos+rem086@gmail.com,Mrs.,Patrícia,Ormos,invited,+36302234086,FoodFactory Zrt.,Partner,registered
+zolijavos+rem087@gmail.com,Mrs.,Ramóna,Pataki,invited,+36302234087,VoyageWorld Kft.,Partner,registered
+zolijavos+rem088@gmail.com,Mrs.,Szabina,Rigó,invited,+36302234088,StrategyPro Zrt.,Partner,registered
+zolijavos+rem089@gmail.com,Mrs.,Tekla,Somogyi,invited,+36302234089,FitClub Kft.,Partner,registered
+zolijavos+rem090@gmail.com,Mrs.,Valéria,Tolnai,invited,+36302234090,GlamourBrand Zrt.,Partner,registered
+zolijavos+rem091@gmail.com,Mrs.,Zita,Uri,invited,+36302234091,FarmCorp Kft.,Partner,registered
+zolijavos+rem092@gmail.com,Mrs.,Alma,Vörös,invited,+36302234092,FestivalPro Zrt.,Partner,registered
+zolijavos+rem093@gmail.com,Mrs.,Borbála,Závodi,invited,+36302234093,MedCenter Kft.,Partner,registered
+zolijavos+rem094@gmail.com,Mrs.,Csenge,Ács,invited,+36302234094,SoundStudio Zrt.,Partner,registered
+zolijavos+rem095@gmail.com,Mrs.,Dorina,Beke,invited,+36302234095,StyleHouse Kft.,Partner,registered
+zolijavos+rem096@gmail.com,Mrs.,Éva,Csete,invited,+36302234096,CarWorld Zrt.,Partner,registered
+zolijavos+rem097@gmail.com,Mrs.,Felícia,Deák,invited,+36302234097,MoneyBank Kft.,Partner,registered
+zolijavos+rem098@gmail.com,Mrs.,Gitta,Erdélyi,invited,+36302234098,JusticeFirm Zrt.,Partner,registered
+zolijavos+rem099@gmail.com,Mrs.,Hédi,Fehérvári,invited,+36302234099,SoftwareLab Kft.,Partner,registered
+zolijavos+rem100@gmail.com,Mrs.,Ivett,Garai,invited,+36302234100,BrandMaster Zrt.,Partner,registered

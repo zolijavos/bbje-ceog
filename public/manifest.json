@@ -1,0 +1,26 @@
+{
+  "name": "CEO Gala 2026",
+  "short_name": "CEO Gala",
+  "description": "CEO Gala 2026 - Guest App",
+  "start_url": "/pwa",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e293b",
+  "orientation": "portrait",
+  "scope": "/pwa",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "192x192",
+      "type": "image/x-icon",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["events", "lifestyle"],
+  "lang": "hu"
+}

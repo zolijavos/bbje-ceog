@@ -1,0 +1,11 @@
+{
+  "name": "CEO Gala Arany",
+  "colors": {
+    "primary_fill": "#fffdf5",
+    "accent": "#c9a227",
+    "decision": "#f5e6b3",
+    "success": "#d4edda",
+    "error": "#f8d7da",
+    "text": "#1e1e1e"
+  }
+}
