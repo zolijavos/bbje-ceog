@@ -12,9 +12,18 @@ import { getServerSession } from '@/lib/auth/session';
 import { sendBulkMagicLinkEmails } from '@/lib/services/email';
 import { logError } from '@/lib/utils/logger';
 
+// Allowed template slugs for the guest list email sender
+const ALLOWED_TEMPLATE_SLUGS = [
+  'magic_link',
+  'invitation_reminder',
+  'sponsor_invitation',
+  'applicant_approval',
+] as const;
+
 // Request body schema
 const SendMagicLinkSchema = z.object({
   guest_ids: z.array(z.number().int().positive()).min(1).max(100),
+  template_slug: z.enum(ALLOWED_TEMPLATE_SLUGS).optional().default('magic_link'),
 });
 
 export async function POST(request: Request) {
@@ -55,10 +64,10 @@ export async function POST(request: Request) {
       );
     }
 
-    const { guest_ids } = parseResult.data;
+    const { guest_ids, template_slug } = parseResult.data;
 
     // Send emails
-    const result = await sendBulkMagicLinkEmails(guest_ids);
+    const result = await sendBulkMagicLinkEmails(guest_ids, template_slug);
 
     return NextResponse.json(result, {
       status: result.success ? 200 : 207, // 207 Multi-Status for partial success

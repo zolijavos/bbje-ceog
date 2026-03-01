@@ -9,7 +9,7 @@ import { prisma } from '@/lib/db/prisma';
 import { generateMagicLinkHash } from '@/lib/auth/magic-link';
 import { getMagicLinkEmailTemplate } from '@/lib/email-templates/magic-link';
 import { getTicketDeliveryEmailTemplate } from '@/lib/email-templates/ticket-delivery';
-import { renderTemplate } from '@/lib/services/email-templates';
+import { renderTemplate, type TemplateSlug } from '@/lib/services/email-templates';
 import { generateTicket, getExistingTicket, tryAcquireTicketLock } from '@/lib/services/qr-ticket';
 import { logError, logInfo } from '@/lib/utils/logger';
 import { getFullName, getDisplayName } from '@/lib/utils/name';
@@ -215,9 +215,11 @@ export type EmailResult = {
  * 5. Log delivery attempt
  *
  * @param guestId - Guest ID to send email to
+ * @param templateSlug - Email template slug to use (default: 'magic_link')
  */
 export async function sendMagicLinkEmail(
-  guestId: number
+  guestId: number,
+  templateSlug: TemplateSlug = 'magic_link'
 ): Promise<EmailResult> {
   try {
     // 1. Lookup guest
@@ -255,7 +257,7 @@ export async function sendMagicLinkEmail(
     let text: string;
 
     try {
-      const rendered = await renderTemplate('magic_link', {
+      const rendered = await renderTemplate(templateSlug, {
         guestName: getDisplayName(guest.first_name, guest.last_name, guest.title),
         magicLinkUrl,
         baseUrl: appUrl,
@@ -327,14 +329,17 @@ export async function sendMagicLinkEmail(
  * Send magic link emails to multiple guests
  * Returns summary of sent and failed emails
  */
-export async function sendBulkMagicLinkEmails(guestIds: number[]): Promise<{
+export async function sendBulkMagicLinkEmails(
+  guestIds: number[],
+  templateSlug: TemplateSlug = 'magic_link'
+): Promise<{
   success: boolean;
   sent: number;
   failed: number;
   errors: Array<{ guest_id: number; error: string }>;
 }> {
   const results = await Promise.all(
-    guestIds.map(guestId => sendMagicLinkEmail(guestId))
+    guestIds.map(guestId => sendMagicLinkEmail(guestId, templateSlug))
   );
 
   const sent = results.filter(r => r.success).length;
