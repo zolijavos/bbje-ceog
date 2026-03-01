@@ -186,6 +186,8 @@ export default function ScheduledEmailsDashboard() {
   const [configs, setConfigs] = useState<SchedulerConfig[]>([]);
   const [editingConfig, setEditingConfig] = useState<SchedulerConfig | null>(null);
   const [showConfigModal, setShowConfigModal] = useState(false);
+  const [isCreatingConfig, setIsCreatingConfig] = useState(false);
+  const [newConfigKey, setNewConfigKey] = useState('');
 
   // Email history state
   const [emailLogs, setEmailLogs] = useState<EmailLog[]>([]);
@@ -520,6 +522,54 @@ export default function ScheduledEmailsDashboard() {
   const handleSaveConfig = async () => {
     if (!editingConfig) return;
 
+    // Create mode
+    if (isCreatingConfig) {
+      if (!newConfigKey.trim() || !editingConfig.name.trim()) {
+        setMessage({ type: 'error', text: 'Name and config key are required' });
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/admin/scheduler-config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            config_key: newConfigKey.trim(),
+            name: editingConfig.name,
+            description: editingConfig.description || undefined,
+            template_slug: editingConfig.template_slug,
+            days_before: editingConfig.days_before,
+            days_after: editingConfig.days_after,
+            interval_days: editingConfig.interval_days,
+            send_time: editingConfig.send_time,
+            enabled: editingConfig.enabled,
+            target_status: editingConfig.target_status && editingConfig.target_status.length > 0
+              ? editingConfig.target_status
+              : undefined,
+            target_types: editingConfig.target_types && editingConfig.target_types.length > 0
+              ? editingConfig.target_types
+              : undefined,
+          }),
+        });
+
+        if (res.ok) {
+          setMessage({ type: 'success', text: 'Rule created successfully' });
+          setShowConfigModal(false);
+          setEditingConfig(null);
+          setIsCreatingConfig(false);
+          setNewConfigKey('');
+          fetchConfigs();
+        } else {
+          const error = await res.json();
+          setMessage({ type: 'error', text: error.error || 'Failed to create rule' });
+        }
+      } catch {
+        setMessage({ type: 'error', text: 'Failed to create rule' });
+      }
+      return;
+    }
+
+    // Edit mode
     try {
       const res = await fetch(`/api/admin/scheduler-config/${editingConfig.id}`, {
         method: 'PATCH',
@@ -1410,13 +1460,40 @@ export default function ScheduledEmailsDashboard() {
                 Configure automatic email scheduling rules
               </p>
             </div>
-            <button
-              onClick={() => handleTrigger('all')}
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
-            >
-              <Play size={16} />
-              Run All Now
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  setEditingConfig({
+                    id: 0,
+                    config_key: '',
+                    name: '',
+                    description: null,
+                    enabled: true,
+                    template_slug: TEMPLATES[0]?.[0] || '',
+                    days_before: null,
+                    days_after: null,
+                    interval_days: null,
+                    send_time: '09:00',
+                    target_status: null,
+                    target_types: null,
+                  });
+                  setNewConfigKey('');
+                  setIsCreatingConfig(true);
+                  setShowConfigModal(true);
+                }}
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700"
+              >
+                <Plus size={16} />
+                Create Rule
+              </button>
+              <button
+                onClick={() => handleTrigger('all')}
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+              >
+                <Play size={16} />
+                Run All Now
+              </button>
+            </div>
           </div>
 
           <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -1506,11 +1583,15 @@ export default function ScheduledEmailsDashboard() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between px-6 py-4 border-b">
-              <h3 className="text-lg font-semibold">Edit Automation Rule</h3>
+              <h3 className="text-lg font-semibold">
+                {isCreatingConfig ? 'Create Automation Rule' : 'Edit Automation Rule'}
+              </h3>
               <button
                 onClick={() => {
                   setShowConfigModal(false);
                   setEditingConfig(null);
+                  setIsCreatingConfig(false);
+                  setNewConfigKey('');
                 }}
                 className="text-gray-400 hover:text-gray-600"
               >
@@ -1519,6 +1600,24 @@ export default function ScheduledEmailsDashboard() {
             </div>
 
             <div className="p-6 space-y-4">
+              {isCreatingConfig && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Config Key
+                  </label>
+                  <input
+                    type="text"
+                    value={newConfigKey}
+                    onChange={(e) => setNewConfigKey(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '_'))}
+                    placeholder="e.g. payment_reminder"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg font-mono text-sm"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Unique identifier (lowercase, underscores only)
+                  </p>
+                </div>
+              )}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
                 <input
@@ -1562,7 +1661,7 @@ export default function ScheduledEmailsDashboard() {
                 </select>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Days Before Event
@@ -1574,6 +1673,24 @@ export default function ScheduledEmailsDashboard() {
                       setEditingConfig({
                         ...editingConfig,
                         days_before: e.target.value ? parseInt(e.target.value) : null,
+                      })
+                    }
+                    min={0}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Days After Event
+                  </label>
+                  <input
+                    type="number"
+                    value={editingConfig.days_after || ''}
+                    onChange={(e) =>
+                      setEditingConfig({
+                        ...editingConfig,
+                        days_after: e.target.value ? parseInt(e.target.value) : null,
                       })
                     }
                     min={0}
@@ -1729,6 +1846,8 @@ export default function ScheduledEmailsDashboard() {
                 onClick={() => {
                   setShowConfigModal(false);
                   setEditingConfig(null);
+                  setIsCreatingConfig(false);
+                  setNewConfigKey('');
                 }}
                 className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
               >
@@ -1736,9 +1855,13 @@ export default function ScheduledEmailsDashboard() {
               </button>
               <button
                 onClick={handleSaveConfig}
-                className="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                className={`px-4 py-2 text-white rounded-lg ${
+                  isCreatingConfig
+                    ? 'bg-green-600 hover:bg-green-700'
+                    : 'bg-blue-600 hover:bg-blue-700'
+                }`}
               >
-                {t('save')}
+                {isCreatingConfig ? 'Create' : t('save')}
               </button>
             </div>
           </div>

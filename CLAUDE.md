@@ -21,112 +21,136 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Node.js 18+** - JavaScript runtime
 
 ### Database & ORM
-- **MySQL 8.0+** (production) or **PostgreSQL 14+**
-- **Prisma ORM** - Type-safe database access with migrations
-- Alternative: **Drizzle ORM** for lighter weight
+- **MySQL 8.0+** (production, Hetzner VPS)
+- **Prisma ORM** ^5.19.0 - Type-safe database access with migrations
+- 16 models, 10 enums (see [data-models.md](docs/data-models.md))
 
 ### External Services
-- **Stripe SDK (Node.js)** - Payment processing
-- **Nodemailer** - Email delivery (SMTP provider to be determined)
-- **qrcode** npm package - QR code generation
-- **jsonwebtoken** - JWT token handling
+- **Stripe** ^16.12.0 - Payment processing (Checkout Sessions + webhooks)
+- **Nodemailer** ^7.0.7 - Email delivery (SMTP, retry + rate limiting)
+- **qrcode** - QR code generation (PNG Data URL)
+- **jsonwebtoken** - JWT token handling (QR tickets)
+- **bcryptjs** - Password hashing (admin/staff)
+- **node-cron** - Email scheduler
 
 ### Frontend
-- **React 18** - UI components
-- **Tailwind CSS** - Utility-first styling
-- **React-Konva** or **React-DnD-Kit** - Interactive drag-and-drop seating maps
+- **React 18** ^18.3.0 - UI components (~80+ components, 38 client / 3 server)
+- **Tailwind CSS** ^3.4.0 - Utility-first styling (tailwind-merge + clsx)
+- **React-Konva** + **@dnd-kit** - Seating map (canvas + drag-and-drop)
 - **html5-qrcode** - Mobile QR scanning
-- **i18n (Internationalization)** - Hungarian (default) & English, Context-based with localStorage persistence
+- **Framer Motion** ^12.23.25 - Animations
+- **Phosphor Icons** (@phosphor-icons/react) - Icon library
+- **PapaParse** - CSV parsing (guest import)
+- **i18n**: React Context (`LanguageContext`) + `useLanguage()` hook, HU (default) + EN
 
 ### Hosting & Infrastructure
-- **Current Production**: Hetzner VPS (46.202.153.178) with PM2 + Nginx
+- **Production**: Hetzner VPS with PM2 + Nginx + Let's Encrypt SSL
 - **Database**: MySQL 8.0 on same VPS
-- Alternative deployment: **Vercel** (free tier) + **PlanetScale** (MySQL)
+- **Build**: Next.js `output: 'standalone'` mode
 - Minimum VPS: 2GB RAM, 20GB SSD
 
 ## Architecture
 
-### Next.js App Router Pattern
+### Layered Architecture
 ```
-app/                    # Next.js App Router (routing + API)
-├── (routes)/          # Page routes
-├── api/               # API Route Handlers (backend endpoints)
-└── components/        # React components
+Nginx (SSL, static files) → Next.js 14+ (App Router) → MySQL 8.0+
 
-lib/                   # Business logic layer
-├── services/          # Business logic (registration, payment, check-in)
-├── db/               # Prisma client & database utilities
-└── utils/            # Helper functions
-
-prisma/
-└── schema.prisma     # Database schema & migrations
+Layers:
+1. Middleware      → Auth (NextAuth JWT), CSRF (Origin/Referer), RBAC (admin/staff)
+2. Presentation    → Server Components (default) + Client Components ('use client')
+3. API             → app/api/**/route.ts (44 REST endpoints)
+4. Business Logic  → lib/services/ (email, registration, checkin, rate-limit, audit, scheduler)
+5. Data Access     → Prisma ORM (singleton client, lib/prisma.ts)
+6. Database        → MySQL 8.0+ (16 models, 10 enums)
 ```
+
+Full architecture documentation: [docs/architecture.md](docs/architecture.md)
 
 ### Server & Client Components
-- **Server Components** (default) - Fetch data server-side, zero JS to client
-- **Client Components** (`'use client'`) - Interactive UI (drag-drop, QR scanner)
-- **API Routes** (`app/api/**/route.ts`) - REST endpoints for client interactions
+- **Server Components** (default, 3 total) - Zero JS to client: root layout, landing page, payment/cancel
+- **Client Components** (`'use client'`, 38 total) - Interactive UI with useState/useEffect
+- **API Routes** (`app/api/**/route.ts`) - 36 route files with named exports (GET, POST, PATCH, DELETE)
 
-### Project Structure
+### Project Structure (Full details: [docs/source-tree-analysis.md](docs/source-tree-analysis.md))
 ```
 app/                        # Next.js App Router
-├── (auth)/                # Authentication grouped routes
-├── admin/                 # Admin dashboard (12 sections)
-│   ├── guests/           # Guest CRUD, import, bulk actions
-│   ├── tables/           # Table management
+├── (auth)/admin/login/    # Admin/Staff login page
+├── admin/                 # Admin dashboard (16 sections)
+│   ├── guests/           # Guest CRUD + import + bulk actions + modals
+│   │   ├── components/   # GuestFilters, GuestBulkActions, GuestPagination, Notification
+│   │   ├── hooks/        # useGuestList.ts (CRUD, filter, paginate, sort)
+│   │   └── import/       # CSV import form (PapaParse)
 │   ├── seating/          # Drag-drop seating map
+│   │   ├── components/   # FloorPlanCanvas (Konva), DraggableGuest, DroppableTable, GuestChip
+│   │   └── hooks/        # useSeatingDnd.ts (@dnd-kit state)
+│   ├── tables/           # Table CRUD
 │   ├── payments/         # Payment status & approvals
-│   ├── checkin/          # Check-in dashboard
-│   ├── checkin-log/      # Check-in history
-│   ├── applicants/       # Applicant approval
-│   ├── email/            # Email sending
-│   ├── changelog/        # Version changelog with test links
-│   └── release-testing/  # Manual release test steps by version
+│   ├── applicants/       # Applicant approve/reject
+│   ├── checkin-log/      # Check-in history (real-time)
+│   ├── email-logs/       # Email delivery log
+│   ├── email-templates/  # Email template CRUD
+│   ├── scheduled-emails/ # Scheduled email queue
+│   ├── audit-log/        # Audit trail viewer
+│   ├── statistics/       # Dashboard statistics
+│   ├── users/            # Admin user management
+│   ├── changelog/        # Version changelog
+│   ├── release-testing/  # Manual test steps by version
+│   ├── help/             # Admin FAQ (50+ entries, 12 categories)
+│   ├── diagrams/         # Architecture diagram viewer
+│   ├── pwa-apps/         # PWA app management
+│   └── components/       # Shared admin UI: AdminThemeToggle, LanguageToggle, MobileTabBar, PageHeader
 ├── apply/                 # Public applicant registration
-├── checkin/              # Mobile QR scanner
+├── checkin/              # Mobile QR scanner (standalone, SessionProvider)
 ├── pwa/                  # Progressive Web App for guests
 │   ├── dashboard/        # Guest dashboard
 │   ├── profile/          # Profile view/edit
 │   ├── ticket/           # QR ticket display
-│   └── table/            # Table info
+│   └── table/            # Table info + tablemates
 ├── register/             # Magic link registration
 │   ├── vip/              # Invited guest flow (free ticket)
-│   └── paid/             # Paid flow with billing
+│   ├── paid/             # Paid flow (multi-step: billing + partner)
+│   ├── success/          # Registration success page
+│   ├── declined/         # Declined invitation page
+│   └── request-link/     # Lost link request form
 ├── payment/              # Payment pages
 │   ├── success/          # Stripe success redirect
 │   └── cancel/           # Stripe cancel redirect
-├── api/                  # 30+ API endpoints
-│   ├── admin/            # Admin CRUD operations
-│   ├── registration/     # Guest registration
-│   ├── stripe/           # Payment & webhooks
-│   ├── checkin/          # Check-in validation
-│   └── pwa/              # PWA-specific APIs
-└── components/           # React components
+├── help/                  # Public FAQ for guests
+├── status/                # System status page
+├── terms/ + privacy/      # Legal pages
+├── api/                   # 44 HTTP endpoints in 36 route files
+│   ├── auth/             # NextAuth [...nextauth]
+│   ├── admin/            # Admin CRUD (~30 endpoints)
+│   ├── registration/     # Guest registration (validate, submit, partner, apply)
+│   ├── stripe/           # Payment (create-checkout, webhook)
+│   ├── checkin/          # Check-in (validate, submit)
+│   └── pwa/              # PWA (auth, profile, ticket, table, push-subscribe)
+└── components/            # Global: GlobalProviders, ThemeProvider, ThemeToggle, Footer, MobileFooter
 
-lib/                      # Business logic & utilities
-├── services/            # Core business logic
-├── validations/         # Zod schemas
-├── utils/               # Helper functions
-├── i18n/                # Internationalization (HU/EN translations)
-└── prisma.ts            # Prisma client singleton
+lib/                       # Business logic & utilities
+├── services/             # 7+ services: email, registration, checkin, rate-limit, audit, scheduler, seating
+├── validations/          # Zod schemas: registration, applicant, guest
+├── utils/                # auth, magic-link, qr, helpers
+├── i18n/                 # LanguageContext.tsx, translations.ts, admin-help-translations.ts
+└── prisma.ts             # Prisma client singleton (global dev hot-reload safe)
 
 prisma/
-├── schema.prisma        # Database schema (11 models)
-└── migrations/          # Auto-generated migrations
+├── schema.prisma         # Database schema (16 models, 10 enums)
+└── migrations/           # Auto-generated SQL migrations
 
 tests/
-├── unit/                # Vitest unit tests
-└── e2e/                 # Playwright E2E tests
-    └── fixtures/        # Custom test fixtures
+├── unit/                 # Vitest unit tests
+└── e2e/                  # Playwright E2E tests (201 passed, 21 skipped)
+    └── fixtures/         # Custom test fixtures
 ```
 
 ## Database Schema
 
-11 Prisma models in [prisma/schema.prisma](prisma/schema.prisma):
+16 Prisma models + 10 enums in [prisma/schema.prisma](prisma/schema.prisma). Full details: [docs/data-models.md](docs/data-models.md)
 
 ### Core Tables
-- **Guest** - Guest list with profile (email UNIQUE, name, title, phone, company, position, guest_type, dietary_requirements, seating_preferences, pwa_auth_code, push_token)
-- **Registration** - Registration data (guest_id FK UNIQUE, ticket_type, payment_method, qr_code_hash, GDPR consent, cancellation acceptance)
+- **Guest** - Guest list with profile (email UNIQUE, name, title, phone, company, position, guest_type, dietary_requirements, seating_preferences, pwa_auth_code, push_token, magic_link_code/expires, application_message, rejection_reason)
+- **Registration** - Registration data (guest_id FK UNIQUE, ticket_type, payment_method, qr_code_hash, GDPR consent, cancellation acceptance, partner_name/email)
 - **Payment** - Stripe payments (registration_id FK UNIQUE, stripe_session_id, amount, currency, status, paid_at)
 - **Checkin** - Check-in log (registration_id UNIQUE, guest_id UNIQUE, staff_user_id FK, method, is_override)
 - **BillingInfo** - Billing details for paying guests (registration_id FK UNIQUE, name, company, tax_number, address)
@@ -137,9 +161,13 @@ tests/
 
 ### Admin & System
 - **User** - Admin accounts (email UNIQUE, password_hash bcrypt, role: admin/staff)
-- **EmailLog** - Email delivery tracking (guest_id FK, email_type, status, error_message)
-- **EmailTemplate** - Reusable email templates (slug UNIQUE, subject, html_body, text_body, variables)
+- **EmailLog** - Email delivery tracking (guest_id FK, email_type, recipient, subject, status, error_message, sent_at)
+- **EmailTemplate** - Reusable email templates (slug UNIQUE, subject, html_body, text_body, variables JSON)
+- **SchedulerConfig** - Email scheduler configuration (config_key UNIQUE, enabled, days_before/after, send_time, target_status/types JSON, template_slug)
+- **ScheduledEmail** - Scheduled email queue (guest_id FK optional, template_slug, scheduled_for, status, schedule_type)
 - **RateLimitEntry** - Rate limiting (key UNIQUE, attempts, expires_at)
+- **AuditLog** - Action audit trail (user_id, action, entity_type, entity_id, old_values/new_values JSON, ip_address)
+- **TestResult** - Manual test tracking (version, feature_index, status, tester_id FK, step_results JSON)
 
 ### Enums
 - GuestType: `invited`, `paying_single`, `paying_paired`, `applicant`
@@ -148,7 +176,10 @@ tests/
 - PaymentMethod: `card`, `bank_transfer`
 - PaymentStatus: `pending`, `paid`, `failed`, `refunded`
 - TableStatus: `available`, `full`, `reserved`
+- TableType: `vip`, `standard`
 - UserRole: `admin`, `staff`
+- ScheduledEmailStatus: `pending`, `processing`, `sent`, `failed`, `cancelled`
+- TestStatus: `passed`, `failed`, `not_tested`
 
 ## Development Commands
 
@@ -185,98 +216,155 @@ npm start                                   # Start production server
 
 ## Key API Endpoints
 
-### Guest Registration
-- `GET /register?code={hash}&email={email}` - Magic link validation & registration form
-- `POST /api/registration/submit` - Submit registration data
+**Total: 44 HTTP endpoints in 36 route files.** Full API documentation: [docs/api-contracts.md](docs/api-contracts.md)
+
+### Guest Registration (Public)
+- `POST /api/registration/validate` - Magic link validation (code + email)
+- `POST /api/registration/submit` - Submit registration (VIP: immediate QR; Paid: awaits payment)
 - `POST /api/registration/partner` - Add paired ticket partner details
+- `POST /api/registration/apply` - Public applicant submission
 
 ### Payment Processing
-- `POST /api/stripe/create-checkout` - Create Stripe Checkout Session
-- `POST /api/stripe/webhook` - Stripe webhook receiver (signature validation required)
-- `GET /payment/success` - Successful payment redirect
-- `GET /payment/cancel` - Cancelled payment redirect
+- `POST /api/stripe/create-checkout` - Create Stripe Checkout Session (25K HUF single / 45K HUF paired)
+- `POST /api/stripe/webhook` - Stripe webhook (signature validation, auto QR + ticket email)
 
-### Check-in System
-- `POST /api/checkin/validate` - Validate QR code JWT token
-- `POST /api/checkin/submit` - Record check-in event
+### Check-in System (Admin + Staff)
+- `POST /api/checkin/validate` - QR JWT validation (returns green/yellow/red card data)
+- `POST /api/checkin/submit` - Record check-in (supports admin override for duplicates)
+
+### Admin Guest Management
+- `GET /api/admin/guests` - Guest list (filter, search, paginate, sort)
+- `POST /api/admin/guests` - Create guest manually
+- `GET|PATCH|DELETE /api/admin/guests/{id}` - Guest CRUD
+- `POST /api/admin/guests/import` - JSON guest import (CSV parsed on frontend)
+- `PATCH /api/admin/guests/{id}/approve-payment` - Manual bank transfer approval + QR generation
+- `POST /api/admin/guests/{id}/resend-magic-link` - Regenerate + send magic link
+- `POST /api/admin/guests/{id}/send-ticket` - Send/resend e-ticket email
+
+### Admin Tables & Seating
+- `GET|POST /api/admin/tables` - Table list / create
+- `PATCH|DELETE /api/admin/tables/{id}` - Update / delete table
+- `POST|DELETE /api/admin/table-assignments` - Assign / unassign guest (DELETE uses ?guest_id query)
+- `GET /api/admin/seating-export` - CSV export (Content-Type: text/csv)
+
+### Admin Applicants
+- `GET /api/admin/applicants` - List (filter by status or "all")
+- `POST /api/admin/applicants/{id}/approve` - Approve + generate magic link + send email
+- `POST /api/admin/applicants/{id}/reject` - Reject with reason
+
+### Admin Email Management
+- `GET /api/admin/scheduled-emails` - Email log (paginated, filterable)
+- `POST /api/admin/scheduled-emails/bulk` - Bulk email send (batches of 5, 1s delay between)
+- `DELETE /api/admin/scheduled-emails/{id}` - Cancel pending email (soft: status -> cancelled)
+- `GET|POST /api/admin/email-templates` - Template list / create
+- `PATCH|DELETE /api/admin/email-templates/{id}` - Template update / delete
 
 ### Admin Dashboard
-- `GET /api/admin/guests` - Guest list with filtering (category, status, table) and pagination
-- `POST /api/admin/guests/import` - CSV guest list import
-- `PATCH /api/admin/guests/{id}/approve-payment` - Manual payment approval (bank transfer)
-- `GET|POST /api/admin/tables` - Table list / create table
-- `PATCH|DELETE /api/admin/tables/{id}` - Update / delete table
-- `POST /api/admin/table-assignments` - Assign guest to table
-- `GET /api/admin/seating-export` - Export seating arrangement as CSV
-- `GET /api/admin/checkin-log` - Check-in event log with filters
-- `GET /api/admin/applicants` - List pending applicants
-- `POST /api/admin/applicants/{id}/approve` - Approve applicant & send magic link
-- `POST /api/admin/applicants/{id}/reject` - Reject applicant with reason
+- `GET /api/admin/overview` - Dashboard statistics (9 parallel COUNT queries)
+- `GET /api/admin/checkin-log` - Check-in log (Admin + Staff access, paginated)
+- `GET /api/admin/changelog` - Changelog markdown content
 
-### Email Management (Admin)
-- `GET /api/admin/scheduled-emails` - List scheduled/sent emails
-- `POST /api/admin/scheduled-emails/bulk` - Bulk email sending (batch processing)
-- `DELETE /api/admin/scheduled-emails/{id}` - Cancel pending scheduled email
+### PWA Guest App (Public, code-based auth)
+- `POST /api/pwa/auth` - Auth with CEOG-XXXXXX code
+- `GET|PATCH /api/pwa/profile` - Guest profile (read/update, uses ?guest_id)
+- `GET /api/pwa/ticket` - QR ticket JWT token
+- `GET /api/pwa/table` - Table info + tablemates
+- `POST /api/pwa/push-subscribe` - Save Firebase FCM push token
 
 ### Email Service Features
 - **Retry Logic**: 3 attempts with exponential backoff (1s, 2s, 4s)
-- **Rate Limiting**: 5 per type/hour, 20 total/hour per guest
+- **Rate Limiting**: 5 per type/hour, 20 total/hour per guest (key format: `email:{guestId}:{type}`)
 - **Delivery Logging**: All emails logged to `EmailLog` table
-- **Template System**: DB templates with variable substitution + hardcoded fallbacks
-- **CID Attachments**: Inline images (QR codes) via Content-ID
+- **Template System**: DB templates (slug-based) with `{{variable}}` substitution + hardcoded fallbacks
+- **CID Attachments**: Inline QR code images via Content-ID
 
 ## Security Requirements
 
-### Authentication Methods
+### Authentication Methods (3 distinct approaches)
 1. **Magic Link (Guests)**
    - Hash: SHA-256 of `email + APP_SECRET + timestamp`
    - Expiry: **24 hours** from generation
-   - Single-use only (cleared after successful registration)
+   - Single-use only (magic_link_code cleared after successful registration)
    - Rate limit: Max 5 emails per type per hour, 20 total per hour per guest
 
-2. **Session-Based (Admins)**
-   - Password hash: bcrypt with cost=12
-   - Session cookie: HttpOnly, Secure, SameSite=Strict
-   - Optional: 2FA with Google Authenticator
+2. **NextAuth JWT Session (Admin/Staff)**
+   - Provider: CredentialsProvider (email + password)
+   - Password hash: bcrypt (bcryptjs)
+   - Session strategy: **JWT** (not database sessions), **8 hour** expiry
+   - Session payload: `{id, email, role, name}`
+   - Login page: `/admin/login` (via `(auth)/admin/login/page.tsx`)
 
 3. **JWT Tokens (QR Tickets)**
    - Algorithm: HMAC-SHA256 (HS256)
-   - Secret: `APP_QR_SECRET` (min 64 chars)
-   - Expiry: 48 hours (event day - 1 midnight)
+   - Secret: `QR_SECRET` (min 64 chars, env alias: `APP_QR_SECRET`)
+   - Expiry: 48 hours
    - Payload: `{registration_id, guest_id, ticket_type, iat, exp}`
+
+4. **PWA Auth Code (Guest App)**
+   - Format: `CEOG-XXXXXX` (6 alphanumeric)
+   - Stored in: Guest.pwa_auth_code (UNIQUE)
+   - Client-side: localStorage key `pwa-auth-code`
+   - No expiry (persistent)
+
+### CSRF Protection (middleware.ts)
+- **Method**: Origin/Referer header validation (NOT token-based)
+- Validates non-safe methods (POST, PATCH, DELETE) against expected host
+- **Exceptions**: Stripe webhook (signature-based), Next.js internal fetches (x-nextjs-data header), server-side fetches
+
+### Security Headers (next.config.js)
+| Header | Value |
+|--------|-------|
+| X-Frame-Options | SAMEORIGIN |
+| X-Content-Type-Options | nosniff |
+| Strict-Transport-Security | max-age=31536000 |
+| Content-Security-Policy | script/style/connect restrictions (Stripe compatible) |
+| Permissions-Policy | camera=(self) for QR scanner |
 
 ### Critical Security Rules
 - **SQL Injection**: Prisma ORM handles parameterized queries - NEVER use raw SQL with string concatenation
 - **XSS**: React auto-escapes by default; avoid `dangerouslySetInnerHTML`
-- **CSRF**: NextAuth handles CSRF tokens for admin sessions
-- **HTTPS**: Required in production (configure via Nginx + Let's Encrypt)
+- **HTTPS**: Required in production (Nginx + Let's Encrypt)
 - **Stripe Webhooks**: MUST validate signature using `stripe.webhooks.constructEvent()` with `STRIPE_WEBHOOK_SECRET`
 
+### Known Security Issues (from API audit)
+**CRITICAL:**
+1. **IDOR on PWA APIs**: `/api/pwa/profile`, `/api/pwa/ticket`, `/api/pwa/table` only use `guest_id` query param - anyone can query any guest's data if they know the ID. Fix: require PWA auth token validation.
+2. **Check-in override not role-restricted in API**: `/api/checkin/submit` accepts `is_override: true` from Staff role too. Only the frontend hides the button. Fix: check session.user.role === 'admin' in API.
+
+**MEDIUM:**
+3. **PATCH body injection**: `PATCH /api/admin/guests/{id}` passes body directly to Prisma update without field filtering. Can modify magic_link_code, pwa_auth_code etc.
+4. **Missing Zod validation**: Several API endpoints don't apply Zod schemas despite schemas being defined in `lib/validations/`.
+
 ### Environment Variables
-Critical secrets in `.env.local` (gitignored):
+Critical secrets in `.env` (gitignored). Template: `.env.example`
 ```bash
 # Database
-DATABASE_URL="mysql://user:password@localhost:3306/ceog"
-# Or PostgreSQL: postgresql://user:password@localhost:5432/ceog
+DATABASE_URL="mysql://ceog_user:ceog_password@localhost:3306/ceog_dev"
 
 # App Secrets
 APP_SECRET=min_64_char_random_string_for_magic_links
 QR_SECRET=min_64_char_random_string_for_jwt
 
 # Stripe
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...
-STRIPE_SECRET_KEY=sk_live_...
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_SECRET_KEY=sk_test_...
 STRIPE_WEBHOOK_SECRET=whsec_...
 
-# Email (to be configured later)
-SMTP_HOST=smtp.example.com
-SMTP_PORT=587
-SMTP_USER=noreply@ceogala.hu
-SMTP_PASS=smtp_password
+# Email (SMTP)
+SMTP_HOST=sandbox.smtp.mailtrap.io
+SMTP_PORT=2525
+SMTP_USER=<provider_specific>
+SMTP_PASS=<provider_specific>
+SMTP_FROM=noreply@ceogala.test
 
-# NextAuth (for admin sessions)
+# NextAuth (JWT sessions)
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=generate_random_32_char_string
+
+# App
+APP_URL=http://localhost:3000
+MAGIC_LINK_EXPIRY_HOURS=24
+SHOW_TABLE_NUMBERS=true
 ```
 
 ## Completed Epics (7/7)
@@ -373,7 +461,7 @@ Duplicate check-in prevention: UNIQUE constraint on `checkins.registration_id`
 | Table Management | ✅ CRUD + assign | ❌ No access |
 | Seating Map | ✅ Drag-and-drop | ❌ No access |
 | Email Sending | ✅ Bulk email | ❌ No access |
-| Check-in Log | ✅ View + export | ❌ No access |
+| Check-in Log | ✅ View + export | ✅ Read-only |
 | QR Scanner | ✅ With override | ✅ Basic only |
 | Admin Override | ✅ Allow duplicate | ❌ Cannot override |
 
@@ -394,22 +482,69 @@ if (session.user.role === 'staff') {
 - **Admin**: Can override duplicate check-in (yellow card → "Admin Override" button)
 - **Staff**: Cannot override; must call admin for duplicates
 
+## Generated Documentation (docs/)
+
+Comprehensive project documentation generated via exhaustive codebase scan (2026-02-15). **Start here: [docs/index.md](docs/index.md)**
+
+| Document | Content |
+|----------|---------|
+| [index.md](docs/index.md) | Master index - entry point to all documentation |
+| [architecture.md](docs/architecture.md) | Layered architecture, auth, security, integrations, deployment |
+| [data-models.md](docs/data-models.md) | 16 Prisma models, ER diagram, enums, indexes, constraints |
+| [api-contracts.md](docs/api-contracts.md) | **44 API endpoints** - full request/response specs, auth matrix, security audit |
+| [component-inventory.md](docs/component-inventory.md) | ~80+ React components catalog, state management patterns |
+| [source-tree-analysis.md](docs/source-tree-analysis.md) | Full annotated directory tree (700+ files) |
+| [development-guide.md](docs/development-guide.md) | Setup, commands, conventions, deployment |
+| [project-overview.md](docs/project-overview.md) | Project summary, tech stack, roles, status |
+
+## State Management Patterns
+
+**No external state library** - the project uses only React built-in primitives:
+
+| Pattern | Usage | Where |
+|---------|-------|-------|
+| `useState` | ~130+ calls total | Every client component |
+| `useEffect` | ~30+ | Data fetching, cleanup |
+| React Context | 2 providers | `LanguageContext` (i18n), `SessionProvider` (NextAuth) |
+| `useRef` | 2 components | QRScanner (scanner instance), SeatingMap (canvas) |
+| localStorage | 2 keys | `admin-language` (HU/EN), `pwa-auth-code` (PWA auth) |
+| URL state | 4 pages | `useSearchParams` (register, payment) |
+| `useReducer` | **Not used** | - |
+| Form library | **None** | Manual useState + onChange (no react-hook-form/formik) |
+| SWR/React Query | **None** | Manual fetch + useEffect pattern everywhere |
+
+### Key Custom Hooks
+| Hook | File | Purpose |
+|------|------|---------|
+| `useLanguage()` | `lib/i18n/LanguageContext.tsx` | i18n translation + language switch |
+| `useGuestList()` | `app/admin/guests/hooks/useGuestList.ts` | Guest list CRUD, filter, paginate, sort |
+| `useSeatingDnd()` | `app/admin/seating/hooks/useSeatingDnd.ts` | @dnd-kit drag-and-drop state |
+
+### Common Data Fetching Pattern (repeated in ~15 components)
+```typescript
+const [data, setData] = useState([]);
+const [loading, setLoading] = useState(true);
+useEffect(() => { fetchData(); }, []);
+async function fetchData() {
+  setLoading(true);
+  const res = await fetch('/api/...');
+  setData(await res.json());
+  setLoading(false);
+}
+```
+
 ## Important Context
 
 ### Primary Documentation
 The complete functional requirements specification is in [docs/FUNKCIONALIS-KOVETELMENY.md](docs/FUNKCIONALIS-KOVETELMENY.md) (997 lines, Hungarian). This is the **source of truth** for:
 - Detailed API specifications
-- Database schema definitions (originally MySQL, adaptable to PostgreSQL)
+- Database schema definitions
 - Email templates content
 - Validation rules
 - Performance requirements (< 2s page load, < 100ms DB queries)
 - Scalability targets (500+ concurrent users, 10K guest capacity)
 
-**Tech Stack Decision**: Originally specified PHP/Slim, but migrated to **Next.js** for:
-- Faster development (1 month timeline)
-- Simpler drag-and-drop seating map (React-Konva)
-- Better developer experience
-- Easier deployment (Vercel free tier)
+**Tech Stack Decision**: Originally specified PHP/Slim, migrated to **Next.js** for faster development and better React-Konva DnD support.
 
 ### BMad Method Framework
 This project uses the BMad Method (v6.0.0) for AI-assisted development. Installed modules:
@@ -431,44 +566,17 @@ Use BMad workflows for complex tasks:
   - **Languages**: Hungarian (default), English
   - **Implementation**: React Context (`LanguageContext`) with `useLanguage()` hook
   - **Persistence**: localStorage key `admin-language`
-  - **Files**: `lib/i18n/translations.ts`, `lib/i18n/LanguageContext.tsx`
+  - **Files**: `lib/i18n/translations.ts` (~1500 lines), `lib/i18n/LanguageContext.tsx`, `lib/i18n/admin-help-translations.ts` (~800 lines)
   - **Usage**: `const { t, language, setLanguage } = useLanguage(); t('keyName')`
+  - **Scope**: Admin pages only (wrapped in `AdminLayout > LanguageProvider`)
 - **BMad Method MANDATORY**: Always use BMad agents and workflows - this is critical!
 - **Mobile-First**: Tailwind CSS responsive design, min 44x44px touch targets, WCAG 2.1 AA contrast
 - **Performance**: Target < 2s LCP, < 100ms avg DB query, < 500ms API response (95th percentile)
-- **Email**: Nodemailer with SMTP (queue/batch processing for bulk sends)
-- **Seating Map**: React-Konva canvas with drag-and-drop
-- **UI Icons**: Phosphor Icons (consistent across admin & PWA)
-- **PWA**: Service Worker + Web Push (Firebase FCM)
-
-## Recent UI/UX Improvements
-
-### MobileFooter Component
-- **Location**: `app/components/MobileFooter.tsx`
-- **Purpose**: Fixed footer on all mobile views with "Built By MyForge Labs" branding
-- **Features**: Semi-transparent with backdrop blur, configurable z-index for stacking
-- **Usage**:
-  ```tsx
-  <MobileFooter bottomOffset="3.5rem" zIndex={50} />
-  ```
-
-### Email Rate Limiting
-Enhanced rate limiting in `lib/services/rate-limit.ts`:
-- **Per-type limit**: Max 5 emails per type per hour per guest
-- **Global limit**: Max 20 emails per hour per guest
-- **Retry logic**: 3 attempts with exponential backoff (1s, 2s, 4s)
-- **Database**: `RateLimitEntry` model with auto-cleanup
-
-### Admin Dashboard Help
-- **Admin Guide**: `/admin/help` - Searchable FAQ with 50+ entries, 12 categories
-- **Public FAQ**: `/help` - Registration guide for guests
-- **i18n**: Full HU/EN translations in `lib/i18n/admin-help-translations.ts`
-
-### Diagram Dashboard
-- **Location**: `docs/diagrams/diagram-dashboard.html`
-- **Diagrams**: 28 SVG diagrams (architecture, flows, wireframes, test cases, dataflow)
-- **New in v2**: Admin vs Staff Roles, Check-in Override Flow, Email Rate Limiting, Component Architecture
-- **Features**: Dark mode, HU/EN toggle, notes with CSV export/import
+- **Seating Map**: React-Konva canvas (FloorPlanCanvas) + @dnd-kit (DraggableGuest/DroppableTable)
+- **UI Icons**: Phosphor Icons (@phosphor-icons/react) - consistent across admin & PWA
+- **PWA**: Service Worker + Web Push (Firebase FCM), code auth (CEOG-XXXXXX), MobileFooter branding
+- **Zod validation**: Schemas defined in `lib/validations/` but NOT consistently applied across all API endpoints
+- **TypeScript**: `strict: false` in tsconfig.json, path alias `@/*` -> root
 
 ## VPS Deployment (Production)
 
@@ -551,7 +659,106 @@ unassigned1-5@ceogala.test - 5 single guests
 paired-unassigned@ceogala.test - Papp Zoltán + Judit (paired)
 ```
 
-### Server Paths
-- Application: `/var/www/ceog`
-- Nginx config: `/etc/nginx/sites-available/ceog`
-- Environment: `/var/www/ceog/.env`
+
+## Deployment Environments
+
+### Production — Legacy (CEOG server — 46.202.153.178)
+
+- **URL**: `https://ceogala.mflevents.space`
+- **Stack**: PM2 + Nginx (NOT containerized)
+- **Path**: `/var/www/ceog`
+- **DB**: MySQL 8.0 on same server
+- **Deploy**: `npm run deploy` (build + PM2 restart)
+
+> Note: This is the legacy production setup. The dev and demo environments below are Docker-based.
+
+### Dev (MFLabsDev — 91.98.143.163)
+
+| Component | Container | Host Port | Internal |
+|-----------|-----------|-----------|----------|
+| Next.js App | `ceog-dev-app` | 127.0.0.1:3040 | :3000 |
+| MySQL 8.0 | `ceog-dev-db` | 127.0.0.1:3307 | :3306 |
+
+- **URL**: `https://dev4-ceogala.mflevents.space`
+- **Compose**: `docker-compose.mflabsdev.yml`
+- **Env file**: `.env.dev`
+- **Server path**: `/root/LABS/CEOG-4/`
+- **Nginx reverse proxy**: Full traffic → :3040
+
+```bash
+# Rebuild & deploy dev
+cd /root/LABS/CEOG-4
+git pull
+docker compose -f docker-compose.mflabsdev.yml --env-file .env.dev up -d --build
+
+# DB operations
+docker exec -u root ceog-dev-app npx prisma db push
+docker exec -u root ceog-dev-app node scripts/seed-production.js
+
+# Logs
+docker logs -f ceog-dev-app
+```
+
+### Demo/UAT (MFLDemo — 89.167.63.14)
+
+| Component | Container | Host Port | Internal |
+|-----------|-----------|-----------|----------|
+| Next.js App | `ceog-demo-app` | 127.0.0.1:3040 | :3000 |
+| MySQL 8.0 | `ceog-demo-db` | 127.0.0.1:3307 | :3306 |
+
+- **URL**: `https://demo4-ceogala.mflevents.space`
+- **Compose**: `docker-compose.demo.yml`
+- **Env file**: `.env.demo`
+- **Server path**: `/opt/demos/ceog-4/`
+
+```bash
+# Rebuild & deploy demo
+cd /opt/demos/ceog-4
+git pull
+docker compose -f docker-compose.demo.yml --env-file .env.demo up -d --build
+```
+
+### DB Backups (automated)
+
+- **Cron**: `0 3 * * *` (daily at 3 AM) on both servers
+- **Script**: `/opt/backups/backup.sh`
+- **Retention**: 7-day daily + 4-week weekly (Sunday copies)
+- **Format**: `ceog_dev_YYYYMMDD_HHMMSS.sql.gz` / `ceog_demo_YYYYMMDD_HHMMSS.sql.gz`
+
+### Monitoring
+
+- **Beszel Agent** (port 45876) — server metrics at `https://monitor.mflerp.com`
+- **Portainer Agent** (port 9001) — Docker management at `https://89.167.62.109:9443`
+- **Uptime Kuma** — endpoint monitoring at `https://status.myforge.hu`
+- **Infra docs**: See `monitoring/MFL-INFRASTRUCTURE.md` in the LABS root repo
+
+## Git Workflow
+
+- **Single branch**: `main` only — no dev/staging branches
+- **Repo**: `git@github.com:zolijavos/CEOG-4.git`
+- **Deploy**: Manual — `git pull` on target server, then rebuild
+  - Docker envs (dev/demo): `docker compose up -d --build`
+  - Legacy prod (CEOG server): `npm run deploy` (build + PM2 restart)
+- Dev (MFLabsDev) and Demo (MFLDemo) both track `main`
+- No CI/CD pipeline yet — builds happen on the server directly
+
+## Service Dependencies (startup order)
+
+```
+ceog-db (MySQL 8.0) ──► ceog-app (Next.js)
+```
+
+- `ceog-app` depends on: `ceog-db` (won't start without database)
+- Simple 2-container stack — DB must be healthy before app starts
+- If app fails to start, check DB connectivity first (`docker logs ceog-{env}-app`)
+
+## Known Gotchas
+
+- **Prisma needs root**: `docker exec -u root ceog-{env}-app npx prisma ...` — the container runs as non-root user but Prisma needs write access to generate client.
+- **mysqldump --no-tablespaces**: Always include this flag in backup scripts, otherwise "Access denied; you need the PROCESS privilege" error.
+- **Standalone build**: Next.js uses `output: 'standalone'` — static files need special handling (postbuild script copies them to standalone dir).
+- **Legacy prod (PM2)**: On CEOG server (46.202.153.178), the app runs via PM2, NOT Docker. Different deploy process: `npm run deploy` instead of docker compose.
+- **Build cache**: Docker build cache grows fast. Run `docker builder prune -af` if disk fills up.
+- **MFLDemo RAM limit**: 7.6 GB total — don't build CEOG and KGC simultaneously, build one at a time.
+- **Port conflicts**: Dev and Demo use the same host ports (3040, 3307) — they run on different servers, never on the same machine.
+- **Seed script**: Use `node scripts/seed-production.js` (plain JS, no ts-node needed) for test data.
