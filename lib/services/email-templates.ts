@@ -3241,8 +3241,8 @@ Event website: ceogala.com`,
               <!-- Warm regards -->
               <p style="margin: 25px 0 8px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: left; font-family: Verdana, Geneva, sans-serif;">Warm regards,</p>
 
-              <!-- Signatures -->
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0 25px 0;">
+              <!-- Signatures - BBJ -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0 10px 0;">
                 <tr>
                   <td width="50%" align="center" valign="top" style="padding: 0 10px;">
                     <p style="margin: 0 0 2px 0; font-weight: bold; font-size: 15px; color: #1a1a2e; font-family: Verdana, Geneva, sans-serif;">Tamas Botka</p>
@@ -3251,6 +3251,15 @@ Event website: ceogala.com`,
                   <td width="50%" align="center" valign="top" style="padding: 0 10px;">
                     <p style="margin: 0 0 2px 0; font-weight: bold; font-size: 15px; color: #1a1a2e; font-family: Verdana, Geneva, sans-serif;">Balazs Roman</p>
                     <p style="margin: 0; font-size: 14px; color: #333333; font-family: Verdana, Geneva, sans-serif;">CEO, BBJ</p>
+                  </td>
+                </tr>
+              </table>
+              <!-- Signature - Sponsor CEO -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 15px 0 25px 0;">
+                <tr>
+                  <td align="center" style="padding: 0 10px;">
+                    <p style="margin: 0 0 2px 0; font-weight: bold; font-size: 15px; color: #1a1a2e; font-family: Verdana, Geneva, sans-serif;">Laszlo Radvanyi</p>
+                    <p style="margin: 0; font-size: 14px; color: #333333; font-family: Verdana, Geneva, sans-serif;">CEO, PwC Hungary</p>
                   </td>
                 </tr>
               </table>
@@ -3325,6 +3334,9 @@ Warm regards,
 
 Tamas Botka                    Balazs Roman
 Publisher, BBJ                 CEO, BBJ
+
+Laszlo Radvanyi
+CEO, PwC Hungary
 
 ---
 
