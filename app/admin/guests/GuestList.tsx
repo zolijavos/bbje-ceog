@@ -408,9 +408,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
 
   // Actually send emails (called from EmailPreviewModal)
   const handleSendEmails = useCallback(
-    async (_customSubject: string, _customBody: string) => {
-      // Note: customSubject and customBody are for future implementation
-      // Currently the backend uses its own template
+    async (templateSlug: string) => {
       const ids = emailRecipients.map(r => r.id);
 
       // Mark all as sending
@@ -420,7 +418,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
         const response = await fetch('/api/email/send-magic-link', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ guest_ids: ids }),
+          body: JSON.stringify({ guest_ids: ids, template_slug: templateSlug }),
         });
 
         const result: SendResult = await response.json();

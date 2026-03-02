@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { X, Warning, PaperPlaneTilt, SpinnerGap } from '@phosphor-icons/react';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 interface EmailRecipient {
   id: number;
@@ -13,37 +14,17 @@ interface EmailPreviewModalProps {
   isOpen: boolean;
   recipients: EmailRecipient[];
   onClose: () => void;
-  onSend: (customSubject: string, customBody: string) => void;
+  onSend: (templateSlug: string) => void;
   isSending: boolean;
 }
 
-// Default email template - matches the actual CEO Gala 2026 invitation
-const DEFAULT_SUBJECT = 'Invitation to the CEO Gala 2026';
-
-const DEFAULT_BODY = `Dear {guestName},
-
-The Budapest Business Journal is delighted to invite you to the official
-
-CEO Gala 2026
-
-hosted at Corinthia Hotel Budapest on Friday, March 27, 2026.
-
-As has now become a tradition of several years, two awards will be presented during the evening: the Expat CEO Award and the CEO Community Award.
-
-Date: Friday, March 27, 2026, 7 p.m.
-Location: The Grand Ballroom of the Corinthia Hotel Budapest
-Dress Code: Black tie for men, ball gown or cocktail dress for women
-
-If you wish to reserve your place at the gala now, click the REGISTRATION button in the email.
-
-Registration link:
-{magicLinkUrl}
-
-Please note that any failure to provide due cancellation notice may result in a no-show fee of HUF 99,000 + VAT per person.
-
-Best regards,
-Tamas Botka, Publisher, BBJ
-Balazs Roman, CEO, BBJ`;
+// Templates compatible with magic link flow (have magicLinkUrl variable)
+const INVITATION_TEMPLATES = [
+  { slug: 'magic_link', labelKey: 'templateMagicLink' },
+  { slug: 'invitation_reminder', labelKey: 'templateInvitationReminder' },
+  { slug: 'sponsor_invitation', labelKey: 'templateSponsorInvitation' },
+  { slug: 'applicant_approval', labelKey: 'templateApplicantApproval' },
+] as const;
 
 export default function EmailPreviewModal({
   isOpen,
@@ -52,12 +33,15 @@ export default function EmailPreviewModal({
   onSend,
   isSending,
 }: EmailPreviewModalProps) {
+  const { t } = useLanguage();
   const [showAllRecipients, setShowAllRecipients] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState('magic_link');
 
   // Reset form when modal opens
   useEffect(() => {
     if (isOpen) {
       setShowAllRecipients(false);
+      setSelectedTemplate('magic_link');
     }
   }, [isOpen]);
 
@@ -66,14 +50,8 @@ export default function EmailPreviewModal({
   const displayedRecipients = showAllRecipients ? recipients : recipients.slice(0, 5);
   const hasMoreRecipients = recipients.length > 5;
 
-  // Preview with first recipient's name
-  const previewName = recipients[0]?.name || 'Guest';
-  const previewBody = DEFAULT_BODY
-    .replace(/{guestName}/g, previewName)
-    .replace(/{magicLinkUrl}/g, 'https://ceogala.hu/register?code=xxx&email=xxx');
-
   const handleSend = () => {
-    onSend(DEFAULT_SUBJECT, DEFAULT_BODY);
+    onSend(selectedTemplate);
   };
 
   return (
@@ -103,6 +81,25 @@ export default function EmailPreviewModal({
 
           {/* Content */}
           <div className="p-6 max-h-[70vh] overflow-y-auto">
+            {/* Template Selector */}
+            <div className="mb-6">
+              <label className="block text-sm font-semibold text-neutral-800 mb-2">
+                {t('selectTemplate')}
+              </label>
+              <select
+                value={selectedTemplate}
+                onChange={(e) => setSelectedTemplate(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-accent-teal focus:border-accent-teal"
+                disabled={isSending}
+              >
+                {INVITATION_TEMPLATES.map(({ slug, labelKey }) => (
+                  <option key={slug} value={slug}>
+                    {t(labelKey)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {/* Recipients Section */}
             <div className="mb-6">
               <label className="block text-sm font-semibold text-neutral-800 mb-2">
@@ -131,22 +128,6 @@ export default function EmailPreviewModal({
                       : `+ ${recipients.length - 5} további címzett`}
                   </button>
                 )}
-              </div>
-            </div>
-
-            {/* Email Preview */}
-            <div className="mb-4">
-              <label className="block text-sm font-semibold text-neutral-800 mb-2">
-                Email előnézet ({previewName} példájával)
-              </label>
-              <div className="bg-gray-50 border border-gray-200 p-4">
-                <div className="text-sm font-medium text-neutral-800 mb-2">
-                  <span className="text-gray-500">Tárgy:</span> {DEFAULT_SUBJECT}
-                </div>
-                <hr className="my-3" />
-                <pre className="whitespace-pre-wrap text-sm text-gray-700 font-sans leading-relaxed">
-                  {previewBody}
-                </pre>
               </div>
             </div>
 
