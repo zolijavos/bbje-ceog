@@ -238,14 +238,17 @@ export async function sendMagicLinkEmail(
     // 2. Generate magic link hash
     const { hash, expiresAt } = generateMagicLinkHash(guest.email);
 
-    // 4. Update guest record - set status to 'invited' when magic link is sent
+    // 4. Update guest record - generate magic link, only change status if not already registered/approved
+    const updateData: any = {
+      magic_link_hash: hash,
+      magic_link_expires_at: expiresAt,
+    };
+    if (guest.registration_status !== 'registered' && guest.registration_status !== 'approved') {
+      updateData.registration_status = 'invited';
+    }
     await prisma.guest.update({
       where: { id: guestId },
-      data: {
-        magic_link_hash: hash,
-        magic_link_expires_at: expiresAt,
-        registration_status: 'invited',
-      },
+      data: updateData,
     });
 
     // 5. Compose email (try DB template first, fallback to hardcoded)

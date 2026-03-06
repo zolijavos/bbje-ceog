@@ -25,7 +25,7 @@ const ALLOWED_TEMPLATE_SLUGS = [
 
 // Request body schema
 const SendMagicLinkSchema = z.object({
-  guest_ids: z.array(z.number().int().positive()).min(1).max(100),
+  guest_ids: z.array(z.number().int().positive()).min(1).max(500),
   template_slug: z.enum(ALLOWED_TEMPLATE_SLUGS).optional().default('magic_link'),
 });
 
