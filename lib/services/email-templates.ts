@@ -4074,26 +4074,28 @@ export async function deleteTemplate(slug: string): Promise<void> {
  */
 export async function initializeDefaultTemplates(): Promise<void> {
   for (const [slug, template] of Object.entries(DEFAULT_TEMPLATES)) {
-    const existing = await prisma.emailTemplate.findUnique({
-      where: { slug },
-    });
-
-    if (!existing) {
-      try {
-        await prisma.emailTemplate.create({
-          data: {
-            slug: template.slug,
-            name: template.name,
-            subject: template.subject,
-            html_body: template.html_body,
-            text_body: template.text_body,
-            variables: JSON.stringify(template.variables),
-            is_active: true,
-          },
-        });
-      } catch (error) {
-        logError(`Failed to initialize template ${slug}:`, error);
-      }
+    try {
+      await prisma.emailTemplate.upsert({
+        where: { slug },
+        create: {
+          slug: template.slug,
+          name: template.name,
+          subject: template.subject,
+          html_body: template.html_body,
+          text_body: template.text_body,
+          variables: JSON.stringify(template.variables),
+          is_active: true,
+        },
+        update: {
+          name: template.name,
+          subject: template.subject,
+          html_body: template.html_body,
+          text_body: template.text_body,
+          variables: JSON.stringify(template.variables),
+        },
+      });
+    } catch (error) {
+      logError(`Failed to initialize template ${slug}:`, error);
     }
   }
 }
