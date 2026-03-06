@@ -3857,22 +3857,21 @@ www.ceogala.com - event@bbj.hu`,
               </table>
 
               <!-- Partner Logos: Corinthia | BBJ | Little Minds -->
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0;">
+              <table role="presentation" width="680" cellpadding="0" cellspacing="0" border="0" style="margin: 30px auto; max-width: 680px;">
                 <tr>
-                  <td align="center" valign="middle" style="padding: 0;">
-                    <a href="https://www.corinthia.com/budapest/" style="text-decoration: none;"><img src="{{baseUrl}}/email-assets/corinthia-hotel-budapest-logo.png" alt="Corinthia Hotel Budapest" width="140" style="max-width: 140px; height: auto; border: 0;" /></a>
+                  <td width="170" align="center" valign="middle" style="padding: 0;">
+                    <a href="https://www.corinthia.com/budapest/" style="text-decoration: none;"><img src="{{baseUrl}}/email-assets/corinthia-hotel-budapest-logo.png" alt="Corinthia Hotel Budapest" width="130" style="max-width: 130px; height: auto; border: 0;" /></a>
                   </td>
-                  <td width="40" style="font-size: 1px; line-height: 1px;">&nbsp;</td>
-                  <td align="center" valign="middle" style="padding: 0;">
-                    <a href="https://bbj.hu" style="text-decoration: none;"><img src="{{baseUrl}}/email-assets/bbj-logo.png" alt="Budapest Business Journal" width="280" style="max-width: 280px; height: auto; border: 0;" /></a>
+                  <td width="35" style="font-size: 1px; line-height: 1px;">&nbsp;</td>
+                  <td width="270" align="center" valign="middle" style="padding: 0;">
+                    <a href="https://bbj.hu" style="text-decoration: none;"><img src="{{baseUrl}}/email-assets/bbj-logo.png" alt="Budapest Business Journal" width="250" style="max-width: 250px; height: auto; border: 0;" /></a>
                   </td>
-                  <td width="40" style="font-size: 1px; line-height: 1px;">&nbsp;</td>
-                  <td align="center" valign="middle" style="padding: 0;">
-                    <a href="http://littleminds.hu" style="text-decoration: none;"><img src="{{baseUrl}}/email-assets/little-minds-logo.png" alt="Little Minds" width="140" style="max-width: 140px; height: auto; border: 0;" /></a>
+                  <td width="35" style="font-size: 1px; line-height: 1px;">&nbsp;</td>
+                  <td width="170" align="center" valign="middle" style="padding: 0;">
+                    <a href="http://littleminds.hu" style="text-decoration: none;"><img src="{{baseUrl}}/email-assets/little-minds-logo.png" alt="Little Minds" width="130" style="max-width: 130px; height: auto; border: 0;" /></a>
                   </td>
                 </tr>
               </table>
-
               <!-- Divider -->
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 25px 0;">
                 <tr>
