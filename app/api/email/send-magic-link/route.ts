@@ -16,7 +16,9 @@ import { logError } from '@/lib/utils/logger';
 const ALLOWED_TEMPLATE_SLUGS = [
   'magic_link',
   'invitation_reminder',
+  'invitation_reminder_v2',
   'sponsor_invitation',
+  'invitation_cbre',
   'applicant_approval',
 ] as const;
 

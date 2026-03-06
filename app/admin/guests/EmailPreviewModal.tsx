@@ -22,7 +22,9 @@ interface EmailPreviewModalProps {
 const INVITATION_TEMPLATES = [
   { slug: 'magic_link', labelKey: 'templateMagicLink' },
   { slug: 'invitation_reminder', labelKey: 'templateInvitationReminder' },
+  { slug: 'invitation_reminder_v2', labelKey: 'templateInvitationReminderV2' },
   { slug: 'sponsor_invitation', labelKey: 'templateSponsorInvitation' },
+  { slug: 'invitation_cbre', labelKey: 'templateInvitationCbre' },
   { slug: 'applicant_approval', labelKey: 'templateApplicantApproval' },
 ] as const;
 
