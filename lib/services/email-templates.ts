@@ -3579,7 +3579,7 @@ www.ceogala.com - event@bbj.hu`,
   },
   invitation_cbre: {
     slug: 'invitation_cbre',
-    name: 'CBRE Corporate Table Invitation',
+    name: 'Invitation CBRE',
     subject: 'Invitation to the CBRE Corporate Table',
     variables: ['guestTitle', 'guestName', 'magicLinkUrl', 'baseUrl'],
     html_body: `<!DOCTYPE html>

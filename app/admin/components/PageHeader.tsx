@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { ArrowLeft, Question } from '@phosphor-icons/react';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 // Help anchor mapping for each admin page
 const helpAnchors: Record<string, string> = {
@@ -19,7 +20,9 @@ const helpAnchors: Record<string, string> = {
 
 interface PageHeaderProps {
   title: string;
+  titleKey?: string;
   description?: string;
+  descriptionKey?: string;
   backHref?: string;
   backLabel?: string;
   currentPath: string;
@@ -27,13 +30,18 @@ interface PageHeaderProps {
 
 export default function PageHeader({
   title,
+  titleKey,
   description,
+  descriptionKey,
   backHref = '/admin',
   backLabel = 'Dashboard',
   currentPath,
 }: PageHeaderProps) {
+  const { t } = useLanguage();
   const helpAnchor = helpAnchors[currentPath] || '';
   const helpLink = helpAnchor ? `/admin/help#${helpAnchor}` : '/admin/help';
+  const displayTitle = titleKey ? t(titleKey as any) : title;
+  const displayDescription = descriptionKey ? t(descriptionKey as any) : description;
 
   return (
     <header className="bg-white dark:bg-neutral-800 shadow dark:shadow-neutral-900/50">
@@ -51,11 +59,11 @@ export default function PageHeader({
             <div className="h-6 w-px bg-gray-300 dark:bg-gray-600 hidden sm:block" />
             <div>
               <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">
-                {title}
+                {displayTitle}
               </h1>
-              {description && (
+              {displayDescription && (
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 hidden sm:block">
-                  {description}
+                  {displayDescription}
                 </p>
               )}
             </div>
