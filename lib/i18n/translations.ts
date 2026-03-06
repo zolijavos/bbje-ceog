@@ -358,6 +358,7 @@ export const translations = {
 
     // Guest list
     guestList: 'Guest List',
+    guestListDescription: 'Manage guests and send invitations',
     newGuest: 'New Guest',
     allTypes: 'All Types',
     allStatuses: 'All Statuses',
@@ -377,7 +378,9 @@ export const translations = {
     selectTemplate: 'Email Template',
     templateMagicLink: 'Invitation (Magic Link)',
     templateInvitationReminder: 'Invitation Reminder',
+    templateInvitationReminderV2: 'Invitation Reminder V2',
     templateSponsorInvitation: 'Sponsor Invitation (PwC)',
+    templateInvitationCbre: 'Invitation CBRE',
     templateApplicantApproval: 'Applicant Approval',
     type: 'Type',
     actions: 'Actions',
@@ -838,6 +841,7 @@ export const translations = {
 
     // Guest list
     guestList: 'Vendéglista',
+    guestListDescription: 'Vendégek kezelése és meghívók küldése',
     newGuest: 'Új vendég',
     allTypes: 'Összes típus',
     allStatuses: 'Összes státusz',
@@ -857,7 +861,9 @@ export const translations = {
     selectTemplate: 'Email sablon',
     templateMagicLink: 'Meghívó (Magic Link)',
     templateInvitationReminder: 'Emlékeztető meghívó',
+    templateInvitationReminderV2: 'Emlékeztető meghívó V2',
     templateSponsorInvitation: 'Szponzor meghívó (PwC)',
+    templateInvitationCbre: 'CBRE meghívó',
     templateApplicantApproval: 'Jelentkezés jóváhagyva',
     type: 'Típus',
     actions: 'Műveletek',

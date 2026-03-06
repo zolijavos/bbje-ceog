@@ -232,7 +232,9 @@ export default async function GuestsPage() {
     <div className="min-h-screen bg-gray-100">
       <PageHeader
         title="Guest List"
+        titleKey="guestList"
         description="Manage guests and send invitations"
+        descriptionKey="guestListDescription"
         currentPath="/admin/guests"
       />
 
