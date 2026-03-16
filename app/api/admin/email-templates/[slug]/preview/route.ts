@@ -98,12 +98,12 @@ const SAMPLE_DATA: Record<string, Record<string, string>> = {
     partnerEmail: 'jane.smith@example.com',
     partnerDiet: 'No special requirements',
     headerImage: SAMPLE_HEADER_IMAGE,
-    baseUrl: 'https://ceogala.mflevents.space',
+    baseUrl: process.env.APP_URL || process.env.NEXTAUTH_URL || 'https://ceogala.mflevents.space',
   },
   invite_reminder_v3: {
     title: 'Mr.',
     guestName: 'John Smith',
-    baseUrl: 'https://ceogala.mflevents.space',
+    baseUrl: process.env.APP_URL || process.env.NEXTAUTH_URL || 'https://ceogala.mflevents.space',
   },
   registration_feedback_partner: {
     partnerTitle: 'Mrs.',
@@ -115,7 +115,7 @@ const SAMPLE_DATA: Record<string, Record<string, string>> = {
     mainGuestTitle: 'Mr.',
     mainGuestName: 'John Smith',
     headerImage: SAMPLE_HEADER_IMAGE,
-    baseUrl: 'https://ceogala.mflevents.space',
+    baseUrl: process.env.APP_URL || process.env.NEXTAUTH_URL || 'https://ceogala.mflevents.space',
   },
 };
 
