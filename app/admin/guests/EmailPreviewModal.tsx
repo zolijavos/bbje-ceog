@@ -27,6 +27,7 @@ const INVITATION_TEMPLATES = [
   { slug: 'invitation_cbre', labelKey: 'templateInvitationCbre' },
   { slug: 'applicant_approval', labelKey: 'templateApplicantApproval' },
   { slug: 'reminder_1month', labelKey: 'templateReminder1month' },
+  { slug: 'invite_reminder_v3', labelKey: 'templateInviteReminderV3' },
 ] as const;
 
 export default function EmailPreviewModal({

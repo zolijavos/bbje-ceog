@@ -100,6 +100,11 @@ const SAMPLE_DATA: Record<string, Record<string, string>> = {
     headerImage: SAMPLE_HEADER_IMAGE,
     baseUrl: 'https://ceogala.mflevents.space',
   },
+  invite_reminder_v3: {
+    title: 'Mr.',
+    guestName: 'John Smith',
+    baseUrl: 'https://ceogala.mflevents.space',
+  },
   registration_feedback_partner: {
     partnerTitle: 'Mrs.',
     partnerName: 'Jane Smith',

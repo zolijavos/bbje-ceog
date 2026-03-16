@@ -21,6 +21,7 @@ const ALLOWED_TEMPLATE_SLUGS = [
   'invitation_cbre',
   'applicant_approval',
   'reminder_1month',
+  'invite_reminder_v3',
 ] as const;
 
 // Request body schema
