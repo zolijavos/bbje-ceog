@@ -3936,6 +3936,184 @@ Business Publishing Services Kft.
 Publisher of Budapest Business Journal
 Event website: ceogala.com`,
   },
+  invite_reminder_v3: {
+    slug: 'invite_reminder_v3',
+    name: 'Invite Reminder V3',
+    subject: 'CEO Gala 2026 – practical information for March 27',
+    variables: ['title', 'guestName', 'baseUrl'],
+    html_body: `<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <![endif]-->
+  <title>CEO Gala 2026 &#8211; practical information for March 27</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #ffffff; font-family: Verdana, Geneva, sans-serif; font-size: 15px; line-height: 1.6; color: #333333;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff;">
+    <tr>
+      <td align="center" style="padding: 0;">
+        <table role="presentation" width="680" cellpadding="0" cellspacing="0" border="0" style="max-width: 680px; width: 100%;">
+          <!-- Header Image -->
+          <tr>
+            <td align="center" style="padding: 0;">
+              <img src="{{baseUrl}}/email-assets/CEO_Gala_2026_invitation_header_709x213.jpg" alt="CEO Gala 2026 - March 27, 2026" width="680" style="width: 100%; max-width: 680px; height: auto; display: block; border: 0;" />
+            </td>
+          </tr>
+          <!-- Partner Logos: Little Minds (left) + Corinthia (right) -->
+          <tr>
+            <td align="center" style="padding: 25px 15px 20px 15px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td width="180" align="center" valign="middle" style="padding: 0;">
+                    <a href="http://littleminds.hu" style="text-decoration: none;"><img src="{{baseUrl}}/email-assets/little-minds-logo.png" alt="Little Minds" width="180" style="width: 180px; height: auto; border: 0; display: block;" /></a>
+                  </td>
+                  <td width="220" style="font-size: 1px; line-height: 1px;">&nbsp;</td>
+                  <td width="160" align="center" valign="middle" style="padding: 0;">
+                    <a href="https://www.corinthia.com/budapest/" style="text-decoration: none;"><img src="{{baseUrl}}/email-assets/corinthia-hotel-budapest-logo.png" alt="Corinthia Hotel Budapest" width="160" style="width: 160px; height: auto; border: 0; display: block;" /></a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Content -->
+          <tr>
+            <td style="padding: 10px 15px 20px 15px; text-align: center;">
+              <!-- Greeting -->
+              <p style="margin: 0 0 18px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Dear {{title}} <strong>{{guestName}}</strong>,</p>
+
+              <!-- Intro -->
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Thank you for registering for the CEO Gala 2026. We are delighted that you will be joining us on March 27 at the Corinthia Hotel Budapest.</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">It will be a special evening when Hungary&#8217;s leading business figures gather once again to celebrate leadership, achievement and the strength of our business community. For this community, the CEO Gala has become a moment not to be missed.</p>
+
+              <!-- Programme highlight -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 20px 0;">
+                <tr>
+                  <td align="center" style="padding: 8px 0; font-size: 15px; font-weight: bold; line-height: 1.6; color: #333333; font-family: Verdana, Geneva, sans-serif;">The programme begins at 7:00 p.m.</td>
+                </tr>
+                <tr>
+                  <td align="center" style="padding: 3px 0; font-size: 15px; font-weight: bold; line-height: 1.6; color: #333333; font-family: Verdana, Geneva, sans-serif;">Arrival from 6:30 p.m.</td>
+                </tr>
+              </table>
+
+              <!-- Corinthia Hotel -->
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Should you wish to stay overnight at the <strong>Corinthia Hotel, special rates are available</strong> for our guests. Please visit the hotel&#8217;s website <a href="https://reservations.corinthia.com/?adult=1&amp;arrive=2026-03-05&amp;chain=10210&amp;child=0&amp;currency=EUR&amp;depart=2026-03-06&amp;hotel=28704&amp;level=hotel&amp;locale=en-US&amp;productcurrency=EUR&amp;promo=BBJCEO&amp;rooms=1" style="color: #333333; text-decoration: underline;">via this link</a> to view the available offers.</p>
+
+              <!-- Little Minds -->
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">We also understand that attending an evening event is sometimes not only a professional decision, but a logistical one as well. For guests who may need childcare arrangements for the evening, we are pleased to recommend <strong>Little Minds</strong>, one of the <strong>official Convenience Partners</strong> of the CEO Gala 2026.</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Little Minds provides trusted babysitting services for executive families. Should this be helpful for you on the evening of the event, you may contact them directly via their <a href="http://littleminds.hu" style="color: #333333; text-decoration: underline;">website</a>. Arrangements are made directly with the provider.</p>
+
+              <!-- Website link -->
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">For more details about the event and the award, including previous winners, please visit:<br><a href="https://www.ceogala.com" style="color: #333333; text-decoration: underline;">www.ceogala.com</a></p>
+
+              <!-- Cancellation policy -->
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">We remind you that any cancellations or changes to your registration must be made at least ten business days before the gala. Cancellations should be sent to <a href="mailto:event@bbj.hu?subject=Cancellation%20-%20CEO%20Gala%202026" style="color: #333333; text-decoration: underline;">event@bbj.hu</a>.</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of <strong>HUF 99,000 + VAT</strong> per person.</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">We look forward to meeting you at the gala and celebrating our outstanding CEO Community.</p>
+
+              <!-- Warm regards -->
+              <p style="margin: 25px 0 8px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: left; font-family: Verdana, Geneva, sans-serif;">Warm regards,</p>
+
+              <!-- Signatures -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0 25px 0;">
+                <tr>
+                  <td width="50%" align="center" valign="top" style="padding: 0 10px;">
+                    <p style="margin: 0 0 2px 0; font-weight: bold; font-size: 15px; color: #1a1a2e; font-family: Verdana, Geneva, sans-serif;">Tamas Botka</p>
+                    <p style="margin: 0; font-size: 14px; color: #333333; font-family: Verdana, Geneva, sans-serif;">Publisher, BBJ</p>
+                  </td>
+                  <td width="50%" align="center" valign="top" style="padding: 0 10px;">
+                    <p style="margin: 0 0 2px 0; font-weight: bold; font-size: 15px; color: #1a1a2e; font-family: Verdana, Geneva, sans-serif;">Balazs Roman</p>
+                    <p style="margin: 0; font-size: 14px; color: #333333; font-family: Verdana, Geneva, sans-serif;">CEO, BBJ</p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- BBJ Logo -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0;">
+                <tr>
+                  <td align="center">
+                    <a href="https://bbj.hu" style="text-decoration: none;"><img src="{{baseUrl}}/email-assets/bbj-logo.png" alt="Budapest Business Journal" width="300" style="max-width: 300px; height: auto; border: 0;" /></a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Divider -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 25px 0;">
+                <tr>
+                  <td style="border-top: 1px solid #cccccc; font-size: 1px; line-height: 1px;">&nbsp;</td>
+                </tr>
+              </table>
+
+              <!-- Footer -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" style="padding: 15px 0;">
+                    <p style="margin: 4px 0; font-size: 12px; color: #666666; font-family: Verdana, Geneva, sans-serif;"><a href="https://bbj.hu" style="color: #333333; text-decoration: underline;">Business Publishing Services Kft.</a></p>
+                    <p style="margin: 4px 0; font-size: 12px; color: #666666; font-family: Verdana, Geneva, sans-serif;">1075 Budapest, Mad&#225;ch Imre &#250;t 13&#8211;14., Hungary</p>
+                    <p style="margin: 4px 0; font-size: 12px; color: #666666; font-family: Verdana, Geneva, sans-serif;">Publisher of Budapest Business Journal</p>
+                    <p style="margin: 12px 0 4px 0; font-size: 11px; color: #666666; font-family: Verdana, Geneva, sans-serif;">Event website: <a href="https://www.ceogala.com" style="color: #333333; text-decoration: underline;">ceogala.com</a></p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`,
+    text_body: `CEO Gala 2026 – practical information for March 27
+
+Dear {{title}} {{guestName}},
+
+Thank you for registering for the CEO Gala 2026. We are delighted that you will be joining us on March 27 at the Corinthia Hotel Budapest.
+
+It will be a special evening when Hungary's leading business figures gather once again to celebrate leadership, achievement and the strength of our business community. For this community, the CEO Gala has become a moment not to be missed.
+
+The programme begins at 7:00 p.m.
+Arrival from 6:30 p.m.
+
+Should you wish to stay overnight at the Corinthia Hotel, special rates are available for our guests. Please visit the hotel's website to view the available offers: https://reservations.corinthia.com/?promo=BBJCEO
+
+We also understand that attending an evening event is sometimes not only a professional decision, but a logistical one as well. For guests who may need childcare arrangements for the evening, we are pleased to recommend Little Minds, one of the official Convenience Partners of the CEO Gala 2026.
+
+Little Minds provides trusted babysitting services for executive families. Should this be helpful for you on the evening of the event, you may contact them directly via their website: http://littleminds.hu. Arrangements are made directly with the provider.
+
+For more details about the event and the award, including previous winners, please visit:
+www.ceogala.com
+
+We remind you that any cancellations or changes to your registration must be made at least ten business days before the gala. Cancellations should be sent to event@bbj.hu.
+
+Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 + VAT per person.
+
+We look forward to meeting you at the gala and celebrating our outstanding CEO Community.
+
+Warm regards,
+
+Tamas Botka                    Balazs Roman
+Publisher, BBJ                 CEO, BBJ
+
+---
+
+Business Publishing Services Kft.
+1075 Budapest, Madách Imre út 13–14., Hungary
+Publisher of Budapest Business Journal
+Event website: ceogala.com`,
+  },
 } as const;
 
 export type TemplateSlug = keyof typeof DEFAULT_TEMPLATES;
