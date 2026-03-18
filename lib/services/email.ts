@@ -260,21 +260,32 @@ export async function sendMagicLinkEmail(
     let text: string;
 
     // Build template variables
+    // Note: guestName = full name WITHOUT title (title is a separate variable)
+    // This prevents duplication in templates that use "{{title}} {{guestName}}"
     const templateVars: Record<string, string> = {
-      guestName: getDisplayName(guest.first_name, guest.last_name, guest.title),
+      guestName: getFullName(guest.first_name, guest.last_name),
       title: guest.title || '',
       magicLinkUrl,
       baseUrl: appUrl,
     };
 
-    // Load QR code for templates that need it (e.g. vip_invitation, ticket_delivery)
+    // Load QR code for templates that need it (e.g. vip_invitation)
+    // Use CID attachment for email client compatibility (Gmail blocks inline base64)
+    let emailAttachments: EmailAttachment[] = [];
     const registration = await prisma.registration.findFirst({
       where: { guest_id: guestId },
       select: { id: true, qr_code_hash: true },
     });
     if (registration?.qr_code_hash) {
-      const { generateQRCodeDataURL } = await import('@/lib/services/qr-ticket');
-      templateVars.guestQrCode = await generateQRCodeDataURL(registration.qr_code_hash);
+      const { generateQRCodeBuffer } = await import('@/lib/services/qr-ticket');
+      const qrBuffer = await generateQRCodeBuffer(registration.qr_code_hash);
+      templateVars.guestQrCode = 'cid:qrcode';
+      emailAttachments.push({
+        filename: 'qrcode.png',
+        content: qrBuffer,
+        contentType: 'image/png',
+        cid: 'qrcode',
+      });
     }
 
     try {
@@ -300,6 +311,7 @@ export async function sendMagicLinkEmail(
       subject,
       html,
       text,
+      attachments: emailAttachments.length > 0 ? emailAttachments : undefined,
     });
 
     // 7. Log delivery
