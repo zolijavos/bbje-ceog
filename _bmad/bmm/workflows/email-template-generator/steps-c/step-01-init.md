@@ -74,7 +74,7 @@ Once user provides inputs:
 - **Content file**: Read the file. If HTML, extract the content body. If PDF/SVG, extract text content.
 - **Slug**: Verify it's valid snake_case. Check it doesn't already exist in `lib/services/email-templates.ts` DEFAULT_TEMPLATES.
 - **Subject**: Store as-is.
-- **Variables**: Parse into array if provided, otherwise default to `['guestName', 'baseUrl']`.
+- **Variables**: Parse into array if provided, otherwise default to `['title', 'guestName', 'guestQrCode', 'baseUrl']`.
 
 If any input is invalid or missing, ask for correction.
 

@@ -4114,6 +4114,192 @@ Business Publishing Services Kft.
 Publisher of Budapest Business Journal
 Event website: ceogala.com`,
   },
+  vip_invitation: {
+    slug: 'vip_invitation',
+    name: 'VIP Welcome Reception Invitation',
+    subject: 'Invitation to VIP Welcome Reception at the CEO Gala 2026',
+    variables: ['title', 'guestName', 'guestQrCode', 'baseUrl'],
+    html_body: `<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <![endif]-->
+  <title>Invitation to VIP Welcome Reception at the CEO Gala 2026</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #ffffff; font-family: Verdana, Geneva, sans-serif; font-size: 15px; line-height: 1.6; color: #333333;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff;">
+    <tr>
+      <td align="center" style="padding: 0;">
+        <table role="presentation" width="680" cellpadding="0" cellspacing="0" border="0" style="max-width: 680px; width: 100%;">
+          <!-- Header Image -->
+          <tr>
+            <td align="center" style="padding: 0;">
+              <img src="{{baseUrl}}/email-assets/email_template_fejlec.png" alt="CEO Gala 2026 - March 27, 2026" width="680" style="width: 100%; max-width: 680px; height: auto; display: block; border: 0;" />
+            </td>
+          </tr>
+          <!-- Content -->
+          <tr>
+            <td style="padding: 20px 15px; text-align: center;">
+              <!-- Greeting -->
+              <p style="margin: 0 0 18px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Dear {{title}} <strong>{{guestName}}</strong>,</p>
+
+              <!-- Intro -->
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Thank you for registering for the <strong>CEO Gala 2026.</strong> We are delighted that you will be joining us for this special evening celebrating leadership, excellence and the strength of our business community.</p>
+
+              <!-- VIP Reception invitation -->
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">We are pleased to take this opportunity to <strong>invite you and your partner to</strong> the pre-event <strong>VIP Welcome Reception</strong></p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">The reception begins at 6:30 p.m. sharp and ends at 7:00 p.m.; we kindly ask for your punctual arrival. No further RSVP is required on your part.</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">For your convenience, we are pleased to once again share <strong>the key details of the Gala evening</strong> below:</p>
+
+              <!-- Details Section -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 20px 0;">
+                <tr>
+                  <td align="center" style="padding: 3px 0; font-size: 15px; line-height: 1.6; color: #333333; font-family: Verdana, Geneva, sans-serif;"><strong>Event date:</strong> Friday, March 27, 2026, 7:00 p.m.</td>
+                </tr>
+                <tr><td style="padding: 8px 0;"></td></tr>
+                <tr>
+                  <td align="center" style="padding: 3px 0; font-size: 15px; line-height: 1.6; color: #333333; font-family: Verdana, Geneva, sans-serif;"><strong>Venue:</strong> Grand Ballroom, Corinthia Hotel Budapest</td>
+                </tr>
+                <tr>
+                  <td align="center" style="padding: 3px 0; font-size: 15px; line-height: 1.6; color: #333333; font-family: Verdana, Geneva, sans-serif;">(Erzs&#233;bet krt. 43&#8211;49, 1073 Budapest)</td>
+                </tr>
+                <tr><td style="padding: 8px 0;"></td></tr>
+                <tr>
+                  <td align="center" style="padding: 3px 0; font-size: 15px; line-height: 1.6; color: #333333; font-family: Verdana, Geneva, sans-serif;"><strong>Dress Code:</strong> Black Tie</td>
+                </tr>
+              </table>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">We look forward to welcoming you and celebrating dedication, vision, and exemplary contribution to leadership together with our CEO community.</p>
+
+              <!-- Event website -->
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Event website: <a href="https://www.ceogala.com" style="color: #333333; text-decoration: underline;"><strong>ceogala.com</strong></a></p>
+
+              <!-- QR Section -->
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Attached below is your personal QR code, which will grant you access to the gala. Please note that this <strong>personal invitation</strong> is dedicated to the addressee and <strong>is not transferable.</strong></p>
+
+              <p style="margin: 0 0 8px 0; font-size: 15px; line-height: 1.3; color: #333333; font-weight: bold; text-align: center; font-family: Verdana, Geneva, sans-serif;">Your personalised QR code</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Please have this QR code ready on your phone upon arrival.</p>
+
+              <p style="margin: 0 0 4px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;"><strong>Registered Guest</strong><br>{{title}} <strong>{{guestName}}</strong></p>
+
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 10px auto 20px auto;">
+                <tr>
+                  <td align="center">
+                    <img src="{{guestQrCode}}" alt="Your QR Code" width="180" height="180" style="width: 180px; height: 180px; border: 1px solid #e0e0e0; display: block;" />
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Warm regards -->
+              <p style="margin: 25px 0 8px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: left; font-family: Verdana, Geneva, sans-serif;">Warm regards,</p>
+
+              <!-- Signatures -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0 25px 0;">
+                <tr>
+                  <td width="50%" align="center" valign="top" style="padding: 0 10px;">
+                    <p style="margin: 0 0 2px 0; font-weight: bold; font-size: 15px; color: #1a1a2e; font-family: Verdana, Geneva, sans-serif;">Tamas Botka</p>
+                    <p style="margin: 0; font-size: 14px; color: #333333; font-family: Verdana, Geneva, sans-serif;">Publisher, BBJ</p>
+                  </td>
+                  <td width="50%" align="center" valign="top" style="padding: 0 10px;">
+                    <p style="margin: 0 0 2px 0; font-weight: bold; font-size: 15px; color: #1a1a2e; font-family: Verdana, Geneva, sans-serif;">Balazs Roman</p>
+                    <p style="margin: 0; font-size: 14px; color: #333333; font-family: Verdana, Geneva, sans-serif;">CEO, BBJ</p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- BBJ Logo -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0;">
+                <tr>
+                  <td align="center">
+                    <a href="https://bbj.hu" style="text-decoration: none;"><img src="{{baseUrl}}/email-assets/bbj-logo.png" alt="Budapest Business Journal" width="300" style="max-width: 300px; height: auto; border: 0;" /></a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Divider -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 25px 0;">
+                <tr>
+                  <td style="border-top: 1px solid #cccccc; font-size: 1px; line-height: 1px;">&nbsp;</td>
+                </tr>
+              </table>
+
+              <!-- Footer -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" style="padding: 15px 0;">
+                    <p style="margin: 4px 0; font-size: 12px; color: #666666; font-family: Verdana, Geneva, sans-serif;"><a href="https://bbj.hu" style="color: #333333; text-decoration: underline;">Business Publishing Services Kft.</a></p>
+                    <p style="margin: 4px 0; font-size: 12px; color: #666666; font-family: Verdana, Geneva, sans-serif;">1075 Budapest, Mad&#225;ch Imre &#250;t 13&#8211;14., Hungary</p>
+                    <p style="margin: 4px 0; font-size: 12px; color: #666666; font-family: Verdana, Geneva, sans-serif;">Publisher of Budapest Business Journal</p>
+                    <p style="margin: 12px 0 4px 0; font-size: 11px; color: #666666; font-family: Verdana, Geneva, sans-serif;">Event website: <a href="https://www.ceogala.com" style="color: #333333; text-decoration: underline;">ceogala.com</a></p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`,
+    text_body: `Invitation to VIP Welcome Reception at the CEO Gala 2026
+
+Dear {{title}} {{guestName}},
+
+Thank you for registering for the CEO Gala 2026. We are delighted that you will be joining us for this special evening celebrating leadership, excellence and the strength of our business community.
+
+We are pleased to take this opportunity to invite you and your partner to the pre-event VIP Welcome Reception
+
+The reception begins at 6:30 p.m. sharp and ends at 7:00 p.m.; we kindly ask for your punctual arrival. No further RSVP is required on your part.
+
+For your convenience, we are pleased to once again share the key details of the Gala evening below:
+
+Event date: Friday, March 27, 2026, 7:00 p.m.
+
+Venue: Grand Ballroom, Corinthia Hotel Budapest
+(Erzsébet krt. 43-49, 1073 Budapest)
+
+Dress Code: Black Tie
+
+We look forward to welcoming you and celebrating dedication, vision, and exemplary contribution to leadership together with our CEO community.
+
+Event website: ceogala.com
+
+Attached below is your personal QR code, which will grant you access to the gala. Please note that this personal invitation is dedicated to the addressee and is not transferable.
+
+Your personalised QR code
+Please have this QR code ready on your phone upon arrival.
+
+Registered Guest
+{{title}} {{guestName}}
+
+[QR Code attached]
+
+Warm regards,
+
+Tamas Botka                    Balazs Roman
+Publisher, BBJ                 CEO, BBJ
+
+---
+
+Business Publishing Services Kft.
+1075 Budapest, Madách Imre út 13–14., Hungary
+Publisher of Budapest Business Journal
+Event website: ceogala.com`,
+  },
 } as const;
 
 export type TemplateSlug = keyof typeof DEFAULT_TEMPLATES;

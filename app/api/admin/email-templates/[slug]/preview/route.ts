@@ -105,6 +105,12 @@ const SAMPLE_DATA: Record<string, Record<string, string>> = {
     guestName: 'John Smith',
     baseUrl: process.env.APP_URL || process.env.NEXTAUTH_URL || 'https://ceogala.mflevents.space',
   },
+  vip_invitation: {
+    title: 'Mr.',
+    guestName: 'John Smith',
+    guestQrCode: SAMPLE_QR_CODE,
+    baseUrl: process.env.APP_URL || process.env.NEXTAUTH_URL || 'https://ceogala.mflevents.space',
+  },
   registration_feedback_partner: {
     partnerTitle: 'Mrs.',
     partnerName: 'Jane Smith',

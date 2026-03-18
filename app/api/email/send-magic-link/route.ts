@@ -22,6 +22,7 @@ const ALLOWED_TEMPLATE_SLUGS = [
   'applicant_approval',
   'reminder_1month',
   'invite_reminder_v3',
+  'vip_invitation',
 ] as const;
 
 // Request body schema
