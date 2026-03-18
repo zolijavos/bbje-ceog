@@ -4186,6 +4186,9 @@ Event website: ceogala.com`,
               <!-- Event website -->
               <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Event website: <a href="https://www.ceogala.com" style="color: #333333; text-decoration: underline;"><strong>ceogala.com</strong></a></p>
 
+              <!-- Personal invitation notice -->
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Attached below is your personal QR code, which will grant you access to the gala. Please note that this <strong>personal invitation</strong> is dedicated to the addressee and <strong>is not transferable.</strong></p>
+
               <!-- Warm regards -->
               <p style="margin: 25px 0 8px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: left; font-family: Verdana, Geneva, sans-serif;">Warm regards,</p>
 
@@ -4203,9 +4206,16 @@ Event website: ceogala.com`,
                 </tr>
               </table>
 
-              <!-- QR Section -->
-              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Attached below is your personal QR code, which will grant you access to the gala. Please note that this <strong>personal invitation</strong> is dedicated to the addressee and <strong>is not transferable.</strong></p>
+              <!-- BBJ Logo -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0;">
+                <tr>
+                  <td align="center">
+                    <a href="https://bbj.hu" style="text-decoration: none;"><img src="{{baseUrl}}/email-assets/bbj-logo.png" alt="Budapest Business Journal" width="300" style="max-width: 300px; height: auto; border: 0;" /></a>
+                  </td>
+                </tr>
+              </table>
 
+              <!-- QR Section -->
               <p style="margin: 0 0 8px 0; font-size: 15px; line-height: 1.3; color: #333333; font-weight: bold; text-align: center; font-family: Verdana, Geneva, sans-serif;">Your personalised QR code</p>
 
               <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Please have this QR code ready on your phone upon arrival.</p>
@@ -4216,15 +4226,6 @@ Event website: ceogala.com`,
                 <tr>
                   <td align="center">
                     <img src="{{guestQrCode}}" alt="Your QR Code" width="180" height="180" style="width: 180px; height: 180px; border: 1px solid #e0e0e0; display: block;" />
-                  </td>
-                </tr>
-              </table>
-
-              <!-- BBJ Logo -->
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0;">
-                <tr>
-                  <td align="center">
-                    <a href="https://bbj.hu" style="text-decoration: none;"><img src="{{baseUrl}}/email-assets/bbj-logo.png" alt="Budapest Business Journal" width="300" style="max-width: 300px; height: auto; border: 0;" /></a>
                   </td>
                 </tr>
               </table>
@@ -4278,12 +4279,14 @@ We look forward to welcoming you and celebrating dedication, vision, and exempla
 
 Event website: ceogala.com
 
+Attached below is your personal QR code, which will grant you access to the gala. Please note that this personal invitation is dedicated to the addressee and is not transferable.
+
 Warm regards,
 
 Tamas Botka                    Balazs Roman
 Publisher, BBJ                 CEO, BBJ
 
-Attached below is your personal QR code, which will grant you access to the gala. Please note that this personal invitation is dedicated to the addressee and is not transferable.
+BUDAPEST BUSINESS JOURNAL
 
 Your personalised QR code
 Please have this QR code ready on your phone upon arrival.
