@@ -4186,23 +4186,6 @@ Event website: ceogala.com`,
               <!-- Event website -->
               <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Event website: <a href="https://www.ceogala.com" style="color: #333333; text-decoration: underline;"><strong>ceogala.com</strong></a></p>
 
-              <!-- QR Section -->
-              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Attached below is your personal QR code, which will grant you access to the gala. Please note that this <strong>personal invitation</strong> is dedicated to the addressee and <strong>is not transferable.</strong></p>
-
-              <p style="margin: 0 0 8px 0; font-size: 15px; line-height: 1.3; color: #333333; font-weight: bold; text-align: center; font-family: Verdana, Geneva, sans-serif;">Your personalised QR code</p>
-
-              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Please have this QR code ready on your phone upon arrival.</p>
-
-              <p style="margin: 0 0 4px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;"><strong>Registered Guest</strong><br>{{title}} <strong>{{guestName}}</strong></p>
-
-              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 10px auto 20px auto;">
-                <tr>
-                  <td align="center">
-                    <img src="{{guestQrCode}}" alt="Your QR Code" width="180" height="180" style="width: 180px; height: 180px; border: 1px solid #e0e0e0; display: block;" />
-                  </td>
-                </tr>
-              </table>
-
               <!-- Warm regards -->
               <p style="margin: 25px 0 8px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: left; font-family: Verdana, Geneva, sans-serif;">Warm regards,</p>
 
@@ -4216,6 +4199,23 @@ Event website: ceogala.com`,
                   <td width="50%" align="center" valign="top" style="padding: 0 10px;">
                     <p style="margin: 0 0 2px 0; font-weight: bold; font-size: 15px; color: #1a1a2e; font-family: Verdana, Geneva, sans-serif;">Balazs Roman</p>
                     <p style="margin: 0; font-size: 14px; color: #333333; font-family: Verdana, Geneva, sans-serif;">CEO, BBJ</p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- QR Section -->
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Attached below is your personal QR code, which will grant you access to the gala. Please note that this <strong>personal invitation</strong> is dedicated to the addressee and <strong>is not transferable.</strong></p>
+
+              <p style="margin: 0 0 8px 0; font-size: 15px; line-height: 1.3; color: #333333; font-weight: bold; text-align: center; font-family: Verdana, Geneva, sans-serif;">Your personalised QR code</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Please have this QR code ready on your phone upon arrival.</p>
+
+              <p style="margin: 0 0 4px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;"><strong>Registered Guest</strong><br>{{title}} <strong>{{guestName}}</strong></p>
+
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 10px auto 20px auto;">
+                <tr>
+                  <td align="center">
+                    <img src="{{guestQrCode}}" alt="Your QR Code" width="180" height="180" style="width: 180px; height: 180px; border: 1px solid #e0e0e0; display: block;" />
                   </td>
                 </tr>
               </table>
@@ -4278,6 +4278,11 @@ We look forward to welcoming you and celebrating dedication, vision, and exempla
 
 Event website: ceogala.com
 
+Warm regards,
+
+Tamas Botka                    Balazs Roman
+Publisher, BBJ                 CEO, BBJ
+
 Attached below is your personal QR code, which will grant you access to the gala. Please note that this personal invitation is dedicated to the addressee and is not transferable.
 
 Your personalised QR code
@@ -4287,11 +4292,6 @@ Registered Guest
 {{title}} {{guestName}}
 
 [QR Code attached]
-
-Warm regards,
-
-Tamas Botka                    Balazs Roman
-Publisher, BBJ                 CEO, BBJ
 
 ---
 
