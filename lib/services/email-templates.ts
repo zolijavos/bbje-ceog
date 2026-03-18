@@ -4374,8 +4374,9 @@ export async function getTemplate(
 }
 
 /**
- * Get template for rendering - always uses code-defined templates
- * Note: DB templates are no longer used to ensure consistency across deployments
+ * Get template for rendering - DB first, code fallback
+ * If the template exists in DB and is active, use it (allows live editing by client).
+ * Otherwise fall back to code-defined DEFAULT_TEMPLATES.
  */
 export async function getTemplateWithFallback(slug: TemplateSlug): Promise<{
   subject: string;
@@ -4383,7 +4384,24 @@ export async function getTemplateWithFallback(slug: TemplateSlug): Promise<{
   text_body: string;
   variables: string[];
 }> {
-  // Always use code-defined templates for consistency
+  // Try DB first — allows client to edit templates live
+  try {
+    const dbTemplate = await prisma.emailTemplate.findUnique({
+      where: { slug },
+    });
+    if (dbTemplate && dbTemplate.is_active) {
+      return {
+        subject: dbTemplate.subject,
+        html_body: dbTemplate.html_body,
+        text_body: dbTemplate.text_body || '',
+        variables: Array.isArray(dbTemplate.variables) ? dbTemplate.variables as string[] : [],
+      };
+    }
+  } catch {
+    // DB error — fall through to code default
+  }
+
+  // Fallback to code-defined template
   const defaultTemplate = DEFAULT_TEMPLATES[slug];
   return {
     subject: defaultTemplate.subject,
