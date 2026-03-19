@@ -4303,6 +4303,145 @@ Business Publishing Services Kft.
 Publisher of Budapest Business Journal
 Event website: ceogala.com`,
   },
+
+  reminder_2wks: {
+    slug: 'reminder_2wks',
+    name: 'Reminder 2 Weeks Before',
+    subject: 'Reminder - CEO Gala 2026',
+    variables: ['title', 'guestName', 'baseUrl'],
+    html_body: `<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <![endif]-->
+  <title>Reminder - CEO Gala 2026</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #ffffff; font-family: Verdana, Geneva, sans-serif; font-size: 15px; line-height: 1.6; color: #333333;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff;">
+    <tr>
+      <td align="center" style="padding: 0;">
+        <table role="presentation" width="680" cellpadding="0" cellspacing="0" border="0" style="max-width: 680px; width: 100%;">
+          <!-- Header Image -->
+          <tr>
+            <td align="center" style="padding: 0;">
+              <img src="{{baseUrl}}/email-assets/email_template_fejlec.png" alt="CEO Gala 2026 - March 27, 2026" width="680" style="width: 100%; max-width: 680px; height: auto; display: block; border: 0;" />
+            </td>
+          </tr>
+          <!-- Content -->
+          <tr>
+            <td style="padding: 20px 15px; text-align: center;">
+              <!-- Greeting -->
+              <p style="margin: 0 0 18px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Dear {{title}} <strong>{{guestName}}</strong>,</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">As the CEO Gala 2026 is fast approaching next Friday, we would like to take a moment to say how much we are looking forward to welcoming you to this special evening.</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">We are delighted to share that <strong>the event is now fully booked</strong>, with a <strong>waiting list</strong> already in place. This makes your participation all the more valuable to us.</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">If your plans remain unchanged and you will be joining us, there is nothing further you need do.</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">However, <strong>should your availability have changed</strong> in the meantime and you are no longer able to attend, we <strong>kindly</strong> ask you to <strong>let us know at</strong> your earliest convenience by contacting us at <a href="mailto:event@bbj.hu" style="color: #333333; text-decoration: underline;">event@bbj.hu</a>.<br>Your timely notice would allow us to offer your place to another guest, which would be greatly appreciated.</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 + VAT per person.</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Thank you very much for your cooperation and understanding.</p>
+
+              <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">We are truly looking forward to seeing you soon.</p>
+
+              <!-- Warm regards -->
+              <p style="margin: 25px 0 8px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: left; font-family: Verdana, Geneva, sans-serif;">Warm regards,</p>
+
+              <!-- Signatures -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0 25px 0;">
+                <tr>
+                  <td width="50%" align="center" valign="top" style="padding: 0 10px;">
+                    <p style="margin: 0 0 2px 0; font-weight: bold; font-size: 15px; color: #1a1a2e; font-family: Verdana, Geneva, sans-serif;">Tamas Botka</p>
+                    <p style="margin: 0; font-size: 14px; color: #333333; font-family: Verdana, Geneva, sans-serif;">Publisher, BBJ</p>
+                  </td>
+                  <td width="50%" align="center" valign="top" style="padding: 0 10px;">
+                    <p style="margin: 0 0 2px 0; font-weight: bold; font-size: 15px; color: #1a1a2e; font-family: Verdana, Geneva, sans-serif;">Balazs Roman</p>
+                    <p style="margin: 0; font-size: 14px; color: #333333; font-family: Verdana, Geneva, sans-serif;">CEO, BBJ</p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- BBJ Logo -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 30px 0;">
+                <tr>
+                  <td align="center">
+                    <a href="https://bbj.hu" style="text-decoration: none;"><img src="{{baseUrl}}/email-assets/bbj-logo.png" alt="Budapest Business Journal" width="300" style="max-width: 300px; height: auto; border: 0;" /></a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Divider -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 25px 0;">
+                <tr>
+                  <td style="border-top: 1px solid #cccccc; font-size: 1px; line-height: 1px;">&nbsp;</td>
+                </tr>
+              </table>
+
+              <!-- Footer -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" style="padding: 15px 0;">
+                    <p style="margin: 4px 0; font-size: 12px; color: #666666; font-family: Verdana, Geneva, sans-serif;"><a href="https://bbj.hu" style="color: #333333; text-decoration: underline;">Business Publishing Services Kft.</a></p>
+                    <p style="margin: 4px 0; font-size: 12px; color: #666666; font-family: Verdana, Geneva, sans-serif;">1075 Budapest, Mad&#225;ch Imre &#250;t 13&#8211;14., Hungary</p>
+                    <p style="margin: 4px 0; font-size: 12px; color: #666666; font-family: Verdana, Geneva, sans-serif;">Publisher of Budapest Business Journal</p>
+                    <p style="margin: 12px 0 4px 0; font-size: 11px; color: #666666; font-family: Verdana, Geneva, sans-serif;">Event website: <a href="https://www.ceogala.com" style="color: #333333; text-decoration: underline;">ceogala.com</a></p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`,
+    text_body: `Reminder - CEO Gala 2026
+
+Dear {{title}} {{guestName}},
+
+As the CEO Gala 2026 is fast approaching next Friday, we would like to take a moment to say how much we are looking forward to welcoming you to this special evening.
+
+We are delighted to share that the event is now fully booked, with a waiting list already in place. This makes your participation all the more valuable to us.
+
+If your plans remain unchanged and you will be joining us, there is nothing further you need do.
+
+However, should your availability have changed in the meantime and you are no longer able to attend, we kindly ask you to let us know at your earliest convenience by contacting us at event@bbj.hu.
+Your timely notice would allow us to offer your place to another guest, which would be greatly appreciated.
+
+Please keep in mind that any failure on your part to provide due cancellation notice may result in your being charged a no-show fee of HUF 99,000 + VAT per person.
+
+Thank you very much for your cooperation and understanding.
+
+We are truly looking forward to seeing you soon.
+
+Warm regards,
+
+Tamas Botka                    Balazs Roman
+Publisher, BBJ                 CEO, BBJ
+
+BUDAPEST BUSINESS JOURNAL
+
+---
+
+Business Publishing Services Kft.
+1075 Budapest, Madách Imre út 13–14., Hungary
+Publisher of Budapest Business Journal
+Event website: ceogala.com`,
+  },
 } as const;
 
 export type TemplateSlug = keyof typeof DEFAULT_TEMPLATES;
