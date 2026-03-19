@@ -269,23 +269,29 @@ export async function sendMagicLinkEmail(
       baseUrl: appUrl,
     };
 
-    // Load QR code for templates that need it (e.g. vip_invitation)
+    // Load QR code only for templates that use {{guestQrCode}} variable
     // Use CID attachment for email client compatibility (Gmail blocks inline base64)
     let emailAttachments: EmailAttachment[] = [];
-    const registration = await prisma.registration.findFirst({
-      where: { guest_id: guestId },
-      select: { id: true, qr_code_hash: true },
-    });
-    if (registration?.qr_code_hash) {
-      const { generateQRCodeBuffer } = await import('@/lib/services/qr-ticket');
-      const qrBuffer = await generateQRCodeBuffer(registration.qr_code_hash);
-      templateVars.guestQrCode = 'cid:qrcode';
-      emailAttachments.push({
-        filename: 'qrcode.png',
-        content: qrBuffer,
-        contentType: 'image/png',
-        cid: 'qrcode',
+    const { getTemplateWithFallback } = await import('@/lib/services/email-templates');
+    const templateDef = await getTemplateWithFallback(templateSlug);
+    const needsQrCode = templateDef.html_body.includes('{{guestQrCode}}');
+
+    if (needsQrCode) {
+      const registration = await prisma.registration.findFirst({
+        where: { guest_id: guestId },
+        select: { id: true, qr_code_hash: true },
       });
+      if (registration?.qr_code_hash) {
+        const { generateQRCodeBuffer } = await import('@/lib/services/qr-ticket');
+        const qrBuffer = await generateQRCodeBuffer(registration.qr_code_hash);
+        templateVars.guestQrCode = 'cid:qrcode';
+        emailAttachments.push({
+          filename: 'qrcode.png',
+          content: qrBuffer,
+          contentType: 'image/png',
+          cid: 'qrcode',
+        });
+      }
     }
 
     try {
