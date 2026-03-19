@@ -215,61 +215,73 @@ export default function SeatingDisplay() {
   }
 
   return (
-    <div className="fixed inset-0 overflow-hidden" style={{ fontFamily: "'Futura', 'Century Gothic', 'Trebuchet MS', sans-serif" }}>
-      {/* Background image */}
-      <img
-        src="/images/ceo_gala_asztalterv_FINAL_ures_1.png"
-        alt="Seating plan"
-        className="w-full h-full object-contain"
-        draggable={false}
-      />
-
-      {/* Check-in counter */}
+    <div className="fixed inset-0 overflow-hidden bg-black flex items-center justify-center" style={{ fontFamily: "'Futura', 'Century Gothic', 'Trebuchet MS', sans-serif" }}>
+      {/* Aspect-ratio container matching the background image (1920x1280 = 3:2) */}
       <div
-        className="fixed top-4 right-6 z-10"
-        style={{ fontSize: '1.25vw', fontWeight: 'bold', color: '#000000' }}
+        className="relative"
+        style={{
+          aspectRatio: '1920 / 1280',
+          maxWidth: '100vw',
+          maxHeight: '100vh',
+          width: '100vw',
+          height: 'auto',
+        }}
       >
-        {checkedInIds.size}/{total} CHECKED IN
+        {/* Background image fills the container exactly */}
+        <img
+          src="/images/ceo_gala_asztalterv_FINAL_ures_1.png"
+          alt="Seating plan"
+          className="absolute inset-0 w-full h-full"
+          draggable={false}
+        />
+
+        {/* Check-in counter */}
+        <div
+          className="absolute top-[2%] right-[2%] z-10"
+          style={{ fontSize: '1.25vw', fontWeight: 'bold', color: '#000000' }}
+        >
+          {checkedInIds.size}/{total} CHECKED IN
+        </div>
+
+        {/* Table overlays — positioned relative to the image container */}
+        {Array.from(tableGuests.entries()).map(([tableNum, guests]) => {
+          const pos = TABLE_POSITIONS[tableNum];
+          if (!pos) return null;
+
+          return (
+            <div
+              key={tableNum}
+              className="absolute"
+              style={{
+                top: pos.top,
+                left: pos.left,
+                transform: 'translateX(-50%)',
+                fontSize: '0.54vw',
+                lineHeight: '1.5',
+                textAlign: 'center',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {guests.map((guest) => {
+                const isCheckedIn = checkedInIds.has(guest.id);
+                return (
+                  <div
+                    key={guest.id}
+                    style={{
+                      fontStyle: isCheckedIn ? 'normal' : 'italic',
+                      fontWeight: isCheckedIn ? 'bold' : 'normal',
+                      color: isCheckedIn ? '#000000' : '#737373',
+                      transition: 'all 0.8s ease',
+                    }}
+                  >
+                    {guest.lastName} {guest.firstName}
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
       </div>
-
-      {/* Table overlays */}
-      {Array.from(tableGuests.entries()).map(([tableNum, guests]) => {
-        const pos = TABLE_POSITIONS[tableNum];
-        if (!pos) return null;
-
-        return (
-          <div
-            key={tableNum}
-            className="absolute"
-            style={{
-              top: pos.top,
-              left: pos.left,
-              transform: 'translateX(-50%)',
-              fontSize: '0.54vw',
-              lineHeight: '1.5',
-              textAlign: 'center',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {guests.map((guest) => {
-              const isCheckedIn = checkedInIds.has(guest.id);
-              return (
-                <div
-                  key={guest.id}
-                  style={{
-                    fontStyle: isCheckedIn ? 'normal' : 'italic',
-                    fontWeight: isCheckedIn ? 'bold' : 'normal',
-                    color: isCheckedIn ? '#000000' : '#737373',
-                    transition: 'all 0.8s ease',
-                  }}
-                >
-                  {guest.lastName} {guest.firstName}
-                </div>
-              );
-            })}
-          </div>
-        );
-      })}
     </div>
   );
 }
