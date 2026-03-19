@@ -160,6 +160,8 @@ export const translations = {
     checkInDesc: 'Scan QR codes and manage event entry',
     statisticsCard: 'Statistics',
     statisticsCardDesc: 'View registration, payment and seating analytics',
+    liveDisplay: 'Live Display',
+    liveDisplayDesc: 'Full-screen real-time seating display with check-in status',
 
     // Quick actions
     quickActions: 'Quick Actions',
@@ -678,6 +680,8 @@ export const translations = {
     checkInDesc: 'QR kódok beolvasása és belépés kezelése',
     statisticsCard: 'Statisztikák',
     statisticsCardDesc: 'Regisztráció, fizetés és ültetés elemzések',
+    liveDisplay: 'Élő Kijelző',
+    liveDisplayDesc: 'Nagy kijelzős valós idejű ülésrend check-in státusszal',
 
     // Quick actions
     quickActions: 'Gyors műveletek',

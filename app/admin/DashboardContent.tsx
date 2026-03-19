@@ -52,6 +52,7 @@ export default function DashboardContent({ userName, userRole }: { userName?: st
         { titleKey: 'seating' as const, descriptionKey: 'seatingArrangementDesc' as const, href: '/admin/seating', Icon: Chair },
         { titleKey: 'checkinLog' as const, descriptionKey: 'checkInDesc' as const, href: '/admin/checkin-log', Icon: CheckCircle },
         { titleKey: 'statistics' as const, descriptionKey: 'statisticsCardDesc' as const, href: '/admin/statistics', Icon: ChartBar },
+        { titleKey: 'liveDisplay' as const, descriptionKey: 'liveDisplayDesc' as const, href: '/display/seating', Icon: Monitor },
       ],
     },
     {
@@ -105,49 +106,6 @@ export default function DashboardContent({ userName, userRole }: { userName?: st
                 </div>
               </section>
             ))}
-
-            {/* Live Display Button (admin-only) */}
-            {isAdmin && (
-              <section>
-                <h2 className="flex items-center gap-2 text-lg font-semibold text-neutral-700 dark:text-neutral-200 mb-4">
-                  <Monitor size={24} weight="duotone" className="text-accent-600 dark:text-accent-400" />
-                  {language === 'hu' ? 'Élő Kijelző' : 'Live Display'}
-                </h2>
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  <div
-                    role="button"
-                    tabIndex={0}
-                    onClick={() => window.open('/display/seating', '_blank')}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') window.open('/display/seating', '_blank'); }}
-                    className="text-left cursor-pointer panel panel-hover overflow-hidden h-full flex flex-col"
-                  >
-                    <div className="p-6 flex-1">
-                      <div className="flex items-center h-full">
-                        <div className="flex-shrink-0 w-14 h-14 bg-gray-100 dark:bg-neutral-700 rounded-lg flex items-center justify-center">
-                          <Monitor size={32} weight="duotone" className="text-gray-500 dark:text-neutral-300" />
-                        </div>
-                        <div className="ml-5 w-0 flex-1">
-                          <dl>
-                            <dt className="font-display text-lg font-medium text-neutral-800 dark:text-neutral-100">
-                              {language === 'hu' ? 'Élő Ülésrend' : 'Live Seating Display'}
-                            </dt>
-                            <dd className="mt-1 text-sm text-neutral-500 dark:text-neutral-400 font-sans">
-                              {language === 'hu' ? 'Nagy kijelzős valós idejű ülésrend check-in státusszal' : 'Full-screen real-time seating display with check-in status'}
-                            </dd>
-                          </dl>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="px-6 py-3 bg-neutral-50/50 dark:bg-neutral-700/50 border-t border-neutral-300/10 dark:border-neutral-600/30">
-                      <span className="text-sm font-sans text-accent-600 dark:text-accent-400 font-medium flex items-center">
-                        {language === 'hu' ? 'Megnyitás új ablakban' : 'Open in new window'}
-                        <CaretRight size={16} weight="bold" className="ml-1" />
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            )}
 
             {/* Help Quick Links */}
             <section className="mt-8 pt-8 border-t border-neutral-200 dark:border-neutral-700">
