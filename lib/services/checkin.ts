@@ -10,7 +10,7 @@ import { validateTicket, TicketPayload, verifyTicketToken } from './qr-ticket';
 import { TicketType } from '@prisma/client';
 import { getErrorMessage } from '@/lib/utils/errors';
 import { logError, logInfo } from '@/lib/utils/logger';
-import { broadcastToGuest, CheckinEvent } from './event-broadcaster';
+import { broadcastToGuest, broadcastToDisplay, CheckinEvent, DisplayCheckinEvent } from './event-broadcaster';
 import { getFullName } from '@/lib/utils/name';
 
 /**
@@ -45,6 +45,13 @@ export interface CheckinSubmitResponse {
   success: boolean;
   checkinId?: number;
   error?: string;
+  guestDetails?: {
+    title: string | null;
+    dietaryRequirements: string | null;
+    tableName: string | null;
+    guestType: string;
+    guestName: string;
+  };
 }
 
 /**
@@ -241,11 +248,35 @@ export async function submitCheckin(
     };
 
     broadcastToGuest(registration.guest.id, checkinEvent);
+
+    // Broadcast to display subscribers (large screen seating display)
+    const guestName = getFullName(registration.guest.first_name, registration.guest.last_name);
+    const displayEvent: DisplayCheckinEvent = {
+      type: 'DISPLAY_CHECKED_IN',
+      guestId: registration.guest.id,
+      guestName,
+      tableName: tableAssignment?.table.name || null,
+      tableType: tableAssignment?.table.type || null,
+      seatNumber: tableAssignment?.seat_number || null,
+      checkedInAt: checkin.checked_in_at.toISOString(),
+      dietaryRequirements: registration.guest.dietary_requirements || null,
+      title: registration.guest.title || null,
+      guestType: registration.guest.guest_type,
+    };
+    broadcastToDisplay(displayEvent);
+
     logInfo(`[CHECKIN] Broadcasted check-in event to guest ${registration.guest.id}`);
 
     return {
       success: true,
       checkinId: checkin.id,
+      guestDetails: {
+        title: registration.guest.title || null,
+        dietaryRequirements: registration.guest.dietary_requirements || null,
+        tableName: tableAssignment?.table.name || null,
+        guestType: registration.guest.guest_type,
+        guestName,
+      },
     };
   } catch (error) {
     logError('Check-in submission error:', error);

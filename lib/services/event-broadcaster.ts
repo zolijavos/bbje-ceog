@@ -31,12 +31,29 @@ export interface CheckinEvent {
   checkedInAt: string;
 }
 
+export interface DisplayCheckinEvent {
+  type: 'DISPLAY_CHECKED_IN';
+  guestId: number;
+  guestName: string;
+  tableName: string | null;
+  tableType: string | null;
+  seatNumber: number | null;
+  checkedInAt: string;
+  dietaryRequirements: string | null;
+  title: string | null;
+  guestType: string;
+}
+
 export type BroadcastEvent = CheckinEvent;
 
 type EventCallback = (event: BroadcastEvent) => void;
+type DisplayEventCallback = (event: DisplayCheckinEvent) => void;
 
 // Map of guestId -> Set of callbacks (one guest can have multiple tabs)
 const subscribers = new Map<number, Set<EventCallback>>();
+
+// Global display subscribers (large screen seating display)
+const displaySubscribers = new Set<DisplayEventCallback>();
 
 /**
  * Subscribe a guest to receive events
@@ -92,4 +109,35 @@ export function getSubscriberCount(): number {
  */
 export function getSubscribedGuestIds(): number[] {
   return Array.from(subscribers.keys());
+}
+
+/**
+ * Subscribe a display client to receive all check-in events
+ * @returns unsubscribe function
+ */
+export function subscribeDisplay(callback: DisplayEventCallback): () => void {
+  displaySubscribers.add(callback);
+  return () => {
+    displaySubscribers.delete(callback);
+  };
+}
+
+/**
+ * Broadcast an event to all display subscribers
+ */
+export function broadcastToDisplay(event: DisplayCheckinEvent): void {
+  displaySubscribers.forEach((callback) => {
+    try {
+      callback(event);
+    } catch (error) {
+      logError('[EVENT-BROADCASTER] Error in display callback:', error);
+    }
+  });
+}
+
+/**
+ * Get number of active display subscribers (for debugging)
+ */
+export function getDisplaySubscriberCount(): number {
+  return displaySubscribers.size;
 }

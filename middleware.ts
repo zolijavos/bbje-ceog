@@ -64,6 +64,25 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // Auth protection for display routes (admin-only)
+  if (pathname.startsWith('/display')) {
+    const token = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
+
+    if (!token) {
+      const loginUrl = new URL('/admin/login', request.url);
+      loginUrl.searchParams.set('callbackUrl', pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    // Only admin can access display routes
+    if (token.role !== 'admin') {
+      return NextResponse.redirect(new URL('/admin/login', request.url));
+    }
+  }
+
   // Auth protection for check-in route (staff and admin both can access)
   if (pathname.startsWith('/checkin')) {
     const token = await getToken({
@@ -156,6 +175,7 @@ export const config = {
     '/admin',
     '/admin/((?!login).*)',
     '/checkin/:path*',
+    '/display/:path*',
     '/api/:path*',
   ],
 };
