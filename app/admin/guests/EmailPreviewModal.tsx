@@ -155,7 +155,7 @@ export default function EmailPreviewModal({
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-end px-6 py-4 border-t border-gray-200 bg-gray-50 gap-3">
+          <div className="flex items-center justify-end px-6 py-4 pb-20 sm:pb-4 border-t border-gray-200 bg-gray-50 gap-3">
             <button
               onClick={onClose}
               className="btn btn-ghost"
