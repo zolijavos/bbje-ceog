@@ -281,6 +281,15 @@ export default function SeatingDisplay() {
             </div>
           );
         })}
+        {/* Compact branding */}
+        <div className="absolute bottom-[0.5%] left-1/2 -translate-x-1/2 z-10 flex items-center gap-1 opacity-50">
+          <span style={{ fontSize: '0.55vw', color: '#666' }}>
+            Built by{' '}
+            <a href="https://www.myforgelabs.com/#kapcsolat" target="_blank" rel="noopener noreferrer" className="underline">
+              MyForge Labs
+            </a>
+          </span>
+        </div>
       </div>
     </div>
   );

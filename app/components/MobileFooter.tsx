@@ -21,6 +21,7 @@ interface MobileFooterProps {
 export default function MobileFooter({ bottomOffset = '0', zIndex = 30, className = '' }: MobileFooterProps) {
   return (
     <div
+      data-global-footer
       className={`
         fixed left-0 right-0 md:hidden
         py-1.5
