@@ -26,6 +26,10 @@ export interface CheckinValidationResponse {
     ticketType: TicketType;
     partnerFirstName: string | null;
     partnerLastName: string | null;
+    title: string | null;
+    dietaryRequirements: string | null;
+    isVipReception: boolean;
+    tableName: string | null;
   };
   registration?: {
     id: number;
@@ -50,6 +54,7 @@ export interface CheckinSubmitResponse {
     dietaryRequirements: string | null;
     tableName: string | null;
     guestType: string;
+    isVipReception: boolean;
     guestName: string;
   };
 }
