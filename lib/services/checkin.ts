@@ -93,6 +93,10 @@ export async function validateCheckinToken(qrToken: string): Promise<CheckinVali
             id: true,
             first_name: true,
             last_name: true,
+            title: true,
+            dietary_requirements: true,
+            is_vip_reception: true,
+            guest_type: true,
           },
         },
         checkin: {
@@ -125,6 +129,12 @@ export async function validateCheckinToken(qrToken: string): Promise<CheckinVali
     // Check if already checked in
     const alreadyCheckedIn = !!registration.checkin;
 
+    // Fetch table assignment for staff info
+    const tableAssignment = await prisma.tableAssignment.findUnique({
+      where: { guest_id: registration.guest!.id },
+      include: { table: { select: { name: true } } },
+    });
+
     return {
       valid: true,
       guest: {
@@ -134,6 +144,10 @@ export async function validateCheckinToken(qrToken: string): Promise<CheckinVali
         ticketType: registration.ticket_type,
         partnerFirstName: registration.partner_first_name,
         partnerLastName: registration.partner_last_name,
+        title: registration.guest!.title || null,
+        dietaryRequirements: registration.guest!.dietary_requirements || null,
+        isVipReception: registration.guest!.is_vip_reception || false,
+        tableName: tableAssignment?.table.name || null,
       },
       registration: {
         id: registration.id,
@@ -275,6 +289,7 @@ export async function submitCheckin(
         dietaryRequirements: registration.guest.dietary_requirements || null,
         tableName: tableAssignment?.table.name || null,
         guestType: registration.guest.guest_type,
+        isVipReception: registration.guest.is_vip_reception || false,
         guestName,
       },
     };

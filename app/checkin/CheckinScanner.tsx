@@ -27,8 +27,16 @@ interface ValidationResult {
   guest?: {
     id: number;
     name: string;
+    firstName: string;
+    lastName: string;
     ticketType: string;
     partnerName: string | null;
+    partnerFirstName: string | null;
+    partnerLastName: string | null;
+    title: string | null;
+    dietaryRequirements: string | null;
+    isVipReception: boolean;
+    tableName: string | null;
   };
   registration?: {
     id: number;
@@ -51,6 +59,7 @@ export default function CheckinScanner() {
     dietaryRequirements: string | null;
     tableName: string | null;
     guestType: string;
+    isVipReception: boolean;
     guestName: string;
   } | null>(null);
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
@@ -139,8 +148,15 @@ export default function CheckinScanner() {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ qrToken: decodedText }),
             });
-            const data: ValidationResult = await response.json();
-            setResult(data);
+            const data = await response.json();
+            // Map API response fields to frontend interface
+            if (data.guest) {
+              data.guest.name = `${data.guest.firstName || ''} ${data.guest.lastName || ''}`.trim();
+              if (data.guest.partnerFirstName || data.guest.partnerLastName) {
+                data.guest.partnerName = `${data.guest.partnerFirstName || ''} ${data.guest.partnerLastName || ''}`.trim();
+              }
+            }
+            setResult(data as ValidationResult);
             setCheckInSuccess(false);
             setSubmitError(null);
           } catch (error) {
@@ -356,12 +372,10 @@ export default function CheckinScanner() {
                         <span className="text-white font-bold text-lg">{guestDetails.tableName}</span>
                       </div>
                     )}
-                    {guestDetails.guestType && (
+                    {guestDetails.isVipReception && (
                       <div className="flex items-center justify-between">
-                        <span className="text-white/70 text-sm">Típus</span>
-                        <span className={`font-semibold ${guestDetails.guestType === 'invited' ? 'text-yellow-300' : 'text-white'}`}>
-                          {guestDetails.guestType === 'invited' ? 'VIP' : guestDetails.guestType === 'paying_paired' ? 'Páros jegy' : 'Egyéni jegy'}
-                        </span>
+                        <span className="text-white/70 text-sm">Státusz</span>
+                        <span className="text-yellow-300 font-semibold">⭐ VIP Reception</span>
                       </div>
                     )}
                     {guestDetails.dietaryRequirements && (
@@ -407,12 +421,36 @@ export default function CheckinScanner() {
                 </div>
 
                 <div className="bg-white/10 rounded-lg p-4 mb-4">
-                  <h2 className="text-2xl font-bold text-white mb-2">{result.guest?.name}</h2>
+                  <h2 className="text-2xl font-bold text-white mb-1">
+                    {result.guest?.title ? `${result.guest.title} ` : ''}{result.guest?.name}
+                  </h2>
                   <p className="text-white/90">
                     {TICKET_TYPE_LABELS[result.guest?.ticketType || ''] || result.guest?.ticketType}
                   </p>
                   {result.guest?.partnerName && (
                     <p className="text-white/80 mt-1">Partner: {result.guest.partnerName}</p>
+                  )}
+                </div>
+
+                {/* Staff info: table, VIP, dietary */}
+                <div className="bg-white/10 rounded-lg p-4 mb-4 space-y-2">
+                  {result.guest?.tableName && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-white/70 text-sm">Asztal</span>
+                      <span className="text-white font-bold text-lg">{result.guest.tableName}</span>
+                    </div>
+                  )}
+                  {result.guest?.isVipReception && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-white/70 text-sm">Státusz</span>
+                      <span className="text-yellow-300 font-semibold">⭐ VIP Reception</span>
+                    </div>
+                  )}
+                  {result.guest?.dietaryRequirements && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-white/70 text-sm">Diéta</span>
+                      <span className="text-orange-300 font-semibold">{result.guest.dietaryRequirements}</span>
+                    </div>
                   )}
                 </div>
 
