@@ -280,30 +280,95 @@ export default function CheckinScanner() {
     return messages[error || ''] || error || 'Unknown Error';
   };
 
+  // Shared info box for staff details
+  const renderGuestInfoBox = (guest: ValidationResult['guest'], details?: typeof guestDetails) => {
+    const tableName = details?.tableName || guest?.tableName;
+    const isVip = details?.isVipReception ?? guest?.isVipReception;
+    const dietary = details?.dietaryRequirements || guest?.dietaryRequirements;
+    const partnerName = guest?.partnerName;
+
+    const hasInfo = tableName || isVip || dietary || partnerName;
+    if (!hasInfo) return null;
+
+    return (
+      <div className="rounded-lg p-4 my-4 space-y-2" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(212,175,55,0.2)' }}>
+        {tableName && (
+          <div className="flex items-center justify-between text-sm">
+            <span style={{ opacity: 0.7 }}>Table</span>
+            <span className="font-semibold">{tableName}</span>
+          </div>
+        )}
+        {isVip && (
+          <div className="flex items-center justify-between text-sm">
+            <span style={{ opacity: 0.7 }}>VIP</span>
+            <span className="font-semibold" style={{ color: '#d4af37' }}>&#9733; VIP Reception</span>
+          </div>
+        )}
+        {dietary && (
+          <div className="flex items-center justify-between text-sm">
+            <span style={{ opacity: 0.7 }}>Dietary</span>
+            <span className="font-semibold" style={{ color: '#e8a035' }}>{dietary}</span>
+          </div>
+        )}
+        {partnerName && (
+          <div className="flex items-center justify-between text-sm">
+            <span style={{ opacity: 0.7 }}>Partner</span>
+            <span className="font-semibold">{partnerName}</span>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // Gold line separator
+  const GoldLine = () => (
+    <div className="my-5" style={{ height: 1, background: 'linear-gradient(90deg, transparent, #d4af37, transparent)' }} />
+  );
+
+  // VIP badge
+  const VipBadge = () => (
+    <span
+      className="inline-block text-[10px] font-bold uppercase ml-2 px-3 py-1 rounded-full align-middle"
+      style={{ background: 'linear-gradient(135deg, #d4af37, #f0d060)', color: '#0a1628', letterSpacing: '1.5px' }}
+    >
+      &#9733; VIP
+    </span>
+  );
+
+  const isVipGuest = result?.guest?.isVipReception || guestDetails?.isVipReception;
+  const cardVipStyle = isVipGuest
+    ? { border: '1px solid #d4af37', boxShadow: '0 0 20px rgba(212,175,55,0.15), inset 0 0 20px rgba(212,175,55,0.05)' }
+    : { border: '1px solid rgba(212,175,55,0.3)' };
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div
+      className="min-h-screen flex flex-col"
+      style={{ fontFamily: "'Segoe UI', system-ui, -apple-system, sans-serif", background: '#0a1628', color: '#fff' }}
+    >
       {/* Header */}
-      <header className="bg-gray-800 px-4 py-3 flex items-center justify-between">
-        <Link href="/admin" className="text-white text-lg font-semibold hover:text-amber-400 transition-colors">
-          BBJ Events Check-in
+      <header className="px-4 py-3 flex items-center justify-between" style={{ borderBottom: '1px solid rgba(212,175,55,0.15)' }}>
+        <Link href="/admin" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <span style={{ color: '#d4af37', fontSize: 20 }}>&#9733;</span>
+          <span className="text-lg font-semibold" style={{ color: '#d4af37' }}>CEO Gala 2026</span>
         </Link>
         <div className="flex items-center gap-2">
-          {/* Install App Button */}
           {installPrompt && !isInstalled && (
             <button
               onClick={handleInstall}
-              className="px-3 py-1 text-sm bg-amber-500 text-white rounded-lg font-medium flex items-center gap-1 hover:bg-amber-600 transition-colors"
+              className="px-3 py-1 text-sm rounded-lg font-medium flex items-center gap-1 transition-colors"
+              style={{ background: '#722f37', color: '#fff' }}
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
-              Install App
+              Install
             </button>
           )}
           {scanning && (
             <button
               onClick={stopScanner}
-              className="px-3 py-1 text-sm bg-red-600 text-white rounded-lg"
+              className="px-3 py-1 text-sm rounded-lg"
+              style={{ background: 'rgba(180,60,60,0.3)', border: '1px solid rgba(180,60,60,0.5)', color: '#e05555' }}
             >
               Stop
             </button>
@@ -312,26 +377,48 @@ export default function CheckinScanner() {
       </header>
 
       {/* Main content */}
-      <main className="flex-1 flex flex-col items-center justify-center p-4">
+      <main className="flex-1 flex flex-col items-center justify-center p-4 pb-16">
         {/* Scanner view */}
         {!result && (
           <div className="w-full max-w-md">
+            <div className="text-center mb-6">
+              <div style={{ color: '#d4af37', fontSize: 32 }}>&#9733;</div>
+              <h2 className="text-lg font-semibold mt-2" style={{ color: '#d4af37' }}>CEO Gala 2026</h2>
+              <p className="text-xs uppercase mt-1" style={{ letterSpacing: 2, opacity: 0.6, color: '#d4af37' }}>Check-in Scanner</p>
+            </div>
+
             <div
-              id="qr-reader"
-              ref={containerRef}
-              className="w-full aspect-square bg-black rounded-lg overflow-hidden"
-            />
+              className="relative w-full aspect-square rounded-xl overflow-hidden mb-5"
+              style={{ background: 'rgba(255,255,255,0.03)', border: '2px dashed rgba(212,175,55,0.3)' }}
+            >
+              <div
+                id="qr-reader"
+                ref={containerRef}
+                className="w-full h-full"
+              />
+              {scanning && (
+                <div
+                  className="absolute left-[20%] right-[20%] h-[2px]"
+                  style={{
+                    background: 'linear-gradient(90deg, transparent, #d4af37, transparent)',
+                    animation: 'scanMove 2.5s ease-in-out infinite',
+                  }}
+                />
+              )}
+            </div>
+
             {!scanning && (
               <button
                 onClick={startScanner}
-                className="mt-4 w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+                className="w-full py-4 rounded-lg font-bold text-sm uppercase transition-colors"
+                style={{ background: '#722f37', color: '#fff', letterSpacing: 1 }}
               >
                 Start Scanning
               </button>
             )}
             {scanning && (
-              <p className="mt-4 text-center text-gray-400">
-                Hold the QR code in front of the camera...
+              <p className="text-center text-sm" style={{ opacity: 0.6 }}>
+                Hold QR code in front of camera...
               </p>
             )}
           </div>
@@ -340,232 +427,177 @@ export default function CheckinScanner() {
         {/* Result card */}
         {result && (
           <div
-            className={`w-full max-w-md rounded-xl shadow-xl overflow-hidden ${getCardColor()}`}
+            className="w-full max-w-md rounded-2xl overflow-hidden"
+            style={{
+              ...cardVipStyle,
+              padding: '32px 24px',
+              background: 'linear-gradient(180deg, #0a1628 0%, #162447 100%)',
+              animation: 'cardFadeIn 0.5s ease-out',
+            }}
           >
-            {/* Success state after check-in */}
+            {/* ===== SUCCESS ===== */}
             {checkInSuccess && (
-              <div className="p-6 text-center">
-                <div className="w-20 h-20 mx-auto mb-4 bg-white/20 rounded-full flex items-center justify-center">
-                  <svg
-                    className="w-12 h-12 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={3}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                </div>
-                <h2 className="text-2xl font-bold text-white mb-2">Check-in Successful!</h2>
-                <p className="text-white/90 text-lg">{guestDetails?.title ? `${guestDetails.title} ` : ''}{guestDetails?.guestName || result.guest?.name}</p>
+              <div className="text-center">
+                <div style={{ color: '#d4af37', fontSize: 24 }}>&#9733;</div>
 
-                {/* Guest details for staff */}
-                {guestDetails && (
-                  <div className="mt-4 bg-white/10 rounded-lg p-4 text-left space-y-2">
-                    {guestDetails.tableName && (
-                      <div className="flex items-center justify-between">
-                        <span className="text-white/70 text-sm">Asztal</span>
-                        <span className="text-white font-bold text-lg">{guestDetails.tableName}</span>
-                      </div>
-                    )}
-                    {guestDetails.isVipReception && (
-                      <div className="flex items-center justify-between">
-                        <span className="text-white/70 text-sm">Státusz</span>
-                        <span className="text-yellow-300 font-semibold">⭐ VIP Reception</span>
-                      </div>
-                    )}
-                    {guestDetails.dietaryRequirements && (
-                      <div className="flex items-center justify-between">
-                        <span className="text-white/70 text-sm">Diéta</span>
-                        <span className="text-orange-300 font-semibold">{guestDetails.dietaryRequirements}</span>
-                      </div>
-                    )}
-                  </div>
-                )}
+                <div
+                  className="w-[60px] h-[60px] rounded-full flex items-center justify-center mx-auto my-4"
+                  style={{ background: '#722f37', border: '2px solid #d4af37' }}
+                >
+                  <span className="text-white text-2xl">&#10003;</span>
+                </div>
+
+                <h2 className="text-xl font-bold mb-2">Check-in Successful!</h2>
+                <h3 className="text-xl mb-1" style={{ fontWeight: 300 }}>
+                  {guestDetails?.title ? `${guestDetails.title} ` : ''}{guestDetails?.guestName || result.guest?.name}
+                  {isVipGuest && <VipBadge />}
+                </h3>
+                <p className="text-sm mb-2" style={{ opacity: 0.8 }}>
+                  {TICKET_TYPE_LABELS[result.guest?.ticketType || ''] || result.guest?.ticketType}
+                </p>
+
+                <GoldLine />
+                {renderGuestInfoBox(result.guest, guestDetails)}
+                <GoldLine />
 
                 <button
                   onClick={scanAgain}
-                  className="mt-6 w-full py-3 bg-white/20 text-white rounded-lg font-medium hover:bg-white/30"
+                  className="w-full py-3.5 rounded-lg font-semibold text-sm uppercase transition-opacity hover:opacity-80"
+                  style={{ background: 'transparent', border: '1px solid currentColor', opacity: 0.7, letterSpacing: 1 }}
                 >
                   Next Guest
                 </button>
               </div>
             )}
 
-            {/* Valid ticket - not checked in yet */}
+            {/* ===== VALID TICKET (pre check-in) ===== */}
             {result.valid && !result.alreadyCheckedIn && !checkInSuccess && (
-              <div className="p-6">
-                <div className="text-center mb-4">
-                  <div className="w-16 h-16 mx-auto mb-3 bg-white/20 rounded-full flex items-center justify-center">
-                    <svg
-                      className="w-10 h-10 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                  </div>
-                  <span className="text-white/80 text-sm uppercase tracking-wider">
-                    Valid Ticket
-                  </span>
-                </div>
+              <div>
+                <div className="text-center" style={{ color: '#d4af37', fontSize: 24 }}>&#9733;</div>
 
-                <div className="bg-white/10 rounded-lg p-4 mb-4">
-                  <h2 className="text-2xl font-bold text-white mb-1">
-                    {result.guest?.title ? `${result.guest.title} ` : ''}{result.guest?.name}
-                  </h2>
-                  <p className="text-white/90">
-                    {TICKET_TYPE_LABELS[result.guest?.ticketType || ''] || result.guest?.ticketType}
-                  </p>
-                  {result.guest?.partnerName && (
-                    <p className="text-white/80 mt-1">Partner: {result.guest.partnerName}</p>
-                  )}
-                </div>
+                <p className="text-center text-xs uppercase mt-4 mb-1" style={{ letterSpacing: 2, opacity: 0.7 }}>
+                  Valid Ticket
+                </p>
+                <h2 className="text-center text-2xl mb-1" style={{ fontWeight: 300 }}>
+                  {result.guest?.title ? `${result.guest.title} ` : ''}{result.guest?.name}
+                  {result.guest?.isVipReception && <VipBadge />}
+                </h2>
+                <p className="text-center text-sm mb-4" style={{ opacity: 0.8 }}>
+                  {TICKET_TYPE_LABELS[result.guest?.ticketType || ''] || result.guest?.ticketType}
+                </p>
 
-                {/* Staff info: table, VIP, dietary */}
-                <div className="bg-white/10 rounded-lg p-4 mb-4 space-y-2">
-                  {result.guest?.tableName && (
-                    <div className="flex items-center justify-between">
-                      <span className="text-white/70 text-sm">Asztal</span>
-                      <span className="text-white font-bold text-lg">{result.guest.tableName}</span>
-                    </div>
-                  )}
-                  {result.guest?.isVipReception && (
-                    <div className="flex items-center justify-between">
-                      <span className="text-white/70 text-sm">Státusz</span>
-                      <span className="text-yellow-300 font-semibold">⭐ VIP Reception</span>
-                    </div>
-                  )}
-                  {result.guest?.dietaryRequirements && (
-                    <div className="flex items-center justify-between">
-                      <span className="text-white/70 text-sm">Diéta</span>
-                      <span className="text-orange-300 font-semibold">{result.guest.dietaryRequirements}</span>
-                    </div>
-                  )}
-                </div>
+                <GoldLine />
+                {renderGuestInfoBox(result.guest)}
+                <GoldLine />
 
                 {submitError && (
-                  <p className="text-white/90 bg-red-700/50 rounded-lg p-2 mb-4 text-center">
+                  <div className="rounded-lg p-3 mb-4 text-center text-sm" style={{ background: 'rgba(180,60,60,0.1)', border: '1px solid rgba(180,60,60,0.3)', color: '#e05555' }}>
                     {getErrorMessage(submitError)}
-                  </p>
+                  </div>
                 )}
 
                 <button
                   onClick={() => submitCheckin(false)}
                   disabled={submitting}
-                  className="w-full py-4 bg-white text-green-700 rounded-lg font-bold text-lg hover:bg-white/90 disabled:opacity-50"
+                  className="w-full py-4 rounded-lg font-bold text-sm uppercase transition-colors disabled:opacity-50"
+                  style={{ background: '#722f37', color: '#fff', letterSpacing: 1 }}
                 >
                   {submitting ? 'Processing...' : 'CHECK IN'}
                 </button>
 
                 <button
                   onClick={scanAgain}
-                  className="mt-3 w-full py-2 bg-red-800 text-white rounded-lg font-medium hover:bg-red-900"
+                  className="mt-3 w-full py-3.5 rounded-lg font-semibold text-sm uppercase transition-opacity hover:opacity-80"
+                  style={{ background: 'transparent', border: '1px solid currentColor', opacity: 0.7, letterSpacing: 1 }}
                 >
                   Cancel
                 </button>
               </div>
             )}
 
-            {/* Already checked in - warning */}
+            {/* ===== ALREADY CHECKED IN (warning) ===== */}
             {result.valid && result.alreadyCheckedIn && !checkInSuccess && (
-              <div className="p-6">
-                <div className="text-center mb-4">
-                  <div className="w-16 h-16 mx-auto mb-3 bg-white/20 rounded-full flex items-center justify-center">
-                    <svg
-                      className="w-10 h-10 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                      />
-                    </svg>
-                  </div>
-                  <span className="text-white text-sm uppercase tracking-wider font-bold">
-                    Already Checked In!
-                  </span>
+              <div>
+                <div className="text-center" style={{ color: '#d4af37', fontSize: 24 }}>&#9733;</div>
+
+                <div
+                  className="w-[60px] h-[60px] rounded-full flex items-center justify-center mx-auto my-4"
+                  style={{ background: 'rgba(212,175,55,0.15)', border: '2px solid #d4af37' }}
+                >
+                  <span className="text-2xl" style={{ color: '#d4af37' }}>&#9888;</span>
                 </div>
 
-                <div className="bg-white/10 rounded-lg p-4 mb-4">
-                  <h2 className="text-2xl font-bold text-white mb-2">{result.guest?.name}</h2>
-                  <p className="text-white/90">
-                    {TICKET_TYPE_LABELS[result.guest?.ticketType || ''] || result.guest?.ticketType}
-                  </p>
-                  {result.previousCheckin && (
-                    <div className="mt-3 pt-3 border-t border-white/20">
-                      <p className="text-white/80 text-sm">
-                        Previous Check-in: {formatDate(result.previousCheckin.checkedInAt)}
-                      </p>
-                      {result.previousCheckin.staffName && (
-                        <p className="text-white/80 text-sm">
-                          Staff: {result.previousCheckin.staffName}
-                        </p>
-                      )}
+                <h2 className="text-center text-xl font-bold mb-2" style={{ color: '#d4af37' }}>Already Checked In!</h2>
+                <h3 className="text-center text-xl mb-1" style={{ fontWeight: 300 }}>
+                  {result.guest?.title ? `${result.guest.title} ` : ''}{result.guest?.name}
+                </h3>
+                <p className="text-center text-sm mb-2" style={{ opacity: 0.8 }}>
+                  {TICKET_TYPE_LABELS[result.guest?.ticketType || ''] || result.guest?.ticketType}
+                </p>
+
+                {result.previousCheckin && (
+                  <div className="rounded-lg p-3 my-3 text-center text-sm" style={{ background: 'rgba(212,175,55,0.1)', border: '1px solid rgba(212,175,55,0.3)', color: '#d4af37' }}>
+                    <div className="mb-1">&#9888; This guest was already checked in</div>
+                    <div style={{ fontSize: 12, opacity: 0.8 }}>
+                      {formatDate(result.previousCheckin.checkedInAt)}
+                      {result.previousCheckin.staffName && ` — by Staff: ${result.previousCheckin.staffName}`}
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
+
+                <GoldLine />
+                {renderGuestInfoBox(result.guest)}
+                <GoldLine />
 
                 {submitError && (
-                  <p className="text-white/90 bg-red-700/50 rounded-lg p-2 mb-4 text-center">
+                  <div className="rounded-lg p-3 mb-4 text-center text-sm" style={{ background: 'rgba(180,60,60,0.1)', border: '1px solid rgba(180,60,60,0.3)', color: '#e05555' }}>
                     {getErrorMessage(submitError)}
-                  </p>
+                  </div>
                 )}
 
                 <button
                   onClick={() => submitCheckin(true)}
                   disabled={submitting}
-                  className="w-full py-3 bg-white/20 text-white rounded-lg font-medium border-2 border-white/50 hover:bg-white/30 disabled:opacity-50"
+                  className="w-full py-3.5 rounded-lg font-semibold text-sm uppercase transition-colors disabled:opacity-50 mb-3"
+                  style={{ background: 'transparent', border: '1px solid #d4af37', color: '#d4af37', letterSpacing: 1 }}
                 >
                   {submitting ? 'Processing...' : 'Admin Override'}
                 </button>
 
                 <button
                   onClick={scanAgain}
-                  className="mt-3 w-full py-3 bg-white text-yellow-700 rounded-lg font-bold"
+                  className="w-full py-3.5 rounded-lg font-semibold text-sm uppercase transition-opacity hover:opacity-80"
+                  style={{ background: 'transparent', border: '1px solid currentColor', opacity: 0.7, letterSpacing: 1 }}
                 >
                   Next Guest
                 </button>
               </div>
             )}
 
-            {/* Invalid ticket - error */}
+            {/* ===== INVALID TICKET (error) ===== */}
             {!result.valid && (
-              <div className="p-6 text-center">
-                <div className="w-20 h-20 mx-auto mb-4 bg-white/20 rounded-full flex items-center justify-center">
-                  <svg
-                    className="w-12 h-12 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
+              <div className="text-center">
+                <div style={{ color: '#d4af37', fontSize: 24 }}>&#9733;</div>
+
+                <div
+                  className="w-[60px] h-[60px] rounded-full flex items-center justify-center mx-auto my-4"
+                  style={{ background: 'rgba(180,60,60,0.2)', border: '2px solid #b43c3c' }}
+                >
+                  <span className="text-2xl" style={{ color: '#e05555' }}>&#10007;</span>
                 </div>
-                <h2 className="text-2xl font-bold text-white mb-2">Invalid Ticket</h2>
-                <p className="text-white/90">{getErrorMessage(result.error)}</p>
+
+                <h2 className="text-xl font-bold mb-3">Invalid Ticket</h2>
+
+                <div className="rounded-lg p-3 mb-4 text-sm" style={{ background: 'rgba(180,60,60,0.1)', border: '1px solid rgba(180,60,60,0.3)', color: '#e05555' }}>
+                  {getErrorMessage(result.error)}
+                </div>
+
+                <GoldLine />
+
                 <button
                   onClick={scanAgain}
-                  className="mt-6 w-full py-3 bg-white text-red-700 rounded-lg font-bold"
+                  className="w-full py-4 rounded-lg font-bold text-sm uppercase transition-colors"
+                  style={{ background: '#722f37', color: '#fff', letterSpacing: 1 }}
                 >
                   Scan Again
                 </button>
@@ -575,36 +607,42 @@ export default function CheckinScanner() {
         )}
       </main>
 
-      {/* Footer - Help link */}
-      <footer className="bg-gray-800 px-4 py-2 text-center pb-8">
-        <Link href="/help" className="text-amber-400 text-sm hover:underline">
-          Need help?
-        </Link>
-      </footer>
-
-      {/* MyForge Labs branding - blur effect */}
-      <div className="fixed bottom-0 left-0 right-0 py-2 bg-gray-900/60 backdrop-blur-md border-t border-gray-700/30 z-50">
-        <div className="flex items-center justify-center gap-2">
-          <Image
-            src="/myforgelabs-logo.png"
-            alt="MyForge Labs"
-            width={21}
-            height={21}
-            className="opacity-80"
-          />
-          <span className="text-[15px] text-gray-400/80">
-            Built By{' '}
-            <a
-              href="https://www.myforgelabs.com/#kapcsolat"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-300/80 hover:text-white transition-colors underline"
-            >
-              MyForge Labs
-            </a>
-          </span>
-        </div>
+      {/* MyForge Labs footer bar */}
+      <div
+        className="fixed bottom-0 left-0 right-0 py-1.5 z-50 flex items-center justify-center gap-2"
+        style={{
+          background: 'rgba(10,22,40,0.7)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          borderTop: '1px solid rgba(212,175,55,0.15)',
+        }}
+      >
+        <Image src="/myforgelabs-logo.png" alt="MyForge Labs" width={18} height={18} className="opacity-80" />
+        <span className="text-xs" style={{ color: 'rgba(212,175,55,0.6)', letterSpacing: 1 }}>
+          Built By{' '}
+          <a
+            href="https://www.myforgelabs.com/#kapcsolat"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline transition-colors"
+            style={{ color: 'rgba(212,175,55,0.7)' }}
+          >
+            MyForge Labs
+          </a>
+        </span>
       </div>
+
+      {/* Animations */}
+      <style jsx>{`
+        @keyframes cardFadeIn {
+          from { opacity: 0; transform: translateY(20px) scale(0.95); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes scanMove {
+          0%, 100% { top: 22%; }
+          50% { top: 75%; }
+        }
+      `}</style>
     </div>
   );
 }
