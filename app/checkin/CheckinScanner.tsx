@@ -46,6 +46,13 @@ export default function CheckinScanner() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [checkInSuccess, setCheckInSuccess] = useState(false);
+  const [guestDetails, setGuestDetails] = useState<{
+    title: string | null;
+    dietaryRequirements: string | null;
+    tableName: string | null;
+    guestType: string;
+    guestName: string;
+  } | null>(null);
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const scannerRef = useRef<Html5Qrcode | null>(null);
@@ -174,6 +181,7 @@ export default function CheckinScanner() {
     setResult(null);
     setCheckInSuccess(false);
     setSubmitError(null);
+    setGuestDetails(null);
     await startScanner();
   }, [startScanner]);
 
@@ -199,6 +207,9 @@ export default function CheckinScanner() {
 
         if (data.success) {
           setCheckInSuccess(true);
+          if (data.guestDetails) {
+            setGuestDetails(data.guestDetails);
+          }
         } else {
           setSubmitError(data.error || 'Check-in failed');
         }
@@ -334,7 +345,34 @@ export default function CheckinScanner() {
                   </svg>
                 </div>
                 <h2 className="text-2xl font-bold text-white mb-2">Check-in Successful!</h2>
-                <p className="text-white/90 text-lg">{result.guest?.name}</p>
+                <p className="text-white/90 text-lg">{guestDetails?.title ? `${guestDetails.title} ` : ''}{result.guest?.name}</p>
+
+                {/* Guest details for staff */}
+                {guestDetails && (
+                  <div className="mt-4 bg-white/10 rounded-lg p-4 text-left space-y-2">
+                    {guestDetails.tableName && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-white/70 text-sm">Asztal</span>
+                        <span className="text-white font-bold text-lg">{guestDetails.tableName}</span>
+                      </div>
+                    )}
+                    {guestDetails.guestType && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-white/70 text-sm">Típus</span>
+                        <span className={`font-semibold ${guestDetails.guestType === 'invited' ? 'text-yellow-300' : 'text-white'}`}>
+                          {guestDetails.guestType === 'invited' ? 'VIP' : guestDetails.guestType === 'paying_paired' ? 'Páros jegy' : 'Egyéni jegy'}
+                        </span>
+                      </div>
+                    )}
+                    {guestDetails.dietaryRequirements && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-white/70 text-sm">Diéta</span>
+                        <span className="text-orange-300 font-semibold">{guestDetails.dietaryRequirements}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <button
                   onClick={scanAgain}
                   className="mt-6 w-full py-3 bg-white/20 text-white rounded-lg font-medium hover:bg-white/30"
