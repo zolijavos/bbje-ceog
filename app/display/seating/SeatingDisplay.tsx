@@ -62,8 +62,9 @@ interface DisplayCheckinEvent {
 }
 
 function parseTableNumber(name: string): number | null {
-  const match = name.match(/\d+/);
-  return match ? parseInt(match[0], 10) : null;
+  // Only match exact "Table N" format, skip "VIP Table N", "Standard Table N" etc.
+  const match = name.match(/^Table (\d+)$/);
+  return match ? parseInt(match[1], 10) : null;
 }
 
 export default function SeatingDisplay() {
