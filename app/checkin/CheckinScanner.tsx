@@ -345,7 +345,7 @@ export default function CheckinScanner() {
                   </svg>
                 </div>
                 <h2 className="text-2xl font-bold text-white mb-2">Check-in Successful!</h2>
-                <p className="text-white/90 text-lg">{guestDetails?.title ? `${guestDetails.title} ` : ''}{result.guest?.name}</p>
+                <p className="text-white/90 text-lg">{guestDetails?.title ? `${guestDetails.title} ` : ''}{guestDetails?.guestName || result.guest?.name}</p>
 
                 {/* Guest details for staff */}
                 {guestDetails && (
