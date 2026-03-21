@@ -286,6 +286,46 @@
             font-size: 10px;
             opacity: 0.5;
             letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .footer-branding img {
+            width: 16px;
+            height: 16px;
+            opacity: 0.8;
+        }
+
+        .footer-branding a {
+            color: inherit;
+            text-decoration: underline;
+            transition: opacity 0.3s;
+        }
+
+        .footer-branding a:hover {
+            opacity: 1;
+        }
+
+        /* VIP Card Glow */
+        .card.vip-card {
+            border: 1px solid #d4af37;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.15), inset 0 0 20px rgba(212, 175, 55, 0.05);
+        }
+
+        .vip-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #d4af37, #f0d060);
+            color: #0a1628;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-left: 8px;
+            vertical-align: middle;
         }
 
         /* Camera Placeholder */
@@ -533,19 +573,19 @@
                 <div class="camera-text">Hold QR code in front of camera</div>
             </div>
 
-            <p class="footer-branding">Built by MyForge Labs</p>
+            <p class="footer-branding"><img src="/myforgelabs-logo.png" alt="MyForge Labs"> Built By <a href="https://www.myforgelabs.com/#kapcsolat" target="_blank" rel="noopener noreferrer">MyForge Labs</a></p>
         </div>
 
         <!-- ============================================ -->
         <!-- SCREEN 2: Valid Ticket (Pre-check-in)        -->
         <!-- ============================================ -->
 
-        <div class="card" style="animation-delay: 0.1s;">
+        <div class="card vip-card" style="animation-delay: 0.1s;">
             <span class="screen-label">2. Valid Ticket</span>
             <div class="gold-star">&#9733;</div>
 
             <p class="label heading-center">Valid Ticket</p>
-            <h2 class="guest-name heading-center">Dr. Zoltan Asztal001</h2>
+            <h2 class="guest-name heading-center">Dr. Zoltan Asztal001 <span class="vip-badge">&#9733; VIP</span></h2>
             <p class="ticket-type heading-center">Invited (Free)</p>
 
             <div class="gold-line"></div>
@@ -554,10 +594,6 @@
                 <div class="info-row">
                     <span class="info-label">Table</span>
                     <span class="info-value">Table 1</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">VIP Reception</span>
-                    <span class="info-value gold">&#9733; VIP Reception</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Dietary</span>
@@ -574,14 +610,14 @@
             <button class="btn-primary burgundy">CHECK IN</button>
             <button class="btn-secondary">Cancel</button>
 
-            <p class="footer-branding">Built by MyForge Labs</p>
+            <p class="footer-branding"><img src="/myforgelabs-logo.png" alt="MyForge Labs"> Built By <a href="https://www.myforgelabs.com/#kapcsolat" target="_blank" rel="noopener noreferrer">MyForge Labs</a></p>
         </div>
 
         <!-- ============================================ -->
         <!-- SCREEN 3: Check-in Success                   -->
         <!-- ============================================ -->
 
-        <div class="card" style="animation-delay: 0.2s;">
+        <div class="card vip-card" style="animation-delay: 0.2s;">
             <span class="screen-label">3. Success</span>
 
             <div class="sparkle-container">
@@ -604,7 +640,7 @@
             <div class="success-icon gold-border">&#10003;</div>
 
             <h2 class="heading-center" style="margin-bottom: 8px;">Check-in Successful!</h2>
-            <h3 class="heading-center" style="font-weight: 300; font-size: 22px; margin-bottom: 4px;">Dr. Zoltan Asztal001</h3>
+            <h3 class="heading-center" style="font-weight: 300; font-size: 22px; margin-bottom: 4px;">Dr. Zoltan Asztal001 <span class="vip-badge">&#9733; VIP</span></h3>
             <p class="ticket-type heading-center">Invited (Free)</p>
 
             <div class="gold-line"></div>
@@ -613,10 +649,6 @@
                 <div class="info-row">
                     <span class="info-label">Table</span>
                     <span class="info-value">Table 1</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">VIP Reception</span>
-                    <span class="info-value gold">&#9733; VIP Reception</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Dietary</span>
@@ -632,7 +664,7 @@
 
             <button class="btn-secondary">Next Guest</button>
 
-            <p class="footer-branding">Built by MyForge Labs</p>
+            <p class="footer-branding"><img src="/myforgelabs-logo.png" alt="MyForge Labs"> Built By <a href="https://www.myforgelabs.com/#kapcsolat" target="_blank" rel="noopener noreferrer">MyForge Labs</a></p>
         </div>
 
         <!-- ============================================ -->
@@ -661,10 +693,6 @@
                     <span class="info-label">Table</span>
                     <span class="info-value">Table 1</span>
                 </div>
-                <div class="info-row">
-                    <span class="info-label">VIP Reception</span>
-                    <span class="info-value gold">&#9733; VIP Reception</span>
-                </div>
             </div>
 
             <div class="gold-line"></div>
@@ -672,7 +700,7 @@
             <button class="btn-amber">Admin Override</button>
             <button class="btn-secondary">Next Guest</button>
 
-            <p class="footer-branding">Built by MyForge Labs</p>
+            <p class="footer-branding"><img src="/myforgelabs-logo.png" alt="MyForge Labs"> Built By <a href="https://www.myforgelabs.com/#kapcsolat" target="_blank" rel="noopener noreferrer">MyForge Labs</a></p>
         </div>
 
         <!-- ============================================ -->
@@ -695,12 +723,15 @@
 
             <button class="btn-primary burgundy">Scan Again</button>
 
-            <p class="footer-branding">Built by MyForge Labs</p>
+            <p class="footer-branding"><img src="/myforgelabs-logo.png" alt="MyForge Labs"> Built By <a href="https://www.myforgelabs.com/#kapcsolat" target="_blank" rel="noopener noreferrer">MyForge Labs</a></p>
         </div>
 
     </div>
 
-    <p class="page-footer" style="color: #d4af37;">Built by MyForge Labs</p>
+    <p class="page-footer" style="color: #d4af37; display: flex; align-items: center; justify-content: center; gap: 6px;">
+        <img src="/myforgelabs-logo.png" alt="MyForge Labs" style="width: 16px; height: 16px; opacity: 0.8;">
+        Built By <a href="https://www.myforgelabs.com/#kapcsolat" target="_blank" rel="noopener noreferrer" style="color: #d4af37; text-decoration: underline;">MyForge Labs</a>
+    </p>
 
 </body>
 </html>
