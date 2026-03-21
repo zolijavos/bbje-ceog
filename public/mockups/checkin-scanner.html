@@ -15,7 +15,7 @@
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: #0a1628;
             min-height: 100vh;
-            padding: 20px;
+            padding: 20px 20px 50px;
         }
 
         h1 {
@@ -526,11 +526,34 @@
         }
 
         .page-footer {
-            text-align: center;
-            margin-top: 40px;
-            font-size: 10px;
-            opacity: 0.5;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 6px 0;
+            font-size: 12px;
             letter-spacing: 1px;
+            background: rgba(10, 22, 40, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-top: 1px solid rgba(212, 175, 55, 0.15);
+            z-index: 100;
+        }
+
+        .page-footer img {
+            width: 18px;
+            height: 18px;
+            opacity: 0.8;
+        }
+
+        .page-footer a {
+            color: rgba(212, 175, 55, 0.7);
+            text-decoration: underline;
+            transition: color 0.3s;
+        }
+
+        .page-footer a:hover {
+            color: #d4af37;
         }
 
         /* Responsive */
@@ -573,7 +596,6 @@
                 <div class="camera-text">Hold QR code in front of camera</div>
             </div>
 
-            <p class="footer-branding"><img src="/myforgelabs-logo.png" alt="MyForge Labs"> Built By <a href="https://www.myforgelabs.com/#kapcsolat" target="_blank" rel="noopener noreferrer">MyForge Labs</a></p>
         </div>
 
         <!-- ============================================ -->
@@ -610,7 +632,6 @@
             <button class="btn-primary burgundy">CHECK IN</button>
             <button class="btn-secondary">Cancel</button>
 
-            <p class="footer-branding"><img src="/myforgelabs-logo.png" alt="MyForge Labs"> Built By <a href="https://www.myforgelabs.com/#kapcsolat" target="_blank" rel="noopener noreferrer">MyForge Labs</a></p>
         </div>
 
         <!-- ============================================ -->
@@ -664,7 +685,6 @@
 
             <button class="btn-secondary">Next Guest</button>
 
-            <p class="footer-branding"><img src="/myforgelabs-logo.png" alt="MyForge Labs"> Built By <a href="https://www.myforgelabs.com/#kapcsolat" target="_blank" rel="noopener noreferrer">MyForge Labs</a></p>
         </div>
 
         <!-- ============================================ -->
@@ -700,7 +720,6 @@
             <button class="btn-amber">Admin Override</button>
             <button class="btn-secondary">Next Guest</button>
 
-            <p class="footer-branding"><img src="/myforgelabs-logo.png" alt="MyForge Labs"> Built By <a href="https://www.myforgelabs.com/#kapcsolat" target="_blank" rel="noopener noreferrer">MyForge Labs</a></p>
         </div>
 
         <!-- ============================================ -->
@@ -723,15 +742,14 @@
 
             <button class="btn-primary burgundy">Scan Again</button>
 
-            <p class="footer-branding"><img src="/myforgelabs-logo.png" alt="MyForge Labs"> Built By <a href="https://www.myforgelabs.com/#kapcsolat" target="_blank" rel="noopener noreferrer">MyForge Labs</a></p>
         </div>
 
     </div>
 
-    <p class="page-footer" style="color: #d4af37; display: flex; align-items: center; justify-content: center; gap: 6px;">
-        <img src="/myforgelabs-logo.png" alt="MyForge Labs" style="width: 16px; height: 16px; opacity: 0.8;">
-        Built By <a href="https://www.myforgelabs.com/#kapcsolat" target="_blank" rel="noopener noreferrer" style="color: #d4af37; text-decoration: underline;">MyForge Labs</a>
-    </p>
+    <footer class="page-footer" style="color: rgba(212,175,55,0.6); display: flex; align-items: center; justify-content: center; gap: 6px;">
+        <img src="/myforgelabs-logo.png" alt="MyForge Labs">
+        <span>Built By <a href="https://www.myforgelabs.com/#kapcsolat" target="_blank" rel="noopener noreferrer">MyForge Labs</a></span>
+    </footer>
 
 </body>
 </html>
