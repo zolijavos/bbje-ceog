@@ -194,6 +194,7 @@ export async function getAllTables(): Promise<TableWithAssignments[]> {
               last_name: true,
               email: true,
               guest_type: true,
+              registration_status: true, // For status dot color coding in UI
               paired_with_id: true, // For filtering partners in drag & drop UI
               registration: {
                 select: {
@@ -650,6 +651,7 @@ export async function getUnassignedGuests() {
       last_name: true,
       email: true,
       guest_type: true,
+      registration_status: true, // For status dot color coding in UI
       registration: {
         select: {
           ticket_type: true,

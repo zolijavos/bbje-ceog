@@ -7,6 +7,7 @@
  * Supports collapse/expand and search highlight
  */
 
+import { useState, useRef, useCallback } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CaretDown, CaretRight } from '@phosphor-icons/react';
@@ -46,6 +47,19 @@ export function DroppableTable({
   const currentOccupancy = calculateOccupancy(guests);
   const isFull = currentOccupancy >= table.capacity;
 
+  // Tooltip state for collapsed cards
+  const [showTooltip, setShowTooltip] = useState(false);
+  const tooltipTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const handleMouseEnter = useCallback(() => {
+    if (!isCollapsed || guests.length === 0) return;
+    tooltipTimeout.current = setTimeout(() => setShowTooltip(true), 300);
+  }, [isCollapsed, guests.length]);
+  const handleMouseLeave = useCallback(() => {
+    if (tooltipTimeout.current) clearTimeout(tooltipTimeout.current);
+    tooltipTimeout.current = null;
+    setShowTooltip(false);
+  }, []);
+
   // Check if active guest can fit
   const canAcceptGuest = activeGuest
     ? (currentOccupancy + activeGuest.seatsRequired) <= table.capacity
@@ -65,19 +79,31 @@ export function DroppableTable({
   const isValidDrop = isOver && canAcceptGuest;
   const isInvalidDrop = isOver && !canAcceptGuest;
 
+  // Occupancy-based color coding
+  const occupancyRatio = table.capacity > 0 ? currentOccupancy / table.capacity : 0;
+  const occupancyColorClass = isFull
+    ? 'border-red-300 bg-red-50 dark:border-red-700 dark:bg-red-950/30'
+    : occupancyRatio >= 0.5
+      ? 'border-amber-300 bg-amber-50/50 dark:border-amber-700 dark:bg-amber-950/20'
+      : currentOccupancy > 0
+        ? 'border-emerald-300 bg-emerald-50/50 dark:border-emerald-700 dark:bg-emerald-950/20'
+        : 'border-gray-200 bg-gray-50 dark:border-neutral-600 dark:bg-neutral-800';
+
   return (
     <div
       ref={setNodeRef}
       data-testid="droppable-table"
       data-table-id={table.id}
       data-table-name={table.name}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       className={`
         relative border-2 rounded-lg transition-all
         ${isCollapsed ? 'p-3' : 'p-4 min-h-[180px]'}
-        ${isFull ? 'border-red-200 bg-red-50' : 'border-gray-200 bg-gray-50'}
-        ${isValidDrop ? 'border-green-400 bg-green-50 ring-2 ring-green-200' : ''}
-        ${isInvalidDrop ? 'border-red-400 bg-red-100 ring-2 ring-red-200' : ''}
-        ${isHighlighted ? 'border-amber-400 bg-amber-50/50 ring-1 ring-amber-300' : ''}
+        ${occupancyColorClass}
+        ${isValidDrop ? 'border-green-400 bg-green-50 ring-2 ring-green-200 dark:border-green-500 dark:bg-green-950/30' : ''}
+        ${isInvalidDrop ? 'border-red-400 bg-red-100 ring-2 ring-red-200 dark:border-red-500 dark:bg-red-950/50' : ''}
+        ${isHighlighted ? 'border-amber-400 bg-amber-50/50 ring-1 ring-amber-300 dark:border-amber-400 dark:bg-amber-950/30' : ''}
       `}
     >
       {/* Invalid drop overlay */}
@@ -103,12 +129,17 @@ export function DroppableTable({
               ? <CaretRight size={14} weight="bold" className="text-gray-500 flex-shrink-0" />
               : <CaretDown size={14} weight="bold" className="text-gray-500 flex-shrink-0" />
           )}
-          <h4 className="font-medium text-sm text-gray-900">{table.name}</h4>
+          <h4 className="font-medium text-sm text-gray-900 dark:text-neutral-100">{table.name}</h4>
         </div>
         <div className="flex items-center gap-2">
           {/* Compact occupancy when collapsed */}
           {isCollapsed && (
-            <span className={`text-xs font-medium ${isFull ? 'text-red-600' : 'text-gray-600'}`}>
+            <span className={`text-xs font-medium ${
+              isFull ? 'text-red-600 dark:text-red-400'
+                : occupancyRatio >= 0.5 ? 'text-amber-600 dark:text-amber-400'
+                : currentOccupancy > 0 ? 'text-emerald-600 dark:text-emerald-400'
+                : 'text-gray-500 dark:text-neutral-400'
+            }`}>
               {currentOccupancy}/{table.capacity}
             </span>
           )}
@@ -119,14 +150,14 @@ export function DroppableTable({
       {/* Occupancy bar - always visible */}
       {!isCollapsed && (
         <div className="flex items-center justify-between text-sm text-gray-600 mb-3">
-          <span className={isFull ? 'text-red-600 font-medium' : ''}>
+          <span className={`${isFull ? 'text-red-600 dark:text-red-400 font-medium' : 'text-gray-600 dark:text-neutral-400'}`}>
             <span data-testid="table-occupied">{currentOccupancy}</span>/<span data-testid="table-capacity">{table.capacity}</span>
             {isFull && ` ${t('full')}`}
           </span>
-          <div className="flex-1 mx-2 bg-gray-200 rounded-full h-2">
+          <div className="flex-1 mx-2 bg-gray-200 dark:bg-neutral-600 rounded-full h-2">
             <div
               className={`h-2 rounded-full transition-all ${
-                isFull ? 'bg-red-500' : currentOccupancy > 0 ? 'bg-green-500' : ''
+                isFull ? 'bg-red-500' : occupancyRatio >= 0.5 ? 'bg-amber-500' : currentOccupancy > 0 ? 'bg-emerald-500' : ''
               }`}
               style={{ width: `${Math.min((currentOccupancy / table.capacity) * 100, 100)}%` }}
             />
@@ -176,6 +207,30 @@ export function DroppableTable({
           )}
         </div>
       </SortableContext>
+
+      {/* Hover tooltip for collapsed state - shows guest names */}
+      {isCollapsed && showTooltip && guests.length > 0 && (
+        <div
+          className="absolute z-50 left-0 right-0 top-full mt-1 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-600
+                     rounded-lg shadow-xl p-3 min-w-[200px]"
+          onMouseEnter={() => setShowTooltip(true)}
+          onMouseLeave={handleMouseLeave}
+        >
+          <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1.5">
+            {table.name} — {currentOccupancy}/{table.capacity} {t('seats')}
+          </p>
+          <ul className="space-y-0.5 max-h-[200px] overflow-y-auto">
+            {guests.map((guest) => (
+              <li key={guest.id} className="text-sm text-neutral-800 dark:text-neutral-200 truncate">
+                {guest.name}
+                {guest.type === 'paired' && guest.partner?.name && (
+                  <span className="text-neutral-400 dark:text-neutral-500"> + {guest.partner.name}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
