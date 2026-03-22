@@ -11,7 +11,6 @@ import { useState, useRef, useCallback } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CaretDown, CaretRight } from '@phosphor-icons/react';
-import { TABLE_TYPE_COLORS } from '@/lib/constants';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { DraggableGuest } from './DraggableGuest';
 import type { DraggableGuest as DraggableGuestType, TableData } from '../types';
@@ -148,7 +147,6 @@ export function DroppableTable({
               {currentOccupancy}/{table.capacity}
             </span>
           )}
-          <span className={`w-3 h-3 rounded-full ${TABLE_TYPE_COLORS[table.type] || 'bg-gray-400'}`} />
         </div>
       </div>
 
