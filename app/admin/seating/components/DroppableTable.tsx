@@ -130,6 +130,11 @@ export function DroppableTable({
               : <CaretDown size={14} weight="bold" className="text-gray-500 flex-shrink-0" />
           )}
           <h4 className="font-medium text-sm text-gray-900 dark:text-neutral-100">{table.name}</h4>
+          {table.type === 'vip' && (
+            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300 uppercase tracking-wider">
+              VIP
+            </span>
+          )}
         </div>
         <div className="flex items-center gap-2">
           {/* Compact occupancy when collapsed */}

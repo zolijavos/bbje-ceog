@@ -443,6 +443,9 @@ export const translations = {
     seatingAutoArrange: 'Auto Arrange',
     seatingAutoArrangeConfirm: 'Rearrange all tables in a grid? VIP tables will be placed in the front rows.',
     seatingAutoArranged: 'Tables rearranged successfully',
+    tableTypeVip: 'VIP',
+    tableTypeStandard: 'Standard',
+    tableTypeReserved: 'Reserved',
 
     emailCancelled: 'Email cancelled',
     ruleUpdated: 'Rule updated',
@@ -956,6 +959,9 @@ export const translations = {
     seatingAutoArrange: 'Automatikus elrendezés',
     seatingAutoArrangeConfirm: 'Összes asztal rácsba rendezése? A VIP asztalok az első sorokba kerülnek.',
     seatingAutoArranged: 'Asztalok sikeresen átrendezve',
+    tableTypeVip: 'VIP',
+    tableTypeStandard: 'Standard',
+    tableTypeReserved: 'Foglalt',
 
     emailCancelled: 'Email törölve',
     ruleUpdated: 'Szabály frissítve',

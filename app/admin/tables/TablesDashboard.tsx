@@ -58,9 +58,9 @@ export default function TablesDashboard() {
 
   // Dynamic labels using translations
   const TYPE_LABELS: Record<string, string> = {
-    standard: t('standard'),
-    vip: t('vip'),
-    reserved: t('reserved'),
+    standard: t('tableTypeStandard'),
+    vip: t('tableTypeVip'),
+    reserved: t('tableTypeReserved'),
   };
 
   const STATUS_LABELS: Record<string, string> = {
@@ -262,9 +262,9 @@ export default function TablesDashboard() {
                   onChange={(e) => setFormData({ ...formData, type: e.target.value })}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                 >
-                  <option value="standard">{t('standard')}</option>
-                  <option value="vip">{t('vip')}</option>
-                  <option value="reserved">{t('reserved')}</option>
+                  <option value="standard">{t('tableTypeStandard')}</option>
+                  <option value="vip">{t('tableTypeVip')}</option>
+                  <option value="reserved">{t('tableTypeReserved')}</option>
                 </select>
               </div>
 
