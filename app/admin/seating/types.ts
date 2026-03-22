@@ -3,6 +3,18 @@
  * Story 4.2, 4.3, 4.4, 4.5
  */
 
+// Registration status → dot color CSS class mapping (shared by GuestChip & PairedGuestChip)
+export const STATUS_DOT_COLORS: Record<string, string> = {
+  invited: 'bg-yellow-400',
+  registered: 'bg-blue-400',
+  approved: 'bg-emerald-400',
+  checked_in: 'bg-emerald-600 ring-2 ring-emerald-300',
+  declined: 'bg-red-400',
+  cancelled: 'bg-red-400',
+  pending_approval: 'bg-amber-500',
+  rejected: 'bg-red-400',
+};
+
 export interface Guest {
   id: number;
   first_name: string;

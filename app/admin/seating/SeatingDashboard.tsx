@@ -28,7 +28,7 @@ import {
 } from '@dnd-kit/core';
 import type { DragOverEvent } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { GUEST_TYPE_LABELS, TABLE_TYPE_COLORS, SEATING_AUTO_COLLAPSE_THRESHOLD } from '@/lib/constants';
+import { GUEST_TYPE_LABELS, SEATING_AUTO_COLLAPSE_THRESHOLD } from '@/lib/constants';
 import {
   SquaresFour,
   MapTrifold,
@@ -237,6 +237,9 @@ export default function SeatingDashboard() {
     autoExpandTableId.current = null;
   }, []);
 
+  // Cleanup auto-expand timer on unmount
+  useEffect(() => () => { clearAutoExpand(); }, [clearAutoExpand]);
+
   // Enhanced DnD handlers with auto-expand on hover
   const handleDragOver = useCallback((event: DragOverEvent) => {
     baseDragOver(event);
@@ -390,8 +393,8 @@ export default function SeatingDashboard() {
   // === Expand All / Collapse All (operates on visible tables only) ===
   const isAllExpanded = useMemo(() => {
     if (visibleTables.length === 0) return true;
-    return visibleTables.every(t => !collapsed[t.id]);
-  }, [visibleTables, collapsed]);
+    return visibleTables.every(t => !isTableCollapsed(t.id));
+  }, [visibleTables, isTableCollapsed]);
 
   const handleToggleExpandAll = useCallback(() => {
     const newValue = isAllExpanded; // if all expanded, collapse all (true); if not, expand all (false)
@@ -744,10 +747,10 @@ export default function SeatingDashboard() {
                   <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-2">Tables</p>
                   <div className="space-y-1.5">
                     {[
-                      { border: 'border-gray-300 dark:border-neutral-500', label: t('seatingColorTableEmpty') },
-                      { border: 'border-blue-400 dark:border-blue-500', label: t('seatingColorTablePartial') + ' (<50%)' },
-                      { border: 'border-emerald-400 dark:border-emerald-500', label: t('seatingColorTableAlmost') + ' (≥50%)' },
-                      { border: 'border-red-400 dark:border-red-500', label: t('seatingColorTableFull') + ' (100%)' },
+                      { border: 'border-neutral-400 dark:border-neutral-500', label: t('seatingColorTableEmpty') },
+                      { border: 'border-blue-400 dark:border-blue-600', label: t('seatingColorTablePartial') + ' (<50%)' },
+                      { border: 'border-emerald-400 dark:border-emerald-600', label: t('seatingColorTableAlmost') + ' (≥50%)' },
+                      { border: 'border-red-400 dark:border-red-600', label: t('seatingColorTableFull') + ' (100%)' },
                     ].map(({ border, label }) => (
                       <div key={label} className="flex items-center gap-2">
                         <span className={`w-5 h-3 rounded border-2 ${border} bg-white dark:bg-neutral-800`} />

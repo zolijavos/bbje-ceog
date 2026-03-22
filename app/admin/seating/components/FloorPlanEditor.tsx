@@ -367,6 +367,7 @@ export function FloorPlanEditor({
 
   // Auto-arrange tables in grid pattern (VIP first, then Standard)
   const handleAutoArrange = useCallback(async () => {
+    if (tables.length === 0) return;
     if (!confirm(t('seatingAutoArrangeConfirm'))) return;
 
     setSaving(true);
@@ -384,26 +385,32 @@ export function FloorPlanEditor({
       const padding = 2; // meters from room edges
       const usableWidth = roomConfig.width - padding * 2;
       const usableHeight = roomConfig.height - padding * 2;
-      const cols = Math.ceil(Math.sqrt(sorted.length * (usableWidth / usableHeight)));
-      const rows = Math.ceil(sorted.length / cols);
-      const spacingX = usableWidth / Math.max(cols, 1);
-      const spacingY = usableHeight / Math.max(rows, 1);
+      const cols = Math.max(1, Math.ceil(Math.sqrt(sorted.length * (usableWidth / usableHeight))));
+      const rows = Math.max(1, Math.ceil(sorted.length / cols));
+      const spacingX = usableWidth / cols;
+      const spacingY = usableHeight / rows;
 
       // Save each table position sequentially
+      let failCount = 0;
       for (let i = 0; i < sorted.length; i++) {
         const col = i % cols;
         const row = Math.floor(i / cols);
         const x = Math.round((padding + spacingX * 0.5 + col * spacingX) * 10) / 10;
         const y = Math.round((padding + spacingY * 0.5 + row * spacingY) * 10) / 10;
 
-        await fetch(`/api/admin/tables/${sorted[i].id}/position`, {
+        const res = await fetch(`/api/admin/tables/${sorted[i].id}/position`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ pos_x: x, pos_y: y }),
         });
+        if (!res.ok) failCount++;
       }
 
-      setExportSuccess(t('seatingAutoArranged'));
+      if (failCount > 0) {
+        setError(`${failCount} table(s) failed to update`);
+      } else {
+        setExportSuccess(t('seatingAutoArranged'));
+      }
       onRefresh?.();
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Network error';

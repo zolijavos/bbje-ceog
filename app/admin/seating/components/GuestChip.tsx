@@ -8,6 +8,7 @@
 
 import { forwardRef, memo } from 'react';
 import { GUEST_TYPE_LABELS } from '@/lib/constants';
+import { STATUS_DOT_COLORS } from '../types';
 import type { DraggableGuest } from '../types';
 
 interface GuestChipProps {
@@ -17,18 +18,6 @@ interface GuestChipProps {
   isHighlighted?: boolean;
   style?: React.CSSProperties;
 }
-
-// Registration status → dot color mapping
-const STATUS_DOT_COLORS: Record<string, string> = {
-  invited: 'bg-yellow-400',
-  registered: 'bg-blue-400',
-  approved: 'bg-emerald-400',
-  checked_in: 'bg-emerald-600 ring-2 ring-emerald-300',
-  declined: 'bg-red-400',
-  cancelled: 'bg-red-400',
-  pending_approval: 'bg-amber-500',
-  rejected: 'bg-red-400',
-};
 
 export const GuestChip = forwardRef<HTMLDivElement, GuestChipProps & React.HTMLAttributes<HTMLDivElement>>(
   ({ guest, isDragging, isOverlay, isHighlighted, style, ...props }, ref) => {

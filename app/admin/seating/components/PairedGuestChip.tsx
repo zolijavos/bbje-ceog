@@ -8,6 +8,7 @@
  */
 
 import { forwardRef, memo } from 'react';
+import { STATUS_DOT_COLORS } from '../types';
 import type { DraggableGuest } from '../types';
 
 interface PairedGuestChipProps {
@@ -19,18 +20,6 @@ interface PairedGuestChipProps {
   mainGuestLabel?: string;
   partnerLabel?: string;
 }
-
-// Registration status → dot color mapping
-const STATUS_DOT_COLORS: Record<string, string> = {
-  invited: 'bg-yellow-400',
-  registered: 'bg-blue-400',
-  approved: 'bg-emerald-400',
-  checked_in: 'bg-emerald-600 ring-2 ring-emerald-300',
-  declined: 'bg-red-400',
-  cancelled: 'bg-red-400',
-  pending_approval: 'bg-amber-500',
-  rejected: 'bg-red-400',
-};
 
 export const PairedGuestChip = forwardRef<HTMLDivElement, PairedGuestChipProps & React.HTMLAttributes<HTMLDivElement>>(
   ({ guest, isDragging, isOverlay, isHighlighted, style, mainGuestLabel = 'Main guest', partnerLabel = 'Partner', ...props }, ref) => {
@@ -85,6 +74,13 @@ export const PairedGuestChip = forwardRef<HTMLDivElement, PairedGuestChipProps &
           </p>
           <p className="text-xs text-gray-500 dark:text-neutral-400">{partnerLabel}</p>
         </div>
+
+        {/* VIP badge */}
+        {guest.isVip && (
+          <span className="text-[9px] font-bold px-1 py-0.5 rounded bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300 uppercase tracking-wider flex-shrink-0">
+            VIP
+          </span>
+        )}
 
         {/* 2 Seats Badge */}
         <span className="px-1.5 py-0.5 bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300 text-xs rounded flex-shrink-0 font-medium">

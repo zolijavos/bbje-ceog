@@ -352,7 +352,7 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
   return (
     <div
       ref={containerRef}
-      className="relative bg-neutral-200 overflow-hidden border-2 border-neutral-300"
+      className="relative bg-neutral-200 dark:bg-neutral-900 overflow-hidden border-2 border-neutral-300 dark:border-neutral-600"
       style={{ height: '500px' }}
     >
       <Stage
@@ -614,14 +614,14 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
         >
         {/* Invisible padding for easier mouse access */}
         <div
-          className="bg-white border border-neutral-300 rounded-lg shadow-xl p-4 min-w-[240px] max-w-[340px] m-3"
+          className="bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-lg shadow-xl p-4 min-w-[240px] max-w-[340px] m-3"
         >
           {/* Header */}
-          <div className="flex items-center gap-2 mb-3 pb-2 border-b border-neutral-200">
-            <Users size={20} weight="duotone" className="text-neutral-500" />
+          <div className="flex items-center gap-2 mb-3 pb-2 border-b border-neutral-200 dark:border-neutral-700">
+            <Users size={20} weight="duotone" className="text-neutral-500 dark:text-neutral-400" />
             <div>
-              <h4 className="font-semibold text-neutral-800 text-sm">{hoveredTable.name}</h4>
-              <p className="text-xs text-neutral-500">{TABLE_TYPE_LABELS[hoveredTable.type] || hoveredTable.type}</p>
+              <h4 className="font-semibold text-neutral-800 dark:text-neutral-100 text-sm">{hoveredTable.name}</h4>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400">{TABLE_TYPE_LABELS[hoveredTable.type] || hoveredTable.type}</p>
             </div>
           </div>
 
@@ -630,7 +630,7 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
             const occupiedSeats = calculateOccupiedSeats(hoveredTable.assignments);
             return (
               <div className="flex justify-between items-center mb-3 text-sm">
-                <span className="text-neutral-600">Occupancy:</span>
+                <span className="text-neutral-600 dark:text-neutral-400">Occupancy:</span>
                 <span className={`font-semibold ${
                   occupiedSeats >= hoveredTable.capacity
                     ? 'text-red-600'
@@ -647,7 +647,7 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
           {/* Guest list - scrollable */}
           {hoveredTable.assignments.length > 0 ? (
             <div className="space-y-1.5">
-              <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide">Guests:</p>
+              <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide">Guests:</p>
               <ul className="space-y-1.5 max-h-[300px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent">
                 {hoveredTable.assignments
                   .filter(a => !a.guest.paired_with_id) // Only show main guests, not partners
@@ -666,9 +666,9 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
                           <User size={16} weight="duotone" className="text-blue-500 mt-0.5 flex-shrink-0" />
                         )}
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-neutral-800 truncate">{guestName}</p>
+                          <p className="font-medium text-neutral-800 dark:text-neutral-200 truncate">{guestName}</p>
                           {isPaired && partnerName && (
-                            <p className="text-xs text-neutral-500 truncate">+ {partnerName}</p>
+                            <p className="text-xs text-neutral-500 dark:text-neutral-400 truncate">+ {partnerName}</p>
                           )}
                         </div>
                         <span className={`text-xs px-1.5 py-0.5 rounded flex-shrink-0 ${
@@ -686,7 +686,7 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
               </ul>
             </div>
           ) : (
-            <p className="text-sm text-neutral-500 italic">No assigned guests</p>
+            <p className="text-sm text-neutral-500 dark:text-neutral-400 italic">No assigned guests</p>
           )}
         </div>
         </div>
@@ -694,8 +694,8 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
       })()}
 
       {/* Heatmap legend */}
-      <div className="absolute bottom-3 left-3 flex items-center gap-3 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2 shadow-sm border border-neutral-200">
-        <span className="text-xs font-medium text-neutral-500 uppercase tracking-wide">Heatmap:</span>
+      <div className="absolute bottom-3 left-3 flex items-center gap-3 bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm rounded-lg px-3 py-2 shadow-sm border border-neutral-200 dark:border-neutral-600">
+        <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide">Heatmap:</span>
         {[
           { color: '#9ca3af', label: heatmapLabels?.empty ?? 'Empty' },
           { color: '#22c55e', label: heatmapLabels?.available ?? 'Available' },
@@ -704,7 +704,7 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
         ].map(({ color, label }) => (
           <div key={label} className="flex items-center gap-1">
             <span className="w-3 h-3 rounded-full" style={{ backgroundColor: color }} />
-            <span className="text-xs text-neutral-600">{label}</span>
+            <span className="text-xs text-neutral-600 dark:text-neutral-300">{label}</span>
           </div>
         ))}
       </div>

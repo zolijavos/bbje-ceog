@@ -30,7 +30,8 @@ export function SeatingSearchBar({ searchQuery, onSearchChange, resultCount }: S
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder={t('seatingSearchPlaceholder')}
-          className="w-full pl-10 pr-10 py-2.5 border-2 border-neutral-300 bg-white text-sm
+          className="w-full pl-10 pr-10 py-2.5 border-2 border-neutral-300 dark:border-neutral-600
+                     bg-white dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 text-sm
                      focus:border-accent-500 focus:ring-1 focus:ring-accent-500 outline-none
                      transition-colors"
           data-testid="seating-search-input"

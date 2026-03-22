@@ -7,7 +7,7 @@
  * Supports collapse/expand, search highlight, inline edit modal
  */
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CaretDown, CaretRight, PencilSimple } from '@phosphor-icons/react';
@@ -61,6 +61,11 @@ export function DroppableTable({
     setShowTooltip(false);
   }, []);
 
+  // Cleanup tooltip timer on unmount
+  useEffect(() => () => {
+    if (tooltipTimeout.current) clearTimeout(tooltipTimeout.current);
+  }, []);
+
   // Edit modal state
   const [showEditModal, setShowEditModal] = useState(false);
   const [editForm, setEditForm] = useState({ name: table.name, capacity: table.capacity, type: table.type });
@@ -75,6 +80,10 @@ export function DroppableTable({
   }, [table.name, table.capacity, table.type]);
 
   const handleSaveEdit = useCallback(async () => {
+    if (editForm.capacity < currentOccupancy) {
+      setEditError(`Capacity cannot be less than current occupancy (${currentOccupancy})`);
+      return;
+    }
     setEditSaving(true);
     setEditError(null);
     try {
@@ -144,7 +153,7 @@ export function DroppableTable({
     >
       {/* Invalid drop overlay */}
       {isInvalidDrop && (
-        <div className="absolute inset-0 flex items-center justify-center bg-red-100/90 rounded-lg z-10">
+        <div className="absolute inset-0 flex items-center justify-center bg-red-100/90 dark:bg-red-950/90 rounded-lg z-10">
           <p className="text-red-600 font-medium text-sm text-center px-2">
             {activeGuest?.type === 'paired'
               ? t('pairedGuestNeedsSeats').replace('{available}', String(table.capacity - currentOccupancy))
@@ -162,8 +171,8 @@ export function DroppableTable({
         <div className="flex items-center gap-2">
           {onToggleCollapse && (
             isCollapsed
-              ? <CaretRight size={14} weight="bold" className="text-gray-500 flex-shrink-0" />
-              : <CaretDown size={14} weight="bold" className="text-gray-500 flex-shrink-0" />
+              ? <CaretRight size={14} weight="bold" className="text-gray-500 dark:text-neutral-400 flex-shrink-0" />
+              : <CaretDown size={14} weight="bold" className="text-gray-500 dark:text-neutral-400 flex-shrink-0" />
           )}
           <h4 className="font-medium text-sm text-gray-900 dark:text-neutral-100">{table.name}</h4>
           {table.type === 'vip' && (
@@ -225,9 +234,9 @@ export function DroppableTable({
       >
         <div className={isCollapsed ? 'hidden' : 'space-y-2'}>
           {guests.length === 0 ? (
-            <div className="text-center py-6 border-2 border-dashed border-gray-200 rounded-lg">
-              <p className="text-sm text-gray-500">{t('dragGuestsHere')}</p>
-              <p className="text-xs text-gray-500 mt-1">
+            <div className="text-center py-6 border-2 border-dashed border-gray-200 dark:border-neutral-600 rounded-lg">
+              <p className="text-sm text-gray-500 dark:text-neutral-400">{t('dragGuestsHere')}</p>
+              <p className="text-xs text-gray-500 dark:text-neutral-400 mt-1">
                 ({table.capacity} {t('seats')})
               </p>
             </div>
