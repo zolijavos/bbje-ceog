@@ -16,11 +16,11 @@ const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
 async function loginAsAdmin(page: Page): Promise<void> {
   await page.goto(`${BASE_URL}/admin/login`);
   await page.getByLabel(/email/i).fill(ADMIN_EMAIL);
-  await page.getByLabel(/password|jelsz/i).fill(ADMIN_PASSWORD);
+  await page.getByLabel(/password/i).fill(ADMIN_PASSWORD);
 
   await Promise.all([
     page.waitForResponse((res) => res.url().includes('/api/auth/callback/credentials')),
-    page.getByRole('button', { name: /sign in|bejelentkez/i }).click(),
+    page.getByRole('button', { name: /login|sign in|bejelentkez/i }).click(),
   ]);
 
   await page.waitForURL(/\/admin(\/|$)/, { timeout: 15000 });
@@ -292,23 +292,20 @@ test.describe('Live Seating Display - Dashboard Integration', () => {
   }) => {
     await page.goto(`${BASE_URL}/admin`);
 
-    // Find the Live Seating Display card (role="button" in DashboardContent)
-    const liveSeatingButton = page.getByRole('button').filter({ hasText: /Seating Display|Ülésrend/i });
-    await expect(liveSeatingButton).toBeVisible({ timeout: 10000 });
+    // Find the Live Display card on the dashboard
+    const liveDisplayCard = page.getByText(/Live Display|Élő Kijelző/i).first();
+    await expect(liveDisplayCard).toBeVisible({ timeout: 10000 });
 
     // Verify description text is present
     await expect(
-      page.getByText(/real-time seating display|valós idejű ülésrend/i),
+      page.getByText(/real-time seating display|valós idejű ülésrend/i).first(),
     ).toBeVisible();
 
-    // Click opens new window
-    const [newPage] = await Promise.all([
-      context.waitForEvent('page'),
-      liveSeatingButton.click(),
-    ]);
-
-    await newPage.waitForURL(/\/display\/seating/, { timeout: 15000 });
-    expect(newPage.url()).toContain('/display/seating');
-    await newPage.close();
+    // Click the card link navigates to display page
+    const displayLink = page.locator('a[href="/display/seating"]').first();
+    await expect(displayLink).toBeVisible();
+    await displayLink.click();
+    await page.waitForURL(/\/display\/seating/, { timeout: 15000 });
+    expect(page.url()).toContain('/display/seating');
   });
 });
