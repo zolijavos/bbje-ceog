@@ -46,10 +46,10 @@ export const PairedGuestChip = forwardRef<HTMLDivElement, PairedGuestChipProps &
         data-guest-id={guest.guestId}
         data-guest-type={guest.guestType}
         className={`
-          flex items-center gap-2 p-2 bg-gray-50 dark:bg-neutral-800 border rounded-lg cursor-grab
+          flex items-center gap-2 p-2 bg-neutral-50 dark:bg-neutral-700 border rounded-lg cursor-grab
           transition-all duration-150
-          ${isDragging ? 'opacity-50 border-blue-400' : 'border-gray-200 dark:border-neutral-600'}
-          ${isOverlay ? 'shadow-xl scale-105 rotate-1' : 'hover:shadow-md hover:-translate-y-0.5'}
+          ${isDragging ? 'opacity-50 border-blue-400' : 'border-neutral-200 dark:border-neutral-500'}
+          ${isOverlay ? 'shadow-xl scale-105 rotate-1' : 'hover:shadow-md hover:bg-white dark:hover:bg-neutral-600 hover:-translate-y-0.5'}
           ${isHighlighted ? 'ring-2 ring-amber-400 bg-amber-50 dark:bg-amber-950/30' : ''}
         `}
         {...props}

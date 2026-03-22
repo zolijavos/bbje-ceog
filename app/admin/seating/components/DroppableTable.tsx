@@ -123,7 +123,7 @@ export function DroppableTable({
       ? 'border-emerald-400 bg-emerald-100 dark:border-emerald-600 dark:bg-emerald-950/40'
       : currentOccupancy > 0
         ? 'border-blue-400 bg-blue-100 dark:border-blue-600 dark:bg-blue-950/40'
-        : 'border-neutral-300 bg-neutral-100 dark:border-neutral-600 dark:bg-neutral-800';
+        : 'border-neutral-400 bg-neutral-200 dark:border-neutral-500 dark:bg-neutral-700/50';
 
   return (
     <div
