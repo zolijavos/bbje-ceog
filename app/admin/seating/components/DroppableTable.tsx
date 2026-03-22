@@ -4,13 +4,13 @@
  * DroppableTable Component
  * A table card that accepts dropped guests
  * Shows capacity, current guests, and visual feedback during drag
- * Supports collapse/expand and search highlight
+ * Supports collapse/expand, search highlight, inline edit modal
  */
 
 import { useState, useRef, useCallback } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { CaretDown, CaretRight } from '@phosphor-icons/react';
+import { CaretDown, CaretRight, PencilSimple } from '@phosphor-icons/react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { DraggableGuest } from './DraggableGuest';
 import type { DraggableGuest as DraggableGuestType, TableData } from '../types';
@@ -24,6 +24,7 @@ interface DroppableTableProps {
   onToggleCollapse?: () => void;
   isHighlighted?: boolean;
   highlightedGuestIds?: Set<number>;
+  onTableUpdate?: () => void;
 }
 
 // Calculate total occupied seats (paired guests = 2)
@@ -40,6 +41,7 @@ export function DroppableTable({
   onToggleCollapse,
   isHighlighted = false,
   highlightedGuestIds,
+  onTableUpdate,
 }: DroppableTableProps) {
   const { t } = useLanguage();
   const containerId = `table-${table.id}`;
@@ -59,6 +61,41 @@ export function DroppableTable({
     setShowTooltip(false);
   }, []);
 
+  // Edit modal state
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editForm, setEditForm] = useState({ name: table.name, capacity: table.capacity, type: table.type });
+  const [editSaving, setEditSaving] = useState(false);
+  const [editError, setEditError] = useState<string | null>(null);
+
+  const handleOpenEdit = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditForm({ name: table.name, capacity: table.capacity, type: table.type });
+    setEditError(null);
+    setShowEditModal(true);
+  }, [table.name, table.capacity, table.type]);
+
+  const handleSaveEdit = useCallback(async () => {
+    setEditSaving(true);
+    setEditError(null);
+    try {
+      const res = await fetch(`/api/admin/tables/${table.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(editForm),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message || 'Error saving');
+      }
+      setShowEditModal(false);
+      onTableUpdate?.();
+    } catch (err) {
+      setEditError(err instanceof Error ? err.message : 'Error');
+    } finally {
+      setEditSaving(false);
+    }
+  }, [table.id, editForm, onTableUpdate]);
+
   // Check if active guest can fit
   const canAcceptGuest = activeGuest
     ? (currentOccupancy + activeGuest.seatsRequired) <= table.capacity
@@ -71,7 +108,7 @@ export function DroppableTable({
       table,
       containerId,
     },
-    disabled: isFull && !activeGuest?.tableId, // Allow removing from full table
+    disabled: isFull && !activeGuest?.tableId,
   });
 
   // Visual states
@@ -97,7 +134,7 @@ export function DroppableTable({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={`
-        relative border-2 rounded-lg transition-all
+        group relative border-2 rounded-lg transition-all
         ${isCollapsed ? 'p-3' : 'p-4 min-h-[180px]'}
         ${occupancyColorClass}
         ${isValidDrop ? 'border-green-400 bg-green-50 ring-2 ring-green-200 dark:border-green-500 dark:bg-green-950/30' : ''}
@@ -136,6 +173,18 @@ export function DroppableTable({
           )}
         </div>
         <div className="flex items-center gap-2">
+          {/* Edit button */}
+          {onTableUpdate && (
+            <button
+              onClick={handleOpenEdit}
+              className="p-1 rounded text-gray-400 hover:text-gray-600 hover:bg-gray-200/50
+                         dark:text-neutral-500 dark:hover:text-neutral-300 dark:hover:bg-neutral-700/50
+                         opacity-0 group-hover:opacity-100 transition-all"
+              title={t('edit')}
+            >
+              <PencilSimple size={14} weight="bold" />
+            </button>
+          )}
           {/* Compact occupancy when collapsed */}
           {isCollapsed && (
             <span className={`text-xs font-medium ${
@@ -232,6 +281,99 @@ export function DroppableTable({
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {/* Edit Table Modal */}
+      {showEditModal && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50"
+          onClick={() => setShowEditModal(false)}
+        >
+          <div
+            className="bg-white dark:bg-neutral-800 rounded-lg shadow-2xl p-6 w-full max-w-sm mx-4
+                       border border-neutral-200 dark:border-neutral-600"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="font-semibold text-neutral-800 dark:text-neutral-100 mb-4">{t('editTable')}</h3>
+
+            <div className="space-y-4">
+              {/* Name */}
+              <div>
+                <label className="block text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase tracking-wide mb-1">
+                  {t('tableName')}
+                </label>
+                <input
+                  type="text"
+                  value={editForm.name}
+                  onChange={(e) => setEditForm(prev => ({ ...prev, name: e.target.value }))}
+                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg
+                             bg-white dark:bg-neutral-700 text-neutral-800 dark:text-neutral-100
+                             focus:border-accent-500 focus:ring-1 focus:ring-accent-500 outline-none text-sm"
+                />
+              </div>
+
+              {/* Capacity */}
+              <div>
+                <label className="block text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase tracking-wide mb-1">
+                  {t('capacity')}
+                </label>
+                <input
+                  type="number"
+                  min={1}
+                  max={20}
+                  value={editForm.capacity}
+                  onChange={(e) => setEditForm(prev => ({ ...prev, capacity: parseInt(e.target.value) || 1 }))}
+                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg
+                             bg-white dark:bg-neutral-700 text-neutral-800 dark:text-neutral-100
+                             focus:border-accent-500 focus:ring-1 focus:ring-accent-500 outline-none text-sm"
+                />
+              </div>
+
+              {/* Type */}
+              <div>
+                <label className="block text-xs font-medium text-neutral-600 dark:text-neutral-400 uppercase tracking-wide mb-1">
+                  {t('type')}
+                </label>
+                <select
+                  value={editForm.type}
+                  onChange={(e) => setEditForm(prev => ({ ...prev, type: e.target.value }))}
+                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg
+                             bg-white dark:bg-neutral-700 text-neutral-800 dark:text-neutral-100
+                             focus:border-accent-500 focus:ring-1 focus:ring-accent-500 outline-none text-sm"
+                >
+                  <option value="standard">{t('tableTypeStandard')}</option>
+                  <option value="vip">{t('tableTypeVip')}</option>
+                  <option value="reserved">{t('tableTypeReserved')}</option>
+                </select>
+              </div>
+
+              {/* Error */}
+              {editError && (
+                <p className="text-red-600 dark:text-red-400 text-sm">{editError}</p>
+              )}
+            </div>
+
+            {/* Actions */}
+            <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-600">
+              <button
+                onClick={() => setShowEditModal(false)}
+                className="px-4 py-2 text-sm text-neutral-600 dark:text-neutral-400 bg-neutral-100 dark:bg-neutral-700
+                           hover:bg-neutral-200 dark:hover:bg-neutral-600 rounded-lg transition-colors"
+                disabled={editSaving}
+              >
+                {t('cancel')}
+              </button>
+              <button
+                onClick={handleSaveEdit}
+                disabled={editSaving || !editForm.name.trim()}
+                className="px-4 py-2 text-sm text-white bg-accent-600 hover:bg-accent-700
+                           rounded-lg transition-colors disabled:opacity-50"
+              >
+                {editSaving ? '...' : t('save')}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -469,6 +469,7 @@ export default function SeatingDashboard() {
               guests={tableGuestsMap[table.id] || []}
               activeGuest={activeGuest}
               onRemoveGuest={handleRemoveGuest}
+              onTableUpdate={fetchData}
               isCollapsed={isTableCollapsed(table.id)}
               onToggleCollapse={() => handleToggleCollapse(table.id)}
               isHighlighted={globalSearch.trim() ? searchResults.matchingTableIds.has(table.id) : false}
