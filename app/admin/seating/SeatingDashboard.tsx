@@ -568,9 +568,8 @@ export default function SeatingDashboard() {
           <button
             onClick={() => setShowCsvImport(!showCsvImport)}
             className="px-3 py-2 text-sm font-medium rounded-lg flex items-center gap-2 transition-all
-                       bg-neutral-100 text-neutral-700 hover:bg-neutral-200
-                       dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700
-                       border border-neutral-300 dark:border-neutral-600"
+                       bg-emerald-600 text-white hover:bg-emerald-700
+                       dark:bg-emerald-700 dark:hover:bg-emerald-600 shadow-sm"
             data-testid="csv-import-button"
           >
             <UploadSimple size={16} weight="duotone" />
@@ -579,9 +578,8 @@ export default function SeatingDashboard() {
           <button
             onClick={handleExport}
             className="px-3 py-2 text-sm font-medium rounded-lg flex items-center gap-2 transition-all
-                       bg-neutral-100 text-neutral-700 hover:bg-neutral-200
-                       dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700
-                       border border-neutral-300 dark:border-neutral-600"
+                       bg-accent-600 text-white hover:bg-accent-700
+                       dark:bg-accent-700 dark:hover:bg-accent-600 shadow-sm"
             data-testid="csv-export-button"
           >
             <DownloadSimple size={16} weight="duotone" />
@@ -590,9 +588,8 @@ export default function SeatingDashboard() {
           <button
             onClick={fetchData}
             className="px-3 py-2 text-sm font-medium rounded-lg flex items-center gap-2 transition-all
-                       bg-neutral-100 text-neutral-700 hover:bg-neutral-200
-                       dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700
-                       border border-neutral-300 dark:border-neutral-600"
+                       bg-neutral-600 text-white hover:bg-neutral-700
+                       dark:bg-neutral-600 dark:hover:bg-neutral-500 shadow-sm"
             data-testid="refresh-button"
           >
             <ArrowsClockwise size={16} weight="duotone" />

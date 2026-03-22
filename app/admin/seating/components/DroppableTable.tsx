@@ -118,12 +118,12 @@ export function DroppableTable({
   // Occupancy-based color coding: gray (empty) → blue (<50%) → green (≥50%) → red (full)
   const occupancyRatio = table.capacity > 0 ? currentOccupancy / table.capacity : 0;
   const occupancyColorClass = isFull
-    ? 'border-red-300 bg-red-50 dark:border-red-700 dark:bg-red-950/30'
+    ? 'border-red-400 bg-red-100 dark:border-red-600 dark:bg-red-950/40'
     : occupancyRatio >= 0.5
-      ? 'border-emerald-300 bg-emerald-50/50 dark:border-emerald-700 dark:bg-emerald-950/20'
+      ? 'border-emerald-400 bg-emerald-100 dark:border-emerald-600 dark:bg-emerald-950/40'
       : currentOccupancy > 0
-        ? 'border-blue-300 bg-blue-50/50 dark:border-blue-700 dark:bg-blue-950/20'
-        : 'border-gray-200 bg-gray-50 dark:border-neutral-600 dark:bg-neutral-800';
+        ? 'border-blue-400 bg-blue-100 dark:border-blue-600 dark:bg-blue-950/40'
+        : 'border-neutral-300 bg-neutral-100 dark:border-neutral-600 dark:bg-neutral-800';
 
   return (
     <div
