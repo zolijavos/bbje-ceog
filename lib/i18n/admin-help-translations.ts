@@ -582,6 +582,94 @@ jane@example.com,Table 5
 This is useful for printing, presentations, or sending to the event venue.`,
     keywords: ['export', 'download', 'csv', 'save', 'png', 'pdf', 'print', 'floor plan'],
   },
+  {
+    id: 'seating-search-filter',
+    category: 'Seating Arrangement',
+    question: 'How do I search for guests and filter tables?',
+    answer: `**Global Search** (top of page):
+• Type a guest name, email, or table name
+• Matching tables auto-expand with highlighted guests (★ amber ring)
+• Search works in both Grid and Floor Plan views
+• Clear with the × button — original collapse state restores
+
+**Filter Chips** (above tables):
+• **All** — show all tables
+• **Available** — tables with free seats (<100%)
+• **Full** — completely occupied tables (100%)
+• **Empty** — tables with no guests (0%)
+
+**Sorting** (dropdown next to filters):
+• **Name** — numeric order (Table 1, 2, 3... 10, not 1, 10, 2)
+• **Most free seats** — tables with most room first
+• **Fewest free seats** — fullest tables first
+
+**Expand/Collapse**:
+• Click table header to toggle individual table
+• "Expand All / Collapse All" button for bulk control
+• 5+ tables auto-collapse on page load`,
+    keywords: ['search', 'filter', 'find', 'sort', 'collapse', 'expand'],
+  },
+  {
+    id: 'seating-color-coding',
+    category: 'Seating Arrangement',
+    question: 'What do the table colors mean?',
+    answer: `Tables are color-coded by occupancy:
+
+**Table border colors**:
+• **Grey** — empty table (0 guests)
+• **Blue** — partially filled (<50%)
+• **Green** — almost full (≥50%)
+• **Red** — completely full (100%)
+
+**Guest status dots** (on guest cards):
+• 🟡 **Yellow** — invited (invitation sent)
+• 🔵 **Blue** — registered
+• 🟢 **Green** — approved (ticket issued)
+• ✅ **Green with ring** — checked in
+• 🔴 **Red** — declined or rejected
+• 🟠 **Orange** — pending approval
+
+**VIP Badge**: Gold "VIP" badge on guests with VIP Reception flag enabled.
+
+A Color Guide is available at the bottom of the Seating page.`,
+    keywords: ['color', 'colours', 'status', 'dot', 'vip', 'badge', 'heatmap'],
+  },
+  {
+    id: 'seating-inline-edit',
+    category: 'Seating Arrangement',
+    question: 'How do I edit a table from the seating page?',
+    answer: `You can edit table properties directly from the Grid view:
+
+1. **Hover** over a table card — a pencil icon appears
+2. **Click** the pencil icon — edit popup opens
+3. Change **name**, **capacity**, or **type** (Standard/VIP/Reserved)
+4. Click **Save**
+
+**Notes**:
+• Changing type to VIP moves the table to the VIP section with a gold badge
+• Capacity cannot be reduced below current occupancy
+• Changes take effect immediately`,
+    keywords: ['edit', 'rename', 'capacity', 'type', 'vip', 'pencil', 'modify'],
+  },
+  {
+    id: 'seating-floorplan-features',
+    category: 'Seating Arrangement',
+    question: 'What can I do in the Floor Plan view?',
+    answer: `The Floor Plan view shows a 2D canvas with tables:
+
+**Heatmap Colors**: Tables are colored by occupancy (grey/green/orange/red).
+
+**Spotlight Search**: When you search, matching tables pulse with a gold glow and non-matching tables dim. With a single match, the camera auto-zooms to it.
+
+**Auto-Arrange**: Click the grid icon button in the toolbar to automatically arrange all tables in a neat grid pattern. VIP tables are placed in the front rows.
+
+**Tooltip**: Hover over a table to see guest list. The tooltip stays visible for scrolling (800ms delay).
+
+**Drag & Resize**: Drag tables to reposition. Select a table and drag the resize handle to change capacity.
+
+**Export**: Download as PNG or PDF via the dropdown menu.`,
+    keywords: ['floor plan', 'canvas', 'heatmap', 'spotlight', 'auto arrange', 'tooltip', 'zoom'],
+  },
 
   // ==========================================
   // TABLE MANAGEMENT
@@ -746,6 +834,54 @@ Overrides are marked separately in the log.`,
 • Entry staff name
 • Override flag (if applicable)`,
     keywords: ['log', 'history', 'entries', 'view'],
+  },
+  {
+    id: 'checkin-scanner-theme',
+    category: 'Check-in',
+    question: 'What information does the scanner show?',
+    answer: `The check-in scanner shows guest details at every stage:
+
+**Before check-in** (green card):
+• Guest name and title
+• Table number (if assigned)
+• VIP Reception badge (gold ★ VIP)
+• Dietary requirements
+• Partner name (for paired tickets)
+
+**After check-in** (success card):
+• Same guest details are shown on the confirmation screen
+
+**Already checked in** (yellow card):
+• Previous check-in time and staff name
+• Admin Override button (admin only, not staff)
+
+**Invalid ticket** (red card):
+• Error message explaining why the ticket is invalid
+
+The scanner uses the CEO Gala dark-blue theme with gold accents.`,
+    keywords: ['scanner', 'details', 'vip', 'dietary', 'partner', 'table', 'theme'],
+  },
+  {
+    id: 'checkin-live-display',
+    category: 'Check-in',
+    question: 'What is the Live Seating Display?',
+    answer: `The Live Seating Display is a full-screen view for event venue screens.
+
+**Access**: Dashboard → "Live Display" card, or navigate to /display/seating
+
+**Features**:
+• Shows the event floor plan as background image
+• Guest names overlaid at their table positions
+• **Real-time updates**: when a guest checks in, their name style changes from grey italic to bold black
+• **Counter**: "X/Y CHECKED IN" updates live
+
+**Usage**:
+• Open on a large screen/projector at the event venue
+• Leave it running — updates automatically via SSE (Server-Sent Events)
+• Requires admin login
+
+**Note**: Only works online (requires server connection for real-time updates).`,
+    keywords: ['display', 'live', 'screen', 'projector', 'real-time', 'venue'],
   },
 
   // ==========================================
@@ -2102,6 +2238,94 @@ jane@example.com,Table 5
 Ez hasznos nyomtatáshoz, prezentációkhoz, vagy a rendezvény helyszínére küldéshez.`,
     keywords: ['export', 'letöltés', 'download', 'csv', 'mentés', 'png', 'pdf', 'nyomtatás', 'floor plan'],
   },
+  {
+    id: 'seating-search-filter',
+    category: 'Seating Arrangement',
+    question: 'Hogyan keresek vendéget és szűröm az asztalokat?',
+    answer: `**Globális keresés** (oldal tetején):
+• Írjon be vendég nevet, email-t vagy asztal nevet
+• A talált asztalok automatikusan kinyílnak kiemelt vendégekkel (★ amber keret)
+• A keresés Grid és Alaprajz nézetben egyaránt működik
+• Törlés az × gombbal — eredeti állapot visszaáll
+
+**Szűrő chipek** (asztalok felett):
+• **Összes** — minden asztal megjelenik
+• **Van hely** — szabad helyes asztalok (<100%)
+• **Tele** — teljesen foglalt asztalok (100%)
+• **Üres** — vendég nélküli asztalok (0%)
+
+**Rendezés** (dropdown a szűrők mellett):
+• **Név** — numerikus sorrend (Asztal 1, 2, 3... 10, nem 1, 10, 2)
+• **Legtöbb szabad hely** — legtöbb helyes asztalok elől
+• **Legkevesebb szabad hely** — legteltebb asztalok elől
+
+**Összecsukás/Kinyitás**:
+• Asztal fejlécre kattintva egyenként
+• "Összes kinyitása / becsukása" gomb tömegesen
+• 5+ asztalnál automatikusan csukva indulnak`,
+    keywords: ['keresés', 'szűrő', 'szűrés', 'rendezés', 'összecsuk', 'kinyit', 'filter', 'search'],
+  },
+  {
+    id: 'seating-color-coding',
+    category: 'Seating Arrangement',
+    question: 'Mit jelentenek az asztal színek?',
+    answer: `Az asztalok telítettség szerint színkódoltak:
+
+**Asztal keret színek**:
+• **Szürke** — üres asztal (0 vendég)
+• **Kék** — részben foglalt (<50%)
+• **Zöld** — majdnem tele (≥50%)
+• **Piros** — teljesen tele (100%)
+
+**Vendég státusz pontok** (vendég kártyákon):
+• 🟡 **Sárga** — meghívott (meghívó elküldve)
+• 🔵 **Kék** — regisztrált
+• 🟢 **Zöld** — jóváhagyott (jegy kiadva)
+• ✅ **Zöld ringgel** — bejelentkezett
+• 🔴 **Piros** — visszautasított
+• 🟠 **Narancs** — jóváhagyásra vár
+
+**VIP Badge**: Arany "VIP" jelzés azoknál a vendégeknél, akiknek a VIP Reception jelölő engedélyezve van.
+
+A Szín jelölések panel az Ülésrend oldal alján található.`,
+    keywords: ['szín', 'szinek', 'státusz', 'pont', 'vip', 'badge', 'heatmap'],
+  },
+  {
+    id: 'seating-inline-edit',
+    category: 'Seating Arrangement',
+    question: 'Hogyan szerkesztek egy asztalt az ülésrend oldalról?',
+    answer: `Az asztal tulajdonságai közvetlenül a Grid nézetből szerkeszthetők:
+
+1. **Vigye az egeret** az asztal kártya fölé — ceruza ikon jelenik meg
+2. **Kattintson** a ceruza ikonra — szerkesztő ablak nyílik
+3. Módosítsa a **nevet**, **kapacitást** vagy **típust** (Standard/VIP/Foglalt)
+4. Kattintson a **Mentés** gombra
+
+**Megjegyzések**:
+• A típus VIP-re változtatása áthelyezi az asztalt a VIP szekcióba arany badge-dzsel
+• A kapacitás nem csökkenthető a jelenlegi foglaltság alá
+• A változások azonnal érvénybe lépnek`,
+    keywords: ['szerkeszt', 'módosít', 'átnevez', 'kapacitás', 'típus', 'vip', 'ceruza'],
+  },
+  {
+    id: 'seating-floorplan-features',
+    category: 'Seating Arrangement',
+    question: 'Mit tudok csinálni az Alaprajz nézetben?',
+    answer: `Az Alaprajz nézet 2D vászon az asztalokkal:
+
+**Heatmap színek**: Az asztalok telítettség szerint színezettek (szürke/zöld/narancs/piros).
+
+**Spotlight keresés**: Kereséskor a talált asztal arany kerettel pulzál, a többi elhalványul. Egyetlen találatnál a kamera automatikusan ráközelít.
+
+**Automatikus elrendezés**: A rács ikon gomb az eszköztárban automatikusan elrendezi az asztalokat. VIP asztalok az első sorokba kerülnek.
+
+**Tooltip**: Vigye az egeret egy asztalra a vendéglista megtekintéséhez. A tooltip elég ideig marad a görgetéshez (800ms).
+
+**Húzás és átméretezés**: Húzza az asztalokat az áthelyezéshez. Jelölje ki és húzza az átméretező fogantyút a kapacitás módosításához.
+
+**Exportálás**: Letöltés PNG vagy PDF formátumban a legördülő menüből.`,
+    keywords: ['alaprajz', 'vászon', 'heatmap', 'spotlight', 'automatikus', 'elrendezés', 'tooltip', 'zoom'],
+  },
 
   // ==========================================
   // TABLE MANAGEMENT
@@ -2266,6 +2490,54 @@ Az override-ok külön jelölve vannak a naplóban.`,
 • Beléptető staff neve
 • Override jelölés (ha volt)`,
     keywords: ['napló', 'log', 'history', 'előzmények'],
+  },
+  {
+    id: 'checkin-scanner-theme',
+    category: 'Check-in',
+    question: 'Milyen információkat mutat a scanner?',
+    answer: `A check-in scanner minden fázisban mutatja a vendég adatait:
+
+**Check-in előtt** (zöld kártya):
+• Vendég neve és titulusa
+• Asztal szám (ha ki van osztva)
+• VIP Reception badge (arany ★ VIP)
+• Diétás igények
+• Partner neve (páros jegynél)
+
+**Check-in után** (sikeres kártya):
+• Ugyanazok a vendég adatok jelennek meg a visszaigazoló képernyőn
+
+**Már bejelentkezett** (sárga kártya):
+• Előző bejelentkezés időpontja és staff neve
+• Admin Override gomb (csak admin, staff nem)
+
+**Érvénytelen jegy** (piros kártya):
+• Hibaüzenet a jegy érvénytelenségének okáról
+
+A scanner a CEO Gála sötétkék-arany arculatot használja.`,
+    keywords: ['scanner', 'szkenner', 'részletek', 'vip', 'diéta', 'partner', 'asztal'],
+  },
+  {
+    id: 'checkin-live-display',
+    category: 'Check-in',
+    question: 'Mi az Élő Ülésrend Kijelző?',
+    answer: `Az Élő Ülésrend Kijelző egy teljes képernyős nézet a helyszíni kijelzőkhöz.
+
+**Elérés**: Dashboard → "Élő Kijelző" kártya, vagy navigáljon a /display/seating címre
+
+**Funkciók**:
+• Háttérképként mutatja az event alaprajzot
+• Vendégnevek az asztal pozícióknál overlay-ként
+• **Valós idejű frissítés**: bejelentkezéskor a vendég neve szürkéből fekete félkövérre változik
+• **Számláló**: "X/Y CHECKED IN" élőben frissül
+
+**Használat**:
+• Nyissa meg egy nagy képernyőn/projektoron a rendezvény helyszínén
+• Hagyja futni — automatikusan frissül SSE-n keresztül
+• Admin bejelentkezés szükséges
+
+**Megjegyzés**: Csak online működik (szerver kapcsolat szükséges a valós idejű frissítéshez).`,
+    keywords: ['kijelző', 'élő', 'display', 'képernyő', 'projektor', 'valós idejű', 'helyszín'],
   },
 
   // ==========================================

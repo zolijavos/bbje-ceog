@@ -56,6 +56,7 @@ const anchorToCategory: Record<string, string> = {
   'payments': 'Payment History',
   'email-logs': 'Email Logs',
   'users': 'User Management',
+  'live-display': 'Check-in',
 };
 
 // Category to anchor mapping (reverse)
