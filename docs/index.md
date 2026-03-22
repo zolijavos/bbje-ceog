@@ -1,8 +1,8 @@
 # CEO Gala Regisztrációs Rendszer - Projekt Dokumentáció
 
-**Generálva:** 2026-02-15
+**Generálva:** 2026-02-15 | **Frissítve:** 2026-03-22
 **Szkennelési mód:** Exhaustive (teljes forráskód elemzés)
-**Verzió:** 2.17.0 (Production Ready)
+**Verzió:** v4.1.0 (Production Ready)
 
 ---
 
@@ -22,8 +22,8 @@
 
 - **Tech Stack:** Next.js 14, React 18, TypeScript, Tailwind CSS, Prisma, MySQL, Stripe, Nodemailer
 - **Belépési pont:** `app/layout.tsx` (Root Layout)
-- **API belépés:** `app/api/` (~50+ REST endpoint)
-- **Üzleti logika:** `lib/services/` (15 szolgáltatás)
+- **API belépés:** `app/api/` (83 HTTP endpoint, 62 route fájl)
+- **Üzleti logika:** `lib/services/` (16 szolgáltatás)
 - **Adatbázis:** `prisma/schema.prisma` (16 modell, 10 enum)
 - **Auth:** NextAuth.js (admin) + Magic Link (vendég) + PWA Code (app)
 
@@ -37,7 +37,8 @@
 - [Architektúra](./architecture.md) - Magas szintű architektúra, rétegek, biztonság, integrációk
 - [Forrás Fa Elemzés](./source-tree-analysis.md) - Teljes annotált könyvtárstruktúra
 - [Adatmodellek](./data-models.md) - Prisma séma, 16 tábla, kapcsolatok, indexek
-- [Komponens Inventár](./component-inventory.md) - ~80+ React komponens katalógusa
+- [API Kontraktusok](./api-contracts.md) - 83 HTTP endpoint teljes specifikációja
+- [Komponens Inventár](./component-inventory.md) - ~90+ React komponens katalógusa
 - [Fejlesztési Útmutató](./development-guide.md) - Beállítás, parancsok, konvenciók, deployment
 
 ### Meglévő Projekt Dokumentáció

@@ -1,6 +1,7 @@
 # Fejlesztési Útmutató - CEO Gala Regisztrációs Rendszer
 
 **Generálva:** 2026-02-15
+**Frissítve:** 2026-03-22 (v4.1.0)
 
 ---
 
@@ -143,6 +144,8 @@ npm run dev
 | `npm run test:e2e:debug` | Playwright debug mód |
 | `npm run test:e2e:headed` | Playwright böngészővel |
 
+**E2E teszt státusz:** 97/97 passing (0 skipped). Részletek: `docs/testing/E2E-TEST-STATUS.md`
+
 ### Deployment
 
 | Parancs | Leírás |
@@ -185,6 +188,36 @@ npm run dev
 - Path alias: `@/*` → gyökér könyvtár
 - Zod sémák runtime validáláshoz
 
+## Kódbázis Méretek
+
+| Metrika | Érték |
+|---------|-------|
+| React komponensek | ~90+ |
+| API endpoints | 83 HTTP endpoint, 62 route fájl |
+| Prisma modellek | 16 modell, 10 enum |
+| Service-ek | 8+ (`lib/services/`) |
+| E2E tesztek | 97/97 passing |
+
+### Fontosabb Service-ek
+
+| Service | Fájl | Leírás |
+|---------|------|--------|
+| Email | `lib/services/email.ts` | SMTP küldés, retry, rate limit, template |
+| Registration | `lib/services/registration.ts` | Regisztrációs flow logika |
+| Check-in | `lib/services/checkin.ts` | QR validálás, check-in feldolgozás |
+| Rate Limit | `lib/services/rate-limit.ts` | IP és email alapú rate limiting |
+| Audit | `lib/services/audit.ts` | Audit trail naplózás |
+| Scheduler | `lib/services/scheduler.ts` | Ütemezett email küldés |
+| Seating | `lib/services/seating.ts` | Ültetési rend kezelés |
+| Event Broadcaster | `lib/services/event-broadcaster.ts` | SSE pub/sub valós idejű eseményekhez |
+
+### Új Funkciók (v4.1.0, 2026 Március)
+
+- **Live Seating Display** (`/display/seating`) - Valós idejű ültetési kijelző SSE-vel (event-broadcaster), háttérkép overlay, 24 asztal pozíció
+- **Ültetési Rend Újratervezés** - Grid + floor plan nézet, keresés, szűrők, színkódolás, inline szerkesztés, auto-arrange
+- **Check-in Scanner Újratervezés** - CEO Gala sötétkék téma, VIP badge, vendég részletek, partner megjelenítés
+- **Email Template fejlesztések** - 4 új sablon, DB-alapú prioritás
+
 ## Gyakori Fejlesztési Feladatok
 
 ### Új API Endpoint Hozzáadása
@@ -215,6 +248,15 @@ npm run dev
 3. API endpoint: app/api/registration/[action]/route.ts
 4. Service logika: lib/services/registration.ts
 5. Validáció: lib/validations/[schema].ts
+```
+
+### SSE (Server-Sent Events) Használata
+
+```
+1. Event típus regisztrálása az event-broadcaster.ts-ben
+2. API endpoint: app/api/[route]/events/route.ts - SSE stream
+3. Kliens oldalon: EventSource API vagy custom hook
+4. Broadcast hívás a releváns API-kból módosításkor
 ```
 
 ## Deployment (Production)
@@ -274,16 +316,4 @@ sudo bash scripts/backup-db.sh
 | Stripe webhook hiba | Ellenőrizd `STRIPE_WEBHOOK_SECRET` és signature-t |
 | Magic link lejárt | 24 óra limit, új link küldése szükséges |
 | Email nem megy ki | SMTP beállítások ellenőrzése, rate limit check |
-
-### Logok
-
-```bash
-# PM2 logok (production)
-pm2 logs ceog --lines 100
-
-# Next.js dev logok
-# A terminálban láthatók `npm run dev` futtatásakor
-
-# Prisma debug
-# DATABASE_URL env-ben: ?connection_limit=5&pool_timeout=10
-```
+| SSE nem frissül | Ellenőrizd event-broadcaster kapcsolatot és CORS beállításokat |

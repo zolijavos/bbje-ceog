@@ -1,6 +1,6 @@
 # Forrás Fa Elemzés - CEO Gala Regisztrációs Rendszer
 
-**Generálva:** 2026-02-15
+**Generálva:** 2026-02-15 | **Frissítve:** 2026-03-22
 **Szkennelési mélység:** Exhaustive
 
 ---
@@ -84,13 +84,15 @@ ceog-gala/                          # Projekt gyökér
 │   │   │   │   ├── FloorPlanCanvas.tsx   # React-Konva canvas
 │   │   │   │   ├── FloorPlanEditor.tsx   # Alaprajz szerkesztő
 │   │   │   │   ├── GuestChip.tsx         # Vendég chip
-│   │   │   │   ├── PairedGuestChip.tsx   # Páros vendég chip
+│   │   │   │   ├── PairedGuestChip.tsx   # Páros vendég chip (partner megjelenítés)
+│   │   │   │   ├── SeatingSearchBar.tsx  # Vendég keresés az ültetésen
+│   │   │   │   ├── SeatingFilters.tsx    # Ültetés szűrők (típus, státusz)
 │   │   │   │   ├── UnassignedPanel.tsx   # Nem ültetett vendégek
 │   │   │   │   └── index.ts
 │   │   │   ├── hooks/
 │   │   │   │   └── useSeatingDnd.ts      # DnD state management
 │   │   │   ├── page.tsx
-│   │   │   └── types.ts                  # Ültetés típusok
+│   │   │   └── types.ts                  # Ültetés típusok (SeatingGuest, SeatingTable, stb.)
 │   │   ├── statistics/             # Statisztikák
 │   │   │   ├── StatisticsContent.tsx
 │   │   │   └── page.tsx
@@ -101,24 +103,26 @@ ceog-gala/                          # Projekt gyökér
 │   │       ├── UsersDashboard.tsx
 │   │       └── page.tsx
 │   │
-│   ├── api/                        # ⭐ REST API Endpoints (~50+)
+│   ├── api/                        # ⭐ REST API Endpoints (62 route fájl)
 │   │   ├── admin/                  # Admin API-k (auth required)
 │   │   │   ├── applicants/         # Jelentkező CRUD + approve/reject
 │   │   │   ├── audit-log/          # Audit napló API
 │   │   │   ├── checkin-log/        # Check-in napló
 │   │   │   ├── checkin-stats/      # Check-in statisztikák
+│   │   │   ├── display-stream/     # SSE stream élő kijelzőhöz (valós idejű frissítés)
 │   │   │   ├── email-logs/         # Email napló CRUD
 │   │   │   ├── email-templates/    # Email sablon CRUD + preview
 │   │   │   ├── guests/             # Vendég CRUD + import/export
-│   │   │   ├── payments/           # Fizetés kezelés + refund
+│   │   │   ├── payments/           # Fizetés kezelés + refund ([id]/refund/)
 │   │   │   ├── scheduled-emails/   # Ütemezett email CRUD + bulk + trigger
-│   │   │   ├── scheduler-config/   # Email ütemező konfiguráció
+│   │   │   ├── scheduler-config/   # Email ütemező konfiguráció CRUD ([id]/)
+│   │   │   ├── seating-display-data/ # Ültetési kijelző adatok (display oldalhoz)
 │   │   │   ├── seating-export/     # Ültetés CSV export
 │   │   │   ├── seating-stats/      # Ültetés statisztikák
 │   │   │   ├── statistics/         # Dashboard statisztikák
-│   │   │   ├── table-assignments/  # Asztal hozzárendelés + bulk
-│   │   │   ├── tables/             # Asztal CRUD + pozíció
-│   │   │   ├── test-results/       # Teszt eredmények + export
+│   │   │   ├── table-assignments/  # Asztal hozzárendelés + bulk (bulk/)
+│   │   │   ├── tables/             # Asztal CRUD + pozíció ([id]/position/)
+│   │   │   ├── test-results/       # Teszt eredmények + export (export/)
 │   │   │   └── users/              # Admin felhasználó CRUD
 │   │   ├── apply/                  # Publikus jelentkezés
 │   │   ├── auth/[...nextauth]/     # NextAuth bejelentkezés
@@ -137,6 +141,11 @@ ceog-gala/                          # Projekt gyökér
 │   │   ├── CheckinScanner.tsx      # html5-qrcode integráció
 │   │   ├── layout.tsx
 │   │   └── page.tsx
+│   ├── display/                    # ⭐ Élő kijelző (nagykivetítő)
+│   │   ├── layout.tsx              # Display layout (minimal, fullscreen)
+│   │   └── seating/
+│   │       ├── page.tsx            # Ültetési kijelző oldal
+│   │       └── SeatingDisplay.tsx  # SSE-alapú valós idejű ültetési térkép
 │   ├── components/                 # Globális komponensek
 │   │   ├── Footer.tsx              # Desktop lábléc
 │   │   ├── GlobalProviders.tsx     # App-szintű provider-ek
@@ -247,7 +256,7 @@ ceog-gala/                          # Projekt gyökér
 │   │   ├── email-scheduler.ts      # Email ütemező logika
 │   │   ├── email-templates.ts      # DB sablon betöltés + változó helyettesítés
 │   │   ├── email.ts                # Email küldés (Nodemailer + retry)
-│   │   ├── event-broadcaster.ts    # Esemény értesítések
+│   │   ├── event-broadcaster.ts    # SSE esemény broadcast (élő kijelző frissítés)
 │   │   ├── guest.ts                # Vendég CRUD üzleti logika
 │   │   ├── payment.ts              # Stripe fizetés kezelés
 │   │   ├── pwa-auth.ts             # PWA kód-alapú auth
@@ -266,7 +275,7 @@ ceog-gala/                          # Projekt gyökér
 │       └── guest-profile.ts        # Vendég profil validáció
 │
 ├── prisma/                         # Adatbázis
-│   ├── schema.prisma               # ⭐ Prisma séma (16 modell, 10 enum)
+│   ├── schema.prisma               # ⭐ Prisma séma (16 modell, 10 enum, TestResult + TestStatus v4.1)
 │   └── migrations/                 # Automatikus migrációk
 │
 ├── public/                         # Statikus fájlok
@@ -309,10 +318,16 @@ ceog-gala/                          # Projekt gyökér
 │
 ├── tests/                          # Tesztek
 │   ├── setup.ts                    # Vitest beállítás
-│   └── unit/                       # Unit tesztek
-│       ├── guest-list-filtering.test.ts
-│       ├── magic-link-category.test.ts
-│       └── partner-email-validation.test.ts
+│   ├── unit/                       # Unit tesztek
+│   │   ├── guest-list-filtering.test.ts
+│   │   ├── magic-link-category.test.ts
+│   │   └── partner-email-validation.test.ts
+│   └── e2e/                        # Playwright E2E tesztek
+│       ├── display-seating.spec.ts           # Ültetési kijelző tesztek
+│       ├── display-layout-extended.spec.ts   # Kijelző layout tesztek
+│       ├── checkin-card-rendering.spec.ts    # Check-in kártya megjelenítés
+│       ├── checkin-full-flow.spec.ts         # Teljes check-in folyamat
+│       └── checkin-scanner-extended.spec.ts  # Szkenner kiterjesztett tesztek
 │
 ├── test-data/                      # Teszt CSV fájlok
 │   ├── guest-import-test.csv
@@ -357,12 +372,13 @@ ceog-gala/                          # Projekt gyökér
 
 | Könyvtár | Cél | Fontosság |
 |----------|-----|-----------|
-| `app/api/` | REST API endpoints (~50+) | Kritikus - teljes backend |
-| `app/admin/` | Admin dashboard (12 szekció) | Kritikus - kezelőfelület |
+| `app/api/` | REST API endpoints (62 route fájl) | Kritikus - teljes backend |
+| `app/admin/` | Admin dashboard (16+ szekció) | Kritikus - kezelőfelület |
 | `app/register/` | Vendég regisztrációs folyamatok | Kritikus - core üzleti flow |
+| `app/display/` | Élő ültetési kijelző (SSE) | Fontos - eseménynapi megjelenítés |
 | `app/pwa/` | PWA vendég alkalmazás | Fontos - vendég élmény |
 | `app/checkin/` | QR szkenner | Fontos - eseménynapi művelet |
-| `lib/services/` | Üzleti logika (15 szolgáltatás) | Kritikus - core logika |
+| `lib/services/` | Üzleti logika (16 szolgáltatás) | Kritikus - core logika |
 | `lib/auth/` | Authentikáció (NextAuth + magic link) | Kritikus - biztonság |
 | `lib/i18n/` | Többnyelvűség (HU/EN) | Fontos - lokalizáció |
 | `prisma/` | Adatbázis séma és migrációk | Kritikus - adatréteg |
@@ -376,5 +392,6 @@ ceog-gala/                          # Projekt gyökér
 | Middleware | `middleware.ts` | Auth + CSRF validálás |
 | Admin Layout | `app/admin/layout.tsx` | Admin shell (header, sidebar, tabs) |
 | PWA Layout | `app/pwa/layout.tsx` | PWA shell (manifest, service worker) |
+| Display Layout | `app/display/layout.tsx` | Élő kijelző shell (fullscreen, minimal) |
 | NextAuth | `app/api/auth/[...nextauth]/route.ts` | Bejelentkezési endpoint |
 | Prisma Client | `lib/db/prisma.ts` | Adatbázis singleton |

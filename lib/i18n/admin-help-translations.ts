@@ -955,13 +955,13 @@ The **"Clear"** button clears all filters.`,
 4. Confirm the refund
 
 **What happens**:
-• For **Stripe card payments**: Automatic refund via Stripe API
+• For **Stripe card payments**: Status marked as refunded — process actual refund via Stripe Dashboard
 • For **bank transfers**: Status marked as refunded (manual transfer needed)
 • Payment status changes to "Refunded"
-• Guest's ticket remains valid (cancel separately if needed)
+• Guest's ticket is invalidated and QR code revoked
+• Guest status reverts to "Registered"
 
-**Alternative - Stripe Dashboard**:
-For partial refunds, use the [Stripe Dashboard](https://dashboard.stripe.com) directly.
+**Important**: Automatic Stripe refunds are not yet implemented. After clicking Refund, process the actual money return via the [Stripe Dashboard](https://dashboard.stripe.com).
 
 Refunded payments appear with gray "Refunded" badge.`,
     keywords: ['refund', 'return', 'cancel', 'money back'],
@@ -2611,13 +2611,13 @@ A **"Clear"** gomb törli az összes szűrőt.`,
 4. Erősítsd meg a visszatérítést
 
 **Mi történik**:
-• **Stripe kártyás fizetésnél**: Automatikus visszatérítés a Stripe API-n keresztül
+• **Stripe kártyás fizetésnél**: Státusz "refunded" lesz — a tényleges visszatérítést a Stripe Dashboard-ban kell elvégezni
 • **Banki átutalásnál**: Státusz "refunded" lesz (manuális utalás szükséges)
 • A fizetés státusza "Refunded" lesz
-• A vendég jegye érvényes marad (külön kell törölni ha szükséges)
+• A vendég jegye érvénytelenítve, QR kód visszavonva
+• A vendég státusza visszaáll "Registered"-re
 
-**Alternatíva - Stripe Dashboard**:
-Részleges visszatérítéshez használd a [Stripe Dashboard](https://dashboard.stripe.com)-ot közvetlenül.
+**Fontos**: Az automatikus Stripe visszatérítés még nem implementált. A Refund gomb megnyomása után a tényleges pénz visszatérítést a [Stripe Dashboard](https://dashboard.stripe.com)-ban kell feldolgozni.
 
 A visszatérített fizetések szürke "Refunded" badge-dzsel jelennek meg.`,
     keywords: ['visszatérítés', 'refund', 'visszautalás', 'cancel'],

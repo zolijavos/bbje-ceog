@@ -1,6 +1,6 @@
 # Adatmodellek - CEO Gala Regisztrációs Rendszer
 
-**Generálva:** 2026-02-15
+**Generálva:** 2026-02-15 | **Frissítve:** 2026-03-22
 **Adatbázis:** MySQL 8.0+ (Prisma ORM ^5.19.0)
 **Séma fájl:** `prisma/schema.prisma`
 
@@ -95,6 +95,7 @@ A vendég az alapvető entitás - minden vendéghez tartozhat regisztráció, ü
 | seating_preferences | String? | Text | Ültetési preferenciák |
 | magic_link_code | String? | - | Magic link hash kód |
 | magic_link_expires | DateTime? | - | Magic link lejárat |
+| is_vip_reception | Boolean | default: false | Külön VIP fogadásra meghívott |
 | pwa_auth_code | String? | UNIQUE | PWA belépési kód (CEOG-XXXXXX) |
 | push_token | String? | Text | Firebase FCM push token |
 | application_message | String? | Text | Jelentkezési üzenet |
@@ -126,11 +127,14 @@ A vendég az alapvető entitás - minden vendéghez tartozhat regisztráció, ü
 |------|-------|--------------|--------|
 | id | Int | PK, autoincrement | Azonosító |
 | registration_id | Int | UNIQUE, FK→Registration | Regisztráció FK |
-| stripe_session_id | String? | - | Stripe Session ID |
-| amount | Int | - | Összeg (fillérben/centben) |
+| stripe_session_id | String? | UNIQUE | Stripe Session ID |
+| stripe_payment_intent_id | String? | - | Stripe Payment Intent ID (visszatérítéshez) |
+| amount | Decimal | Decimal(10,2) | Összeg |
 | currency | String | default: "HUF" | Pénznem |
-| status | PaymentStatus | default: pending | Fizetési státusz |
+| payment_status | PaymentStatus | default: pending | Fizetési státusz |
+| payment_method | PaymentMethod | - | Fizetési mód (card, bank_transfer) |
 | paid_at | DateTime? | - | Fizetés időpontja |
+| created_at | DateTime | default: now() | Létrehozás |
 
 ### BillingInfo (billing_infos)
 
@@ -256,19 +260,30 @@ Email ütemező konfigurációk (payment reminder, event reminder, stb.)
 
 ### TestResult (test_results)
 
+Manuális release tesztelés eredményeinek tárolása. Minden verzió minden feature-jéhez külön rekord.
+
 | Mező | Típus | Leírás |
 |------|-------|--------|
+| id | Int | PK, autoincrement |
 | version | String | Verzió szám (pl. "2.11.0") |
-| feature_index | Int | Feature index |
+| feature_index | Int | Feature index a verzión belül |
+| feature_name | String | Feature név (referencia) |
 | status | TestStatus | passed/failed/not_tested |
-| tester_id | Int | FK→User |
-| step_results | String? | JSON - lépés eredmények |
+| comment | String? | Tesztelő megjegyzése |
+| tester_id | Int | FK→User (tesztelő) |
+| tester_name | String | Tesztelő neve (cache-elve exporthoz) |
+| step_results | String? | JSON - lépés eredmények ({ stepIndex: boolean }) |
+| tested_at | DateTime | Tesztelés időpontja |
+| updated_at | DateTime | Módosítás |
+
+**Unique constraint:** `(version, feature_index)` — egy feature verzión belül egyedi
+**Kapcsolatok:** User (N:1, tester_id → User.id)
 
 ## Enumerációk
 
 ```prisma
 enum GuestType { invited, paying_single, paying_paired, applicant }
-enum RegistrationStatus { invited, registered, approved, declined, pending_approval, rejected }
+enum RegistrationStatus { pending, invited, registered, approved, declined, pending_approval, rejected, cancelled, checked_in }
 enum TicketType { vip_free, paid_single, paid_paired }
 enum PaymentMethod { card, bank_transfer }
 enum PaymentStatus { pending, paid, failed, refunded }
@@ -293,6 +308,7 @@ enum TestStatus { passed, failed, not_tested }
 - `User.email` - Egyedi admin email
 - `EmailTemplate.slug` - Egyedi sablon azonosítók
 - `RateLimitEntry.key` - Egyedi rate limit kulcsok
+- `TestResult.(version, feature_index)` - Egyedi teszt eredmény per feature per verzió
 
 ## Migrációs Stratégia
 

@@ -1,7 +1,7 @@
 # Architektúra Dokumentáció - CEO Gala Regisztrációs Rendszer
 
-**Generálva:** 2026-02-15
-**Verzió:** 2.17.0
+**Generálva:** 2026-02-15 | **Frissítve:** 2026-03-22
+**Verzió:** 4.1.0
 **Típus:** Monolith Full-Stack Web Alkalmazás
 
 ---
@@ -11,57 +11,59 @@
 ### 1.1 Magas Szintű Architektúra
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                      Kliensek                            │
-├──────────┬──────────┬──────────┬──────────┬─────────────┤
-│  Admin   │  Staff   │  Vendég  │  PWA     │ Jelentkező  │
-│ Dashboard│ Check-in │ Register │  App     │   Form      │
-└──────┬───┴────┬─────┴────┬─────┴───┬──────┴──────┬──────┘
-       │        │          │         │             │
-       ▼        ▼          ▼         ▼             ▼
-┌─────────────────────────────────────────────────────────┐
-│              Nginx Reverse Proxy (SSL)                    │
-│              HSTS, CSP, X-Frame-Options                  │
-└─────────────────────────┬───────────────────────────────┘
-                          │
-┌─────────────────────────▼───────────────────────────────┐
-│                    Next.js 14+                            │
-│                  (App Router)                             │
-├──────────────────────────────────────────────────────────┤
-│  Middleware Layer                                         │
-│  ├── Auth Protection (NextAuth JWT)                      │
-│  ├── CSRF Validation (Origin/Referer)                    │
-│  └── Role-Based Access Control (admin/staff)             │
-├──────────────────────────────────────────────────────────┤
-│  Presentation Layer                                      │
-│  ├── Server Components (alapértelmezett, zero JS)        │
-│  ├── Client Components ('use client' - interaktív)       │
-│  └── Layouts (Root, Admin, PWA, Checkin)                 │
-├──────────────────────────────────────────────────────────┤
-│  API Layer (app/api/**/route.ts)                         │
-│  ├── Admin endpoints (~30+, auth required)               │
-│  ├── Registration endpoints (publikus + magic link)      │
-│  ├── Payment endpoints (Stripe)                          │
-│  ├── Check-in endpoints (staff + admin)                  │
-│  └── PWA endpoints (guest auth code)                     │
-├──────────────────────────────────────────────────────────┤
-│  Business Logic Layer (lib/services/)                    │
-│  ├── Registration Service                                │
-│  ├── Payment Service (Stripe SDK)                        │
-│  ├── Email Service (Nodemailer + retry + rate limit)     │
-│  ├── Check-in Service (QR validation)                    │
-│  ├── Seating Service (table assignment)                  │
-│  ├── Audit Service (action logging)                      │
-│  └── Scheduler Service (node-cron)                       │
-├──────────────────────────────────────────────────────────┤
-│  Data Access Layer                                       │
-│  └── Prisma ORM (singleton client)                       │
-└─────────────────────────┬───────────────────────────────┘
-                          │
-┌─────────────────────────▼───────────────────────────────┐
-│                    MySQL 8.0+                             │
-│              16 modell, 10 enum                          │
-└─────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│                           Kliensek                               │
+├──────────┬──────────┬──────────┬──────────┬──────────┬──────────┤
+│  Admin   │  Staff   │  Vendég  │  PWA     │Jelentkező│  Display │
+│ Dashboard│ Check-in │ Register │  App     │  Form    │  Screen  │
+└──────┬───┴────┬─────┴────┬─────┴───┬──────┴────┬─────┴────┬─────┘
+       │        │          │         │           │          │
+       ▼        ▼          ▼         ▼           ▼          ▼
+┌──────────────────────────────────────────────────────────────────┐
+│               Nginx Reverse Proxy (SSL)                          │
+│               HSTS, CSP, X-Frame-Options                         │
+└──────────────────────────┬───────────────────────────────────────┘
+                           │
+┌──────────────────────────▼───────────────────────────────────────┐
+│                     Next.js 14+                                   │
+│                   (App Router)                                    │
+├──────────────────────────────────────────────────────────────────┤
+│  Middleware Layer                                                 │
+│  ├── Auth Protection (NextAuth JWT)                              │
+│  ├── CSRF Validation (Origin/Referer)                            │
+│  └── Role-Based Access Control (admin/staff)                     │
+├──────────────────────────────────────────────────────────────────┤
+│  Presentation Layer                                               │
+│  ├── Server Components (alapértelmezett, zero JS)                │
+│  ├── Client Components ('use client' - interaktív)               │
+│  └── Layouts (Root, Admin, PWA, Checkin, Display)                │
+├──────────────────────────────────────────────────────────────────┤
+│  API Layer (app/api/**/route.ts)                                  │
+│  ├── Admin endpoints (~55+, auth required)                       │
+│  ├── Registration endpoints (publikus + magic link)              │
+│  ├── Payment endpoints (Stripe + refund)                         │
+│  ├── Check-in endpoints (staff + admin)                          │
+│  ├── PWA endpoints (guest auth code + SSE)                       │
+│  └── SSE streaming (display + PWA events)                        │
+├──────────────────────────────────────────────────────────────────┤
+│  Business Logic Layer (lib/services/)                             │
+│  ├── Registration Service                                        │
+│  ├── Payment Service (Stripe SDK)                                │
+│  ├── Email Service (Nodemailer + retry + rate limit)             │
+│  ├── Check-in Service (QR validation)                            │
+│  ├── Seating Service (table assignment)                          │
+│  ├── Event Broadcaster Service (SSE pub/sub)                     │
+│  ├── Audit Service (action logging)                              │
+│  └── Scheduler Service (node-cron)                               │
+├──────────────────────────────────────────────────────────────────┤
+│  Data Access Layer                                                │
+│  └── Prisma ORM (singleton client)                               │
+└──────────────────────────┬───────────────────────────────────────┘
+                           │
+┌──────────────────────────▼───────────────────────────────────────┐
+│                     MySQL 8.0+                                    │
+│               16 modell, 11 enum                                 │
+└──────────────────────────────────────────────────────────────────┘
 
 Külső Szolgáltatások:
 ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
@@ -77,8 +79,8 @@ Külső Szolgáltatások:
 | **Proxy** | Nginx + Let's Encrypt | SSL termination, static file serving, reverse proxy |
 | **Middleware** | Next.js Middleware | Auth, CSRF, role-based access control |
 | **Prezentáció** | React 18 (Server/Client) | UI renderelés, interaktivitás |
-| **API** | Next.js Route Handlers | REST endpoints, request/response kezelés |
-| **Üzleti logika** | lib/services/ | Domain logika, validáció, integráció |
+| **API** | Next.js Route Handlers | REST endpoints, SSE streaming, request/response kezelés |
+| **Üzleti logika** | lib/services/ | Domain logika, validáció, integráció, event broadcasting |
 | **Adat hozzáférés** | Prisma ORM | Adatbázis műveletek, migrációk |
 | **Adatbázis** | MySQL 8.0 | Perzisztens adattárolás |
 | **Process Manager** | PM2 | Standalone Next.js szerver kezelés |
@@ -138,12 +140,13 @@ Külső Szolgáltatások:
 | Admin Dashboard (teljes) | ✅ | ❌ → /checkin redirect |
 | Vendég CRUD + Import | ✅ | ❌ |
 | Jelentkező Kezelés | ✅ | ❌ |
-| Fizetés Jóváhagyás | ✅ | ❌ |
+| Fizetés Jóváhagyás + Visszatérítés | ✅ | ❌ |
 | Asztal + Ültetés | ✅ | ❌ |
 | Email Küldés | ✅ | ❌ |
 | QR Szkenner | ✅ (override-dal) | ✅ (basic) |
 | Check-in Napló | ✅ | ✅ (csak olvasás) |
 | Admin Override | ✅ | ❌ |
+| Live Seating Display | ✅ | ❌ |
 
 ## 3. Adatarchitektúra
 
@@ -151,7 +154,7 @@ Külső Szolgáltatások:
 
 - **Motor:** MySQL 8.0+
 - **ORM:** Prisma ^5.19.0
-- **Modellek:** 16 modell + 10 enum
+- **Modellek:** 16 modell + 11 enum
 - **Kapcsolódás:** Singleton pattern (`lib/db/prisma.ts`)
 
 ### 3.2 Fő Entitás Kapcsolatok
@@ -177,23 +180,51 @@ AuditLog (standalone, opcionális user_id)
 TestResult ──── User [tester]
 ```
 
+### 3.3 Legutóbbi Séma Változások (v4.x)
+
+| Változás | Típus | Leírás |
+|----------|-------|--------|
+| `Guest.is_vip_reception` | Boolean (default: false) | VIP fogadás jelölő — a check-in szkenner VIP badge-je ezen alapul (NEM `guest_type`) |
+| `Payment.stripe_payment_intent_id` | String (opcionális) | Stripe PaymentIntent ID visszatérítésekhez |
+| `TestResult` modell | Új tábla | Manuális teszteredmény követés (version, feature_index, status, step_results JSON) |
+| `RegistrationStatus` enum | Bővítve | Új érték: `checked_in` — check-in utáni státusz |
+
 Részletes séma: [data-models.md](./data-models.md)
 
 ## 4. API Architektúra
 
 ### 4.1 Endpoint Kategóriák
 
+**Összesen: ~83 HTTP endpoint ~62 route fájlban**
+
 | Kategória | Prefix | Auth | Endpoint-ek |
 |-----------|--------|------|-------------|
-| Admin | `/api/admin/*` | Admin session | ~30+ |
+| Admin | `/api/admin/*` | Admin session | ~55+ |
 | Regisztráció | `/api/registration/*` | Publikus | 5 |
 | Stripe | `/api/stripe/*` | Publikus / webhook | 3 |
 | Check-in | `/api/checkin/*` | Admin/Staff | 2 |
-| PWA | `/api/pwa/*` | Guest auth code | 6+ |
+| PWA | `/api/pwa/*` | Guest auth code | 7+ |
 | Auth | `/api/auth/*` | Publikus | NextAuth |
 | Egyéb | `/api/apply`, `/api/health` | Publikus | 2+ |
 
-### 4.2 API Design Minták
+### 4.2 Új API Endpoint-ek (v4.x)
+
+| Endpoint | Metódus | Leírás |
+|----------|---------|--------|
+| `/api/admin/display-stream` | GET (SSE) | Real-time check-in frissítések a Display Screen-hez |
+| `/api/admin/seating-display-data` | GET | Teljes ültetési adat a live display-hez |
+| `/api/admin/tables/[id]/position` | PATCH | Asztal pozíció frissítés (floor plan) |
+| `/api/admin/table-assignments/bulk` | POST | Tömeges asztalhoz rendelés |
+| `/api/admin/seating-stats` | GET | Ültetési statisztikák (foglaltság, szabad helyek) |
+| `/api/admin/payments/[id]/refund` | POST | Stripe visszatérítés indítása |
+| `/api/admin/email-templates/[slug]/preview` | POST | Email sablon előnézet renderelés |
+| `/api/admin/scheduler-config` | GET/POST | Ütemező konfiguráció kezelés |
+| `/api/admin/scheduler-config/[id]` | PATCH/DELETE | Egyedi ütemező konfig módosítás/törlés |
+| `/api/admin/test-results` | GET/POST | Teszteredmények listázás/mentés |
+| `/api/admin/test-results/[id]` | DELETE | Teszteredmény törlés |
+| `/api/pwa/events` | GET (SSE) | Real-time események a PWA alkalmazáshoz |
+
+### 4.3 API Design Minták
 
 - **Konvenció:** `route.ts` fájlok Next.js App Router-ben
 - **HTTP metódusok:** Named export functions (GET, POST, PATCH, DELETE)
@@ -201,6 +232,7 @@ Részletes séma: [data-models.md](./data-models.md)
 - **Hibakezelés:** try/catch + NextResponse.json({ error })
 - **Lapozás:** Query params (page, limit, search, sortBy, sortOrder)
 - **CSRF:** Middleware-szintű Origin/Referer validáció
+- **SSE streaming:** ReadableStream + TextEncoder, Server-Sent Events protokoll
 
 ## 5. Frontend Architektúra
 
@@ -209,7 +241,9 @@ Részletes séma: [data-models.md](./data-models.md)
 | Típus | Használat | Példa |
 |-------|-----------|-------|
 | **Server Component** (alapértelmezett) | Adatlekérdezés, SEO, statikus tartalom | Oldalak (`page.tsx`), Layout-ok |
-| **Client Component** (`'use client'`) | Interaktivitás, state, event handling | Formok, DnD, QR szkenner |
+| **Client Component** (`'use client'`) | Interaktivitás, state, event handling | Formok, DnD, QR szkenner, Display |
+
+**Komponens szám:** ~90+ React komponens
 
 ### 5.2 Component Hierarchia
 
@@ -222,13 +256,18 @@ Root Layout (app/layout.tsx)
 │   ├── AdminHeader (desktop nav)
 │   ├── MobileTabBar (mobil nav)
 │   └── [Admin Pages]
+│       └── Seating (dual-mode: Grid View + Floor Plan View)
 │
 ├── PWA Layout (app/pwa/layout.tsx)
 │   ├── ThemeProvider (PWA-specifikus)
+│   ├── SSE EventSource (/api/pwa/events)
 │   └── [PWA Pages]
 │
 ├── Checkin Layout (app/checkin/layout.tsx)
-│   └── CheckinScanner (html5-qrcode)
+│   └── CheckinScanner (CEO Gala dark-blue theme)
+│
+├── Display Layout (app/display/)
+│   └── SeatingDisplay (full-screen, SSE real-time)
 │
 └── Registration Pages (app/register/)
     ├── VIP flow (ingyenes)
@@ -236,7 +275,75 @@ Root Layout (app/layout.tsx)
     └── Request Link flow
 ```
 
-### 5.3 State Management
+### 5.3 Új Funkciók Részletezése
+
+#### 5.3.1 Live Seating Display (`/display/seating`)
+
+Valós idejű ülésrend megjelenítő helyszíni nagy képernyőkhöz.
+
+```
+Architektúra:
+┌──────────────┐     SSE stream      ┌──────────────────┐
+│  Check-in    │ ──── broadcast ───→ │  Display Screen   │
+│  Scanner     │                     │  /display/seating │
+└──────┬───────┘                     └──────────────────┘
+       │                                      ▲
+       ▼                                      │
+┌──────────────┐                     ┌────────┴─────────┐
+│ event-       │ ──── SSE push ───→  │  EventSource     │
+│ broadcaster  │                     │  /api/admin/      │
+│ .ts          │                     │  display-stream   │
+└──────────────┘                     └──────────────────┘
+```
+
+- **Admin-only access** — full-screen háttérkép overlay
+- **24 asztal pozíció** kalibrálva a helyszín alaprajzához
+- **Vendég státusz megjelenítés:** szürke italic (nem érkezett) → fekete bold (megérkezett)
+- **Counter:** `{checkedIn}/{totalAssigned} CHECKED IN`
+- **Háttérkép:** `ceo_gala_asztalterv_FINAL_ures_1.png` (1920x1280, 3:2 aspect ratio)
+- **Tipográfia:** Futura font
+- **Table mapping:** `Table.name` → `parseInt()` → CSS grid pozíció
+
+#### 5.3.2 Check-in Scanner Redesign (`/checkin`)
+
+CEO Gala arculathoz igazított sötétkék design.
+
+| Elem | Érték |
+|------|-------|
+| Háttér | Dark-blue gradient (`#0a1628` → `#162447`) |
+| Akcentus | Gold (`#d4af37`) |
+| Gombok | Burgundy (`#722f37`) |
+| VIP badge | `is_vip_reception` mező alapján (NEM `guest_type`) |
+| Vendég infó | Asztal, VIP, diéta, partner — check-in ELŐTT ÉS UTÁN is látható |
+| Event broadcast | Check-in → display screen + PWA frissítés SSE-n keresztül |
+
+#### 5.3.3 Seating Management Redesign (`/admin/seating`)
+
+Dual-mode ültetéskezelő felület.
+
+```
+┌─────────────────────────────────────────────┐
+│  Ültetés Kezelő                              │
+├──────────────┬──────────────────────────────┤
+│  Grid View   │  Floor Plan View             │
+│  (kártyák +  │  (Konva canvas +             │
+│   DnD)       │   háttérkép)                 │
+├──────────────┴──────────────────────────────┤
+│  Közös funkciók:                             │
+│  ├── Globális keresés (vendég/asztal)        │
+│  ├── Filter chips (All/Available/Full/Empty) │
+│  ├── Sort opciók                             │
+│  ├── Inline asztal szerkesztés               │
+│  └── VIP/Standard szekciók                   │
+└─────────────────────────────────────────────┘
+```
+
+- **Grid View:** Asztal kártyák + @dnd-kit drag-and-drop vendég hozzárendelés
+- **Floor Plan View:** React-Konva canvas háttérkép overlay-jel, heatmap, spotlight keresés, auto-arrange, zoom/pan
+- **Szín kódolás:** Asztal keretek foglaltság szerint (szürke→kék→zöld→piros), vendég státusz pöttyök
+- **Bulk assignment:** Tömeges asztalhoz rendelés API (`POST /api/admin/table-assignments/bulk`)
+
+### 5.4 State Management
 
 | Pattern | Technológia | Használat |
 |---------|-------------|-----------|
@@ -246,9 +353,10 @@ Root Layout (app/layout.tsx)
 | **Auth State** | NextAuth/useSession | Admin session |
 | **URL State** | searchParams | Szűrők, lapozás |
 | **Local Storage** | localStorage | Nyelv beállítás, dark mode |
+| **SSE State** | EventSource | Real-time check-in (Display, PWA) |
 | **Custom Hooks** | useGuestList, useSeatingDnd, useTheme, useToast, useHaptic | Domain-specifikus logika |
 
-### 5.4 Styling
+### 5.5 Styling
 
 - **Tailwind CSS** ^3.4.0 - Utility-first
 - **tailwind-merge** - Osztály összeolvasztás
@@ -256,6 +364,7 @@ Root Layout (app/layout.tsx)
 - **Framer Motion** ^12.23.25 - Animációk
 - **Phosphor Icons** (@phosphor-icons/react) - Ikonok
 - **Mobile-first** - Responsive design, min 44x44px touch targets
+- **CEO Gala arculat** - Dark-blue/gold/burgundy téma (scanner, display)
 
 ## 6. Külső Integráció
 
@@ -269,9 +378,15 @@ Fizetési Folyamat:
    └── Webhook signature validáció (STRIPE_WEBHOOK_SECRET)
 4. Client → GET /payment/success (redirect siker oldal)
 
+Visszatérítés:
+1. Admin → POST /api/admin/payments/{id}/refund
+2. Server → Stripe Refund API (stripe_payment_intent_id alapján)
+3. Payment.status → refunded
+
 Támogatott módok:
 - Kártyás fizetés (Stripe Checkout Session)
 - Banki átutalás (manuális admin jóváhagyás)
+- Visszatérítés (Stripe Refund, admin indítja)
 ```
 
 ### 6.2 Nodemailer (Email)
@@ -286,6 +401,7 @@ Email Küldés Folyamat:
 6. EmailLog rögzítés
 
 Sablon típusok: magic_link, ticket_delivery, payment_reminder, stb.
+Előnézet: POST /api/admin/email-templates/{slug}/preview
 ```
 
 ### 6.3 QR Rendszer
@@ -302,20 +418,69 @@ QR Validálás (Check-in):
 1. html5-qrcode szkenner → JWT token
 2. jsonwebtoken.verify(token, QR_SECRET)
 3. Prisma query: Registration + Guest lookup
+   (bővített válasz: title, dietary_requirements, is_vip_reception, tableName, partner)
 4. Duplikáció ellenőrzés (Checkin UNIQUE constraint)
 5. Szín-kódolt kártya: Zöld/Sárga/Piros
+6. Event broadcast: display screen + PWA frissítés
 ```
 
-## 7. Deployment Architektúra
+## 7. Real-time Architektúra (SSE)
 
-### 7.1 Production Environment
+### 7.1 Event Broadcaster Service (`lib/services/event-broadcaster.ts`)
+
+In-memory pub/sub rendszer Server-Sent Events (SSE) streaming-hez.
+
+```
+┌──────────────────────────────────────────────────┐
+│              event-broadcaster.ts                 │
+├──────────────────────────────────────────────────┤
+│  Channels:                                        │
+│  ├── Guest subscribers (Map<guestId, callback>)  │
+│  └── Display subscribers (Set<callback>)          │
+│                                                   │
+│  API:                                             │
+│  ├── subscribeGuest(guestId, callback)            │
+│  ├── broadcastToGuest(guestId, data)              │
+│  ├── subscribeDisplay(callback)                   │
+│  └── broadcastToDisplay(data)                     │
+└──────────────────────────────────────────────────┘
+```
+
+**Adatfolyam:**
+
+```
+Check-in submit API
+  ↓
+broadcastToDisplay({ type: 'checkin', guestId, tableName })
+broadcastToGuest(guestId, { type: 'checkin-confirmed' })
+  ↓                           ↓
+Display Screen (SSE)     PWA App (SSE)
+/api/admin/display-stream    /api/pwa/events
+```
+
+**Korlátok:**
+- Single-instance only — a globális Map/Set nem osztott több Node.js process között
+- Multi-instance deployment esetén Redis pub/sub szükséges
+- Nginx `proxy_buffering off` + `X-Accel-Buffering: no` kell az SSE-hez
+
+### 7.2 SSE Endpoint-ek
+
+| Endpoint | Kliens | Adattartalom |
+|----------|--------|-------------|
+| `GET /api/admin/display-stream` | Display Screen | Check-in események (guestId, tableName, timestamp) |
+| `GET /api/pwa/events` | PWA Guest App | Vendég-specifikus értesítések |
+
+## 8. Deployment Architektúra
+
+### 8.1 Production Environment
 
 ```
 Hetzner VPS (Ubuntu)
 ├── Nginx (reverse proxy, SSL, static files)
 │   ├── SSL: Let's Encrypt (auto-renewal)
 │   ├── Static: .next/static/ közvetlenül
-│   └── Proxy: localhost:3000
+│   ├── Proxy: localhost:3000
+│   └── SSE: proxy_buffering off (display-stream, pwa/events)
 │
 ├── PM2 (process manager)
 │   └── .next/standalone/server.js
@@ -326,32 +491,36 @@ Hetzner VPS (Ubuntu)
 └── Node.js 18+ (runtime)
 ```
 
-### 7.2 Build Folyamat
+### 8.2 Build Folyamat
 
 ```bash
 npm run build          # Next.js build (output: standalone)
 # postbuild script → static fájlok másolása standalone-ba
 pm2 restart ceog       # Production szerver újraindítás
+
+# VAGY
+npm run deploy         # Build + auto-copy static + PM2 restart (ajánlott)
 ```
 
-### 7.3 Docker Támogatás
+### 8.3 Docker Támogatás
 
 - `docker-compose.yml` - Lokális fejlesztés (MySQL + phpMyAdmin)
 - `docker-compose.dev.yml` - Dev override
 - `docker-compose.prod.yml` - Production override
 - `Dockerfile` - Alkalmazás container
 
-## 8. Tesztelési Stratégia
+## 9. Tesztelési Stratégia
 
-### 8.1 Teszt Szintek
+### 9.1 Teszt Szintek
 
-| Szint | Eszköz | Lefedettség |
-|-------|--------|-------------|
-| **Unit** | Vitest + happy-dom | Üzleti logika, validáció, szűrők |
-| **E2E** | Playwright | Teljes felhasználói folyamatok |
-| **BDD** | playwright-bdd (Gherkin) | Fizetés, check-in szcenáriók |
+| Szint | Eszköz | Lefedettség | Státusz |
+|-------|--------|-------------|---------|
+| **Unit** | Vitest + happy-dom | Üzleti logika, validáció, szűrők | ✅ |
+| **E2E** | Playwright | Teljes felhasználói folyamatok | 97/97 passing |
+| **BDD** | playwright-bdd (Gherkin) | Fizetés, check-in szcenáriók | ✅ |
+| **Manuális** | Admin release-testing | Verzió-specifikus teszt lépések | TestResult modell |
 
-### 8.2 Teszt Fájlok
+### 9.2 Teszt Fájlok
 
 ```
 tests/
@@ -362,7 +531,7 @@ tests/
     └── partner-email-validation.test.ts # Partner email validáció
 ```
 
-### 8.3 Teszt Parancsok
+### 9.3 Teszt Parancsok
 
 ```bash
 npm run test:unit          # Unit tesztek (Vitest)
@@ -370,17 +539,18 @@ npm run test:e2e           # E2E tesztek (Playwright headless)
 npm run test:e2e:ui        # E2E tesztek GUI módban
 ```
 
-## 9. Teljesítmény Követelmények
+## 10. Teljesítmény Követelmények
 
 | Metrika | Célérték |
 |---------|----------|
 | Oldal betöltés (LCP) | < 2 másodperc |
 | DB lekérdezés (átlag) | < 100ms |
 | API válaszidő (95. percentilis) | < 500ms |
+| SSE latency (check-in → display) | < 200ms |
 | Egyidejű felhasználók | 500+ |
 | Vendég kapacitás | 10,000 |
 
-## 10. Lokalizáció (i18n)
+## 11. Lokalizáció (i18n)
 
 - **Nyelvek:** Magyar (alapértelmezett), English
 - **Implementáció:** React Context (`LanguageContext`) + `useLanguage()` hook

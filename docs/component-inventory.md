@@ -1,19 +1,21 @@
 # Komponens Inventár - CEO Gala Regisztrációs Rendszer
 
 **Generálva:** 2026-02-15
+**Utolsó frissítés:** 2026-03-22
 **Keretrendszer:** React 18 + Next.js 14 (App Router)
 
 ---
 
 ## Áttekintés
 
-A projekt ~80+ React komponenst tartalmaz, amelyek Server és Client komponensekre oszlanak. Az alábbi kategóriákba sorolhatók:
+A projekt ~90+ React komponenst tartalmaz, amelyek Server és Client komponensekre oszlanak. Az alábbi kategóriákba sorolhatók:
 
 | Kategória | Darabszám | Típus |
 |-----------|-----------|-------|
 | **Globális** | 5 | Layout, Footer, Providers, Theme |
 | **Admin Dashboard** | 25+ | CRUD, szűrők, modálok, navigáció |
-| **Ültetés (Seating)** | 8 | DnD, Konva canvas, chips |
+| **Ültetés (Seating)** | 12 | DnD, Konva canvas, chips, keresés, szűrők |
+| **Live Display** | 3 | Ültetési kijelző, SSE, háttérkép overlay |
 | **Regisztráció** | 10+ | Formok, welcome, error, success |
 | **PWA** | 15+ | Dashboard, ticket, profil, UI kit |
 | **Check-in** | 2 | QR szkenner, layout |
@@ -64,16 +66,26 @@ A projekt ~80+ React komponenst tartalmaz, amelyek Server és Client komponensek
 
 | Komponens | Fájl | Leírás |
 |-----------|------|--------|
-| **SeatingDashboard** | seating/SeatingDashboard.tsx | Fő ültetés felület (lista + térkép) |
-| **FloorPlanCanvas** | seating/components/FloorPlanCanvas.tsx | React-Konva canvas az asztalok vizualizálásához |
-| **FloorPlanEditor** | seating/components/FloorPlanEditor.tsx | Alaprajz szerkesztő |
-| **DraggableGuest** | seating/components/DraggableGuest.tsx | @dnd-kit húzható vendég elem |
-| **DroppableTable** | seating/components/DroppableTable.tsx | @dnd-kit asztal cél terület |
-| **GuestChip** | seating/components/GuestChip.tsx | Vendég chip megjelenítés |
-| **PairedGuestChip** | seating/components/PairedGuestChip.tsx | Páros vendég chip |
-| **UnassignedPanel** | seating/components/UnassignedPanel.tsx | Nem ültetett vendégek panel |
+| **SeatingDashboard** | seating/SeatingDashboard.tsx | **REDESIGN:** Fő ültetés felület, dual-mód (Grid + Floor Plan), keresés, szűrők, összenyitás/összecsukás, DnD |
+| **UnassignedPanel** | seating/components/UnassignedPanel.tsx | Bal oldali sidebar, nem ültetett vendégek típus szerinti csoportosítással (VIP, Invited, Paying Single, Paying Paired) |
+| **DroppableTable** | seating/components/DroppableTable.tsx | **REDESIGN:** @dnd-kit asztal cél terület, kapacitás progress bar, szín-kódolás, összenyitás/összecsukás, hover tooltip, inline szerkesztő modál, regisztrációs státusz pontok |
+| **GuestChip** | seating/components/GuestChip.tsx | **REDESIGN:** Vendég chip — státusz pont, VIP badge, típus badge, keresési kiemelés |
+| **PairedGuestChip** | seating/components/PairedGuestChip.tsx | **ÚJ:** Páros vendég chip — dupla vendég megjelenítés, összekötő ikon, „2 seats" lila badge |
+| **SeatingSearchBar** | seating/components/SeatingSearchBar.tsx | **ÚJ:** Globális keresés, találat szám, törlés gomb, i18n támogatás |
+| **SeatingFilters** | seating/components/SeatingFilters.tsx | **ÚJ:** Szűrő chip-ek (All/Available/Full/Empty), rendezés dropdown, Expand/Collapse All |
+| **FloorPlanEditor** | seating/components/FloorPlanEditor.tsx | **REDESIGN:** Alaprajz szerkesztő — szoba konfiguráció panel, export (PNG/PDF jsPDF-en keresztül), auto-arrange, jelmagyarázat |
+| **FloorPlanCanvas** | seating/components/FloorPlanCanvas.tsx | **REDESIGN:** React-Konva canvas — asztalok húzása, átméretezés, zoom/pan, heatmap overlay, spotlight keresés, szín-kódolás |
+| **DraggableGuest** | seating/components/DraggableGuest.tsx | @dnd-kit húzható vendég elem (useSortable wrapper), GuestChip vagy PairedGuestChip renderelés |
 
-**Custom Hook:** `useSeatingDnd.ts` - DnD state management (@dnd-kit)
+**Típusdefiníciók:** `seating/types.ts` — Guest, Assignment, TableData, DraggableGuest, STATUS_DOT_COLORS
+
+**Custom Hook:** `useSeatingDnd.ts` — DnD state management: activeGuest, sourceContainerId, assign/unassign/move műveletek
+
+### Check-in Napló (admin/checkin-log/)
+
+| Komponens | Fájl | Leírás |
+|-----------|------|--------|
+| **CheckinLogDashboard** | checkin-log/CheckinLogDashboard.tsx | Valós idejű check-in napló, lapozás, szűrők, keresés, CSV export |
 
 ### Egyéb Admin Oldalak
 
@@ -81,7 +93,6 @@ A projekt ~80+ React komponenst tartalmaz, amelyek Server és Client komponensek
 |-----------|------|--------|
 | **ApplicantList** | applicants/ApplicantList.tsx | Jelentkezők approve/reject |
 | **AuditLogList** | audit-log/AuditLogList.tsx | Szűrhető audit napló |
-| **CheckinLogDashboard** | checkin-log/CheckinLogDashboard.tsx | Check-in napló (valós idejű) |
 | **PaymentsDashboard** | payments/PaymentsDashboard.tsx | Fizetések kezelése |
 | **TablesDashboard** | tables/TablesDashboard.tsx | Asztal CRUD |
 | **UsersDashboard** | users/UsersDashboard.tsx | Admin felhasználók |
@@ -89,6 +100,16 @@ A projekt ~80+ React komponenst tartalmaz, amelyek Server és Client komponensek
 | **EmailTemplatesDashboard** | email-templates/EmailTemplatesDashboard.tsx | Email sablonok szerkesztése |
 | **ScheduledEmailsDashboard** | scheduled-emails/ScheduledEmailsDashboard.tsx | Ütemezett emailek |
 | **StatisticsContent** | statistics/StatisticsContent.tsx | Dashboard statisztikák |
+
+## Live Seating Display (app/display/)
+
+Élő ültetési kijelző — teljes képernyős nézet, valós idejű SSE frissítéssel.
+
+| Komponens | Fájl | Típus | Leírás |
+|-----------|------|-------|--------|
+| **DisplayLayout** | display/layout.tsx | Server | Display layout — elrejti a globális lábléceket a teljes képernyős megjelenítéshez |
+| **SeatingPage** | display/seating/page.tsx | Server | Szerver komponens, admin-only hitelesítés |
+| **SeatingDisplay** | display/seating/SeatingDisplay.tsx | Client | **ÚJ:** SSE stream listener (EventSource), 24 asztal pozíció, check-in számláló, háttérkép overlay |
 
 ## Regisztrációs Komponensek (app/register/)
 
@@ -140,7 +161,20 @@ A projekt ~80+ React komponenst tartalmaz, amelyek Server és Client komponensek
 
 | Komponens | Fájl | Leírás |
 |-----------|------|--------|
-| **CheckinScanner** | CheckinScanner.tsx | html5-qrcode QR szkenner + szín-kódolt kártyák (zöld/sárga/piros) |
+| **CheckinScanner** | CheckinScanner.tsx | **REDESIGN:** CEO Gala sötétkék téma (#0a1628 + #d4af37 arany), 4 szín-kódolt kártya (ZÖLD/SÁRGA/PIROS/KÉK), VIP badge (arany), vendég infó doboz (asztal, étrend, partner), admin override, PWA install prompt |
+
+## Szerviz Réteg (lib/services/)
+
+| Szolgáltatás | Fájl | Leírás |
+|--------------|------|--------|
+| **EventBroadcaster** | lib/services/event-broadcaster.ts | **ÚJ:** In-memory pub/sub SSE eseményekhez (check-in broadcast) |
+| **SeatingService** | lib/services/seating.ts | **BŐVÍTVE:** Asztal CRUD, ültetés hozzárendelés, auto-arrange, statisztikák |
+| **CheckinService** | lib/services/checkin.ts | **BŐVÍTVE:** Check-in validálás + event broadcasting SSE-n keresztül |
+| **EmailService** | lib/services/email.ts | Email küldés, retry logika, rate limiting, CID csatolmányok |
+| **RegistrationService** | lib/services/registration.ts | Regisztráció feldolgozás |
+| **RateLimitService** | lib/services/rate-limit.ts | IP/kulcs alapú rate limiting |
+| **AuditService** | lib/services/audit.ts | Audit trail naplózás |
+| **SchedulerService** | lib/services/scheduler.ts | Ütemezett email végrehajtás (node-cron) |
 
 ## State Management Összefoglaló
 
@@ -159,7 +193,7 @@ A projekt ~80+ React komponenst tartalmaz, amelyek Server és Client komponensek
 | Hook | Fájl | Leírás |
 |------|------|--------|
 | `useGuestList` | admin/guests/hooks/useGuestList.ts | Vendéglista CRUD, szűrés, lapozás |
-| `useSeatingDnd` | admin/seating/hooks/useSeatingDnd.ts | @dnd-kit DnD state |
+| `useSeatingDnd` | admin/seating/hooks/useSeatingDnd.ts | @dnd-kit DnD state: activeGuest, sourceContainerId, assign/unassign/move |
 | `useLanguage` | lib/i18n/LanguageContext.tsx | Nyelv váltás + t() fordító |
 | `useTheme` | app/pwa/hooks/useTheme.ts | PWA téma + localStorage |
 | `useToast` | app/pwa/hooks/useToast.ts | Toast értesítések |
