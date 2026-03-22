@@ -499,32 +499,40 @@ export default function SeatingDashboard() {
         )}
 
         {/* Stats Bar */}
-        {stats && (
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            <div className="panel p-4">
-              <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">{t('totalTables')}</p>
-              <p className="text-2xl font-bold text-neutral-800">{stats.totalTables}</p>
+        {stats && (() => {
+          const occRate = stats.occupancyRate;
+          const occColor = occRate >= 90
+            ? 'border-red-500 text-red-600 dark:text-red-400'
+            : occRate >= 70
+              ? 'border-amber-500 text-amber-600 dark:text-amber-400'
+              : 'border-emerald-500 text-emerald-600 dark:text-emerald-400';
+          return (
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              <div className="panel p-4 border-l-4 border-neutral-400 dark:border-neutral-500">
+                <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1">{t('totalTables')}</p>
+                <p className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">{stats.totalTables}</p>
+              </div>
+              <div className="panel p-4 border-l-4 border-neutral-400 dark:border-neutral-500">
+                <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1">{t('capacity')}</p>
+                <p className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">{stats.totalCapacity}</p>
+              </div>
+              <div className="panel p-4 border-l-4 border-blue-500">
+                <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1">{t('assignedSeats')}</p>
+                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.totalOccupied}</p>
+              </div>
+              <div className={`panel p-4 border-l-4 ${occColor}`}>
+                <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1">{t('occupancy')}</p>
+                <p className={`text-2xl font-bold ${occColor.split(' ').slice(1).join(' ')}`}>
+                  {stats.occupancyRate.toFixed(1)}%
+                </p>
+              </div>
+              <div className="panel p-4 border-l-4 border-purple-500">
+                <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1">{t('guests')}</p>
+                <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{stats.totalGuests}</p>
+              </div>
             </div>
-            <div className="panel p-4">
-              <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">{t('capacity')}</p>
-              <p className="text-2xl font-bold text-neutral-800">{stats.totalCapacity}</p>
-            </div>
-            <div className="panel p-4">
-              <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">{t('assignedSeats')}</p>
-              <p className="text-2xl font-bold text-neutral-800">{stats.totalOccupied}</p>
-            </div>
-            <div className="panel p-4 border-l-4 border-emerald-600">
-              <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">{t('occupancy')}</p>
-              <p className="text-2xl font-bold text-emerald-700">
-                {stats.occupancyRate.toFixed(1)}%
-              </p>
-            </div>
-            <div className="panel p-4">
-              <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">{t('guests')}</p>
-              <p className="text-2xl font-bold text-neutral-800">{stats.totalGuests}</p>
-            </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* Search Bar */}
         <SeatingSearchBar
