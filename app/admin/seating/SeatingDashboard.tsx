@@ -534,27 +534,27 @@ export default function SeatingDashboard() {
         />
 
         {/* Action Bar */}
-        <div className="flex gap-4 flex-wrap items-center">
+        <div className="flex gap-3 flex-wrap items-center">
           {/* View Mode Toggle */}
-          <div className="inline-flex border-2 border-neutral-300 bg-neutral-100 p-1">
+          <div className="inline-flex border border-neutral-300 dark:border-neutral-600 bg-neutral-100 dark:bg-neutral-800 rounded-lg p-1">
             <button
               onClick={() => setViewMode('grid')}
-              className={`px-4 py-2 text-sm font-medium transition-all duration-150 flex items-center gap-2 ${
+              className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-150 flex items-center gap-2 ${
                 viewMode === 'grid'
-                  ? 'bg-accent-600 text-white'
-                  : 'text-neutral-600 hover:bg-neutral-200 hover:text-neutral-800'
+                  ? 'bg-white dark:bg-neutral-600 text-neutral-900 dark:text-white shadow-sm'
+                  : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200'
               }`}
               data-testid="view-grid-button"
             >
               <SquaresFour size={18} weight="duotone" />
-              Grid View
+              Grid
             </button>
             <button
               onClick={() => setViewMode('floorplan')}
-              className={`px-4 py-2 text-sm font-medium transition-all duration-150 flex items-center gap-2 ${
+              className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-150 flex items-center gap-2 ${
                 viewMode === 'floorplan'
-                  ? 'bg-accent-600 text-white'
-                  : 'text-neutral-600 hover:bg-neutral-200 hover:text-neutral-800'
+                  ? 'bg-white dark:bg-neutral-600 text-neutral-900 dark:text-white shadow-sm'
+                  : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200'
               }`}
               data-testid="view-floorplan-button"
             >
@@ -563,30 +563,39 @@ export default function SeatingDashboard() {
             </button>
           </div>
 
-          <div className="h-8 w-px bg-neutral-300" />
+          <div className="h-8 w-px bg-neutral-300 dark:bg-neutral-600" />
 
           <button
             onClick={() => setShowCsvImport(!showCsvImport)}
-            className="btn btn-success flex items-center gap-2"
+            className="px-3 py-2 text-sm font-medium rounded-lg flex items-center gap-2 transition-all
+                       bg-neutral-100 text-neutral-700 hover:bg-neutral-200
+                       dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700
+                       border border-neutral-300 dark:border-neutral-600"
             data-testid="csv-import-button"
           >
-            <UploadSimple size={18} weight="duotone" />
+            <UploadSimple size={16} weight="duotone" />
             {t('importCSV')}
           </button>
           <button
             onClick={handleExport}
-            className="btn btn-primary flex items-center gap-2"
+            className="px-3 py-2 text-sm font-medium rounded-lg flex items-center gap-2 transition-all
+                       bg-neutral-100 text-neutral-700 hover:bg-neutral-200
+                       dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700
+                       border border-neutral-300 dark:border-neutral-600"
             data-testid="csv-export-button"
           >
-            <DownloadSimple size={18} weight="duotone" />
+            <DownloadSimple size={16} weight="duotone" />
             {t('exportCSV')}
           </button>
           <button
             onClick={fetchData}
-            className="btn btn-secondary flex items-center gap-2"
+            className="px-3 py-2 text-sm font-medium rounded-lg flex items-center gap-2 transition-all
+                       bg-neutral-100 text-neutral-700 hover:bg-neutral-200
+                       dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700
+                       border border-neutral-300 dark:border-neutral-600"
             data-testid="refresh-button"
           >
-            <ArrowsClockwise size={18} weight="duotone" />
+            <ArrowsClockwise size={16} weight="duotone" />
             {t('retry')}
           </button>
         </div>
@@ -655,9 +664,9 @@ export default function SeatingDashboard() {
 
             {/* Tables Grid with sections */}
             <div className="lg:col-span-3 panel p-6">
-              <div className="flex justify-between items-center mb-4 pb-4 border-b border-neutral-200">
-                <h3 className="text-lg font-semibold text-neutral-800">Tables</h3>
-                <p className="text-sm text-neutral-500">
+              <div className="flex justify-between items-center mb-4 pb-4 border-b border-neutral-200 dark:border-neutral-700">
+                <h3 className="text-lg font-semibold text-neutral-800 dark:text-neutral-100">{t('seating')}</h3>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400">
                   Drag guests to tables or between tables
                 </p>
               </div>
