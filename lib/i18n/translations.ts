@@ -437,6 +437,9 @@ export const translations = {
     seatingHeatmapAvailable: 'Available',
     seatingHeatmapPartial: 'Partial',
     seatingHeatmapFull: 'Full',
+    seatingSortName: 'Name',
+    seatingSortFreeSeatsDesc: 'Most free seats',
+    seatingSortFreeSeatsAsc: 'Fewest free seats',
 
     emailCancelled: 'Email cancelled',
     ruleUpdated: 'Rule updated',
@@ -944,6 +947,9 @@ export const translations = {
     seatingHeatmapAvailable: 'Van hely',
     seatingHeatmapPartial: 'Részben',
     seatingHeatmapFull: 'Tele',
+    seatingSortName: 'Név',
+    seatingSortFreeSeatsDesc: 'Legtöbb szabad hely',
+    seatingSortFreeSeatsAsc: 'Legkevesebb szabad hely',
 
     emailCancelled: 'Email törölve',
     ruleUpdated: 'Szabály frissítve',

@@ -45,7 +45,7 @@ import { PairedGuestChip } from './components/PairedGuestChip';
 import { FloorPlanEditor } from './components/FloorPlanEditor';
 import { SeatingSearchBar } from './components/SeatingSearchBar';
 import { SeatingFilters } from './components/SeatingFilters';
-import type { OccupancyFilter } from './components/SeatingFilters';
+import type { OccupancyFilter, TableSortMode } from './components/SeatingFilters';
 import { useSeatingDnd } from './hooks/useSeatingDnd';
 import type {
   Guest,
@@ -80,6 +80,7 @@ export default function SeatingDashboard() {
   // === Search, filter, collapse state ===
   const [globalSearch, setGlobalSearch] = useState('');
   const [occupancyFilter, setOccupancyFilter] = useState<OccupancyFilter>('all');
+  const [sortMode, setSortMode] = useState<TableSortMode>('name');
   const [collapsed, setCollapsed] = useState<Record<number, boolean>>({});
   const [searchExpandedIds, setSearchExpandedIds] = useState<Set<number>>(new Set());
   const collapseInitialized = useRef(false);
@@ -353,9 +354,32 @@ export default function SeatingDashboard() {
     return filteredTables.filter((t) => searchResults.matchingTableIds.has(t.id));
   }, [filteredTables, globalSearch, searchResults.matchingTableIds]);
 
+  // === Sort logic ===
+  const sortedTables = useMemo(() => {
+    const sorted = [...visibleTables];
+    const getFreeSeats = (table: TableData) => {
+      const guests = tableGuestsMap[table.id] || [];
+      const occupied = guests.reduce((sum, g) => sum + g.seatsRequired, 0);
+      return table.capacity - occupied;
+    };
+    switch (sortMode) {
+      case 'freeSeatsDesc':
+        sorted.sort((a, b) => getFreeSeats(b) - getFreeSeats(a));
+        break;
+      case 'freeSeatsAsc':
+        sorted.sort((a, b) => getFreeSeats(a) - getFreeSeats(b));
+        break;
+      case 'name':
+      default:
+        sorted.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+        break;
+    }
+    return sorted;
+  }, [visibleTables, sortMode, tableGuestsMap]);
+
   // === Section grouping ===
-  const vipTables = useMemo(() => visibleTables.filter(t => t.type === 'vip'), [visibleTables]);
-  const standardTables = useMemo(() => visibleTables.filter(t => t.type !== 'vip'), [visibleTables]);
+  const vipTables = useMemo(() => sortedTables.filter(t => t.type === 'vip'), [sortedTables]);
+  const standardTables = useMemo(() => sortedTables.filter(t => t.type !== 'vip'), [sortedTables]);
 
   // === Effective collapse state (respects search auto-expand) ===
   const isTableCollapsed = useCallback((tableId: number) => {
@@ -644,6 +668,8 @@ export default function SeatingDashboard() {
                   onFilterChange={setOccupancyFilter}
                   isAllExpanded={isAllExpanded}
                   onToggleExpandAll={handleToggleExpandAll}
+                  sortMode={sortMode}
+                  onSortChange={setSortMode}
                 />
               </div>
 
