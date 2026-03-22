@@ -615,10 +615,6 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
         {/* Invisible padding for easier mouse access */}
         <div
           className="bg-white border border-neutral-300 rounded-lg shadow-xl p-4 min-w-[240px] max-w-[340px] m-3"
-          style={{
-            maxHeight: `${Math.min(tooltipMaxHeight, stageSize.height - 20)}px`,
-            overflowY: 'auto',
-          }}
         >
           {/* Header */}
           <div className="flex items-center gap-2 mb-3 pb-2 border-b border-neutral-200">
