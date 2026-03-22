@@ -79,14 +79,14 @@ export function DroppableTable({
   const isValidDrop = isOver && canAcceptGuest;
   const isInvalidDrop = isOver && !canAcceptGuest;
 
-  // Occupancy-based color coding
+  // Occupancy-based color coding: gray (empty) → blue (<50%) → green (≥50%) → red (full)
   const occupancyRatio = table.capacity > 0 ? currentOccupancy / table.capacity : 0;
   const occupancyColorClass = isFull
     ? 'border-red-300 bg-red-50 dark:border-red-700 dark:bg-red-950/30'
     : occupancyRatio >= 0.5
-      ? 'border-amber-300 bg-amber-50/50 dark:border-amber-700 dark:bg-amber-950/20'
+      ? 'border-emerald-300 bg-emerald-50/50 dark:border-emerald-700 dark:bg-emerald-950/20'
       : currentOccupancy > 0
-        ? 'border-emerald-300 bg-emerald-50/50 dark:border-emerald-700 dark:bg-emerald-950/20'
+        ? 'border-blue-300 bg-blue-50/50 dark:border-blue-700 dark:bg-blue-950/20'
         : 'border-gray-200 bg-gray-50 dark:border-neutral-600 dark:bg-neutral-800';
 
   return (
@@ -141,8 +141,8 @@ export function DroppableTable({
           {isCollapsed && (
             <span className={`text-xs font-medium ${
               isFull ? 'text-red-600 dark:text-red-400'
-                : occupancyRatio >= 0.5 ? 'text-amber-600 dark:text-amber-400'
-                : currentOccupancy > 0 ? 'text-emerald-600 dark:text-emerald-400'
+                : occupancyRatio >= 0.5 ? 'text-emerald-600 dark:text-emerald-400'
+                : currentOccupancy > 0 ? 'text-blue-600 dark:text-blue-400'
                 : 'text-gray-500 dark:text-neutral-400'
             }`}>
               {currentOccupancy}/{table.capacity}
@@ -162,7 +162,7 @@ export function DroppableTable({
           <div className="flex-1 mx-2 bg-gray-200 dark:bg-neutral-600 rounded-full h-2">
             <div
               className={`h-2 rounded-full transition-all ${
-                isFull ? 'bg-red-500' : occupancyRatio >= 0.5 ? 'bg-amber-500' : currentOccupancy > 0 ? 'bg-emerald-500' : ''
+                isFull ? 'bg-red-500' : occupancyRatio >= 0.5 ? 'bg-emerald-500' : currentOccupancy > 0 ? 'bg-blue-500' : ''
               }`}
               style={{ width: `${Math.min((currentOccupancy / table.capacity) * 100, 100)}%` }}
             />

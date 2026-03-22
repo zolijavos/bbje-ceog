@@ -696,26 +696,72 @@ export default function SeatingDashboard() {
           />
         )}
 
-        {/* Instructions - shown for grid view */}
+        {/* Instructions + Color Guide - shown for grid view */}
         {viewMode === 'grid' && (
-          <div className="panel p-4 border-l-4 border-accent-600">
-            <h4 className="font-semibold text-neutral-800 text-sm mb-3 uppercase tracking-wide">Drag & Drop Instructions</h4>
-            <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm text-neutral-600">
-              <div className="flex items-start gap-2">
-                <span className="text-accent-600 font-bold">1.</span>
-                <span>Drag guests from the left panel to any table</span>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* DnD Instructions */}
+            <div className="panel p-4 border-l-4 border-accent-600">
+              <h4 className="font-semibold text-neutral-800 dark:text-neutral-200 text-sm mb-3 uppercase tracking-wide">Drag & Drop Instructions</h4>
+              <div className="grid grid-cols-1 gap-y-2 text-sm text-neutral-600 dark:text-neutral-400">
+                <div className="flex items-start gap-2">
+                  <span className="text-accent-600 font-bold">1.</span>
+                  <span>Drag guests from the left panel to any table</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="text-accent-600 font-bold">2.</span>
+                  <span>Drag guests between tables to move them</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="text-accent-600 font-bold">3.</span>
+                  <span>Drag back to the left panel to remove assignment</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="text-accent-600 font-bold">4.</span>
+                  <span>Paired guests (2 {t('seats')}) move together</span>
+                </div>
               </div>
-              <div className="flex items-start gap-2">
-                <span className="text-accent-600 font-bold">2.</span>
-                <span>Drag guests between tables to move them</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <span className="text-accent-600 font-bold">3.</span>
-                <span>Drag back to the left panel to remove assignment</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <span className="text-accent-600 font-bold">4.</span>
-                <span>Paired guests (2 {t('seats')}) move together</span>
+            </div>
+
+            {/* Color Guide */}
+            <div className="panel p-4 border-l-4 border-amber-500">
+              <h4 className="font-semibold text-neutral-800 dark:text-neutral-200 text-sm mb-3 uppercase tracking-wide">{t('seatingColorGuide')}</h4>
+              <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+                {/* Table occupancy colors */}
+                <div>
+                  <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-2">Tables</p>
+                  <div className="space-y-1.5">
+                    {[
+                      { border: 'border-gray-300 dark:border-neutral-500', label: t('seatingColorTableEmpty') },
+                      { border: 'border-blue-400 dark:border-blue-500', label: t('seatingColorTablePartial') + ' (<50%)' },
+                      { border: 'border-emerald-400 dark:border-emerald-500', label: t('seatingColorTableAlmost') + ' (≥50%)' },
+                      { border: 'border-red-400 dark:border-red-500', label: t('seatingColorTableFull') + ' (100%)' },
+                    ].map(({ border, label }) => (
+                      <div key={label} className="flex items-center gap-2">
+                        <span className={`w-5 h-3 rounded border-2 ${border} bg-white dark:bg-neutral-800`} />
+                        <span className="text-xs text-neutral-600 dark:text-neutral-400">{label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {/* Guest status dots */}
+                <div>
+                  <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-2">{t('guests')}</p>
+                  <div className="space-y-1.5">
+                    {[
+                      { dot: 'bg-yellow-400', label: t('seatingColorStatusInvited') },
+                      { dot: 'bg-blue-400', label: t('seatingColorStatusRegistered') },
+                      { dot: 'bg-emerald-400', label: t('seatingColorStatusApproved') },
+                      { dot: 'bg-emerald-600', label: t('seatingColorStatusCheckedIn') },
+                      { dot: 'bg-red-400', label: t('seatingColorStatusDeclined') },
+                      { dot: 'bg-amber-500', label: t('seatingColorStatusPending') },
+                    ].map(({ dot, label }) => (
+                      <div key={label} className="flex items-center gap-2">
+                        <span className={`w-2.5 h-2.5 rounded-full ${dot}`} />
+                        <span className="text-xs text-neutral-600 dark:text-neutral-400">{label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
