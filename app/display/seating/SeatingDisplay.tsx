@@ -62,8 +62,8 @@ interface DisplayCheckinEvent {
 }
 
 function parseTableNumber(name: string): number | null {
-  // Only match exact "Table N" format, skip "VIP Table N", "Standard Table N" etc.
-  const match = name.match(/^Table (\d+)$/);
+  // Match "Table N" or "Asztal N" format, skip prefixed names like "VIP Table N"
+  const match = name.match(/^(?:Table|Asztal)\s+(\d+)$/);
   return match ? parseInt(match[1], 10) : null;
 }
 
