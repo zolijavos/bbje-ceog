@@ -10,6 +10,7 @@ export interface Guest {
   email: string;
   guest_type: 'vip' | 'invited' | 'paying_single' | 'paying_paired';
   registration_status?: string;
+  is_vip_reception?: boolean;
   registration?: {
     ticket_type: string;
     partner_first_name: string | null;
@@ -34,6 +35,7 @@ export interface Assignment {
     email: string;
     guest_type: string;
     registration_status?: string;
+    is_vip_reception?: boolean;
     paired_with_id?: number | null; // If set, this guest is a partner (not main guest)
     registration?: {
       ticket_type: string;
@@ -84,6 +86,7 @@ export interface DraggableGuest {
     email: string | null;
   };
   registrationStatus?: string;
+  isVip?: boolean;
   seatsRequired: 1 | 2;
   assignmentId?: number; // Only set if already assigned to a table
   tableId?: number; // Only set if already assigned
@@ -149,6 +152,7 @@ export function toDraggableGuest(
     email: guest.email,
     guestType: guest.guest_type,
     registrationStatus: guest.registration_status,
+    isVip: !!guest.is_vip_reception,
     type: hasPartner ? 'paired' : 'single',
     partner: hasPartner && partnerName ? {
       name: partnerName,
@@ -189,6 +193,7 @@ export function assignmentToDraggableGuest(
     email: guest.email,
     guestType: guest.guest_type as 'vip' | 'invited' | 'paying_single' | 'paying_paired',
     registrationStatus: guest.registration_status,
+    isVip: !!guest.is_vip_reception,
     type: hasPartner ? 'paired' : 'single',
     partner: hasPartner && partnerName ? {
       name: partnerName,

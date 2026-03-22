@@ -195,6 +195,7 @@ export async function getAllTables(): Promise<TableWithAssignments[]> {
               email: true,
               guest_type: true,
               registration_status: true, // For status dot color coding in UI
+              is_vip_reception: true, // VIP reception flag for VIP badge
               paired_with_id: true, // For filtering partners in drag & drop UI
               registration: {
                 select: {
@@ -652,6 +653,7 @@ export async function getUnassignedGuests() {
       email: true,
       guest_type: true,
       registration_status: true, // For status dot color coding in UI
+      is_vip_reception: true, // VIP reception flag for VIP badge
       registration: {
         select: {
           ticket_type: true,

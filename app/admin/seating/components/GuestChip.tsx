@@ -72,7 +72,7 @@ export const GuestChip = forwardRef<HTMLDivElement, GuestChipProps & React.HTMLA
           `}>
             {GUEST_TYPE_LABELS[guest.guestType] || guest.guestType}
           </span>
-          {(guest.guestType === 'invited' || guest.guestType === 'vip') && (
+          {guest.isVip && (
             <span className="text-[9px] font-bold px-1 py-0.5 rounded bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300 uppercase tracking-wider">
               VIP
             </span>

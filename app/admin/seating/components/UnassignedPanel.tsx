@@ -21,18 +21,17 @@ interface UnassignedPanelProps {
 
 // Guest type → border color for left accent
 const GUEST_TYPE_BORDER: Record<string, string> = {
-  invited: 'border-l-amber-500',
-  vip: 'border-l-amber-500',
+  invited: 'border-l-blue-500',
+  vip: 'border-l-blue-500',
   paying_single: 'border-l-blue-500',
   paying_paired: 'border-l-purple-500',
 };
 
-// Guest type → group config
-const GUEST_GROUPS: { types: string[]; labelKey: string; borderColor: string }[] = [
-  { types: ['invited', 'vip'], labelKey: 'guestGroupInvited', borderColor: 'border-amber-500' },
-  { types: ['paying_single'], labelKey: 'guestGroupPayingSingle', borderColor: 'border-blue-500' },
-  { types: ['paying_paired'], labelKey: 'guestGroupPayingPaired', borderColor: 'border-purple-500' },
-];
+// VIP guests get amber border override
+function getGuestBorderColor(guest: DraggableGuestType): string {
+  if (guest.isVip) return 'border-l-amber-500';
+  return GUEST_TYPE_BORDER[guest.guestType] || 'border-l-neutral-400';
+}
 
 export function UnassignedPanel({ guests, isReceiving }: UnassignedPanelProps) {
   const { t } = useLanguage();
@@ -52,12 +51,21 @@ export function UnassignedPanel({ guests, isReceiving }: UnassignedPanelProps) {
     (g.email || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Group guests by type
+  // Group guests: VIP first (isVip), then by guest type
   const groupedGuests = useMemo(() => {
-    return GUEST_GROUPS.map(group => ({
-      ...group,
-      guests: filteredGuests.filter(g => group.types.includes(g.guestType)),
-    })).filter(g => g.guests.length > 0);
+    const groups: { key: string; labelKey: string; borderColor: string; guests: DraggableGuestType[] }[] = [];
+
+    const vipGuests = filteredGuests.filter(g => g.isVip);
+    const invitedNonVip = filteredGuests.filter(g => !g.isVip && (g.guestType === 'invited' || g.guestType === 'vip'));
+    const payingSingle = filteredGuests.filter(g => !g.isVip && g.guestType === 'paying_single');
+    const payingPaired = filteredGuests.filter(g => !g.isVip && g.guestType === 'paying_paired');
+
+    if (vipGuests.length > 0) groups.push({ key: 'vip', labelKey: 'tableTypeVip', borderColor: 'border-amber-500', guests: vipGuests });
+    if (invitedNonVip.length > 0) groups.push({ key: 'invited', labelKey: 'guestGroupInvited', borderColor: 'border-blue-500', guests: invitedNonVip });
+    if (payingSingle.length > 0) groups.push({ key: 'single', labelKey: 'guestGroupPayingSingle', borderColor: 'border-blue-500', guests: payingSingle });
+    if (payingPaired.length > 0) groups.push({ key: 'paired', labelKey: 'guestGroupPayingPaired', borderColor: 'border-purple-500', guests: payingPaired });
+
+    return groups;
   }, [filteredGuests]);
 
   // Count actual guests (not cards) - paired guests count as 2
@@ -118,7 +126,7 @@ export function UnassignedPanel({ guests, isReceiving }: UnassignedPanelProps) {
                   {group.guests.map((guest) => (
                     <div
                       key={guest.id}
-                      className={`border-l-3 ${GUEST_TYPE_BORDER[guest.guestType] || 'border-l-neutral-400'}`}
+                      className={getGuestBorderColor(guest)}
                       style={{ borderLeftWidth: '3px' }}
                     >
                       <DraggableGuest guest={guest} containerId="unassigned" />
