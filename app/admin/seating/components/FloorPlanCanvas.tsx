@@ -195,7 +195,7 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
       if (!isTooltipHovered) {
         setHoveredTable(null);
       }
-    }, 300); // 300ms delay before hiding
+    }, 800); // 800ms delay before hiding — enough time to reach tooltip for scrolling
   }, [clearTooltipTimeout, isTooltipHovered]);
 
   // Handle tooltip hover
@@ -586,12 +586,12 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
         </Layer>
       </Stage>
 
-      {/* Tooltip overlay - interactive for scrolling, smart positioning */}
+      {/* Tooltip overlay - interactive for scrolling, smart positioning, generous hover zone */}
       {hoveredTable && (() => {
         // Smart positioning: calculate optimal position based on container bounds
-        const tooltipWidth = 320;
-        const tooltipHeight = 350; // Estimated max height
-        const offset = 15;
+        const tooltipWidth = 340;
+        const tooltipMaxHeight = 420; // Generous max height for long guest lists
+        const offset = 10; // Closer to cursor for easier reach
 
         // Determine horizontal position
         const showLeft = tooltipPosition.x > stageSize.width - tooltipWidth - offset;
@@ -600,21 +600,25 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
           : Math.min(tooltipPosition.x + offset, stageSize.width - tooltipWidth - 10);
 
         // Determine vertical position
-        const showAbove = tooltipPosition.y > stageSize.height - tooltipHeight - offset;
+        const showAbove = tooltipPosition.y > stageSize.height - tooltipMaxHeight - offset;
         const top = showAbove
-          ? Math.max(10, tooltipPosition.y - tooltipHeight - offset)
-          : Math.min(tooltipPosition.y + offset, stageSize.height - tooltipHeight - 10);
+          ? Math.max(10, tooltipPosition.y - tooltipMaxHeight - offset)
+          : Math.min(tooltipPosition.y + offset, stageSize.height - tooltipMaxHeight - 10);
 
         return (
         <div
-          className="absolute z-50 bg-white border border-neutral-300 rounded-lg shadow-xl p-4 min-w-[220px] max-w-[320px]"
-          style={{
-            left,
-            top,
-            maxHeight: `${Math.min(tooltipHeight, stageSize.height - 20)}px`,
-          }}
+          className="absolute z-50"
+          style={{ left: left - 12, top: top - 12 }}
           onMouseEnter={handleTooltipMouseEnter}
           onMouseLeave={handleTooltipMouseLeave}
+        >
+        {/* Invisible padding for easier mouse access */}
+        <div
+          className="bg-white border border-neutral-300 rounded-lg shadow-xl p-4 min-w-[240px] max-w-[340px] m-3"
+          style={{
+            maxHeight: `${Math.min(tooltipMaxHeight, stageSize.height - 20)}px`,
+            overflowY: 'auto',
+          }}
         >
           {/* Header */}
           <div className="flex items-center gap-2 mb-3 pb-2 border-b border-neutral-200">
@@ -648,7 +652,7 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
           {hoveredTable.assignments.length > 0 ? (
             <div className="space-y-1.5">
               <p className="text-xs font-medium text-neutral-500 uppercase tracking-wide">Guests:</p>
-              <ul className="space-y-1.5 max-h-[250px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent">
+              <ul className="space-y-1.5 max-h-[300px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent">
                 {hoveredTable.assignments
                   .filter(a => !a.guest.paired_with_id) // Only show main guests, not partners
                   .map((assignment) => {
@@ -688,6 +692,7 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
           ) : (
             <p className="text-sm text-neutral-500 italic">No assigned guests</p>
           )}
+        </div>
         </div>
         );
       })()}

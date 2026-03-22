@@ -440,6 +440,9 @@ export const translations = {
     seatingSortName: 'Name',
     seatingSortFreeSeatsDesc: 'Most free seats',
     seatingSortFreeSeatsAsc: 'Fewest free seats',
+    seatingAutoArrange: 'Auto Arrange',
+    seatingAutoArrangeConfirm: 'Rearrange all tables in a grid? VIP tables will be placed in the front rows.',
+    seatingAutoArranged: 'Tables rearranged successfully',
 
     emailCancelled: 'Email cancelled',
     ruleUpdated: 'Rule updated',
@@ -950,6 +953,9 @@ export const translations = {
     seatingSortName: 'Név',
     seatingSortFreeSeatsDesc: 'Legtöbb szabad hely',
     seatingSortFreeSeatsAsc: 'Legkevesebb szabad hely',
+    seatingAutoArrange: 'Automatikus elrendezés',
+    seatingAutoArrangeConfirm: 'Összes asztal rácsba rendezése? A VIP asztalok az első sorokba kerülnek.',
+    seatingAutoArranged: 'Asztalok sikeresen átrendezve',
 
     emailCancelled: 'Email törölve',
     ruleUpdated: 'Szabály frissítve',

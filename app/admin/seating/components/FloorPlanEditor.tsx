@@ -365,6 +365,55 @@ export function FloorPlanEditor({
     }
   }, [onRefresh]);
 
+  // Auto-arrange tables in grid pattern (VIP first, then Standard)
+  const handleAutoArrange = useCallback(async () => {
+    if (!confirm(t('seatingAutoArrangeConfirm'))) return;
+
+    setSaving(true);
+    setError(null);
+
+    try {
+      // Sort: VIP tables first (alphabetically), then standard (alphabetically)
+      const sorted = [...tables].sort((a, b) => {
+        if (a.type === 'vip' && b.type !== 'vip') return -1;
+        if (a.type !== 'vip' && b.type === 'vip') return 1;
+        return a.name.localeCompare(b.name, undefined, { numeric: true });
+      });
+
+      // Calculate grid layout within room bounds
+      const padding = 2; // meters from room edges
+      const usableWidth = roomConfig.width - padding * 2;
+      const usableHeight = roomConfig.height - padding * 2;
+      const cols = Math.ceil(Math.sqrt(sorted.length * (usableWidth / usableHeight)));
+      const rows = Math.ceil(sorted.length / cols);
+      const spacingX = usableWidth / Math.max(cols, 1);
+      const spacingY = usableHeight / Math.max(rows, 1);
+
+      // Save each table position sequentially
+      for (let i = 0; i < sorted.length; i++) {
+        const col = i % cols;
+        const row = Math.floor(i / cols);
+        const x = Math.round((padding + spacingX * 0.5 + col * spacingX) * 10) / 10;
+        const y = Math.round((padding + spacingY * 0.5 + row * spacingY) * 10) / 10;
+
+        await fetch(`/api/admin/tables/${sorted[i].id}/position`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pos_x: x, pos_y: y }),
+        });
+      }
+
+      setExportSuccess(t('seatingAutoArranged'));
+      onRefresh?.();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Network error';
+      setError(message);
+      logError('Failed to auto-arrange tables:', err);
+    } finally {
+      setSaving(false);
+    }
+  }, [tables, roomConfig, onRefresh, t]);
+
   // Save room config
   const handleSaveRoomConfig = () => {
     setRoomConfig(localRoomConfig);
@@ -453,6 +502,17 @@ export function FloorPlanEditor({
               </div>
             )}
           </div>
+          <button
+            onClick={handleAutoArrange}
+            className="icon-btn flex items-center gap-1.5"
+            title={t('seatingAutoArrange')}
+            disabled={saving}
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+            </svg>
+            <span className="text-xs font-medium hidden sm:inline">{t('seatingAutoArrange')}</span>
+          </button>
           <button
             onClick={() => setShowSettings(!showSettings)}
             className={`icon-btn ${showSettings ? 'icon-btn-active' : ''}`}
