@@ -52,6 +52,193 @@ interface TestResultData {
 
 const releaseTests: ReleaseTest[] = [
   {
+    version: '4.1.0',
+    date: '2026-03-22',
+    features: [
+      // === LIVE SEATING DISPLAY ===
+      {
+        nameEn: 'Live Seating Display — Page Load',
+        nameHu: 'Élő Ülésrend Kijelző — Oldal Betöltés',
+        steps: [
+          { en: 'Log in as admin', hu: 'Jelentkezz be adminként' },
+          { en: 'Navigate to Dashboard → click "Live Display" card', hu: 'Navigálj a Dashboard-ra → kattints az "Élő Kijelző" kártyára' },
+          { en: 'Verify the display loads full-screen with background image', hu: 'Ellenőrizd, hogy a kijelző teljes képernyőn betölt háttérképpel' },
+          { en: 'Verify guest names appear at their table positions', hu: 'Ellenőrizd, hogy a vendégnevek megjelennek az asztal pozícióknál' },
+          { en: 'Verify "X/Y CHECKED IN" counter is visible', hu: 'Ellenőrizd, hogy az "X/Y CHECKED IN" számláló látható' },
+          { en: 'Verify non-checked-in guests are grey italic, checked-in are bold black', hu: 'Ellenőrizd, hogy a nem bejelentkezett vendégek szürke dőltek, a bejelentkezettek fekete félkövérek' },
+        ],
+        expected: { en: 'Full-screen display with background image, guest overlays, and counter', hu: 'Teljes képernyős kijelző háttérképpel, vendég overlay-ekkel és számlálóval' },
+      },
+      {
+        nameEn: 'Live Seating Display — Real-time Updates',
+        nameHu: 'Élő Ülésrend Kijelző — Valós Idejű Frissítés',
+        steps: [
+          { en: 'Open the live display on one screen', hu: 'Nyisd meg az élő kijelzőt egy képernyőn' },
+          { en: 'On another device/tab, check in a guest via the scanner', hu: 'Egy másik eszközön/fülön jelentkeztesd be a vendéget a szkennerrel' },
+          { en: 'Verify the guest name style changes on the display (grey→black bold)', hu: 'Ellenőrizd, hogy a vendég neve stílusa változik a kijelzőn (szürke→fekete félkövér)' },
+          { en: 'Verify the counter increments', hu: 'Ellenőrizd, hogy a számláló növekszik' },
+        ],
+        expected: { en: 'Guest check-in updates live on display without page refresh', hu: 'Vendég bejelentkezés valós időben frissül a kijelzőn oldalfrissítés nélkül' },
+      },
+      // === CHECK-IN SCANNER ===
+      {
+        nameEn: 'Check-in Scanner — CEO Gala Theme',
+        nameHu: 'Check-in Scanner — CEO Gála Arculat',
+        steps: [
+          { en: 'Navigate to /checkin', hu: 'Navigálj a /checkin oldalra' },
+          { en: 'Verify dark-blue background with gold accents', hu: 'Ellenőrizd a sötétkék hátteret arany akcentusokkal' },
+          { en: 'Verify "CEO Gala 2026" title with star decoration', hu: 'Ellenőrizd a "CEO Gala 2026" címet csillag dekorációval' },
+          { en: 'Verify "Start Scanning" button is visible', hu: 'Ellenőrizd, hogy a "Start Scanning" gomb látható' },
+          { en: 'Verify MyForge Labs footer at bottom', hu: 'Ellenőrizd a MyForge Labs lábléc alul' },
+        ],
+        expected: { en: 'Scanner page renders in CEO Gala dark-blue/gold theme', hu: 'Scanner oldal CEO Gála sötétkék-arany arculatban jelenik meg' },
+      },
+      {
+        nameEn: 'Check-in Scanner — Guest Details on Valid Ticket',
+        nameHu: 'Check-in Scanner — Vendég Részletek Érvényes Jegynél',
+        steps: [
+          { en: 'Scan a valid QR ticket', hu: 'Szkennelj be egy érvényes QR jegyet' },
+          { en: 'Verify green card appears with guest name', hu: 'Ellenőrizd, hogy zöld kártya jelenik meg a vendég nevével' },
+          { en: 'Verify table number is shown (if assigned)', hu: 'Ellenőrizd, hogy az asztal szám megjelenik (ha ki van osztva)' },
+          { en: 'Verify VIP badge shown for VIP Reception guests', hu: 'Ellenőrizd, hogy VIP badge megjelenik a VIP Reception vendégeknél' },
+          { en: 'Verify dietary requirements shown if set', hu: 'Ellenőrizd, hogy a diétás igények megjelennek ha be van állítva' },
+          { en: 'Verify partner name shown for paired tickets', hu: 'Ellenőrizd, hogy a partner neve megjelenik páros jegynél' },
+          { en: 'Press CHECK IN and verify success screen with guest info', hu: 'Nyomd meg a CHECK IN gombot és ellenőrizd a sikerképernyőt vendég infóval' },
+        ],
+        expected: { en: 'Guest details (table, VIP, diet, partner) visible before and after check-in', hu: 'Vendég részletek (asztal, VIP, diéta, partner) láthatóak check-in előtt és után' },
+      },
+      {
+        nameEn: 'Check-in Scanner — Already Checked In (Yellow Card)',
+        nameHu: 'Check-in Scanner — Már Bejelentkezett (Sárga Kártya)',
+        steps: [
+          { en: 'Scan a QR ticket that has already been checked in', hu: 'Szkennelj be egy már bejelentkezett QR jegyet' },
+          { en: 'Verify yellow/amber card appears', hu: 'Ellenőrizd, hogy sárga/amber kártya jelenik meg' },
+          { en: 'Verify "Already Checked In" message with previous check-in time', hu: 'Ellenőrizd az "Already Checked In" üzenetet az előző bejelentkezési idővel' },
+          { en: 'As admin: verify "Admin Override" button is available', hu: 'Adminként: ellenőrizd, hogy az "Admin Override" gomb elérhető' },
+          { en: 'As staff: verify override button is NOT shown', hu: 'Staffként: ellenőrizd, hogy az override gomb NEM jelenik meg' },
+        ],
+        expected: { en: 'Yellow card for duplicate check-in, admin override available', hu: 'Sárga kártya dupla bejelentkezésnél, admin felülírás elérhető' },
+      },
+      // === SEATING PAGE — SEARCH & COLLAPSE ===
+      {
+        nameEn: 'Seating Grid — Search & Collapse',
+        nameHu: 'Ülésrend Grid — Keresés & Összecsukás',
+        steps: [
+          { en: 'Navigate to Seating page (admin/seating)', hu: 'Navigálj az Ülésrend oldalra (admin/seating)' },
+          { en: 'With 5+ tables: verify all tables start collapsed', hu: '5+ asztalnál: ellenőrizd, hogy minden asztal csukva indul' },
+          { en: 'Click a table header to expand/collapse', hu: 'Kattints egy asztal fejlécre a kinyitáshoz/becsukáshoz' },
+          { en: 'Click "Összes kinyitása" button — verify all expand', hu: 'Kattints az "Összes kinyitása" gombra — ellenőrizd, hogy mind kinyílik' },
+          { en: 'Type a guest name in global search bar', hu: 'Írj be egy vendég nevet a globális keresőbe' },
+          { en: 'Verify matching tables auto-expand with highlighted guests (★ and amber ring)', hu: 'Ellenőrizd, hogy a talált asztalok automatikusan kinyílnak kiemelt vendégekkel (★ és amber keret)' },
+          { en: 'Clear search — verify original collapse state restores', hu: 'Töröld a keresést — ellenőrizd, hogy az eredeti állapot visszaáll' },
+          { en: 'Type a non-existing name — verify "Nincs találat" message', hu: 'Írj be nem létező nevet — ellenőrizd a "Nincs találat" üzenetet' },
+        ],
+        expected: { en: 'Tables collapse/expand correctly, search finds guests and auto-expands tables', hu: 'Asztalok helyesen csukódnak/nyílnak, keresés megtalálja a vendégeket és kinyitja az asztalokat' },
+      },
+      // === SEATING PAGE — FILTERS & SORTING ===
+      {
+        nameEn: 'Seating Grid — Filters, Sorting & Sections',
+        nameHu: 'Ülésrend Grid — Szűrők, Rendezés & Szekciók',
+        steps: [
+          { en: 'Verify VIP and Standard sections are shown separately', hu: 'Ellenőrizd, hogy a VIP és Standard szekciók külön jelennek meg' },
+          { en: 'Click "Van hely" filter — verify only tables with room shown', hu: 'Kattints a "Van hely" szűrőre — ellenőrizd, hogy csak a szabad helyes asztalok jelennek meg' },
+          { en: 'Click "Tele" filter — verify only full tables shown', hu: 'Kattints a "Tele" szűrőre — ellenőrizd, hogy csak a tele asztalok jelennek meg' },
+          { en: 'Click "Üres" filter — verify only empty tables shown', hu: 'Kattints az "Üres" szűrőre — ellenőrizd, hogy csak az üres asztalok jelennek meg' },
+          { en: 'Change sort to "Legtöbb szabad hely" — verify order changes', hu: 'Váltsd a rendezést "Legtöbb szabad hely"-re — ellenőrizd a sorrend változást' },
+          { en: 'Verify tables are in numeric order by default (1, 2, 3... 10, 11, not 1, 10, 11, 2)', hu: 'Ellenőrizd, hogy az asztalok numerikus sorrendben vannak (1, 2, 3... 10, 11, nem 1, 10, 11, 2)' },
+        ],
+        expected: { en: 'Filters, sorting and VIP/Standard sections work correctly', hu: 'Szűrők, rendezés és VIP/Standard szekciók helyesen működnek' },
+      },
+      // === SEATING PAGE — COLOR CODING ===
+      {
+        nameEn: 'Seating Grid — Color Coding & Statuses',
+        nameHu: 'Ülésrend Grid — Színkódolás & Státuszok',
+        steps: [
+          { en: 'Verify empty tables have grey border', hu: 'Ellenőrizd, hogy az üres asztalok szürke keretűek' },
+          { en: 'Verify partially filled tables (<50%) have blue border', hu: 'Ellenőrizd, hogy a részben telt asztalok (<50%) kék keretűek' },
+          { en: 'Verify almost full tables (≥50%) have green border', hu: 'Ellenőrizd, hogy a majdnem tele asztalok (≥50%) zöld keretűek' },
+          { en: 'Verify full tables have red border', hu: 'Ellenőrizd, hogy a tele asztalok piros keretűek' },
+          { en: 'Verify guest chips show colored status dots', hu: 'Ellenőrizd, hogy a vendég kártyákon színes státusz pontok vannak' },
+          { en: 'Verify VIP guests have gold VIP badge', hu: 'Ellenőrizd, hogy a VIP vendégeknél arany VIP badge van' },
+          { en: 'Verify KPI stat cards have colored borders and numbers', hu: 'Ellenőrizd, hogy a KPI statisztika kártyákon színes keretek és számok vannak' },
+          { en: 'Verify Color Guide panel at page bottom', hu: 'Ellenőrizd a Szín jelölések panelt az oldal alján' },
+        ],
+        expected: { en: 'All color coding matches the Color Guide legend', hu: 'Minden színkódolás megegyezik a Szín jelölések legendával' },
+      },
+      // === SEATING PAGE — DnD + COLLAPSE ===
+      {
+        nameEn: 'Seating Grid — DnD with Collapsed Tables',
+        nameHu: 'Ülésrend Grid — DnD Csukott Asztalokkal',
+        steps: [
+          { en: 'Drag a guest from left panel onto a collapsed table', hu: 'Húzz egy vendéget a bal panelből egy csukott asztalra' },
+          { en: 'Hold over collapsed table for 400ms — verify it auto-expands', hu: 'Tartsd a csukott asztal felett 400ms-ig — ellenőrizd, hogy automatikusan kinyílik' },
+          { en: 'Drop the guest — verify successful assignment', hu: 'Ejtsd le a vendéget — ellenőrizd a sikeres hozzárendelést' },
+          { en: 'Drop a guest on a collapsed table quickly (before 400ms) — verify it still assigns', hu: 'Ejtsd le a vendéget gyorsan egy csukott asztalra (400ms előtt) — ellenőrizd, hogy hozzárendeli' },
+          { en: 'Drag a guest back to the left panel to remove assignment', hu: 'Húzd vissza a vendéget a bal panelbe a hozzárendelés törléséhez' },
+        ],
+        expected: { en: 'DnD works correctly with collapsed tables, auto-expand on hover', hu: 'DnD helyesen működik csukott asztalokkal, hover-re automatikusan kinyílik' },
+      },
+      // === SEATING PAGE — INLINE EDIT ===
+      {
+        nameEn: 'Seating Grid — Inline Table Edit',
+        nameHu: 'Ülésrend Grid — Helyben Asztal Szerkesztés',
+        steps: [
+          { en: 'Hover over a table card — verify pencil icon appears', hu: 'Vidd az egeret egy asztal kártya fölé — ellenőrizd, hogy ceruza ikon megjelenik' },
+          { en: 'Click pencil icon — verify edit modal opens', hu: 'Kattints a ceruza ikonra — ellenőrizd, hogy a szerkesztő ablak megnyílik' },
+          { en: 'Change table name and save — verify name updates', hu: 'Változtasd meg az asztal nevét és mentsd — ellenőrizd, hogy a név frissül' },
+          { en: 'Change table type to VIP — verify VIP badge appears and table moves to VIP section', hu: 'Változtasd az asztal típust VIP-re — ellenőrizd, hogy VIP badge megjelenik és az asztal a VIP szekcióba kerül' },
+          { en: 'Try to reduce capacity below current occupancy — verify error message', hu: 'Próbáld csökkenteni a kapacitást a jelenlegi foglaltság alá — ellenőrizd a hibaüzenetet' },
+        ],
+        expected: { en: 'Table edit modal works, VIP type change reflected immediately', hu: 'Asztal szerkesztő modal működik, VIP típus változás azonnal megjelenik' },
+      },
+      // === FLOOR PLAN ===
+      {
+        nameEn: 'Floor Plan — Heatmap, Spotlight & Auto-Arrange',
+        nameHu: 'Alaprajz — Heatmap, Spotlight & Automatikus Elrendezés',
+        steps: [
+          { en: 'Switch to Floor Plan view', hu: 'Válts Alaprajz nézetre' },
+          { en: 'Verify heatmap colors: grey (empty), green (<50%), orange (≥50%), red (full)', hu: 'Ellenőrizd a heatmap színeket: szürke (üres), zöld (<50%), narancs (≥50%), piros (tele)' },
+          { en: 'Verify heatmap legend at bottom of canvas', hu: 'Ellenőrizd a heatmap legendát a vászon alján' },
+          { en: 'Type a table name in search bar', hu: 'Írj be egy asztal nevet a keresőbe' },
+          { en: 'Verify matching table pulses with gold glow, others dim', hu: 'Ellenőrizd, hogy a talált asztal arany kerettel pulzál, a többi elhalványul' },
+          { en: 'With single match — verify auto-pan/zoom to table', hu: 'Egyetlen találatnál — ellenőrizd az automatikus pan/zoom-ot az asztalra' },
+          { en: 'Hover a table — verify tooltip with guest list (scrollable)', hu: 'Vidd az egeret asztalra — ellenőrizd a tooltip-ot vendéglistával (görgethető)' },
+          { en: 'Click "Automatikus elrendezés" — confirm dialog — verify grid layout', hu: 'Kattints az "Automatikus elrendezés" gombra — erősítsd meg — ellenőrizd a rács elrendezést' },
+        ],
+        expected: { en: 'Heatmap, spotlight search, tooltip and auto-arrange all functional', hu: 'Heatmap, spotlight keresés, tooltip és automatikus elrendezés mind működik' },
+      },
+      // === SEARCH STATE PERSISTENCE ===
+      {
+        nameEn: 'Seating — Search Persists Across Views',
+        nameHu: 'Ülésrend — Keresés Megmarad Nézet Váltáskor',
+        steps: [
+          { en: 'In Grid view, type a search query', hu: 'Grid nézetben írj be egy keresési kifejezést' },
+          { en: 'Switch to Floor Plan view', hu: 'Válts Alaprajz nézetre' },
+          { en: 'Verify search is still active (spotlight shows matching table)', hu: 'Ellenőrizd, hogy a keresés aktív marad (spotlight mutatja a találatot)' },
+          { en: 'Clear search in Floor Plan view', hu: 'Töröld a keresést Alaprajz nézetben' },
+          { en: 'Switch back to Grid — verify search is cleared', hu: 'Válts vissza Grid-re — ellenőrizd, hogy a keresés törölve van' },
+        ],
+        expected: { en: 'Search state persists when switching between Grid and Floor Plan', hu: 'Keresés állapot megmarad Grid és Alaprajz nézet váltásnál' },
+      },
+      // === DARK MODE ===
+      {
+        nameEn: 'Seating — Dark Mode Consistency',
+        nameHu: 'Ülésrend — Dark Mode Konzisztencia',
+        steps: [
+          { en: 'Switch to dark mode', hu: 'Válts dark mode-ra' },
+          { en: 'Verify KPI cards have visible colored borders and text', hu: 'Ellenőrizd, hogy a KPI kártyákon látható színes keretek és szöveg van' },
+          { en: 'Verify table cards have proper dark backgrounds with colored borders', hu: 'Ellenőrizd, hogy az asztal kártyákon sötét háttér van színes kerettel' },
+          { en: 'Verify search bar has dark background', hu: 'Ellenőrizd, hogy a kereső sáv sötét hátterű' },
+          { en: 'Verify guest chips and status dots are visible', hu: 'Ellenőrizd, hogy a vendég kártyák és státusz pontok láthatóak' },
+          { en: 'Verify edit modal has dark styling', hu: 'Ellenőrizd, hogy a szerkesztő modal sötét stílusú' },
+          { en: 'Switch to Floor Plan — verify heatmap legend has dark background', hu: 'Válts Alaprajzra — ellenőrizd, hogy a heatmap legenda sötét hátterű' },
+          { en: 'Verify Floor Plan tooltip has dark background', hu: 'Ellenőrizd, hogy az Alaprajz tooltip sötét hátterű' },
+        ],
+        expected: { en: 'All seating page elements render correctly in dark mode', hu: 'Minden ülésrend elem helyesen jelenik meg dark mode-ban' },
+      },
+    ],
+  },
+  {
     version: '2.16.0',
     date: '2026-01-22',
     features: [
