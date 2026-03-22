@@ -4,10 +4,12 @@
  * DroppableTable Component
  * A table card that accepts dropped guests
  * Shows capacity, current guests, and visual feedback during drag
+ * Supports collapse/expand and search highlight
  */
 
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { CaretDown, CaretRight } from '@phosphor-icons/react';
 import { TABLE_TYPE_COLORS } from '@/lib/constants';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { DraggableGuest } from './DraggableGuest';
@@ -18,6 +20,10 @@ interface DroppableTableProps {
   guests: DraggableGuestType[];
   activeGuest: DraggableGuestType | null;
   onRemoveGuest?: (assignmentId: number) => void;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
+  isHighlighted?: boolean;
+  highlightedGuestIds?: Set<number>;
 }
 
 // Calculate total occupied seats (paired guests = 2)
@@ -25,7 +31,16 @@ function calculateOccupancy(guests: DraggableGuestType[]): number {
   return guests.reduce((sum, g) => sum + g.seatsRequired, 0);
 }
 
-export function DroppableTable({ table, guests, activeGuest, onRemoveGuest }: DroppableTableProps) {
+export function DroppableTable({
+  table,
+  guests,
+  activeGuest,
+  onRemoveGuest,
+  isCollapsed = false,
+  onToggleCollapse,
+  isHighlighted = false,
+  highlightedGuestIds,
+}: DroppableTableProps) {
   const { t } = useLanguage();
   const containerId = `table-${table.id}`;
   const currentOccupancy = calculateOccupancy(guests);
@@ -57,10 +72,12 @@ export function DroppableTable({ table, guests, activeGuest, onRemoveGuest }: Dr
       data-table-id={table.id}
       data-table-name={table.name}
       className={`
-        relative border-2 rounded-lg p-4 transition-all min-h-[180px]
+        relative border-2 rounded-lg transition-all
+        ${isCollapsed ? 'p-3' : 'p-4 min-h-[180px]'}
         ${isFull ? 'border-red-200 bg-red-50' : 'border-gray-200 bg-gray-50'}
         ${isValidDrop ? 'border-green-400 bg-green-50 ring-2 ring-green-200' : ''}
         ${isInvalidDrop ? 'border-red-400 bg-red-100 ring-2 ring-red-200' : ''}
+        ${isHighlighted ? 'border-amber-400 bg-amber-50/50 ring-1 ring-amber-300' : ''}
       `}
     >
       {/* Invalid drop overlay */}
@@ -75,37 +92,55 @@ export function DroppableTable({ table, guests, activeGuest, onRemoveGuest }: Dr
         </div>
       )}
 
-      {/* Header */}
-      <div className="flex items-center justify-between mb-2">
-        <h4 className="font-medium text-sm text-gray-900">{table.name}</h4>
+      {/* Header - clickable for collapse toggle */}
+      <div
+        className={`flex items-center justify-between ${isCollapsed ? '' : 'mb-2'} ${onToggleCollapse ? 'cursor-pointer select-none' : ''}`}
+        onClick={onToggleCollapse}
+      >
         <div className="flex items-center gap-2">
+          {onToggleCollapse && (
+            isCollapsed
+              ? <CaretRight size={14} weight="bold" className="text-gray-500 flex-shrink-0" />
+              : <CaretDown size={14} weight="bold" className="text-gray-500 flex-shrink-0" />
+          )}
+          <h4 className="font-medium text-sm text-gray-900">{table.name}</h4>
+        </div>
+        <div className="flex items-center gap-2">
+          {/* Compact occupancy when collapsed */}
+          {isCollapsed && (
+            <span className={`text-xs font-medium ${isFull ? 'text-red-600' : 'text-gray-600'}`}>
+              {currentOccupancy}/{table.capacity}
+            </span>
+          )}
           <span className={`w-3 h-3 rounded-full ${TABLE_TYPE_COLORS[table.type] || 'bg-gray-400'}`} />
         </div>
       </div>
 
-      {/* Occupancy bar */}
-      <div className="flex items-center justify-between text-sm text-gray-600 mb-3">
-        <span className={isFull ? 'text-red-600 font-medium' : ''}>
-          <span data-testid="table-occupied">{currentOccupancy}</span>/<span data-testid="table-capacity">{table.capacity}</span>
-          {isFull && ` ${t('full')}`}
-        </span>
-        <div className="flex-1 mx-2 bg-gray-200 rounded-full h-2">
-          <div
-            className={`h-2 rounded-full transition-all ${
-              isFull ? 'bg-red-500' : currentOccupancy > 0 ? 'bg-green-500' : ''
-            }`}
-            style={{ width: `${Math.min((currentOccupancy / table.capacity) * 100, 100)}%` }}
-          />
+      {/* Occupancy bar - always visible */}
+      {!isCollapsed && (
+        <div className="flex items-center justify-between text-sm text-gray-600 mb-3">
+          <span className={isFull ? 'text-red-600 font-medium' : ''}>
+            <span data-testid="table-occupied">{currentOccupancy}</span>/<span data-testid="table-capacity">{table.capacity}</span>
+            {isFull && ` ${t('full')}`}
+          </span>
+          <div className="flex-1 mx-2 bg-gray-200 rounded-full h-2">
+            <div
+              className={`h-2 rounded-full transition-all ${
+                isFull ? 'bg-red-500' : currentOccupancy > 0 ? 'bg-green-500' : ''
+              }`}
+              style={{ width: `${Math.min((currentOccupancy / table.capacity) * 100, 100)}%` }}
+            />
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Guest list - Sortable context */}
+      {/* Guest list - Sortable context always rendered for DnD consistency, visually hidden when collapsed */}
       <SortableContext
-        items={guests.map(g => g.id)}
+        items={isCollapsed ? [] : guests.map(g => g.id)}
         strategy={verticalListSortingStrategy}
         id={containerId}
       >
-        <div className="space-y-2">
+        <div className={isCollapsed ? 'hidden' : 'space-y-2'}>
           {guests.length === 0 ? (
             <div className="text-center py-6 border-2 border-dashed border-gray-200 rounded-lg">
               <p className="text-sm text-gray-500">{t('dragGuestsHere')}</p>
@@ -116,7 +151,11 @@ export function DroppableTable({ table, guests, activeGuest, onRemoveGuest }: Dr
           ) : (
             guests.map((guest) => (
               <div key={guest.id} className="relative group">
-                <DraggableGuest guest={guest} containerId={containerId} />
+                <DraggableGuest
+                  guest={guest}
+                  containerId={containerId}
+                  isHighlighted={highlightedGuestIds?.has(guest.guestId)}
+                />
                 {/* Remove button on hover */}
                 {onRemoveGuest && guest.assignmentId && (
                   <button

@@ -13,13 +13,14 @@ interface PairedGuestChipProps {
   guest: DraggableGuest;
   isDragging?: boolean;
   isOverlay?: boolean;
+  isHighlighted?: boolean;
   style?: React.CSSProperties;
   mainGuestLabel?: string;
   partnerLabel?: string;
 }
 
 export const PairedGuestChip = forwardRef<HTMLDivElement, PairedGuestChipProps & React.HTMLAttributes<HTMLDivElement>>(
-  ({ guest, isDragging, isOverlay, style, mainGuestLabel = 'Main guest', partnerLabel = 'Partner', ...props }, ref) => {
+  ({ guest, isDragging, isOverlay, isHighlighted, style, mainGuestLabel = 'Main guest', partnerLabel = 'Partner', ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -32,12 +33,13 @@ export const PairedGuestChip = forwardRef<HTMLDivElement, PairedGuestChipProps &
           transition-all duration-150
           ${isDragging ? 'opacity-50 border-blue-400' : 'border-gray-200'}
           ${isOverlay ? 'shadow-xl scale-105 rotate-1' : 'hover:shadow-md hover:-translate-y-0.5'}
+          ${isHighlighted ? 'ring-2 ring-amber-400 bg-amber-50' : ''}
         `}
         {...props}
       >
         {/* Primary Guest */}
         <div className="flex-1 bg-white border-l-4 border-gray-700 rounded px-2 py-1.5 min-w-0">
-          <p className="font-semibold text-xs text-gray-900 truncate">{guest.name}</p>
+          <p className="font-semibold text-xs text-gray-900 truncate">{isHighlighted && '★ '}{guest.name}</p>
           <p className="text-xs text-gray-500">{mainGuestLabel}</p>
         </div>
 
@@ -59,7 +61,7 @@ export const PairedGuestChip = forwardRef<HTMLDivElement, PairedGuestChipProps &
         {/* Partner */}
         <div className="flex-1 bg-white border-l-4 border-gray-400 rounded px-2 py-1.5 min-w-0">
           <p className="font-semibold text-xs text-gray-900 truncate">
-            {guest.partner?.name || partnerLabel}
+            {isHighlighted && '★ '}{guest.partner?.name || partnerLabel}
           </p>
           <p className="text-xs text-gray-500">{partnerLabel}</p>
         </div>

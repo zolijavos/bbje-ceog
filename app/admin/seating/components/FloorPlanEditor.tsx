@@ -94,6 +94,8 @@ interface RoomConfig {
 interface FloorPlanEditorProps {
   tables: TableData[];
   onRefresh?: () => void;
+  searchQuery?: string;
+  matchingTableIds?: Set<number>;
 }
 
 // Local storage key for room config
@@ -109,6 +111,8 @@ const DEFAULT_ROOM_CONFIG: RoomConfig = {
 export function FloorPlanEditor({
   tables,
   onRefresh,
+  searchQuery,
+  matchingTableIds,
 }: FloorPlanEditorProps) {
   const { t } = useLanguage();
   const [stageInstance, setStageInstance] = useState<any>(null);
@@ -554,6 +558,14 @@ export function FloorPlanEditor({
         onTableMove={saveTablePosition}
         onTableResize={saveTableCapacity}
         onStageReady={handleStageReady}
+        searchQuery={searchQuery}
+        matchingTableIds={matchingTableIds}
+        heatmapLabels={{
+          empty: t('seatingHeatmapEmpty'),
+          available: t('seatingHeatmapAvailable'),
+          partial: t('seatingHeatmapPartial'),
+          full: t('seatingHeatmapFull'),
+        }}
       />
 
       {/* Instructions */}

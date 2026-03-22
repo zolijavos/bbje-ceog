@@ -112,6 +112,13 @@ export const TABLE_TYPE_COLORS: Record<string, string> = {
 } as const;
 
 // ========================================
+// SEATING CONFIGURATION
+// ========================================
+
+/** Auto-collapse tables when total count exceeds this threshold */
+export const SEATING_AUTO_COLLAPSE_THRESHOLD = 5;
+
+// ========================================
 // TICKET TYPE LABELS
 // ========================================
 

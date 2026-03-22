@@ -12,11 +12,11 @@
  * 3. Table → Table (move)
  *
  * View modes:
- * - Grid: Card-based table display
- * - Floor Plan: 2D visual canvas with round tables
+ * - Grid: Card-based table display with search, filters, collapse, VIP/Standard sections
+ * - Floor Plan: 2D visual canvas with round tables, heatmap, spotlight search
  */
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
   DndContext,
   DragOverlay,
@@ -26,8 +26,9 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
+import type { DragOverEvent } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { GUEST_TYPE_LABELS, TABLE_TYPE_COLORS } from '@/lib/constants';
+import { GUEST_TYPE_LABELS, TABLE_TYPE_COLORS, SEATING_AUTO_COLLAPSE_THRESHOLD } from '@/lib/constants';
 import {
   SquaresFour,
   MapTrifold,
@@ -42,6 +43,9 @@ import { DroppableTable } from './components/DroppableTable';
 import { GuestChip } from './components/GuestChip';
 import { PairedGuestChip } from './components/PairedGuestChip';
 import { FloorPlanEditor } from './components/FloorPlanEditor';
+import { SeatingSearchBar } from './components/SeatingSearchBar';
+import { SeatingFilters } from './components/SeatingFilters';
+import type { OccupancyFilter } from './components/SeatingFilters';
 import { useSeatingDnd } from './hooks/useSeatingDnd';
 import type {
   Guest,
@@ -72,6 +76,17 @@ export default function SeatingDashboard() {
     imported: number;
     errors: Array<{ row: number; message: string }>;
   } | null>(null);
+
+  // === Search, filter, collapse state ===
+  const [globalSearch, setGlobalSearch] = useState('');
+  const [occupancyFilter, setOccupancyFilter] = useState<OccupancyFilter>('all');
+  const [collapsed, setCollapsed] = useState<Record<number, boolean>>({});
+  const [searchExpandedIds, setSearchExpandedIds] = useState<Set<number>>(new Set());
+  const collapseInitialized = useRef(false);
+
+  // DnD auto-expand timeout ref
+  const autoExpandTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const autoExpandTableId = useRef<number | null>(null);
 
   // DnD Sensors
   const sensors = useSensors(
@@ -119,6 +134,17 @@ export default function SeatingDashboard() {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  // === Collapse initialization (once after tables load) ===
+  useEffect(() => {
+    if (tables.length > 0 && !collapseInitialized.current) {
+      collapseInitialized.current = true;
+      const shouldCollapse = tables.length > SEATING_AUTO_COLLAPSE_THRESHOLD;
+      const initial: Record<number, boolean> = {};
+      tables.forEach(t => { initial[t.id] = shouldCollapse; });
+      setCollapsed(initial);
+    }
+  }, [tables]);
 
   // API Handlers
   const handleAssign = useCallback(async (guestId: number, tableId: number) => {
@@ -192,14 +218,57 @@ export default function SeatingDashboard() {
   const {
     activeGuest,
     handleDragStart,
-    handleDragOver,
-    handleDragEnd,
-    handleDragCancel,
+    handleDragOver: baseDragOver,
+    handleDragEnd: baseDragEnd,
+    handleDragCancel: baseDragCancel,
   } = useSeatingDnd({
     onAssign: handleAssign,
     onUnassign: handleUnassign,
     onMove: handleMove,
   });
+
+  // Clear auto-expand timeout
+  const clearAutoExpand = useCallback(() => {
+    if (autoExpandTimeout.current) {
+      clearTimeout(autoExpandTimeout.current);
+      autoExpandTimeout.current = null;
+    }
+    autoExpandTableId.current = null;
+  }, []);
+
+  // Enhanced DnD handlers with auto-expand on hover
+  const handleDragOver = useCallback((event: DragOverEvent) => {
+    baseDragOver(event);
+
+    const { over } = event;
+    if (over) {
+      const overId = String(over.id);
+      if (overId.startsWith('table-')) {
+        const tableId = parseInt(overId.replace('table-', ''), 10);
+        // If hovering over a collapsed table, schedule auto-expand
+        if (collapsed[tableId] && tableId !== autoExpandTableId.current) {
+          clearAutoExpand();
+          autoExpandTableId.current = tableId;
+          autoExpandTimeout.current = setTimeout(() => {
+            setCollapsed(prev => ({ ...prev, [tableId]: false }));
+            autoExpandTableId.current = null;
+          }, 400);
+        }
+      }
+    } else {
+      clearAutoExpand();
+    }
+  }, [baseDragOver, collapsed, clearAutoExpand]);
+
+  const handleDragEnd = useCallback((event: any) => {
+    clearAutoExpand();
+    baseDragEnd(event);
+  }, [baseDragEnd, clearAutoExpand]);
+
+  const handleDragCancel = useCallback(() => {
+    clearAutoExpand();
+    baseDragCancel();
+  }, [baseDragCancel, clearAutoExpand]);
 
   // Transform guests to draggable format
   const draggableUnassignedGuests = useMemo(() => {
@@ -207,11 +276,9 @@ export default function SeatingDashboard() {
   }, [unassignedGuests]);
 
   // Transform table assignments to draggable format
-  // Filter out partner guests - only show main guests (partners are shown on their main guest's card)
   const tableGuestsMap = useMemo(() => {
     const map: Record<number, DraggableGuest[]> = {};
     tables.forEach((table) => {
-      // Filter: only include main guests (those without paired_with_id)
       const mainGuestAssignments = table.assignments.filter(
         (a) => !isPartnerAssignment(a)
       );
@@ -221,6 +288,100 @@ export default function SeatingDashboard() {
     });
     return map;
   }, [tables]);
+
+  // === Search logic ===
+  const searchResults = useMemo(() => {
+    if (!globalSearch.trim()) {
+      return { matchingTableIds: new Set<number>(), matchingGuestIds: new Set<number>(), resultCount: null };
+    }
+    const query = globalSearch.toLowerCase().trim();
+    const matchingTableIds = new Set<number>();
+    const matchingGuestIds = new Set<number>();
+
+    tables.forEach((table) => {
+      // Table name match
+      if (table.name.toLowerCase().includes(query)) {
+        matchingTableIds.add(table.id);
+      }
+      // Guest name/email match in this table's assignments
+      const guests = tableGuestsMap[table.id] || [];
+      guests.forEach((guest) => {
+        if (guest.name.toLowerCase().includes(query) || guest.email.toLowerCase().includes(query)) {
+          matchingGuestIds.add(guest.guestId);
+          matchingTableIds.add(table.id);
+        }
+        // Check partner name
+        if (guest.partner?.name && guest.partner.name.toLowerCase().includes(query)) {
+          matchingGuestIds.add(guest.guestId);
+          matchingTableIds.add(table.id);
+        }
+      });
+    });
+
+    return {
+      matchingTableIds,
+      matchingGuestIds,
+      resultCount: { guests: matchingGuestIds.size, tables: matchingTableIds.size },
+    };
+  }, [globalSearch, tables, tableGuestsMap]);
+
+  // Auto-expand matching tables when searching
+  useEffect(() => {
+    if (globalSearch.trim()) {
+      setSearchExpandedIds(searchResults.matchingTableIds);
+    } else {
+      setSearchExpandedIds(new Set());
+    }
+  }, [globalSearch, searchResults.matchingTableIds]);
+
+  // === Occupancy filter logic ===
+  const filteredTables = useMemo(() => {
+    return tables.filter((table) => {
+      const guests = tableGuestsMap[table.id] || [];
+      const occupied = guests.reduce((sum, g) => sum + g.seatsRequired, 0);
+
+      if (occupancyFilter === 'available') return occupied < table.capacity;
+      if (occupancyFilter === 'full') return occupied >= table.capacity;
+      if (occupancyFilter === 'empty') return occupied === 0;
+      return true; // 'all'
+    });
+  }, [tables, tableGuestsMap, occupancyFilter]);
+
+  // Apply search filter on top of occupancy filter
+  const visibleTables = useMemo(() => {
+    if (!globalSearch.trim()) return filteredTables;
+    return filteredTables.filter((t) => searchResults.matchingTableIds.has(t.id));
+  }, [filteredTables, globalSearch, searchResults.matchingTableIds]);
+
+  // === Section grouping ===
+  const vipTables = useMemo(() => visibleTables.filter(t => t.type === 'vip'), [visibleTables]);
+  const standardTables = useMemo(() => visibleTables.filter(t => t.type !== 'vip'), [visibleTables]);
+
+  // === Effective collapse state (respects search auto-expand) ===
+  const isTableCollapsed = useCallback((tableId: number) => {
+    if (searchExpandedIds.has(tableId)) return false;
+    return !!collapsed[tableId];
+  }, [collapsed, searchExpandedIds]);
+
+  // === Expand All / Collapse All (operates on visible tables only) ===
+  const isAllExpanded = useMemo(() => {
+    if (visibleTables.length === 0) return true;
+    return visibleTables.every(t => !collapsed[t.id]);
+  }, [visibleTables, collapsed]);
+
+  const handleToggleExpandAll = useCallback(() => {
+    const newValue = isAllExpanded; // if all expanded, collapse all (true); if not, expand all (false)
+    setCollapsed(prev => {
+      const next = { ...prev };
+      visibleTables.forEach(t => { next[t.id] = newValue; });
+      return next;
+    });
+  }, [visibleTables, isAllExpanded]);
+
+  // Toggle single table collapse
+  const handleToggleCollapse = useCallback((tableId: number) => {
+    setCollapsed(prev => ({ ...prev, [tableId]: !prev[tableId] }));
+  }, []);
 
   // Handle CSV import
   const handleCsvImport = async () => {
@@ -268,6 +429,33 @@ export default function SeatingDashboard() {
     );
   }
 
+  // Render a section of tables (VIP or Standard)
+  const renderTableSection = (sectionTables: TableData[], sectionLabel: string) => {
+    if (sectionTables.length === 0) return null;
+    return (
+      <div>
+        <h4 className="text-sm font-semibold text-neutral-600 uppercase tracking-wide mb-3">
+          {sectionLabel} {t('seatingTableCount').replace('{count}', String(sectionTables.length))}
+        </h4>
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+          {sectionTables.map((table) => (
+            <DroppableTable
+              key={table.id}
+              table={table}
+              guests={tableGuestsMap[table.id] || []}
+              activeGuest={activeGuest}
+              onRemoveGuest={handleRemoveGuest}
+              isCollapsed={isTableCollapsed(table.id)}
+              onToggleCollapse={() => handleToggleCollapse(table.id)}
+              isHighlighted={globalSearch.trim() ? searchResults.matchingTableIds.has(table.id) : false}
+              highlightedGuestIds={globalSearch.trim() ? searchResults.matchingGuestIds : undefined}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <DndContext
       sensors={sensors}
@@ -312,6 +500,13 @@ export default function SeatingDashboard() {
             </div>
           </div>
         )}
+
+        {/* Search Bar */}
+        <SeatingSearchBar
+          searchQuery={globalSearch}
+          onSearchChange={setGlobalSearch}
+          resultCount={searchResults.resultCount}
+        />
 
         {/* Action Bar */}
         <div className="flex gap-4 flex-wrap items-center">
@@ -433,7 +628,7 @@ export default function SeatingDashboard() {
               />
             </div>
 
-            {/* Tables Grid */}
+            {/* Tables Grid with sections */}
             <div className="lg:col-span-3 panel p-6">
               <div className="flex justify-between items-center mb-4 pb-4 border-b border-neutral-200">
                 <h3 className="text-lg font-semibold text-neutral-800">Tables</h3>
@@ -441,17 +636,28 @@ export default function SeatingDashboard() {
                   Drag guests to tables or between tables
                 </p>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-                {tables.map((table) => (
-                  <DroppableTable
-                    key={table.id}
-                    table={table}
-                    guests={tableGuestsMap[table.id] || []}
-                    activeGuest={activeGuest}
-                    onRemoveGuest={handleRemoveGuest}
-                  />
-                ))}
+
+              {/* Filters bar */}
+              <div className="mb-4">
+                <SeatingFilters
+                  activeFilter={occupancyFilter}
+                  onFilterChange={setOccupancyFilter}
+                  isAllExpanded={isAllExpanded}
+                  onToggleExpandAll={handleToggleExpandAll}
+                />
               </div>
+
+              {/* Table sections */}
+              {visibleTables.length === 0 ? (
+                <div className="text-center py-12">
+                  <p className="text-neutral-500">{t('seatingNoResults')}</p>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {renderTableSection(vipTables, t('seatingVipSection'))}
+                  {renderTableSection(standardTables, t('seatingStandardSection'))}
+                </div>
+              )}
             </div>
           </div>
         ) : (
@@ -459,6 +665,8 @@ export default function SeatingDashboard() {
           <FloorPlanEditor
             tables={tables}
             onRefresh={fetchData}
+            searchQuery={globalSearch}
+            matchingTableIds={searchResults.matchingTableIds}
           />
         )}
 

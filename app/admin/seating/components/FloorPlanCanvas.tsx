@@ -80,6 +80,9 @@ interface FloorPlanCanvasProps {
   onTableMove: (tableId: number, xMeters: number, yMeters: number) => void;
   onTableResize?: (tableId: number, newCapacity: number) => void;
   onStageReady?: (stage: Konva.Stage) => void;
+  searchQuery?: string;
+  matchingTableIds?: Set<number>;
+  heatmapLabels?: { empty: string; available: string; partial: string; full: string };
 }
 
 // Pixels per meter (scale factor)
@@ -99,6 +102,9 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
   onTableMove,
   onTableResize,
   onStageReady,
+  searchQuery,
+  matchingTableIds,
+  heatmapLabels,
 }, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<Konva.Stage>(null);
@@ -124,6 +130,49 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
     }, 100);
     return () => clearTimeout(timer);
   }, [onStageReady]);
+
+  // Spotlight glow animation
+  const [glowRadius, setGlowRadius] = useState(0);
+  const isSearchActive = !!(searchQuery && searchQuery.trim() && matchingTableIds && matchingTableIds.size > 0);
+
+  // Pulsating glow effect
+  useEffect(() => {
+    if (!isSearchActive) {
+      setGlowRadius(0);
+      return;
+    }
+    const interval = setInterval(() => {
+      setGlowRadius(prev => prev === 0 ? 10 : 0);
+    }, 800);
+    return () => clearInterval(interval);
+  }, [isSearchActive]);
+
+  // Auto-pan to single matching table (only when matchingTableIds changes)
+  const lastPanRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (matchingTableIds && matchingTableIds.size === 1 && containerRef.current) {
+      const tableId = Array.from(matchingTableIds)[0];
+      const panKey = `${tableId}`;
+      // Avoid re-panning for the same match
+      if (lastPanRef.current === panKey) return;
+      lastPanRef.current = panKey;
+      const table = tables.find(t => t.id === tableId);
+      if (table && table.pos_x != null && table.pos_y != null) {
+        const tableX = table.pos_x * PIXELS_PER_METER;
+        const tableY = table.pos_y * PIXELS_PER_METER;
+        const { width, height } = containerRef.current.getBoundingClientRect();
+        const targetScale = 1.5;
+        setScale(targetScale);
+        setPosition({
+          x: width / 2 - tableX * targetScale,
+          y: height / 2 - tableY * targetScale,
+        });
+      }
+    } else {
+      lastPanRef.current = null;
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [matchingTableIds]);
 
   // Tooltip state
   const [hoveredTable, setHoveredTable] = useState<TableData | null>(null);
@@ -289,14 +338,15 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
     setResizingTableId(null);
   }, [tableRadii, onTableResize]);
 
-  // Get occupancy color intensity
+  // Get occupancy color intensity (heatmap)
   const getOccupancyColor = (table: TableData) => {
     const occupied = calculateOccupiedSeats(table.assignments);
     const ratio = occupied / table.capacity;
 
-    if (ratio >= 1) return '#EF4444'; // Full - red
-    if (ratio >= 0.5) return '#F59E0B'; // Half - orange
-    return TABLE_COLORS[table.type] || '#9CA3AF';
+    if (occupied === 0) return '#9ca3af';   // Empty - gray-400
+    if (ratio >= 1) return '#EF4444';       // Full - red
+    if (ratio >= 0.5) return '#F59E0B';     // Half+ - orange
+    return '#22c55e';                        // <50% - green
   };
 
   return (
@@ -367,12 +417,16 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
             const displayCapacity = tableRadii[table.id]
               ? radiusToCapacity(tableRadii[table.id])
               : table.capacity;
+            // Spotlight logic
+            const isMatching = matchingTableIds?.has(table.id) ?? false;
+            const spotlightOpacity = isSearchActive ? (isMatching ? 1 : 0.2) : 1;
 
             return (
               <Group
                 key={table.id}
                 x={x}
                 y={y}
+                opacity={spotlightOpacity}
                 draggable={!isResizing}
                 onDragEnd={(e) => handleTableDragEnd(table.id, e)}
                 onClick={() => setSelectedTableId(isSelected ? null : table.id)}
@@ -408,6 +462,18 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
                   scheduleTooltipHide();
                 }}
               >
+                {/* Spotlight glow ring */}
+                {isSearchActive && isMatching && (
+                  <Circle
+                    x={0}
+                    y={0}
+                    radius={radius + glowRadius}
+                    stroke="#facc15"
+                    strokeWidth={3}
+                    listening={false}
+                  />
+                )}
+
                 {/* Selection ring */}
                 {isSelected && (
                   <Circle
@@ -625,6 +691,22 @@ const FloorPlanCanvas = forwardRef<FloorPlanCanvasHandle, FloorPlanCanvasProps>(
         </div>
         );
       })()}
+
+      {/* Heatmap legend */}
+      <div className="absolute bottom-3 left-3 flex items-center gap-3 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2 shadow-sm border border-neutral-200">
+        <span className="text-xs font-medium text-neutral-500 uppercase tracking-wide">Heatmap:</span>
+        {[
+          { color: '#9ca3af', label: heatmapLabels?.empty ?? 'Empty' },
+          { color: '#22c55e', label: heatmapLabels?.available ?? 'Available' },
+          { color: '#F59E0B', label: heatmapLabels?.partial ?? 'Partial' },
+          { color: '#EF4444', label: heatmapLabels?.full ?? 'Full' },
+        ].map(({ color, label }) => (
+          <div key={label} className="flex items-center gap-1">
+            <span className="w-3 h-3 rounded-full" style={{ backgroundColor: color }} />
+            <span className="text-xs text-neutral-600">{label}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 });

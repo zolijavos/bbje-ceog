@@ -15,9 +15,10 @@ import type { DraggableGuest as DraggableGuestType } from '../types';
 interface DraggableGuestProps {
   guest: DraggableGuestType;
   containerId: string;
+  isHighlighted?: boolean;
 }
 
-export function DraggableGuest({ guest, containerId }: DraggableGuestProps) {
+export function DraggableGuest({ guest, containerId, isHighlighted }: DraggableGuestProps) {
   const { t } = useLanguage();
   const {
     attributes,
@@ -47,6 +48,7 @@ export function DraggableGuest({ guest, containerId }: DraggableGuestProps) {
         style={style}
         guest={guest}
         isDragging={isDragging}
+        isHighlighted={isHighlighted}
         mainGuestLabel={t('mainGuest')}
         partnerLabel={t('partner')}
         {...attributes}
@@ -61,6 +63,7 @@ export function DraggableGuest({ guest, containerId }: DraggableGuestProps) {
       style={style}
       guest={guest}
       isDragging={isDragging}
+      isHighlighted={isHighlighted}
       {...attributes}
       {...listeners}
     />
