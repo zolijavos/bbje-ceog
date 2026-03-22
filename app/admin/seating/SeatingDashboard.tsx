@@ -501,11 +501,9 @@ export default function SeatingDashboard() {
         {/* Stats Bar */}
         {stats && (() => {
           const occRate = stats.occupancyRate;
-          const occColor = occRate >= 90
-            ? 'border-red-500 text-red-600 dark:text-red-400'
-            : occRate >= 70
-              ? 'border-amber-500 text-amber-600 dark:text-amber-400'
-              : 'border-emerald-500 text-emerald-600 dark:text-emerald-400';
+          const occBorder = occRate >= 90 ? 'border-red-500' : occRate >= 70 ? 'border-amber-500' : 'border-emerald-500';
+          const occBg = occRate >= 90 ? 'bg-red-50 dark:bg-red-950/30' : occRate >= 70 ? 'bg-amber-50 dark:bg-amber-950/30' : 'bg-emerald-50 dark:bg-emerald-950/30';
+          const occText = occRate >= 90 ? 'text-red-600 dark:text-red-400' : occRate >= 70 ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400';
           return (
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               <div className="panel p-4 border-l-4 border-neutral-400 dark:border-neutral-500">
@@ -516,19 +514,19 @@ export default function SeatingDashboard() {
                 <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1">{t('capacity')}</p>
                 <p className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">{stats.totalCapacity}</p>
               </div>
-              <div className="panel p-4 border-l-4 border-blue-500">
+              <div className="panel p-4 border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-950/30">
                 <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1">{t('assignedSeats')}</p>
-                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.totalOccupied}</p>
+                <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{stats.totalOccupied}</p>
               </div>
-              <div className={`panel p-4 border-l-4 ${occColor}`}>
+              <div className={`panel p-4 border-l-4 ${occBorder} ${occBg}`}>
                 <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1">{t('occupancy')}</p>
-                <p className={`text-2xl font-bold ${occColor.split(' ').slice(1).join(' ')}`}>
+                <p className={`text-2xl font-bold ${occText}`}>
                   {stats.occupancyRate.toFixed(1)}%
                 </p>
               </div>
-              <div className="panel p-4 border-l-4 border-purple-500">
+              <div className="panel p-4 border-l-4 border-purple-500 bg-purple-50 dark:bg-purple-950/30">
                 <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1">{t('guests')}</p>
-                <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{stats.totalGuests}</p>
+                <p className="text-2xl font-bold text-purple-700 dark:text-purple-300">{stats.totalGuests}</p>
               </div>
             </div>
           );
@@ -544,13 +542,13 @@ export default function SeatingDashboard() {
         {/* Action Bar */}
         <div className="flex gap-3 flex-wrap items-center">
           {/* View Mode Toggle */}
-          <div className="inline-flex border border-neutral-300 dark:border-neutral-600 bg-neutral-100 dark:bg-neutral-800 rounded-lg p-1">
+          <div className="inline-flex border border-neutral-300 dark:border-neutral-600 bg-neutral-200 dark:bg-neutral-800 rounded-lg p-1 shadow-sm">
             <button
               onClick={() => setViewMode('grid')}
-              className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-150 flex items-center gap-2 ${
+              className={`px-4 py-2 text-sm font-semibold rounded-md transition-all duration-150 flex items-center gap-2 ${
                 viewMode === 'grid'
-                  ? 'bg-white dark:bg-neutral-600 text-neutral-900 dark:text-white shadow-sm'
-                  : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200'
+                  ? 'bg-accent-600 text-white shadow-md'
+                  : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-300 dark:hover:bg-neutral-700'
               }`}
               data-testid="view-grid-button"
             >
@@ -559,10 +557,10 @@ export default function SeatingDashboard() {
             </button>
             <button
               onClick={() => setViewMode('floorplan')}
-              className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-150 flex items-center gap-2 ${
+              className={`px-4 py-2 text-sm font-semibold rounded-md transition-all duration-150 flex items-center gap-2 ${
                 viewMode === 'floorplan'
-                  ? 'bg-white dark:bg-neutral-600 text-neutral-900 dark:text-white shadow-sm'
-                  : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200'
+                  ? 'bg-accent-600 text-white shadow-md'
+                  : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-300 dark:hover:bg-neutral-700'
               }`}
               data-testid="view-floorplan-button"
             >
