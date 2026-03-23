@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   ClockCounterClockwise,
   CaretDown,
@@ -15,6 +15,7 @@ import {
   Bug,
   Sparkle,
   TestTube,
+  Question,
 } from '@phosphor-icons/react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
@@ -1074,9 +1075,26 @@ export default function ChangelogPage() {
     testSteps: language === 'hu' ? 'Tesztelés' : 'Test Steps',
   };
 
+  const versionToHash = (version: string) => `v${version.replace(/\./g, '-')}`;
+
   const getTestingUrl = (version: string) => {
-    return `/admin/release-testing#v${version.replace(/\./g, '-')}`;
+    return `/admin/release-testing#${versionToHash(version)}`;
   };
+
+  const getHelpUrl = () => '/admin/help';
+
+  // Hash-based deep link: auto-expand and scroll to version
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '');
+    if (!hash) return;
+    const version = changelogData.find(e => versionToHash(e.version) === hash)?.version;
+    if (version) {
+      setExpandedVersions(prev => { const next = new Set(prev); next.add(version); return next; });
+      setTimeout(() => {
+        document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  }, []);
 
   const allExpanded = changelogData.every(entry => expandedVersions.has(entry.version));
 
@@ -1123,6 +1141,7 @@ export default function ChangelogPage() {
             return (
               <div
                 key={entry.version}
+                id={versionToHash(entry.version)}
                 className={`bg-white dark:bg-neutral-800 rounded-xl shadow-sm border ${
                   isLatest
                     ? 'border-purple-200 dark:border-purple-800'
@@ -1156,6 +1175,15 @@ export default function ChangelogPage() {
                             {language === 'hu' ? 'Legfrissebb' : 'Latest'}
                           </span>
                         )}
+                        <a
+                          href={getHelpUrl()}
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-800/50 transition-colors border border-green-300 dark:border-green-600"
+                          title={language === 'hu' ? 'Súgó' : 'Help Guide'}
+                        >
+                          <Question className="w-3 h-3" weight="bold" />
+                          {language === 'hu' ? 'Súgó' : 'Help'}
+                        </a>
                         <a
                           href={getTestingUrl(entry.version)}
                           onClick={(e) => e.stopPropagation()}

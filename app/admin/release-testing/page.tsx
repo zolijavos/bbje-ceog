@@ -826,6 +826,7 @@ const translations = {
     title: 'Release Tesztelés',
     subtitle: 'Manuális tesztelési lépések verziónként',
     backToChangelog: 'Változásnapló',
+    helpGuide: 'Súgó',
     steps: 'lépés',
     expectedResult: 'Elvárt eredmény',
     passed: 'Sikeres',
@@ -850,6 +851,7 @@ const translations = {
     title: 'Release Testing',
     subtitle: 'Manual test steps by version',
     backToChangelog: 'Changelog',
+    helpGuide: 'Help Guide',
     steps: 'steps',
     expectedResult: 'Expected Result',
     passed: 'Passed',
@@ -1035,8 +1037,12 @@ export default function ReleaseTestingPage() {
     <div className="min-h-screen">
       <div className="mb-6">
         <div className="flex items-center gap-4 mb-2">
-          <Link href="/admin/changelog" className="inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-primary">
+          <Link href={selectedVersion ? `/admin/changelog#v${selectedVersion.replace(/\./g, '-')}` : '/admin/changelog'} className="inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-primary">
             <ArrowLeft className="w-4 h-4" />{t.backToChangelog}
+          </Link>
+          <span className="text-neutral-300 dark:text-neutral-600">|</span>
+          <Link href="/admin/help" className="inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-green-600 dark:hover:text-green-400">
+            <Question className="w-4 h-4" />{t.helpGuide}
           </Link>
         </div>
         <div className="flex items-center justify-between">
