@@ -1131,6 +1131,12 @@ export default function ReleaseTestingPage() {
                   {expandedVersions.has(release.version) ? <CaretDown className="w-5 h-5 text-neutral-400" /> : <CaretRight className="w-5 h-5 text-neutral-400" />}
                   <span className="font-semibold text-lg text-neutral-900 dark:text-white font-serif">v{release.version}</span>
                   {isLatest && <span className="px-2 py-0.5 text-xs font-semibold bg-accent-500 text-white uppercase">{t.latest}</span>}
+                  <a href={`/admin/changelog#v${release.version.replace(/\./g, '-')}`} onClick={(e) => e.stopPropagation()} className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-800/50 transition-colors border border-purple-300 dark:border-purple-600">
+                    <ArrowLeft className="w-3 h-3" />{t.backToChangelog}
+                  </a>
+                  <a href="/admin/help" onClick={(e) => e.stopPropagation()} className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-800/50 transition-colors border border-green-300 dark:border-green-600">
+                    <Question className="w-3 h-3" weight="bold" />{t.helpGuide}
+                  </a>
                 </div>
                 <div className="flex items-center gap-4 text-sm text-neutral-500">
                   <button onClick={(e) => { e.stopPropagation(); handleExport(release.version); }} className="flex items-center gap-1 hover:text-accent-500"><Export className="w-4 h-4" />CSV</button>
