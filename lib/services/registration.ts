@@ -136,7 +136,7 @@ export function generatePWAAuthCode(): string {
 /**
  * Generate unique PWA auth code with retry for collisions
  */
-async function generateUniquePWAAuthCode(maxRetries = 5): Promise<string> {
+export async function generateUniquePWAAuthCode(maxRetries = 5): Promise<string> {
   for (let i = 0; i < maxRetries; i++) {
     const code = generatePWAAuthCode();
     const existing = await prisma.guest.findFirst({

@@ -59,6 +59,10 @@ export interface BulkAssignResult {
     row: number;
     message: string;
   }>;
+  warnings?: Array<{
+    row: number;
+    message: string;
+  }>;
 }
 
 // ========================================
@@ -753,6 +757,44 @@ export async function getAllAssignments() {
 /**
  * Sanitize CSV input value - remove potentially dangerous characters
  */
+/**
+ * Parse a CSV line respecting RFC 4180 quoted fields.
+ * Handles: commas inside quotes, escaped quotes (""), unquoted fields.
+ */
+function parseCsvLine(line: string): string[] {
+  const fields: string[] = [];
+  let current = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+
+    if (inQuotes) {
+      if (ch === '"') {
+        if (i + 1 < line.length && line[i + 1] === '"') {
+          current += '"';
+          i++; // skip escaped quote
+        } else {
+          inQuotes = false;
+        }
+      } else {
+        current += ch;
+      }
+    } else {
+      if (ch === '"') {
+        inQuotes = true;
+      } else if (ch === ',') {
+        fields.push(current);
+        current = '';
+      } else {
+        current += ch;
+      }
+    }
+  }
+  fields.push(current);
+  return fields;
+}
+
 function sanitizeCsvValue(value: string): string {
   return value
     .trim()
@@ -793,6 +835,7 @@ export async function bulkAssignFromCsv(
 ): Promise<BulkAssignResult> {
   const lines = csvContent.split('\n').filter(line => line.trim());
   const errors: BulkAssignResult['errors'] = [];
+  const warnings: BulkAssignResult['warnings'] = [];
   let imported = 0;
 
   // Skip header row
@@ -814,7 +857,7 @@ export async function bulkAssignFromCsv(
 
     if (!line) continue;
 
-    const parts = line.split(',').map(p => sanitizeCsvValue(p));
+    const parts = parseCsvLine(line).map(p => sanitizeCsvValue(p));
     if (parts.length < 2) {
       errors.push({ row: rowNum, message: 'Missing columns' });
       continue;
@@ -856,7 +899,7 @@ export async function bulkAssignFromCsv(
     }
 
     if (guest.table_assignment) {
-      errors.push({ row: rowNum, message: `Guest already assigned: ${guestEmail}` });
+      warnings.push({ row: rowNum, message: `Guest already assigned: ${guestEmail}` });
       continue;
     }
 
@@ -868,7 +911,11 @@ export async function bulkAssignFromCsv(
       imported++;
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      errors.push({ row: rowNum, message });
+      if (message === 'GUEST_ALREADY_ASSIGNED') {
+        warnings.push({ row: rowNum, message: `Guest already assigned (auto-paired): ${guestEmail}` });
+      } else {
+        errors.push({ row: rowNum, message });
+      }
     }
   }
 
@@ -876,6 +923,7 @@ export async function bulkAssignFromCsv(
     success: errors.length === 0,
     imported,
     errors,
+    warnings,
   };
 }
 
@@ -901,6 +949,8 @@ export async function exportSeatingArrangement(): Promise<string> {
           last_name: true,
           email: true,
           guest_type: true,
+          paired_with_id: true,
+          paired_with: { select: { email: true } },
         },
       },
     },
@@ -910,15 +960,25 @@ export async function exportSeatingArrangement(): Promise<string> {
     ],
   });
 
-  const header = 'table_name,table_type,guest_first_name,guest_last_name,guest_email,guest_type,seat_number';
+  // RFC 4180: quote fields containing commas, quotes, or newlines; escape quotes by doubling
+  const csvEscape = (val: string | number | null | undefined): string => {
+    const s = String(val ?? '');
+    if (s.includes(',') || s.includes('"') || s.includes('\n')) {
+      return `"${s.replace(/"/g, '""')}"`;
+    }
+    return s;
+  };
+
+  const header = 'table_name,table_type,guest_first_name,guest_last_name,guest_email,guest_type,seat_number,partner_of_email';
   const rows = assignments.map(a => [
-    a.table.name,
-    a.table.type,
-    `"${a.guest.first_name}"`,
-    `"${a.guest.last_name}"`,
-    a.guest.email,
-    a.guest.guest_type,
-    a.seat_number || '',
+    csvEscape(a.table.name),
+    csvEscape(a.table.type),
+    csvEscape(a.guest.first_name),
+    csvEscape(a.guest.last_name),
+    csvEscape(a.guest.email),
+    csvEscape(a.guest.guest_type),
+    csvEscape(a.seat_number),
+    csvEscape(a.guest.paired_with_id ? (a.guest.paired_with?.email || '') : ''),
   ].join(','));
 
   return [header, ...rows].join('\n');

@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { titleOptions } from '@/lib/validations/guest-profile';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+import RemovePartnerModal from './RemovePartnerModal';
+import ChangePartnerModal from './ChangePartnerModal';
 
 interface BillingInfo {
   billing_first_name: string;
@@ -40,6 +43,7 @@ interface PartnerGuestInfo {
   title?: string | null;
   dietaryRequirements?: string | null;
   seatingPreferences?: string | null;
+  hasCheckedIn?: boolean;
 }
 
 interface GuestFormModalProps {
@@ -84,6 +88,9 @@ export default function GuestFormModal({
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showRemovePartnerModal, setShowRemovePartnerModal] = useState(false);
+  const [showChangePartnerModal, setShowChangePartnerModal] = useState(false);
+  const { t } = useLanguage();
 
   // Reset form when modal opens/closes or initialData changes
   useEffect(() => {
@@ -581,9 +588,22 @@ export default function GuestFormModal({
                     )}
                   </div>
                 )}
-                <p className="text-xs text-purple-700">
-                  The partner is managed as a separate guest. To edit, find them in the guest list: <strong>{initialData.partnerGuest.name}</strong>
-                </p>
+                <div className="flex flex-wrap gap-2 pt-2 border-t border-purple-200">
+                  <button
+                    type="button"
+                    onClick={() => setShowRemovePartnerModal(true)}
+                    className="px-3 py-1.5 text-xs font-medium text-red-700 bg-white border border-red-300 rounded-lg hover:bg-red-50"
+                  >
+                    {t('partnerRemoveButton')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowChangePartnerModal(true)}
+                    className="px-3 py-1.5 text-xs font-medium text-purple-700 bg-white border border-purple-300 rounded-lg hover:bg-purple-50"
+                  >
+                    {t('partnerChangeButton')}
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -721,6 +741,34 @@ export default function GuestFormModal({
             </button>
           </div>
         </form>
+
+        {/* Partner lifecycle modals */}
+        {mode === 'edit' && initialData?.partnerGuest && initialData?.id && (
+          <>
+            <RemovePartnerModal
+              isOpen={showRemovePartnerModal}
+              onClose={() => setShowRemovePartnerModal(false)}
+              onSuccess={() => {
+                setShowRemovePartnerModal(false);
+                onSave({});
+              }}
+              mainGuestId={initialData.id}
+              partnerName={initialData.partnerGuest.name}
+              partnerCheckedIn={initialData.partnerGuest.hasCheckedIn}
+            />
+            <ChangePartnerModal
+              isOpen={showChangePartnerModal}
+              onClose={() => setShowChangePartnerModal(false)}
+              onSuccess={() => {
+                setShowChangePartnerModal(false);
+                onSave({});
+              }}
+              mainGuestId={initialData.id}
+              mainGuestEmail={initialData.email || ''}
+              currentPartnerName={initialData.partnerGuest.name}
+            />
+          </>
+        )}
       </div>
     </div>
   );

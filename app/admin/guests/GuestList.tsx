@@ -516,6 +516,12 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
     }) => {
       if (!editingGuest) return;
 
+      // If data is empty (e.g., partner modal triggered refresh), just refresh without PATCH
+      if (Object.keys(data).length === 0) {
+        router.refresh();
+        return;
+      }
+
       const response = await fetch(`/api/admin/guests/${editingGuest.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },

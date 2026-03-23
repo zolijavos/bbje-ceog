@@ -22,7 +22,9 @@ export type AuditAction =
   | 'IMPORT'
   | 'EXPORT'
   | 'ASSIGN'
-  | 'UNASSIGN';
+  | 'UNASSIGN'
+  | 'PARTNER_REMOVE'
+  | 'PARTNER_CHANGE';
 
 // Entity types
 export type AuditEntityType =

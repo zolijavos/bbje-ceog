@@ -46,6 +46,7 @@ export default async function GuestsPage() {
           title: true,
           dietary_requirements: true,
           seating_preferences: true,
+          checkin: { select: { id: true } },
         },
       },
       // Paired with: if this guest is a partner, get their main guest
@@ -212,6 +213,7 @@ export default async function GuestsPage() {
           title: g.partner_of.title,
           dietaryRequirements: g.partner_of.dietary_requirements,
           seatingPreferences: g.partner_of.seating_preferences,
+          hasCheckedIn: !!g.partner_of.checkin,
         }
       : null,
     // VIP Reception flag

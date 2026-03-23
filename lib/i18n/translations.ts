@@ -559,6 +559,27 @@ export const translations = {
     lastML: 'Last ML',
     lastMagicLinkTooltip: 'Last magic link sent',
     magicLinkCountTooltip: 'Number of magic links sent',
+
+    // Partner lifecycle management
+    partnerSectionTitle: 'Partner Management',
+    partnerRemoveButton: 'Remove Partner',
+    partnerChangeButton: 'Change Partner',
+    removePartnerTitle: 'Remove Partner',
+    removePartnerWarning: '"{name}" will be removed from the system. Their seat will be freed.',
+    removePartnerCheckinBlocked: 'Partner has already checked in, removal is not possible.',
+    removePartnerConfirm: 'Confirm Removal',
+    removePartnerSuccess: 'Partner successfully removed.',
+    changePartnerTitle: 'Change Partner',
+    changePartnerWarning: 'The current partner ({name}) will be removed.',
+    changePartnerSubmitButton: 'Save Partner & Send Ticket',
+    changePartnerSuccess: 'Partner successfully changed. QR ticket sent to: {email}',
+    changePartnerErrorSelfPairing: 'You cannot set yourself as a partner',
+    changePartnerErrorAlreadyPartner: 'This guest is already the partner of {name}',
+    changePartnerErrorCheckinBlocked: 'Partner has already checked in, change is not possible',
+    changePartnerErrorEmailExists: 'This email is already registered as an independent guest',
+    changePartnerFirstName: 'Partner First Name',
+    changePartnerLastName: 'Partner Last Name',
+    changePartnerEmail: 'Partner Email',
   },
   hu: {
     // Dashboard
@@ -1089,6 +1110,27 @@ export const translations = {
     lastML: 'Utolsó ML',
     lastMagicLinkTooltip: 'Utolsó magic link küldés',
     magicLinkCountTooltip: 'Elküldött magic linkek száma',
+
+    // Partner lifecycle management
+    partnerSectionTitle: 'Partner kezelése',
+    partnerRemoveButton: 'Partner törlése',
+    partnerChangeButton: 'Partner cseréje',
+    removePartnerTitle: 'Partner eltávolítása',
+    removePartnerWarning: '„{name}" törlésre kerül a rendszerből. Az ülőhelye felszabadul.',
+    removePartnerCheckinBlocked: 'A partner már bejelentkezett, törlés nem lehetséges.',
+    removePartnerConfirm: 'Törlés megerősítése',
+    removePartnerSuccess: 'Partner sikeresen eltávolítva.',
+    changePartnerTitle: 'Partner cseréje',
+    changePartnerWarning: 'A jelenlegi partner ({name}) törlésre kerül.',
+    changePartnerSubmitButton: 'Partner mentése és jegy küldése',
+    changePartnerSuccess: 'Partner sikeresen cserélve. QR jegy elküldve: {email}',
+    changePartnerErrorSelfPairing: 'Nem adhatod meg saját magad partnerként',
+    changePartnerErrorAlreadyPartner: 'Ez a vendég már {name} partnere',
+    changePartnerErrorCheckinBlocked: 'A partner már bejelentkezett, csere nem lehetséges',
+    changePartnerErrorEmailExists: 'Ez az email már regisztrálva van önálló vendégként',
+    changePartnerFirstName: 'Partner keresztnév',
+    changePartnerLastName: 'Partner vezetéknév',
+    changePartnerEmail: 'Partner email',
   }
 };
 
