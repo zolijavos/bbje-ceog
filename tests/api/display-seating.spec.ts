@@ -29,15 +29,21 @@ const STAFF_CREDENTIALS = {
 };
 
 /**
+ * Extract individual set-cookie values from a response using headersArray()
+ * to correctly handle multiple Set-Cookie headers (headers() merges them
+ * into a single comma-separated string which breaks on date commas like
+ * "Expires=Sun, 22 Mar 2026").
+ */
+function extractCookies(res: { headersArray(): Array<{ name: string; value: string }> }): string[] {
+  return res
+    .headersArray()
+    .filter((h) => h.name.toLowerCase() === 'set-cookie')
+    .map((h) => h.value.split(';')[0].trim())
+    .filter(Boolean);
+}
+
+/**
  * Authenticate via NextAuth CredentialsProvider and return session cookies.
- *
- * NextAuth expects a POST to /api/auth/callback/credentials with:
- *   - email, password (provider credentials)
- *   - csrfToken (from GET /api/auth/csrf)
- *   - callbackUrl (redirect target)
- *
- * The response sets next-auth.session-token (or __Secure-next-auth.session-token)
- * cookies which we forward on subsequent requests.
  */
 async function getAuthCookies(
   request: APIRequestContext,
@@ -48,11 +54,7 @@ async function getAuthCookies(
   expect(csrfRes.ok()).toBeTruthy();
   const { csrfToken } = await csrfRes.json();
 
-  // Collect cookies set by the csrf endpoint
-  const csrfCookies = (csrfRes.headers()['set-cookie'] || '')
-    .split(/,(?=[^ ])/)
-    .map((c: string) => c.split(';')[0].trim())
-    .filter(Boolean);
+  const csrfCookies = extractCookies(csrfRes);
 
   // Step 2: POST credentials to NextAuth callback
   const callbackRes = await request.post(
@@ -72,18 +74,11 @@ async function getAuthCookies(
     }
   );
 
-  // NextAuth may respond with 200 (json:true) or 302 redirect
-  // Collect ALL set-cookie headers from both responses
-  const callbackCookies = (callbackRes.headers()['set-cookie'] || '')
-    .split(/,(?=[^ ])/)
-    .map((c: string) => c.split(';')[0].trim())
-    .filter(Boolean);
-
-  const allCookies = [...csrfCookies, ...callbackCookies];
+  const callbackCookies = extractCookies(callbackRes);
 
   // Merge cookies (later values override earlier for same key)
   const cookieMap = new Map<string, string>();
-  for (const cookie of allCookies) {
+  for (const cookie of [...csrfCookies, ...callbackCookies]) {
     const eqIdx = cookie.indexOf('=');
     if (eqIdx > 0) {
       const key = cookie.substring(0, eqIdx);
@@ -244,7 +239,8 @@ test.describe('GET /api/admin/display-stream', () => {
       // the stream kept going. We verify auth works by checking the non-auth
       // tests above return 401/403 while this one does NOT.
       const errorMessage = error instanceof Error ? error.message : String(error);
-      if (!errorMessage.includes('timeout') && !errorMessage.includes('abort')) {
+      const lowerMsg = errorMessage.toLowerCase();
+      if (!lowerMsg.includes('timeout') && !lowerMsg.includes('abort')) {
         throw error;
       }
       // Timeout on SSE is acceptable -- the stream opened which means auth passed.

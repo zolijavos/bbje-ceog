@@ -4,6 +4,30 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
 
 ---
 
+## v4.1.1 (2026-03-23)
+
+### New Features / Új funkciók
+
+- **Partner Lifecycle Management** / **Partner Életciklus Kezelés**
+  - EN: Remove or replace guest partners from the admin edit modal with full cascade (table, registration, emails, audit). New partners auto-receive QR ticket and table assignment.
+  - HU: Partner törlése vagy cseréje az admin szerkesztő ablakból teljes kaszkáddal (asztal, regisztráció, emailek, audit). Új partnerek automatikusan kapnak QR jegyet és asztal-hozzárendelést.
+
+- **Partner Management API** / **Partner Kezelés API**
+  - EN: New POST /api/admin/guests/[id]/partner endpoint with remove/replace actions, Zod validation, and comprehensive error handling (checked-in partner block, self-pairing prevention, duplicate email detection).
+  - HU: Új POST /api/admin/guests/[id]/partner végpont remove/replace műveletekkel, Zod validációval és átfogó hibakezeléssel (bejelentkezett partner blokkolás, önpárosítás megakadályozás, duplikált email felismerés).
+
+- **Admin Page Cross-Navigation** / **Admin Oldal Keresztnavigáció**
+  - EN: Changelog, Release Testing, and Help Guide pages now cross-link with colored version badges and hash-based deep linking.
+  - HU: Changelog, Release Testing és Help Guide oldalak keresztlinkekkel, színes verzió badge-ekkel és hash-alapú deep linkinggel.
+
+### Improvements / Fejlesztések
+
+- **Seating CSV Partner Column** / **Ülésrend CSV Partner Oszlop**
+  - EN: CSV export includes partner_of_email column; bulk import treats already-assigned guests as warnings instead of errors.
+  - HU: CSV export tartalmazza a partner_of_email oszlopot; bulk import a már hozzárendelt vendégeket figyelmeztetésként kezeli hiba helyett.
+
+---
+
 ## v2.17.0 (2026-01-22)
 
 ### New Features / Új funkciók

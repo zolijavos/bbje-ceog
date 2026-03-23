@@ -34,6 +34,52 @@ interface ChangelogEntry {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: '4.1.1',
+    date: '2026-03-23',
+    changes: [
+      {
+        type: 'feature',
+        category: 'admin',
+        titleEn: 'Partner Lifecycle Management',
+        titleHu: 'Partner Életciklus Kezelés',
+        descriptionEn: 'Remove or replace a guest\'s partner directly from the guest edit modal. Cascade deletion handles table assignments, registrations, email logs and audit trail. New partner auto-receives QR ticket and table assignment.',
+        descriptionHu: 'Partner törlése vagy cseréje közvetlenül a vendég szerkesztő ablakból. A kaszkád törlés kezeli az asztal-hozzárendeléseket, regisztrációkat, email logokat és audit naplót. Az új partner automatikusan kap QR jegyet és asztal-hozzárendelést.',
+      },
+      {
+        type: 'feature',
+        category: 'admin',
+        titleEn: 'Partner Management API',
+        titleHu: 'Partner Kezelés API',
+        descriptionEn: 'New POST /api/admin/guests/[id]/partner endpoint with remove/replace actions, Zod validation, and comprehensive error handling (checked-in partner block, self-pairing prevention, duplicate email detection).',
+        descriptionHu: 'Új POST /api/admin/guests/[id]/partner végpont remove/replace műveletekkel, Zod validációval és átfogó hibakezeléssel (bejelentkezett partner blokkolás, önpárosítás megakadályozás, duplikált email felismerés).',
+      },
+      {
+        type: 'improvement',
+        category: 'seating',
+        titleEn: 'CSV Export Partner Column',
+        titleHu: 'CSV Export Partner Oszlop',
+        descriptionEn: 'Seating CSV export now includes partner_of_email column showing partner relationships between guests.',
+        descriptionHu: 'Az ülésrend CSV export mostantól tartalmazza a partner_of_email oszlopot a vendégek közötti partner kapcsolatok megjelenítéséhez.',
+      },
+      {
+        type: 'improvement',
+        category: 'seating',
+        titleEn: 'CSV Import Warnings for Already-Assigned Guests',
+        titleHu: 'CSV Import Figyelmeztetések Már Hozzárendelt Vendégeknél',
+        descriptionEn: 'Already-assigned guests during bulk CSV import now produce warnings instead of errors, allowing the import to continue.',
+        descriptionHu: 'A bulk CSV importnál a már hozzárendelt vendégek mostantól figyelmeztetést kapnak hiba helyett, lehetővé téve az import folytatását.',
+      },
+      {
+        type: 'feature',
+        category: 'admin',
+        titleEn: 'Admin Page Cross-Navigation',
+        titleHu: 'Admin Oldal Keresztnavigáció',
+        descriptionEn: 'Changelog, Release Testing and Help Guide pages now link to each other with colored badges per version. Changelog supports hash-based deep linking (#v4-1-0).',
+        descriptionHu: 'Changelog, Release Testing és Help Guide oldalak mostantól linkkel mutatnak egymásra színes badge-ekkel verziónként. Changelog hash-alapú deep linkinget támogat (#v4-1-0).',
+      },
+    ],
+  },
+  {
     version: '4.1.0',
     date: '2026-03-22',
     changes: [

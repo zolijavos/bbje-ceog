@@ -52,6 +52,81 @@ interface TestResultData {
 
 const releaseTests: ReleaseTest[] = [
   {
+    version: '4.1.1',
+    date: '2026-03-23',
+    features: [
+      // === PARTNER LIFECYCLE MANAGEMENT ===
+      {
+        nameEn: 'Partner Management — Remove Partner',
+        nameHu: 'Partner Kezelés — Partner Törlése',
+        steps: [
+          { en: 'Log in as admin, open guest list, edit a guest with a partner', hu: 'Jelentkezz be adminként, nyisd meg a vendéglistát, szerkeszts egy vendéget akinek van partnere' },
+          { en: 'In the partner section, click "Remove Partner"', hu: 'A partner szekcióban kattints a "Partner törlése" gombra' },
+          { en: 'Verify confirmation modal shows partner name and warning', hu: 'Ellenőrizd, hogy a megerősítő ablak mutatja a partner nevét és a figyelmeztetést' },
+          { en: 'Confirm removal and verify success message', hu: 'Erősítsd meg a törlést és ellenőrizd a sikeres üzenetet' },
+          { en: 'Verify partner no longer appears in guest list', hu: 'Ellenőrizd, hogy a partner már nem jelenik meg a vendéglistában' },
+        ],
+        expected: { en: 'Partner is fully removed (guest record, registration, table assignment, email logs)', hu: 'Partner teljesen eltávolítva (vendég rekord, regisztráció, asztal-hozzárendelés, email logok)' },
+      },
+      {
+        nameEn: 'Partner Management — Replace Partner',
+        nameHu: 'Partner Kezelés — Partner Cseréje',
+        steps: [
+          { en: 'Edit a guest with a partner, click "Change Partner"', hu: 'Szerkeszts egy vendéget akinek van partnere, kattints a "Partner cseréje" gombra' },
+          { en: 'Fill in new partner details (name, email)', hu: 'Töltsd ki az új partner adatait (név, email)' },
+          { en: 'Submit and verify old partner removed, new partner created', hu: 'Küld el és ellenőrizd, hogy a régi partner törölve, az új létrehozva' },
+          { en: 'Verify new partner appears in guest list with correct status', hu: 'Ellenőrizd, hogy az új partner megjelenik a vendéglistában helyes státusszal' },
+          { en: 'Verify new partner auto-assigned to same table (if capacity)', hu: 'Ellenőrizd, hogy az új partner automatikusan ugyanahhoz az asztalhoz került (ha van hely)' },
+        ],
+        expected: { en: 'Old partner removed, new partner created with QR ticket and table assignment', hu: 'Régi partner törölve, új partner létrehozva QR jeggyel és asztal-hozzárendeléssel' },
+      },
+      {
+        nameEn: 'Partner Management — Checked-in Partner Block',
+        nameHu: 'Partner Kezelés — Bejelentkezett Partner Blokkolás',
+        steps: [
+          { en: 'Find a guest whose partner has already checked in', hu: 'Keress egy vendéget akinek a partnere már bejelentkezett' },
+          { en: 'Open edit modal and try to remove/change the partner', hu: 'Nyisd meg a szerkesztő ablakot és próbáld meg törölni/cserélni a partnert' },
+          { en: 'Verify the action is blocked with appropriate message', hu: 'Ellenőrizd, hogy a művelet blokkolva van megfelelő üzenettel' },
+        ],
+        expected: { en: 'Cannot remove/change a partner who has already checked in', hu: 'Nem lehet törölni/cserélni egy már bejelentkezett partnert' },
+      },
+      {
+        nameEn: 'Partner Management — Validation Errors',
+        nameHu: 'Partner Kezelés — Validációs Hibák',
+        steps: [
+          { en: 'Try to replace partner with the main guest\'s own email', hu: 'Próbáld meg cserélni a partnert a fő vendég saját email-jére' },
+          { en: 'Try to replace with an email already registered as independent guest', hu: 'Próbáld meg cserélni egy már független vendégként regisztrált email-lel' },
+          { en: 'Try to replace with an email already a partner of someone else', hu: 'Próbáld meg cserélni egy már más vendég partnereként regisztrált email-lel' },
+          { en: 'Verify appropriate error messages for each case', hu: 'Ellenőrizd a megfelelő hibaüzeneteket minden esetre' },
+        ],
+        expected: { en: 'Clear error messages for self-pairing, existing email, and already-partnered email', hu: 'Egyértelmű hibaüzenetek önpárosítás, meglévő email és már párosított email esetén' },
+      },
+      // === CSV PARTNER AWARENESS ===
+      {
+        nameEn: 'Seating CSV — Partner Column in Export',
+        nameHu: 'Ülésrend CSV — Partner Oszlop az Exportban',
+        steps: [
+          { en: 'Navigate to Seating page, click Export CSV', hu: 'Navigálj az Ülésrend oldalra, kattints az Export CSV gombra' },
+          { en: 'Open the exported CSV file', hu: 'Nyisd meg az exportált CSV fájlt' },
+          { en: 'Verify partner_of_email column is present in header', hu: 'Ellenőrizd, hogy a partner_of_email oszlop megjelenik a fejlécben' },
+          { en: 'Verify partner guests show the main guest\'s email in this column', hu: 'Ellenőrizd, hogy partner vendégeknél a fő vendég email-je szerepel ebben az oszlopban' },
+        ],
+        expected: { en: 'CSV export contains partner relationship data', hu: 'CSV export tartalmazza a partner kapcsolati adatokat' },
+      },
+      // === ADMIN CROSS-NAVIGATION ===
+      {
+        nameEn: 'Admin Page Cross-Navigation — Badges & Deep Links',
+        nameHu: 'Admin Oldal Keresztnavigáció — Badge-ek & Deep Linkek',
+        steps: [
+          { en: 'Go to Changelog page, verify Help Guide badge next to version headers', hu: 'Menj a Changelog oldalra, ellenőrizd a Help Guide badge-et a verzió fejléceknél' },
+          { en: 'Click a Help Guide badge, verify it navigates to admin help', hu: 'Kattints egy Help Guide badge-re, ellenőrizd, hogy a help oldalra navigál' },
+          { en: 'Go to Release Testing, verify Changelog and Help Guide badges per version', hu: 'Menj a Release Testing oldalra, ellenőrizd a Changelog és Help Guide badge-eket verziónként' },
+        ],
+        expected: { en: 'All three admin pages link to each other with version-specific badges', hu: 'Mindhárom admin oldal linkkel mutat egymásra verzió-specifikus badge-ekkel' },
+      },
+    ],
+  },
+  {
     version: '4.1.0',
     date: '2026-03-22',
     features: [

@@ -45,8 +45,16 @@ next-env.d.ts
 prisma/*.db
 prisma/*.db-journal
 
-# BMad temporary files
+# BMad framework (dev-only, not for production)
+_bmad/
+_bmad-output/
+.agent/
+.claude/commands/
+.gemini/
 .workflow-init-temp.yaml
+
+# Client documents (not for git)
+docs/client/
 
 # Backup and temp files
 *.bak

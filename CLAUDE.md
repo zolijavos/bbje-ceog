@@ -577,6 +577,9 @@ Use BMad workflows for complex tasks:
 - **PWA**: Service Worker + Web Push (Firebase FCM), code auth (CEOG-XXXXXX), MobileFooter branding
 - **Zod validation**: Schemas defined in `lib/validations/` but NOT consistently applied across all API endpoints
 - **TypeScript**: `strict: false` in tsconfig.json, path alias `@/*` -> root
+- **Memory**: Minden beszélgetés végén, vagy jelentős feature/bugfix befejezésekor automatikusan mentsd el a memory-ba amit csináltunk (döntések, megoldások, tanulságok). Mentés előtt MINDIG kérdezd meg a usert, hogy mit szeretne rögzíteni / rendben van-e a mentés.
+  - **Hely**: `/root/.claude/projects/-root-LABS-CEOG-4/memory/` (NEM repo része, gép-szintű persistence)
+  - **Optimalizálás**: Minden 3-5 session után audit — elavult fájlok törlése, összevonás. Sprint lezáráskor session fájlok összevonása. Max ~10-12 fájl, MEMORY.md index max 200 sor.
 
 ## VPS Deployment (Production)
 

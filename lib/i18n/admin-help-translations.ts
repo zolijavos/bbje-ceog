@@ -1760,6 +1760,67 @@ Please provide:
 • Footer text size reduced for better visual hierarchy`,
     keywords: ['registration', 'flow', 'simplified', 'vip', 'magic link', 'gdpr', 'v2.16'],
   },
+  // ==========================================
+  // GUEST LIST - v4.1.1 additions
+  // ==========================================
+  {
+    id: 'partner-remove-replace',
+    category: 'Guest List',
+    question: 'How do I remove or replace a guest\'s partner?',
+    answer: `You can manage partners directly from the **guest edit modal**:
+
+**Remove Partner**:
+• Open the guest list, find the guest with a partner
+• Click Edit → scroll to the **Partner Management** section
+• Click **"Remove Partner"** → confirm in the modal
+• The partner\'s guest record, registration, table assignment and email logs are all removed
+• The table seat is freed automatically
+
+**Replace Partner**:
+• Click **"Change Partner"** in the partner section
+• Fill in the new partner\'s details (name, email required)
+• The old partner is removed and the new one is created automatically
+• New partner receives a **QR ticket email** and is **auto-assigned** to the same table (if capacity allows)
+
+**Important restrictions**:
+• You **cannot** remove or replace a partner who has already **checked in** — the button will be disabled
+• You cannot use an email that belongs to another existing guest
+• You cannot pair a guest with themselves`,
+    keywords: ['partner', 'remove', 'replace', 'change', 'delete', 'paired', 'lifecycle', 'v4.1.1'],
+  },
+  {
+    id: 'partner-csv-export',
+    category: 'Seating Arrangement',
+    question: 'How can I see partner relationships in the seating CSV export?',
+    answer: `The seating CSV export now includes a **partner_of_email** column:
+
+• Navigate to the **Seating** page → click **Export CSV**
+• The exported file contains a new last column: **partner_of_email**
+• For partner guests, this column shows the **main guest\'s email address**
+• For main guests or solo guests, this column is empty
+
+This makes it easy to identify paired relationships in spreadsheets and verify table assignments for couples.`,
+    keywords: ['csv', 'export', 'partner', 'seating', 'relationship', 'paired', 'v4.1.1'],
+  },
+  {
+    id: 'admin-cross-navigation',
+    category: 'System & Technical',
+    question: 'How do I navigate between Changelog, Release Testing and Help Guide?',
+    answer: `The three admin documentation pages are now **cross-linked**:
+
+**Changelog page**:
+• Each version header shows a **purple "Test Steps"** badge → links to that version\'s tests
+• Each version header shows a **green "Help Guide"** badge → links to the admin help page
+• Direct URL with hash: \`/admin/changelog#v4-1-0\` auto-expands and scrolls to that version
+
+**Release Testing page**:
+• Each version section shows **"Changelog"** and **"Help Guide"** badges
+• "Back to Changelog" link jumps to the specific version
+
+**Help Guide page**:
+• Accessible from badges on both Changelog and Release Testing pages`,
+    keywords: ['navigation', 'changelog', 'testing', 'help', 'badges', 'deep link', 'cross-link', 'v4.1.1'],
+  },
 ];
 
 // Guide content - Hungarian version
@@ -3415,6 +3476,67 @@ Kérlek add meg:
 • "View Registration Guide" szöveg cserélve "Find answers in our FAQs"-ra
 • Footer szövegméret csökkentve a jobb vizuális hierarchia érdekében`,
     keywords: ['regisztráció', 'folyamat', 'egyszerűsített', 'vip', 'magic link', 'gdpr', 'v2.16'],
+  },
+  // ==========================================
+  // GUEST LIST - v4.1.1 additions
+  // ==========================================
+  {
+    id: 'partner-remove-replace-hu',
+    category: 'Guest List',
+    question: 'Hogyan törölhetek vagy cserélhetek partnert egy vendégnél?',
+    answer: `A partnereket közvetlenül a **vendég szerkesztő ablakból** kezelheted:
+
+**Partner törlése**:
+• Nyisd meg a vendéglistát, keresd meg a partneres vendéget
+• Kattints a Szerkesztés → görgess a **Partner kezelése** szekcióhoz
+• Kattints a **"Partner törlése"** gombra → erősítsd meg a felugró ablakban
+• A partner vendég rekordja, regisztrációja, asztal-hozzárendelése és email logjai mind törlődnek
+• Az asztal hely automatikusan felszabadul
+
+**Partner cseréje**:
+• Kattints a **"Partner cseréje"** gombra a partner szekcióban
+• Töltsd ki az új partner adatait (név, email kötelező)
+• A régi partner törlődik és az új automatikusan létrejön
+• Az új partner **QR jegyet** kap emailben és **automatikusan hozzárendelődik** ugyanahhoz az asztalhoz (ha van hely)
+
+**Fontos korlátozások**:
+• **Nem** törölheted vagy cserélheted a partnert, aki már **bejelentkezett** — a gomb letiltásra kerül
+• Nem használhatsz olyan emailt, ami már egy másik vendéghez tartozik
+• Nem párosíthatod a vendéget önmagával`,
+    keywords: ['partner', 'törlés', 'csere', 'módosítás', 'páros', 'életciklus', 'v4.1.1'],
+  },
+  {
+    id: 'partner-csv-export-hu',
+    category: 'Seating Arrangement',
+    question: 'Hogyan láthatom a partner kapcsolatokat az ülésrend CSV exportban?',
+    answer: `Az ülésrend CSV export mostantól tartalmazza a **partner_of_email** oszlopot:
+
+• Navigálj az **Ülésrend** oldalra → kattints az **Export CSV** gombra
+• Az exportált fájl tartalmaz egy új utolsó oszlopot: **partner_of_email**
+• Partner vendégeknél ez az oszlop a **fő vendég email címét** mutatja
+• Fő vendégeknél vagy egyedülálló vendégeknél ez az oszlop üres
+
+Ez megkönnyíti a páros kapcsolatok azonosítását táblázatkezelőkben és az asztal-hozzárendelések ellenőrzését pároknál.`,
+    keywords: ['csv', 'export', 'partner', 'ülésrend', 'kapcsolat', 'páros', 'v4.1.1'],
+  },
+  {
+    id: 'admin-cross-navigation-hu',
+    category: 'System & Technical',
+    question: 'Hogyan navigálhatok a Changelog, Release Testing és Help Guide között?',
+    answer: `A három admin dokumentációs oldal mostantól **keresztlinkekkel** van összekötve:
+
+**Changelog oldal**:
+• Minden verzió fejlécnél van egy **lila "Test Steps"** badge → az adott verzió tesztjeihez linkel
+• Minden verzió fejlécnél van egy **zöld "Help Guide"** badge → az admin help oldalra linkel
+• Közvetlen URL hash-sel: \`/admin/changelog#v4-1-0\` automatikusan kinyitja és odagörget az adott verzióhoz
+
+**Release Testing oldal**:
+• Minden verzió szekció mutat **"Changelog"** és **"Help Guide"** badge-eket
+• A "Back to Changelog" link az adott verzióhoz ugrik
+
+**Help Guide oldal**:
+• Elérhető a badge-ekről mind a Changelog, mind a Release Testing oldalakról`,
+    keywords: ['navigáció', 'changelog', 'tesztelés', 'help', 'badge', 'deep link', 'keresztlink', 'v4.1.1'],
   },
 ];
 
