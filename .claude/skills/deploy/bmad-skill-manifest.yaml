@@ -1,0 +1,3 @@
+name: deploy
+description: Deploy Workflow
+trigger: Use when the user says "deploy" or "/deploy"
