@@ -314,6 +314,375 @@ const releaseTests: ReleaseTest[] = [
     ],
   },
   {
+    version: '3.11.0',
+    date: '2026-03-19',
+    features: [
+      {
+        nameEn: 'Two-Week Reminder Email Template',
+        nameHu: '2 Hetes Emlékeztető Email Sablon',
+        steps: [
+          { en: 'Go to Admin → Email Templates', hu: 'Menj az Admin → Email Sablonok oldalra' },
+          { en: 'Verify reminder_2wks template exists in the list', hu: 'Ellenőrizd, hogy a reminder_2wks sablon megjelenik a listában' },
+          { en: 'Open the template preview', hu: 'Nyisd meg a sablon előnézetét' },
+          { en: 'Verify partner branding is visible in the template', hu: 'Ellenőrizd, hogy a partner branding látható a sablonban' },
+        ],
+        expected: { en: 'reminder_2wks template renders correctly with partner branding', hu: 'reminder_2wks sablon helyesen jelenik meg partner brandinggel' },
+      },
+      {
+        nameEn: 'Conditional QR Code Attachment',
+        nameHu: 'Feltételes QR Kód Csatolás',
+        steps: [
+          { en: 'Send an email using a template that does NOT use guestQrCode variable', hu: 'Küldj emailt egy sablonnal ami NEM használja a guestQrCode változót' },
+          { en: 'Verify no QR code image is attached to the email', hu: 'Ellenőrizd, hogy nincs QR kód kép csatolva az emailhez' },
+          { en: 'Send an email using a template that uses guestQrCode', hu: 'Küldj emailt egy sablonnal ami használja a guestQrCode-ot' },
+          { en: 'Verify QR code is attached as CID image', hu: 'Ellenőrizd, hogy a QR kód csatolva van CID képként' },
+        ],
+        expected: { en: 'QR code only attached when template uses the variable', hu: 'QR kód csak akkor csatolva, ha a sablon használja a változót' },
+      },
+      {
+        nameEn: 'Email Preview Modal — Mobile Footer',
+        nameHu: 'Email Előnézet Modal — Mobil Lábléc',
+        steps: [
+          { en: 'Open email preview on a mobile device or narrow viewport', hu: 'Nyisd meg az email előnézetet mobil eszközön vagy szűk nézetben' },
+          { en: 'Scroll to the bottom of the preview', hu: 'Görgess a preview aljára' },
+          { en: 'Verify content is not hidden behind the mobile footer bar', hu: 'Ellenőrizd, hogy a tartalom nem rejtett a mobil lábléc mögött' },
+        ],
+        expected: { en: 'Preview content has enough bottom padding for mobile footer', hu: 'Előnézet tartalom elegendő alsó paddingot kap a mobil lábléchez' },
+      },
+    ],
+  },
+  {
+    version: '3.10.0',
+    date: '2026-03-18',
+    features: [
+      {
+        nameEn: 'VIP Invitation Email Template',
+        nameHu: 'VIP Meghívó Email Sablon',
+        steps: [
+          { en: 'Go to Admin → Email Templates', hu: 'Menj az Admin → Email Sablonok oldalra' },
+          { en: 'Verify vip_invitation template exists', hu: 'Ellenőrizd, hogy a vip_invitation sablon létezik' },
+          { en: 'Preview the template', hu: 'Nézd meg a sablon előnézetét' },
+          { en: 'Verify BBJ logo, 3 signatures, and personal notice section', hu: 'Ellenőrizd a BBJ logót, 3 aláírást és a személyes üzenet szekciót' },
+          { en: 'Verify QR code section appears below BBJ logo', hu: 'Ellenőrizd, hogy a QR kód szekció a BBJ logó alatt jelenik meg' },
+        ],
+        expected: { en: 'vip_invitation template renders with all sections correctly', hu: 'vip_invitation sablon helyesen jelenik meg minden szekcióval' },
+      },
+      {
+        nameEn: 'QR Code CID Attachment Delivery',
+        nameHu: 'QR Kód CID Csatolás Kézbesítés',
+        steps: [
+          { en: 'Send a ticket email to a guest with QR code', hu: 'Küldj jegy emailt egy vendégnek QR kóddal' },
+          { en: 'Check the received email', hu: 'Ellenőrizd a kapott emailt' },
+          { en: 'Verify QR code image renders inline (not as broken image)', hu: 'Ellenőrizd, hogy a QR kód kép inline renderelődik (nem törött képként)' },
+          { en: 'Test in Outlook, Gmail, and Apple Mail if possible', hu: 'Teszteld Outlook, Gmail és Apple Mail-ben ha lehetséges' },
+        ],
+        expected: { en: 'QR code renders correctly in major email clients via CID attachment', hu: 'QR kód helyesen jelenik meg a főbb email kliensekben CID csatolással' },
+      },
+      {
+        nameEn: 'DB-First Template Loading',
+        nameHu: 'DB-Elsőbbségű Sablon Betöltés',
+        steps: [
+          { en: 'Edit an email template via admin UI and save', hu: 'Szerkeszts egy email sablont az admin UI-on és mentsd el' },
+          { en: 'Restart the server (PM2 restart)', hu: 'Indítsd újra a szervert (PM2 restart)' },
+          { en: 'Preview the template again', hu: 'Nézd meg újra a sablon előnézetét' },
+          { en: 'Verify your DB edits are preserved (not overwritten by code)', hu: 'Ellenőrizd, hogy a DB szerkesztéseid megmaradtak (nem írta felül a kód)' },
+        ],
+        expected: { en: 'Database template edits survive server restarts', hu: 'Adatbázis sablon szerkesztések túlélik a szerver újraindítást' },
+      },
+    ],
+  },
+  {
+    version: '3.9.0',
+    date: '2026-03-16',
+    features: [
+      {
+        nameEn: 'Invite Reminder V3 Template',
+        nameHu: 'Meghívó Emlékeztető V3 Sablon',
+        steps: [
+          { en: 'Go to Admin → Email Templates', hu: 'Menj az Admin → Email Sablonok oldalra' },
+          { en: 'Verify invite_reminder_v3 appears in the list', hu: 'Ellenőrizd, hogy az invite_reminder_v3 megjelenik a listában' },
+          { en: 'Preview the template', hu: 'Nézd meg a sablon előnézetét' },
+          { en: 'Verify Little Minds and Corinthia logos in footer', hu: 'Ellenőrizd a Little Minds és Corinthia logókat a láblécben' },
+          { en: 'Go to Guest List, verify invite_reminder_v3 in email template dropdown', hu: 'Menj a Vendéglistára, ellenőrizd az invite_reminder_v3-at az email sablon dropdown-ban' },
+        ],
+        expected: { en: 'invite_reminder_v3 template with partner logos available and selectable', hu: 'invite_reminder_v3 sablon partner logókkal elérhető és kiválasztható' },
+      },
+      {
+        nameEn: 'Email Preview Base URL',
+        nameHu: 'Email Előnézet Base URL',
+        steps: [
+          { en: 'Preview any email template with images', hu: 'Nézd meg bármely képeket tartalmazó email sablon előnézetét' },
+          { en: 'Verify logos and images render correctly', hu: 'Ellenőrizd, hogy a logók és képek helyesen megjelennek' },
+          { en: 'Verify no hardcoded URLs in image sources', hu: 'Ellenőrizd, hogy nincsenek hardcoded URL-ek a kép forrásokban' },
+        ],
+        expected: { en: 'All images use APP_URL for correct rendering across environments', hu: 'Minden kép APP_URL-t használ a helyes megjelenítéshez minden környezetben' },
+      },
+    ],
+  },
+  {
+    version: '3.8.0',
+    date: '2026-03-06',
+    features: [
+      {
+        nameEn: 'Email Status Protection',
+        nameHu: 'Email Státusz Védelem',
+        steps: [
+          { en: 'Find a guest with "approved" or "registered" status', hu: 'Keress egy "approved" vagy "registered" státuszú vendéget' },
+          { en: 'Send a bulk email that includes this guest', hu: 'Küldj egy tömeges emailt ami tartalmazza ezt a vendéget' },
+          { en: 'Verify the guest status has NOT been downgraded', hu: 'Ellenőrizd, hogy a vendég státusza NEM lett visszaírva' },
+        ],
+        expected: { en: 'Email sending does not downgrade guest registration status', hu: 'Email küldés nem írja vissza a vendég regisztrációs státuszát' },
+      },
+      {
+        nameEn: '100/Page Pagination Option',
+        nameHu: '100/Oldal Lapozási Opció',
+        steps: [
+          { en: 'Go to Admin → Guest List', hu: 'Menj az Admin → Vendéglista oldalra' },
+          { en: 'Look at the pagination controls at the bottom', hu: 'Nézd meg a lapozás vezérlőket az oldal alján' },
+          { en: 'Verify "100" option is available in the items per page selector', hu: 'Ellenőrizd, hogy a "100" opció elérhető az oldalankénti elemszám választóban' },
+          { en: 'Select 100 and verify the list shows up to 100 items', hu: 'Válaszd a 100-at és ellenőrizd, hogy a lista legfeljebb 100 elemet mutat' },
+        ],
+        expected: { en: 'Guest list supports 100 items per page for large lists', hu: 'Vendéglista támogat 100 elem/oldal opciót nagy listákhoz' },
+      },
+    ],
+  },
+  {
+    version: '3.7.0',
+    date: '2026-03-06',
+    features: [
+      {
+        nameEn: 'One-Month Reminder Template with Partner Logos',
+        nameHu: '1 Hónapos Emlékeztető Sablon Partner Logókkal',
+        steps: [
+          { en: 'Go to Admin → Email Templates', hu: 'Menj az Admin → Email Sablonok oldalra' },
+          { en: 'Find reminder_1month template', hu: 'Keresd meg a reminder_1month sablont' },
+          { en: 'Preview the template', hu: 'Nézd meg a sablon előnézetét' },
+          { en: 'Verify Corinthia and Little Minds logos in the footer', hu: 'Ellenőrizd a Corinthia és Little Minds logókat a láblécben' },
+          { en: 'Verify equal spacing between partner logos', hu: 'Ellenőrizd az egyenletes térközöket a partner logók között' },
+        ],
+        expected: { en: 'reminder_1month template with properly spaced partner logos', hu: 'reminder_1month sablon megfelelően elrendezett partner logókkal' },
+      },
+      {
+        nameEn: 'CBRE Email Template',
+        nameHu: 'CBRE Email Sablon',
+        steps: [
+          { en: 'Go to Admin → Email Templates', hu: 'Menj az Admin → Email Sablonok oldalra' },
+          { en: 'Find CBRE template in the list', hu: 'Keresd meg a CBRE sablont a listában' },
+          { en: 'Preview and verify CBRE branding', hu: 'Nézd meg az előnézetet és ellenőrizd a CBRE arculatot' },
+          { en: 'Verify it appears in Guest List email template dropdown', hu: 'Ellenőrizd, hogy megjelenik a Vendéglista email sablon dropdown-jában' },
+        ],
+        expected: { en: 'CBRE template available and selectable from guest list', hu: 'CBRE sablon elérhető és kiválasztható a vendéglistából' },
+      },
+      {
+        nameEn: 'i18n PageHeader Translation',
+        nameHu: 'i18n PageHeader Fordítás',
+        steps: [
+          { en: 'Switch language to Hungarian in admin header', hu: 'Válts magyar nyelvre az admin fejlécben' },
+          { en: 'Navigate through admin pages (Guests, Tables, Emails, etc.)', hu: 'Navigálj az admin oldalakon (Vendégek, Asztalok, Emailek, stb.)' },
+          { en: 'Verify page titles and descriptions are in Hungarian', hu: 'Ellenőrizd, hogy az oldal címek és leírások magyarul vannak' },
+          { en: 'Switch to English and verify all titles translate', hu: 'Válts angolra és ellenőrizd, hogy minden cím lefordítódik' },
+        ],
+        expected: { en: 'All admin page headers translate correctly in both languages', hu: 'Minden admin oldal fejléc helyesen fordítódik mindkét nyelven' },
+      },
+    ],
+  },
+  {
+    version: '3.6.0',
+    date: '2026-03-02',
+    features: [
+      {
+        nameEn: 'Email Template Selector in Guest List',
+        nameHu: 'Email Sablon Választó a Vendéglistában',
+        steps: [
+          { en: 'Go to Admin → Guest List', hu: 'Menj az Admin → Vendéglista oldalra' },
+          { en: 'Find the email template dropdown near the send email button', hu: 'Keresd meg az email sablon dropdown-ot a küldés gomb közelében' },
+          { en: 'Verify multiple templates are listed (default, sponsor_invitation, etc.)', hu: 'Ellenőrizd, hogy több sablon is listázva van (default, sponsor_invitation, stb.)' },
+          { en: 'Select a non-default template and send an email', hu: 'Válassz egy nem-default sablont és küldj emailt' },
+          { en: 'Verify the email uses the selected template', hu: 'Ellenőrizd, hogy az email a kiválasztott sablont használja' },
+        ],
+        expected: { en: 'Can select and send emails using different templates from guest list', hu: 'Kiválasztható és küldhető email különböző sablonokkal a vendéglistából' },
+      },
+      {
+        nameEn: 'Sponsor Invitation Template (PwC Hungary)',
+        nameHu: 'Szponzor Meghívó Sablon (PwC Hungary)',
+        steps: [
+          { en: 'Go to Admin → Email Templates', hu: 'Menj az Admin → Email Sablonok oldalra' },
+          { en: 'Find sponsor_invitation template', hu: 'Keresd meg a sponsor_invitation sablont' },
+          { en: 'Preview the template', hu: 'Nézd meg a sablon előnézetét' },
+          { en: 'Verify 3 signatures are visible including László Radványi, CEO PwC Hungary', hu: 'Ellenőrizd, hogy 3 aláírás látható, beleértve Radványi László, PwC Hungary CEO' },
+          { en: 'Verify professional corporate invitation layout', hu: 'Ellenőrizd a professzionális vállalati meghívó elrendezést' },
+        ],
+        expected: { en: 'sponsor_invitation template with 3 signatures renders correctly', hu: 'sponsor_invitation sablon 3 aláírással helyesen jelenik meg' },
+      },
+    ],
+  },
+  {
+    version: '3.5.0',
+    date: '2026-02-15',
+    features: [
+      {
+        nameEn: 'Codebase Cleanup — Build Verification',
+        nameHu: 'Kódbázis Tisztítás — Build Ellenőrzés',
+        steps: [
+          { en: 'Run npm run build', hu: 'Futtasd az npm run build parancsot' },
+          { en: 'Verify build completes without errors', hu: 'Ellenőrizd, hogy a build hiba nélkül befejeződik' },
+          { en: 'Run npm run lint', hu: 'Futtasd az npm run lint parancsot' },
+          { en: 'Verify no new lint errors', hu: 'Ellenőrizd, hogy nincs új lint hiba' },
+        ],
+        expected: { en: 'Clean build and lint after codebase cleanup', hu: 'Tiszta build és lint a kódbázis tisztítás után' },
+      },
+    ],
+  },
+  {
+    version: '3.4.0',
+    date: '2026-02-12',
+    features: [
+      {
+        nameEn: 'Invitation Reminder V2 Template',
+        nameHu: 'Meghívó Emlékeztető V2 Sablon',
+        steps: [
+          { en: 'Go to Admin → Email Templates', hu: 'Menj az Admin → Email Sablonok oldalra' },
+          { en: 'Find invitation_reminder_v2 template', hu: 'Keresd meg az invitation_reminder_v2 sablont' },
+          { en: 'Preview the template', hu: 'Nézd meg a sablon előnézetét' },
+          { en: 'Verify improved layout and partner branding', hu: 'Ellenőrizd a javított elrendezést és partner brandinget' },
+        ],
+        expected: { en: 'invitation_reminder_v2 template renders with improved design', hu: 'invitation_reminder_v2 sablon javított designnal jelenik meg' },
+      },
+      {
+        nameEn: 'Scheduled Emails — Batch Processing',
+        nameHu: 'Ütemezett Emailek — Kötegelt Feldolgozás',
+        steps: [
+          { en: 'Schedule multiple emails for the same time', hu: 'Ütemezz több emailt ugyanarra az időre' },
+          { en: 'Wait for the scheduled time', hu: 'Várd meg az ütemezett időt' },
+          { en: 'Verify emails are sent in batches with correct delays', hu: 'Ellenőrizd, hogy az emailek kötegelve mennek ki helyes késleltetéssel' },
+          { en: 'Check email logs for correct status updates', hu: 'Ellenőrizd az email logokat a helyes státusz frissítésekhez' },
+        ],
+        expected: { en: 'Scheduled emails sent in batches with proper tracking', hu: 'Ütemezett emailek kötegekben küldve megfelelő nyomkövetéssel' },
+      },
+    ],
+  },
+  {
+    version: '3.3.0',
+    date: '2026-02-03',
+    features: [
+      {
+        nameEn: 'Sortable Guest List Columns',
+        nameHu: 'Rendezhető Vendéglista Oszlopok',
+        steps: [
+          { en: 'Go to Admin → Guest List', hu: 'Menj az Admin → Vendéglista oldalra' },
+          { en: 'Click on a column header (e.g., Name, Email, Status)', hu: 'Kattints egy oszlopfejlécre (pl. Név, Email, Státusz)' },
+          { en: 'Verify the list sorts by that column', hu: 'Ellenőrizd, hogy a lista az oszlop szerint rendeződik' },
+          { en: 'Click again to reverse sort order', hu: 'Kattints újra a rendezési sorrend megfordításához' },
+          { en: 'Verify ascending/descending toggle works', hu: 'Ellenőrizd, hogy a növekvő/csökkenő váltás működik' },
+        ],
+        expected: { en: 'Guest list columns are sortable with asc/desc toggle', hu: 'Vendéglista oszlopok rendezhetők növekvő/csökkenő váltással' },
+      },
+      {
+        nameEn: 'Admin Rate Limits & Partner Validation',
+        nameHu: 'Admin Rate Limit & Partner Validáció',
+        steps: [
+          { en: 'Try to create a guest with an invalid partner email', hu: 'Próbálj vendéget létrehozni érvénytelen partner email-lel' },
+          { en: 'Verify validation error message appears', hu: 'Ellenőrizd, hogy validációs hibaüzenet jelenik meg' },
+          { en: 'Try to send many emails rapidly', hu: 'Próbálj sok emailt gyorsan küldeni' },
+          { en: 'Verify rate limiting kicks in after threshold', hu: 'Ellenőrizd, hogy a rate limit bekapcsol a küszöb után' },
+        ],
+        expected: { en: 'Partner email validation and rate limiting work correctly', hu: 'Partner email validáció és rate limit helyesen működik' },
+      },
+      {
+        nameEn: 'Dark Mode — Magic Link Badges',
+        nameHu: 'Dark Mode — Magic Link Badge-ek',
+        steps: [
+          { en: 'Enable dark mode in admin', hu: 'Kapcsold be a dark mode-ot az adminban' },
+          { en: 'Navigate to Guest List', hu: 'Navigálj a Vendéglistára' },
+          { en: 'Find guests with magic link status badges', hu: 'Keress vendégeket magic link státusz badge-ekkel' },
+          { en: 'Verify badges are readable with good contrast on dark background', hu: 'Ellenőrizd, hogy a badge-ek olvashatók jó kontraszttal sötét háttéren' },
+        ],
+        expected: { en: 'Magic link badges have proper contrast in dark mode', hu: 'Magic link badge-ek megfelelő kontraszttal rendelkeznek dark mode-ban' },
+      },
+    ],
+  },
+  {
+    version: '3.2.0',
+    date: '2026-01-28',
+    features: [
+      {
+        nameEn: 'Outlook-Compatible Email Templates',
+        nameHu: 'Outlook-Kompatibilis Email Sablonok',
+        steps: [
+          { en: 'Send a test email to an Outlook account', hu: 'Küldj teszt emailt egy Outlook fiókba' },
+          { en: 'Verify email renders correctly (no broken layout)', hu: 'Ellenőrizd, hogy az email helyesen jelenik meg (nincs törött elrendezés)' },
+          { en: 'Check images, logos, and formatting', hu: 'Ellenőrizd a képeket, logókat és formázást' },
+          { en: 'Test in Gmail and Apple Mail for comparison', hu: 'Teszteld Gmail-ben és Apple Mail-ben összehasonlításként' },
+        ],
+        expected: { en: 'Email templates render correctly in Outlook, Gmail, and Apple Mail', hu: 'Email sablonok helyesen jelennek meg Outlook-ban, Gmail-ben és Apple Mail-ben' },
+      },
+    ],
+  },
+  {
+    version: '3.1.0',
+    date: '2026-01-26',
+    features: [
+      {
+        nameEn: 'Registration Form — Seating Preferences Removed',
+        nameHu: 'Regisztrációs Űrlap — Ülésrendi Preferenciák Eltávolítva',
+        steps: [
+          { en: 'Open a guest registration form via magic link', hu: 'Nyiss meg egy vendég regisztrációs űrlapot magic link-kel' },
+          { en: 'Verify there is NO seating preferences field', hu: 'Ellenőrizd, hogy NINCS ülésrendi preferenciák mező' },
+          { en: 'Complete the registration', hu: 'Fejezd be a regisztrációt' },
+          { en: 'Check the admin feedback email for position field', hu: 'Ellenőrizd az admin visszajelző emailben a pozíció mezőt' },
+        ],
+        expected: { en: 'Seating preferences removed from registration, position shown in feedback emails', hu: 'Ülésrendi preferenciák eltávolítva a regisztrációból, pozíció megjelenik a visszajelző emailekben' },
+      },
+      {
+        nameEn: 'Consent Checkboxes — Dark Background',
+        nameHu: 'Hozzájárulás Checkboxok — Sötét Háttér',
+        steps: [
+          { en: 'Open registration form on a page with dark background', hu: 'Nyisd meg a regisztrációs űrlapot sötét hátterű oldalon' },
+          { en: 'Look at the consent/GDPR checkboxes', hu: 'Nézd meg a hozzájárulás/GDPR checkboxokat' },
+          { en: 'Verify text is readable and checkbox is visible', hu: 'Ellenőrizd, hogy a szöveg olvasható és a checkbox látható' },
+        ],
+        expected: { en: 'Consent checkboxes are clearly visible on dark backgrounds', hu: 'Hozzájárulás checkboxok jól láthatóak sötét háttéren' },
+      },
+    ],
+  },
+  {
+    version: '3.0.0',
+    date: '2026-01-25',
+    features: [
+      {
+        nameEn: 'Client Feedback — Email Improvements',
+        nameHu: 'Ügyfél Visszajelzés — Email Fejlesztések',
+        steps: [
+          { en: 'Preview various email templates', hu: 'Nézd meg a különböző email sablonok előnézetét' },
+          { en: 'Verify wording, layout, and branding match latest client feedback', hu: 'Ellenőrizd, hogy a szövegezés, elrendezés és arculat megfelel a legfrissebb ügyfél visszajelzésnek' },
+          { en: 'Send a test email and verify rendering', hu: 'Küldj teszt emailt és ellenőrizd a megjelenítést' },
+        ],
+        expected: { en: 'Email templates reflect client feedback improvements', hu: 'Email sablonok tükrözik az ügyfél visszajelzés javításait' },
+      },
+      {
+        nameEn: 'Partner Display — Guest List Fix',
+        nameHu: 'Partner Megjelenítés — Vendéglista Javítás',
+        steps: [
+          { en: 'Go to Guest List, find a guest who IS a partner', hu: 'Menj a Vendéglistára, keress egy vendéget aki partner' },
+          { en: 'Verify the partner column does NOT show their own partner info redundantly', hu: 'Ellenőrizd, hogy a partner oszlop NEM mutatja redundánsan a saját partner infóját' },
+          { en: 'Find a main guest with a partner', hu: 'Keress egy fő vendéget akinek van partnere' },
+          { en: 'Verify partner info is shown correctly', hu: 'Ellenőrizd, hogy a partner info helyesen jelenik meg' },
+        ],
+        expected: { en: 'Partner info only shown for main guests, not for partner guests themselves', hu: 'Partner info csak fő vendégeknél jelenik meg, nem maguknál a partner vendégeknél' },
+      },
+      {
+        nameEn: 'UI Fixes — Registration Screens',
+        nameHu: 'UI Javítások — Regisztrációs Képernyők',
+        steps: [
+          { en: 'Open various registration pages (VIP, paid)', hu: 'Nyiss meg különböző regisztrációs oldalakat (VIP, fizetős)' },
+          { en: 'Verify no status badge or VIP labels appear on registration screens', hu: 'Ellenőrizd, hogy nincs státusz badge vagy VIP címke a regisztrációs képernyőkön' },
+          { en: 'Verify QR email delay is 3 minutes (not 5)', hu: 'Ellenőrizd, hogy a QR email késleltetés 3 perc (nem 5)' },
+        ],
+        expected: { en: 'Clean registration screens without unnecessary badges, faster QR delivery', hu: 'Tiszta regisztrációs képernyők felesleges badge-ek nélkül, gyorsabb QR kézbesítés' },
+      },
+    ],
+  },
+  {
     version: '2.16.0',
     date: '2026-01-22',
     features: [
