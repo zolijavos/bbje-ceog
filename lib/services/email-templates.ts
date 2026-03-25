@@ -4447,7 +4447,7 @@ Event website: ceogala.com`,
     slug: 'final_reminder_general',
     name: 'Final Reminder - General',
     subject: 'Reminder - CEO Gala 2026',
-    variables: ['prefix', 'name', 'qr_code', 'baseUrl'],
+    variables: ['title', 'guestName', 'guestQrCode', 'baseUrl'],
     html_body: `<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
@@ -4480,7 +4480,7 @@ Event website: ceogala.com`,
           <tr>
             <td style="padding: 20px 15px; text-align: center;">
               <!-- Greeting -->
-              <p style="margin: 0 0 18px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Dear {{prefix}} <strong>{{name}}</strong>,</p>
+              <p style="margin: 0 0 18px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Dear {{title}} <strong>{{guestName}}</strong>,</p>
 
               <!-- Body -->
               <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">As the CEO Gala 2026 is taking place this Friday, we would like to share a brief overview of the key details to ensure a smooth and enjoyable arrival.</p>
@@ -4550,12 +4550,12 @@ Event website: ceogala.com`,
 
               <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Please have this QR code ready on your phone upon arrival.</p>
 
-              <p style="margin: 0 0 4px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;"><strong>Registered Guest</strong><br>{{prefix}} <strong>{{name}}</strong></p>
+              <p style="margin: 0 0 4px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;"><strong>Registered Guest</strong><br>{{title}} <strong>{{guestName}}</strong></p>
 
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 10px auto 20px auto;">
                 <tr>
                   <td align="center">
-                    <img src="{{qr_code}}" alt="Your QR Code" width="180" height="180" style="width: 180px; height: 180px; border: 1px solid #e0e0e0; display: block;" />
+                    <img src="{{guestQrCode}}" alt="Your QR Code" width="180" height="180" style="width: 180px; height: 180px; border: 1px solid #e0e0e0; display: block;" />
                   </td>
                 </tr>
               </table>
@@ -4588,7 +4588,7 @@ Event website: ceogala.com`,
 </html>`,
     text_body: `Reminder - CEO Gala 2026
 
-Dear {{prefix}} {{name}},
+Dear {{title}} {{guestName}},
 
 As the CEO Gala 2026 is taking place this Friday, we would like to share a brief overview of the key details to ensure a smooth and enjoyable arrival.
 
@@ -4625,7 +4625,7 @@ Your personalised QR code
 Please have this QR code ready on your phone upon arrival.
 
 Registered Guest
-{{prefix}} {{name}}
+{{title}} {{guestName}}
 
 [QR Code attached]
 
@@ -4641,7 +4641,7 @@ Event website: ceogala.com`,
     slug: 'final_reminder_vip',
     name: 'Final Reminder - VIP',
     subject: 'Reminder - CEO Gala 2026',
-    variables: ['prefix', 'name', 'qr_code', 'baseUrl'],
+    variables: ['title', 'guestName', 'guestQrCode', 'baseUrl'],
     html_body: `<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
@@ -4674,7 +4674,7 @@ Event website: ceogala.com`,
           <tr>
             <td style="padding: 20px 15px; text-align: center;">
               <!-- Greeting -->
-              <p style="margin: 0 0 18px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Dear {{prefix}} <strong>{{name}}</strong>,</p>
+              <p style="margin: 0 0 18px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Dear {{title}} <strong>{{guestName}}</strong>,</p>
 
               <!-- Body -->
               <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">As the CEO Gala 2026 takes place this Friday, here is a brief reminder of the key details of the evening.</p>
@@ -4738,12 +4738,12 @@ Event website: ceogala.com`,
 
               <p style="margin: 0 0 12px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;">Please have this QR code ready on your phone upon arrival.</p>
 
-              <p style="margin: 0 0 4px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;"><strong>Registered Guest</strong><br>{{prefix}} <strong>{{name}}</strong></p>
+              <p style="margin: 0 0 4px 0; font-size: 15px; line-height: 1.6; color: #333333; text-align: center; font-family: Verdana, Geneva, sans-serif;"><strong>Registered Guest</strong><br>{{title}} <strong>{{guestName}}</strong></p>
 
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 10px auto 20px auto;">
                 <tr>
                   <td align="center">
-                    <img src="{{qr_code}}" alt="Your QR Code" width="180" height="180" style="width: 180px; height: 180px; border: 1px solid #e0e0e0; display: block;" />
+                    <img src="{{guestQrCode}}" alt="Your QR Code" width="180" height="180" style="width: 180px; height: 180px; border: 1px solid #e0e0e0; display: block;" />
                   </td>
                 </tr>
               </table>
@@ -4776,7 +4776,7 @@ Event website: ceogala.com`,
 </html>`,
     text_body: `Reminder - CEO Gala 2026
 
-Dear {{prefix}} {{name}},
+Dear {{title}} {{guestName}},
 
 As the CEO Gala 2026 takes place this Friday, here is a brief reminder of the key details of the evening.
 
@@ -4808,7 +4808,7 @@ Your personalised QR code
 Please have this QR code ready on your phone upon arrival.
 
 Registered Guest
-{{prefix}} {{name}}
+{{title}} {{guestName}}
 
 [QR Code attached]
 
