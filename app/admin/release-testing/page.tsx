@@ -52,6 +52,35 @@ interface TestResultData {
 
 const releaseTests: ReleaseTest[] = [
   {
+    version: '4.1.2',
+    date: '2026-03-25',
+    features: [
+      {
+        nameEn: 'Final Reminder Email — General',
+        nameHu: 'Végső Emlékeztető Email — Általános',
+        steps: [
+          { en: 'Navigate to /admin/guests and select a registered guest with a QR code', hu: 'Navigálj a /admin/guests oldalra és válassz egy regisztrált vendéget QR kóddal' },
+          { en: 'Click the email icon → Email preview modal opens', hu: 'Kattints az email ikonra → Email előnézet modal megnyílik' },
+          { en: 'Select "Final Reminder - General" from the template dropdown', hu: 'Válaszd a "Végső emlékeztető - Általános" sablont a dropdown-ból' },
+          { en: 'Click Send → verify success message appears', hu: 'Kattints a Küldés gombra → ellenőrizd, hogy megjelenik a sikeres üzenet' },
+        ],
+        expected: { en: 'Email arrives with guest name, title, event details, and valid scannable QR code', hu: 'Az email megérkezik a vendég nevével, titlusával, esemény részletekkel és érvényes beolvasható QR kóddal' },
+      },
+      {
+        nameEn: 'Final Reminder Email — VIP',
+        nameHu: 'Végső Emlékeztető Email — VIP',
+        steps: [
+          { en: 'Navigate to /admin/guests and select a VIP guest with a QR code', hu: 'Navigálj a /admin/guests oldalra és válassz egy VIP vendéget QR kóddal' },
+          { en: 'Click the email icon → Email preview modal opens', hu: 'Kattints az email ikonra → Email előnézet modal megnyílik' },
+          { en: 'Select "Final Reminder - VIP" from the template dropdown', hu: 'Válaszd a "Végső emlékeztető - VIP" sablont a dropdown-ból' },
+          { en: 'Click Send → verify success message appears', hu: 'Kattints a Küldés gombra → ellenőrizd, hogy megjelenik a sikeres üzenet' },
+          { en: 'Verify the email contains VIP Welcome Reception details (6:30 PM sharp)', hu: 'Ellenőrizd, hogy az email tartalmazza a VIP Welcome Reception részleteket (18:30-kor)' },
+        ],
+        expected: { en: 'Email arrives with VIP-specific content, guest name, and valid QR code', hu: 'Az email megérkezik VIP-specifikus tartalommal, vendég névvel és érvényes QR kóddal' },
+      },
+    ],
+  },
+  {
     version: '4.1.1',
     date: '2026-03-23',
     features: [

@@ -34,6 +34,28 @@ interface ChangelogEntry {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: '4.1.2',
+    date: '2026-03-25',
+    changes: [
+      {
+        type: 'feature',
+        category: 'email',
+        titleEn: 'Final Reminder Email Templates',
+        titleHu: 'Végső Emlékeztető Email Sablonok',
+        descriptionEn: 'Two new templates for the final week before the gala: final_reminder_general (all registered guests) and final_reminder_vip (VIP reception invitees). Both include personalized QR code via CID attachment, event details, and dress code reminder.',
+        descriptionHu: 'Két új sablon a gála előtti utolsó hétre: final_reminder_general (minden regisztrált vendég) és final_reminder_vip (VIP fogadás meghívottak). Mindkettő tartalmazza a személyre szabott QR kódot CID mellékletként, esemény részleteket és dress code emlékeztetőt.',
+      },
+      {
+        type: 'improvement',
+        category: 'admin',
+        titleEn: 'Email Template Generator Workflow',
+        titleHu: 'Email Sablon Generátor Workflow',
+        descriptionEn: 'Fixed the email template generator workflow to enforce system standard variable names (title, guestName, guestQrCode), register templates in all 5 required locations (code, 2 dropdowns, API whitelist, i18n), and document the full registration checklist.',
+        descriptionHu: 'Email sablon generátor workflow javítva: rendszer standard változónevek kényszerítése (title, guestName, guestQrCode), sablonok regisztrálása mind az 5 szükséges helyen (kód, 2 dropdown, API whitelist, i18n), teljes regisztrációs checklist dokumentálva.',
+      },
+    ],
+  },
+  {
     version: '4.1.1',
     date: '2026-03-23',
     changes: [

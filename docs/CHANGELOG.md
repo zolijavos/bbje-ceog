@@ -4,6 +4,22 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
 
 ---
 
+## v4.1.2 (2026-03-25)
+
+### New Features / Új funkciók
+
+- **Final Reminder Email Templates** / **Végső Emlékeztető Email Sablonok**
+  - EN: Two new templates: final_reminder_general (all guests) and final_reminder_vip (VIP). Both include personalized QR code, event details, and dress code.
+  - HU: Két új sablon: final_reminder_general (minden vendég) és final_reminder_vip (VIP). Mindkettő QR kóddal, esemény részletekkel és dress code-dal.
+
+### Improvements / Fejlesztések
+
+- **Email Template Generator Workflow** / **Email Sablon Generátor Workflow**
+  - EN: Fixed workflow to use standard variable names and register templates in all 5 required locations (code, dropdowns, API whitelist, i18n).
+  - HU: Workflow javítva: standard változónevek és sablonok regisztrálása mind az 5 szükséges helyen (kód, dropdownok, API whitelist, i18n).
+
+---
+
 ## v4.1.1 (2026-03-23)
 
 ### New Features / Új funkciók
