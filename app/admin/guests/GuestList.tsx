@@ -150,6 +150,8 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
       declined: t('declined'),
       pending_approval: t('pendingApproval'),
       rejected: t('rejected'),
+      cancelled: t('cancelled'),
+      checked_in: t('checkedIn'),
     };
     return statusMap[status] || status;
   };
@@ -761,6 +763,7 @@ export default function GuestList({ guests: initialGuests }: GuestListProps) {
             <option value="pending_approval">{t('pendingApproval')}</option>
             <option value="rejected">{t('rejected')}</option>
             <option value="cancelled">{t('cancelled')}</option>
+            <option value="checked_in">{t('checkedIn')}</option>
             <option value="no-show">{t('noShow')}</option>
           </select>
         </div>

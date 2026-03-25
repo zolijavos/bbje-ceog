@@ -465,6 +465,10 @@ export default function GuestFormModal({
                     <option value="registered">Registered</option>
                     <option value="approved">Approved</option>
                     <option value="declined">Declined</option>
+                    <option value="pending_approval">Pending Approval</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="cancelled">Cancelled</option>
+                    <option value="checked_in">Checked In</option>
                   </select>
                 </div>
               )}
