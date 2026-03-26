@@ -1,0 +1,1866 @@
+[
+  {
+    "table_name": "Asztal 1",
+    "guest_email": "botka.zeno@gmail.com",
+    "first_name": "Zeno",
+    "last_name": "Botka",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 1",
+    "guest_email": "Miklos.Nemeth@kpmg.hu",
+    "first_name": "Miklós",
+    "last_name": "Németh",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 1",
+    "guest_email": "rozalia.gocsejine@heineken.hu",
+    "first_name": "Rozália",
+    "last_name": "Göcsejiné Kiss",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 1",
+    "guest_email": "beata.rakos-szegleti@dutcham.hu",
+    "first_name": "Beáta",
+    "last_name": "Rákos-Szegleti",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 1",
+    "guest_email": "marc-tell.madl@mpk-partners.com",
+    "first_name": "Marc-Tell",
+    "last_name": "Madl",
+    "title": "Dr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 1",
+    "guest_email": "geza.frang@heineken.hu",
+    "first_name": "Géza Attila",
+    "last_name": "Frang",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 1",
+    "guest_email": "orsolya.molnar@heineken.hu",
+    "first_name": "Orsolya",
+    "last_name": "Mottl-Molnár",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 1",
+    "guest_email": "kozmafanni12@gmail.com",
+    "first_name": "Fanni",
+    "last_name": "Kozma",
+    "title": "Ms.",
+    "paired_with_email": "botka.zeno@gmail.com"
+  },
+  {
+    "table_name": "Asztal 1",
+    "guest_email": "Peter.Szalai@kpmg.hu",
+    "first_name": "Péter",
+    "last_name": "Szalai",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 1",
+    "guest_email": "anita.kiss@heineken.hu",
+    "first_name": "Anita",
+    "last_name": "Kiss",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 10",
+    "guest_email": "duncan.graham@bcch.com",
+    "first_name": "Duncan",
+    "last_name": "Graham",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 10",
+    "guest_email": "roland.szabo@vialto.com",
+    "first_name": "Roland",
+    "last_name": "Szabó",
+    "title": "H.E. Mr.",
+    "paired_with_email": "gyongyi.szabo.varga@bdo.hu"
+  },
+  {
+    "table_name": "Asztal 10",
+    "guest_email": "adrienn.bako@citi.com",
+    "first_name": "Adrienn",
+    "last_name": "Bakó",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 10",
+    "guest_email": "andrea.jadi-nemeth@bpv-jadi.com",
+    "first_name": "Andrea",
+    "last_name": "Jádi-Németh",
+    "title": "Dr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 10",
+    "guest_email": "gyongyi.szabo.varga@bdo.hu",
+    "first_name": "Gyöngyi",
+    "last_name": "Szabó-Varga",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 10",
+    "guest_email": "adri.szucs@outlook.com",
+    "first_name": "Adrienn",
+    "last_name": "Szücs",
+    "title": "Dr.",
+    "paired_with_email": "marcell.tatai.szabo@bdo.hu"
+  },
+  {
+    "table_name": "Asztal 10",
+    "guest_email": "tlorincze@yahoo.com",
+    "first_name": "Timea",
+    "last_name": "Lörincze",
+    "title": "Ms.",
+    "paired_with_email": "duncan.graham@bcch.com"
+  },
+  {
+    "table_name": "Asztal 10",
+    "guest_email": "marcell.tatai.szabo@bdo.hu",
+    "first_name": "Marcell",
+    "last_name": "Tatai-Szabó",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 11",
+    "guest_email": "marc.eckstein@thyssenkrupp-automotive.com",
+    "first_name": "Marc de Bastos",
+    "last_name": "Eckstein",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 11",
+    "guest_email": "ildiko.adam@hydro.com",
+    "first_name": "Veronika",
+    "last_name": "IEPEMA",
+    "title": "Mrs.",
+    "paired_with_email": "frank.iepema@hydro.com"
+  },
+  {
+    "table_name": "Asztal 11",
+    "guest_email": "ctorunlar@thy.com",
+    "first_name": "Çağkan",
+    "last_name": "Torunlar",
+    "title": "Mr.",
+    "paired_with_email": "ysensoy@thy.com"
+  },
+  {
+    "table_name": "Asztal 11",
+    "guest_email": "martina.almasi@hipa.hu",
+    "first_name": "Martina",
+    "last_name": "Almási",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 11",
+    "guest_email": "frank.iepema@hydro.com",
+    "first_name": "Frank",
+    "last_name": "Iepema",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 11",
+    "guest_email": "ysensoy@thy.com",
+    "first_name": "Yahya Zahid",
+    "last_name": "Sensoy",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 11",
+    "guest_email": "berkenye@yahoo.com",
+    "first_name": "Raimondo",
+    "last_name": "Giavi",
+    "title": "Mr.",
+    "paired_with_email": "melinda.topolcsik@bridgestone.eu"
+  },
+  {
+    "table_name": "Asztal 11",
+    "guest_email": "dora.tagai@thyssenkrupp-automotive.com",
+    "first_name": "Dora",
+    "last_name": "Tagai",
+    "title": "Mrs.",
+    "paired_with_email": "marc.eckstein@thyssenkrupp-automotive.com"
+  },
+  {
+    "table_name": "Asztal 11",
+    "guest_email": "attila1.katona@valeo.com",
+    "first_name": "Attila",
+    "last_name": "Katona",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 11",
+    "guest_email": "melinda.topolcsik@bridgestone.eu",
+    "first_name": "Melinda",
+    "last_name": "Topolcsik",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 12",
+    "guest_email": "Tim.OSullivan@cbre.com",
+    "first_name": "Tim",
+    "last_name": "O’Sullivan",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 12",
+    "guest_email": "a.balogh@horizondevelopment.hu",
+    "first_name": "Andrea",
+    "last_name": "Balogh",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 12",
+    "guest_email": "anna@jankovich.net",
+    "first_name": "Anna",
+    "last_name": "Jankovich",
+    "title": "Ms.",
+    "paired_with_email": "bela@jankovich.net"
+  },
+  {
+    "table_name": "Asztal 12",
+    "guest_email": "aurelia.luca@skanska.ro",
+    "first_name": "Aurelia",
+    "last_name": "Luca",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 12",
+    "guest_email": "lajkofe1@gmail.com",
+    "first_name": "Ferenc",
+    "last_name": "Lajko",
+    "title": "Mr.",
+    "paired_with_email": "timea.pesti@leaseplan.com"
+  },
+  {
+    "table_name": "Asztal 12",
+    "guest_email": "bela@jankovich.net",
+    "first_name": "Béla",
+    "last_name": "Jankovich",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 12",
+    "guest_email": "lorant.varga@cbre.com",
+    "first_name": "Lóránt",
+    "last_name": "Kibédi-Varga",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 12",
+    "guest_email": "timea.pesti@leaseplan.com",
+    "first_name": "Tímea",
+    "last_name": "Pesti",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 12",
+    "guest_email": "robert.esik@hu.ey.com",
+    "first_name": "Róbert",
+    "last_name": "Ésik",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 12",
+    "guest_email": "david.johnston3@cbre.com",
+    "first_name": "David M",
+    "last_name": "Johnston",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 13",
+    "guest_email": "peter.korsos@porschehungaria.hu",
+    "first_name": "Péter",
+    "last_name": "Korsos",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 13",
+    "guest_email": "szalekata@gmail.com",
+    "first_name": "Szále",
+    "last_name": "Kata",
+    "title": "Mrs.",
+    "paired_with_email": "tamas.kiss@bbj.hu"
+  },
+  {
+    "table_name": "Asztal 13",
+    "guest_email": "Nora.Racz@leitnerleitner.com",
+    "first_name": "Nóra",
+    "last_name": "Rácz",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 13",
+    "guest_email": "tamas.kiss@bbj.hu",
+    "first_name": "Tamás",
+    "last_name": "Kiss",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 13",
+    "guest_email": "dalma.ordogh@kpmg.hu",
+    "first_name": "Dalma",
+    "last_name": "Ördögh",
+    "title": "Dr.",
+    "paired_with_email": "robin.marshall@bbj.hu"
+  },
+  {
+    "table_name": "Asztal 13",
+    "guest_email": "balazsroman73@gmail.com",
+    "first_name": "Krisztina",
+    "last_name": "Somodi",
+    "title": "Ms.",
+    "paired_with_email": "balazs.roman@bbj.hu"
+  },
+  {
+    "table_name": "Asztal 13",
+    "guest_email": "andrea.matrai@hipa.hu",
+    "first_name": "Andrea",
+    "last_name": "Mátrai",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 13",
+    "guest_email": "robin.marshall@bbj.hu",
+    "first_name": "Robin",
+    "last_name": "Marshall",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 13",
+    "guest_email": "balazs.roman@bbj.hu",
+    "first_name": "Balazs",
+    "last_name": "Roman",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 14",
+    "guest_email": "edina.kertesi@ccifrance-hongrie.org",
+    "first_name": "Edina",
+    "last_name": "Gyulai Kertesi",
+    "title": "Mrs.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 14",
+    "guest_email": "marianna.kukely@hblf.hu",
+    "first_name": "Marianna",
+    "last_name": "Kukely",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 14",
+    "guest_email": "gabor.bercsi@spie-hungaria.hu",
+    "first_name": "Gábor",
+    "last_name": "Bercsi",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 14",
+    "guest_email": "fazekt@yahoo.com",
+    "first_name": "Viktoria",
+    "last_name": "Fazekas-Ónodi",
+    "title": "Mrs.",
+    "paired_with_email": "t.fazekas@anantara-hotels.com"
+  },
+  {
+    "table_name": "Asztal 14",
+    "guest_email": "laszlo.karolyi84@gmail.com",
+    "first_name": "Karolyi",
+    "last_name": "Laszlo jr.",
+    "title": "Mr.",
+    "paired_with_email": "karolyilegrandm@gmail.com"
+  },
+  {
+    "table_name": "Asztal 14",
+    "guest_email": "ruff.gabriella@karrierhungaria.hu",
+    "first_name": "Gabriella",
+    "last_name": "Ruff",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 14",
+    "guest_email": "t.fazekas@anantara-hotels.com",
+    "first_name": "Tamás",
+    "last_name": "Fazekas",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 14",
+    "guest_email": "karolyilegrandm@gmail.com",
+    "first_name": "László",
+    "last_name": "Károlyi",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 14",
+    "guest_email": "andras.bacsfalvi@hu.ey.com",
+    "first_name": "András",
+    "last_name": "Bácsfalvi",
+    "title": "Mr.",
+    "paired_with_email": "marianna.kukely@hblf.hu"
+  },
+  {
+    "table_name": "Asztal 14",
+    "guest_email": "agnes.ducrot@ccifrance-hongrie.org",
+    "first_name": "Ágnes",
+    "last_name": "Ducrot",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 15",
+    "guest_email": "christian.badergruber@magna.com",
+    "first_name": "Christian",
+    "last_name": "Badergruber",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 15",
+    "guest_email": "gabor.lukacs@rellodata.com",
+    "first_name": "Gabor",
+    "last_name": "Lukacs",
+    "title": "Mr.",
+    "paired_with_email": "eszter.jacobs@telcotrend.hu"
+  },
+  {
+    "table_name": "Asztal 15",
+    "guest_email": "ildiko.berka@amcham.hu",
+    "first_name": "Ildikó",
+    "last_name": "Takács-Berka",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 15",
+    "guest_email": "eszter.jacobs@telcotrend.hu",
+    "first_name": "Eszter",
+    "last_name": "Jacobs",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 15",
+    "guest_email": "events@ccch.hu",
+    "first_name": "Csilla",
+    "last_name": "Nagypál-Kuhar",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 15",
+    "guest_email": "fodorgabo12@gmail.com",
+    "first_name": "Cecilia",
+    "last_name": "Balogh",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 15",
+    "guest_email": "agnes.sigmond@siemens.com",
+    "first_name": "Agnes",
+    "last_name": "Sigmond",
+    "title": "Mrs.",
+    "paired_with_email": "christian.badergruber@magna.com"
+  },
+  {
+    "table_name": "Asztal 15",
+    "guest_email": "bkavalecz@ccch.hu",
+    "first_name": "Bernadett",
+    "last_name": "Kavalecz",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 15",
+    "guest_email": "vivien.csernik-tihn@amcham.hu",
+    "first_name": "Vivien",
+    "last_name": "Csernik-Tihn",
+    "title": "Ms.",
+    "paired_with_email": "ildiko.berka@amcham.hu"
+  },
+  {
+    "table_name": "Asztal 16",
+    "guest_email": "orsolya.erdody@bfz.hu",
+    "first_name": "Orsolya",
+    "last_name": "Erdődy",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 16",
+    "guest_email": "dkovacs.gabor8@gmail.com",
+    "first_name": "Gabor Istvan",
+    "last_name": "D Kovacs",
+    "title": "Mr.",
+    "paired_with_email": "irisz.lippai-nagy@amcham.hu"
+  },
+  {
+    "table_name": "Asztal 16",
+    "guest_email": "andras.savos@metmax.hu",
+    "first_name": "András",
+    "last_name": "Sávos",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 16",
+    "guest_email": "info@bfz.hu",
+    "first_name": "Csilla",
+    "last_name": "Csorba",
+    "title": "Mrs.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 16",
+    "guest_email": "irisz.lippai-nagy@amcham.hu",
+    "first_name": "Írisz",
+    "last_name": "Lippai-Nagy",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 16",
+    "guest_email": "martincsilla@gmail.com",
+    "first_name": "Csilla",
+    "last_name": "Martin",
+    "title": "Ms.",
+    "paired_with_email": "dale.martin@eelisa.eu"
+  },
+  {
+    "table_name": "Asztal 16",
+    "guest_email": "anna.orosz@heineken.hu",
+    "first_name": "Anna",
+    "last_name": "Orosz",
+    "title": "Mrs.",
+    "paired_with_email": "nikos.zois@heineken.hu"
+  },
+  {
+    "table_name": "Asztal 16",
+    "guest_email": "andrea.magay@bfz.hu",
+    "first_name": "Sylvia",
+    "last_name": "Tóth",
+    "title": "Ms.",
+    "paired_with_email": "orsolya.erdody@bfz.hu"
+  },
+  {
+    "table_name": "Asztal 16",
+    "guest_email": "dale.martin@eelisa.eu",
+    "first_name": "Dale A.",
+    "last_name": "Martin",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 16",
+    "guest_email": "nikos.zois@heineken.hu",
+    "first_name": "Nikos",
+    "last_name": "Zois",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 17",
+    "guest_email": "eszter.papp@fcdo.gov.uk",
+    "first_name": "Justin McKenzie",
+    "last_name": "Smith",
+    "title": "H.E. Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 17",
+    "guest_email": "chresten.bruun@lego.com",
+    "first_name": "Chresten",
+    "last_name": "Bruun",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 17",
+    "guest_email": "laszlo.radvanyi@pwc.com",
+    "first_name": "László",
+    "last_name": "Radványi",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 17",
+    "guest_email": "kelemen.agnes@tesco.com",
+    "first_name": "Ruchika",
+    "last_name": "Sethi",
+    "title": "Mrs.",
+    "paired_with_email": "Manish.Sethi@tesco.com"
+  },
+  {
+    "table_name": "Asztal 17",
+    "guest_email": "michal.spanar@gmail.com",
+    "first_name": "Michal",
+    "last_name": "Spanar",
+    "title": "Mr.",
+    "paired_with_email": "v.spanarova@gmail.com"
+  },
+  {
+    "table_name": "Asztal 17",
+    "guest_email": "tamas.locsei@pwc.com",
+    "first_name": "Tamás",
+    "last_name": "Lőcsei",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 17",
+    "guest_email": "Manish.Sethi@tesco.com",
+    "first_name": "Manish",
+    "last_name": "Sethi",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 17",
+    "guest_email": "v.spanarova@gmail.com",
+    "first_name": "Veronika",
+    "last_name": "Spanarova",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 17",
+    "guest_email": "ucbruun@gmail.com",
+    "first_name": "Ulla",
+    "last_name": "Bruun",
+    "title": "Mrs.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 17",
+    "guest_email": "gabriella.rozsa@googlemail.com",
+    "first_name": "Gabriella",
+    "last_name": "Radványi",
+    "title": "Mrs.",
+    "paired_with_email": "laszlo.radvanyi@pwc.com"
+  },
+  {
+    "table_name": "Asztal 18",
+    "guest_email": "sandor.baja@randstad.hu",
+    "first_name": "Sándor",
+    "last_name": "Baja",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 18",
+    "guest_email": "geza.german@obudagroup.com",
+    "first_name": "Géza",
+    "last_name": "Germán",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 18",
+    "guest_email": "anna.kiss@colliers.com",
+    "first_name": "Kata",
+    "last_name": "Mazsaroff",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 18",
+    "guest_email": "reka.heiman@gmail.com",
+    "first_name": "Réka",
+    "last_name": "Heiman",
+    "title": "Mrs.",
+    "paired_with_email": "tamas.vida@keszgroup.com"
+  },
+  {
+    "table_name": "Asztal 18",
+    "guest_email": "david.balango@howmet.com",
+    "first_name": "David",
+    "last_name": "Balango",
+    "title": "Mr.",
+    "paired_with_email": "botkafanni26@gmail.com"
+  },
+  {
+    "table_name": "Asztal 18",
+    "guest_email": "edina.fodor@nmrk-global.com",
+    "first_name": "Edina",
+    "last_name": "Fodor",
+    "title": "Ms.",
+    "paired_with_email": "valter.kalaus@nmrk-global.com"
+  },
+  {
+    "table_name": "Asztal 18",
+    "guest_email": "tamas.vida@keszgroup.com",
+    "first_name": "Tamás",
+    "last_name": "Vida",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 18",
+    "guest_email": "botkafanni26@gmail.com",
+    "first_name": "Fanni",
+    "last_name": "Botka",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 18",
+    "guest_email": "valter.kalaus@nmrk-global.com",
+    "first_name": "Valter",
+    "last_name": "Kalaus",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 18",
+    "guest_email": "mihalyorszag1971@gmail.com",
+    "first_name": "Mihály",
+    "last_name": "Ország",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 19",
+    "guest_email": "domby@me.com",
+    "first_name": "Mercedes",
+    "last_name": "Domby-Kincses",
+    "title": "Mrs.",
+    "paired_with_email": "attila.aedomby@ihg.com"
+  },
+  {
+    "table_name": "Asztal 19",
+    "guest_email": "jendrolovics.peter@granitbank.hu",
+    "first_name": "Peter",
+    "last_name": "Jendrolovics",
+    "title": "Mr.",
+    "paired_with_email": "hegedus.eva@granitbank.hu"
+  },
+  {
+    "table_name": "Asztal 19",
+    "guest_email": "vekasi@live.com",
+    "first_name": "Viktoria",
+    "last_name": "Vekasi",
+    "title": "Ms.",
+    "paired_with_email": "tamas.vekasi@hu.ey.com"
+  },
+  {
+    "table_name": "Asztal 19",
+    "guest_email": "attila.aedomby@ihg.com",
+    "first_name": "Attila AE",
+    "last_name": "Domby",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 19",
+    "guest_email": "hegedus.eva@granitbank.hu",
+    "first_name": "Éva",
+    "last_name": "Hegedűs",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 19",
+    "guest_email": "tamas.vekasi@hu.ey.com",
+    "first_name": "Tamás",
+    "last_name": "Vékási",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 19",
+    "guest_email": "llidi@llidi.hu",
+    "first_name": "Lidia",
+    "last_name": "Demján",
+    "title": "Ms.",
+    "paired_with_email": "borbala.czako@hblf.hu"
+  },
+  {
+    "table_name": "Asztal 19",
+    "guest_email": "akos.fehervary@bakermckenzie.com",
+    "first_name": "Ákos",
+    "last_name": "Fehérváry",
+    "title": "Dr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 19",
+    "guest_email": "drmenesanna@googlemail.com",
+    "first_name": "Anna",
+    "last_name": "Ménes",
+    "title": "Dr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 19",
+    "guest_email": "borbala.czako@hblf.hu",
+    "first_name": "Borbála",
+    "last_name": "Czakó",
+    "title": "H.E. Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 2",
+    "guest_email": "monika.pais@diageo.com",
+    "first_name": "Mónika",
+    "last_name": "Pais",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 2",
+    "guest_email": "Albert.Simonyi@kpmg.hu",
+    "first_name": "Albert",
+    "last_name": "Simonyi",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 2",
+    "guest_email": "csilla.toth@hipa.hu",
+    "first_name": "Csilla",
+    "last_name": "Tóth",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 2",
+    "guest_email": "Balazs2.Horvath@kpmg.hu",
+    "first_name": "Balázs",
+    "last_name": "Horváth",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 2",
+    "guest_email": "csilla.vattay@gmail.com",
+    "first_name": "Csilla",
+    "last_name": "Vattay",
+    "title": "Ms.",
+    "paired_with_email": "tamas.sellyey@gmail.com"
+  },
+  {
+    "table_name": "Asztal 2",
+    "guest_email": "Viktoria.Batinkov@unicreditgroup.hu",
+    "first_name": "Balázs",
+    "last_name": "Toldi",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 2",
+    "guest_email": "Gergely.Abraham@diageo.com",
+    "first_name": "Gergely",
+    "last_name": "Abraham",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 2",
+    "guest_email": "tamas.sellyey@gmail.com",
+    "first_name": "Tamás",
+    "last_name": "Sellyey",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 2",
+    "guest_email": "Virag.Miko@unicreditgroup.hu",
+    "first_name": "Virág",
+    "last_name": "Mikó",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 2",
+    "guest_email": "gabriella.liptay@kpmg.hu",
+    "first_name": "Gabriella",
+    "last_name": "Liptay",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 20",
+    "guest_email": "botos.cancun@gmail.com",
+    "first_name": "Barbara",
+    "last_name": "Wassen",
+    "title": "Dr.",
+    "paired_with_email": "charles.wassen@dana.com"
+  },
+  {
+    "table_name": "Asztal 20",
+    "guest_email": "a.dobo@batortabor.hu",
+    "first_name": "Andrea",
+    "last_name": "Dobó",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 20",
+    "guest_email": "nemethbeatadr@gmail.com",
+    "first_name": "Beata",
+    "last_name": "Nemeth",
+    "title": "Mrs.",
+    "paired_with_email": "gyula.marik@shell.com"
+  },
+  {
+    "table_name": "Asztal 20",
+    "guest_email": "charles.wassen@dana.com",
+    "first_name": "Charles",
+    "last_name": "Wassen",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 20",
+    "guest_email": "simon.anita@alteo.hu",
+    "first_name": "Anita",
+    "last_name": "Simon",
+    "title": "Ms.",
+    "paired_with_email": "beck.zsofia@bcg.com"
+  },
+  {
+    "table_name": "Asztal 20",
+    "guest_email": "gyula.marik@shell.com",
+    "first_name": "Gyula",
+    "last_name": "Marik",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 20",
+    "guest_email": "marton.szepfy@met.com",
+    "first_name": "Márton",
+    "last_name": "Szépfy",
+    "title": "Mr.",
+    "paired_with_email": "eszter.szekeres@met.com"
+  },
+  {
+    "table_name": "Asztal 20",
+    "guest_email": "beck.zsofia@bcg.com",
+    "first_name": "Zsófia",
+    "last_name": "Beck",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 20",
+    "guest_email": "akos.hegedus@linde.com",
+    "first_name": "Ákos",
+    "last_name": "Hegedűs",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 20",
+    "guest_email": "eszter.szekeres@met.com",
+    "first_name": "Eszter",
+    "last_name": "Szekeres",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 21",
+    "guest_email": "p.ildiko@europadesign.hu",
+    "first_name": "Ildiko",
+    "last_name": "Pongracz",
+    "title": "Mrs.",
+    "paired_with_email": "feuertag@europadesign.hu"
+  },
+  {
+    "table_name": "Asztal 21",
+    "guest_email": "thomas.narbeshuber@gmail.com",
+    "first_name": "Thomas",
+    "last_name": "Narbeshuber",
+    "title": "Dr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 21",
+    "guest_email": "janos.takacs.jt@gmail.com",
+    "first_name": "János",
+    "last_name": "Takács",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 21",
+    "guest_email": "feuertag@europadesign.hu",
+    "first_name": "Ottó",
+    "last_name": "Feuertag",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 21",
+    "guest_email": "mintas@firstmedcenters.com",
+    "first_name": "Andreea",
+    "last_name": "Mintas",
+    "title": "Dr.",
+    "paired_with_email": "budapesta.economic@mae.ro"
+  },
+  {
+    "table_name": "Asztal 21",
+    "guest_email": "budapesta@mae.ro",
+    "first_name": "Gabriel Cătălin",
+    "last_name": "Şopandă",
+    "title": "H.E. Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 21",
+    "guest_email": "vrhbp@mvep.hr",
+    "first_name": "Mladen",
+    "last_name": "Andrlić",
+    "title": "H.E. Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 21",
+    "guest_email": "budapesta.economic@mae.ro",
+    "first_name": "Horia",
+    "last_name": "Mintas",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 21",
+    "guest_email": "arometballa@wwfcee.org",
+    "first_name": "Agnes",
+    "last_name": "Romet-Balla",
+    "title": "Ms.",
+    "paired_with_email": "thomas.narbeshuber@gmail.com"
+  },
+  {
+    "table_name": "Asztal 21",
+    "guest_email": "issekutz.erzsebet@ext.semmelweis.hu",
+    "first_name": "Erzsébet",
+    "last_name": "Issekutz",
+    "title": "Mrs.",
+    "paired_with_email": "janos.takacs.jt@gmail.com"
+  },
+  {
+    "table_name": "Asztal 22",
+    "guest_email": "psr313@gmail.com",
+    "first_name": "Zoltán",
+    "last_name": "Póser",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 22",
+    "guest_email": "csabas@syncons.eu",
+    "first_name": "Csaba",
+    "last_name": "Szilágyi",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 22",
+    "guest_email": "kozmacsilla@gmail.com",
+    "first_name": "Csilla",
+    "last_name": "Gárdai-Kozma",
+    "title": "Mrs.",
+    "paired_with_email": "ajgardai@gmail.com"
+  },
+  {
+    "table_name": "Asztal 22",
+    "guest_email": "david.hegyesi@hipa.hu",
+    "first_name": "Dávid",
+    "last_name": "Hegyesi",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 22",
+    "guest_email": "szekely.adam@innovinia.hu",
+    "first_name": "Ádám",
+    "last_name": "Székely",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 22",
+    "guest_email": "ajgardai@gmail.com",
+    "first_name": "János",
+    "last_name": "Gárdai",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 22",
+    "guest_email": "agnes.tordai+113@gmail.com",
+    "first_name": "Hortisa",
+    "last_name": "Güney",
+    "title": "Ms.",
+    "paired_with_email": "Tordai.agnes@smarti.me"
+  },
+  {
+    "table_name": "Asztal 22",
+    "guest_email": "savasg@syncons.eu",
+    "first_name": "Günata",
+    "last_name": "Savas",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 22",
+    "guest_email": "p.votisky@gmail.com",
+    "first_name": "Petra",
+    "last_name": "Votisly",
+    "title": "Ms.",
+    "paired_with_email": "csabas@syncons.eu"
+  },
+  {
+    "table_name": "Asztal 22",
+    "guest_email": "Tordai.agnes@smarti.me",
+    "first_name": "Umut",
+    "last_name": "Güney",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 23",
+    "guest_email": "mail@aaronbiser.com",
+    "first_name": "Aaron",
+    "last_name": "Biser",
+    "title": "Mr.",
+    "paired_with_email": "nicole.l.biser@exxonmobil.com"
+  },
+  {
+    "table_name": "Asztal 23",
+    "guest_email": "ahmed.ismail@sanofi.com",
+    "first_name": "Ahmed",
+    "last_name": "Ismail",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 23",
+    "guest_email": "sandor.makra@marketasset.hu",
+    "first_name": "Sándor",
+    "last_name": "Makra",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 23",
+    "guest_email": "mich.zablocki@gmail.com",
+    "first_name": "Michal",
+    "last_name": "Zablocki",
+    "title": "Mr.",
+    "paired_with_email": "dorota.zablocka@randstadsourceright.eu"
+  },
+  {
+    "table_name": "Asztal 23",
+    "guest_email": "nicole.l.biser@exxonmobil.com",
+    "first_name": "Nicole",
+    "last_name": "Biser",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 23",
+    "guest_email": "eva.paulovics@jobsgarden.hu",
+    "first_name": "Eva",
+    "last_name": "Paulovics",
+    "title": "Ms.",
+    "paired_with_email": "zsuzsa.gardus@jobsgarden.hu"
+  },
+  {
+    "table_name": "Asztal 23",
+    "guest_email": "dorota.zablocka@randstadsourceright.eu",
+    "first_name": "Dorota",
+    "last_name": "Zabłocka",
+    "title": "Mrs.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 23",
+    "guest_email": "akos@masterq.hu",
+    "first_name": "Akos",
+    "last_name": "Nagy",
+    "title": "Mr.",
+    "paired_with_email": "tammy.stellini@hays.com"
+  },
+  {
+    "table_name": "Asztal 23",
+    "guest_email": "zsuzsa.gardus@jobsgarden.hu",
+    "first_name": "Zsuzsanna",
+    "last_name": "Gárdus",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 23",
+    "guest_email": "monika.slomska@knowledgepyramid.hu",
+    "first_name": "Monika",
+    "last_name": "Slomska",
+    "title": "Mrs.",
+    "paired_with_email": "ahmed.ismail@sanofi.com"
+  },
+  {
+    "table_name": "Asztal 23",
+    "guest_email": "eszter.kazatsay@gmail.com",
+    "first_name": "Eszter",
+    "last_name": "Kazatsay",
+    "title": "Mrs.",
+    "paired_with_email": "sandor.makra@marketasset.hu"
+  },
+  {
+    "table_name": "Asztal 23",
+    "guest_email": "tammy.stellini@hays.com",
+    "first_name": "Tammy",
+    "last_name": "Nagy-Stellini",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 24",
+    "guest_email": "z.bencsik@telekom.de",
+    "first_name": "Zsuzsanna",
+    "last_name": "Bencsik",
+    "title": "Ms.",
+    "paired_with_email": "bobovsky.michal@telekom.hu"
+  },
+  {
+    "table_name": "Asztal 24",
+    "guest_email": "richard.ketteler@diehl.com",
+    "first_name": "Richard",
+    "last_name": "KETTELER",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 24",
+    "guest_email": "nsalnikova@moellendorf.com",
+    "first_name": "Nelly",
+    "last_name": "Moellendorf",
+    "title": "Mrs.",
+    "paired_with_email": "amoellendorf@moellendorf.com"
+  },
+  {
+    "table_name": "Asztal 24",
+    "guest_email": "bobovsky.michal@telekom.hu",
+    "first_name": "Michal",
+    "last_name": "Bobovsky",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 24",
+    "guest_email": "christian.hefele@web.de",
+    "first_name": "Christian",
+    "last_name": "Hefele",
+    "title": "Mr.",
+    "paired_with_email": "inken.hefele@email.de"
+  },
+  {
+    "table_name": "Asztal 24",
+    "guest_email": "amoellendorf@moellendorf.com",
+    "first_name": "Andreas",
+    "last_name": "Moellendorf",
+    "title": "Dr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 24",
+    "guest_email": "beauftragte@deutscheschule.hu",
+    "first_name": "Anita",
+    "last_name": "Sipeki",
+    "title": "Mrs.",
+    "paired_with_email": "tsipeki1@ford.com"
+  },
+  {
+    "table_name": "Asztal 24",
+    "guest_email": "inken.hefele@email.de",
+    "first_name": "Inken",
+    "last_name": "Hefele",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 24",
+    "guest_email": "alexa.ketteler@gmail.com",
+    "first_name": "Alexa",
+    "last_name": "Ketteler",
+    "title": "Mrs.",
+    "paired_with_email": "richard.ketteler@diehl.com"
+  },
+  {
+    "table_name": "Asztal 24",
+    "guest_email": "tsipeki1@ford.com",
+    "first_name": "Tamás",
+    "last_name": "Sipeki",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 3",
+    "guest_email": "peter.noszek@hu.nestle.com",
+    "first_name": "Péter",
+    "last_name": "Noszek",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 3",
+    "guest_email": "ologvina@gmail.com",
+    "first_name": "Olga",
+    "last_name": "Logvina",
+    "title": "Mrs.",
+    "paired_with_email": "gabor.ormosy@autowallis.com"
+  },
+  {
+    "table_name": "Asztal 3",
+    "guest_email": "lipovecz.julia@swisscham.hu",
+    "first_name": "Júlia",
+    "last_name": "Lipovecz",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 3",
+    "guest_email": "gabor.ormosy@autowallis.com",
+    "first_name": "Gábor",
+    "last_name": "Ormosy",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 3",
+    "guest_email": "budapest@eda.admin.ch",
+    "first_name": "Cindy",
+    "last_name": "Renggli",
+    "title": "Mrs.",
+    "paired_with_email": "krisztina.felkai@eda.admin.ch"
+  },
+  {
+    "table_name": "Asztal 3",
+    "guest_email": "beres.istvan@swisscham.hu",
+    "first_name": "István",
+    "last_name": "Béres",
+    "title": "Dr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 3",
+    "guest_email": "noszekagi@gmail.com",
+    "first_name": "Ági",
+    "last_name": "Noszek",
+    "title": "Mrs.",
+    "paired_with_email": "peter.noszek@hu.nestle.com"
+  },
+  {
+    "table_name": "Asztal 3",
+    "guest_email": "krisztina.felkai@eda.admin.ch",
+    "first_name": "Alexander",
+    "last_name": "Renggli",
+    "title": "H.E. Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 4",
+    "guest_email": "kornel.juhasz@hipa.hu",
+    "first_name": "Kornél",
+    "last_name": "Juhász",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 4",
+    "guest_email": "Ferenc.Szolosi@kpmg.hu",
+    "first_name": "Ferenc",
+    "last_name": "Szőlősi",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 4",
+    "guest_email": "andreas.szakacsi@claas.com",
+    "first_name": "Andreas",
+    "last_name": "Szakacsi",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 4",
+    "guest_email": "varadi.istvan.zsolt84@gmail.com",
+    "first_name": "István",
+    "last_name": "Váradi",
+    "title": "Mr.",
+    "paired_with_email": "bea@littleminds.hu"
+  },
+  {
+    "table_name": "Asztal 4",
+    "guest_email": "maryna.ievtushenko@ferrero.com",
+    "first_name": "Maryna",
+    "last_name": "Ievtushenko",
+    "title": "Mrs.",
+    "paired_with_email": "giuseppe.papa@ferrero.com"
+  },
+  {
+    "table_name": "Asztal 4",
+    "guest_email": "suzandorul@yahoo.com",
+    "first_name": "Suzan",
+    "last_name": "Dorul",
+    "title": "Mrs.",
+    "paired_with_email": "giacomo.volpi@unicreditgroup.hu"
+  },
+  {
+    "table_name": "Asztal 4",
+    "guest_email": "bea@littleminds.hu",
+    "first_name": "Bea",
+    "last_name": "Gardi",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 4",
+    "guest_email": "giuseppe.papa@ferrero.com",
+    "first_name": "Giuseppe",
+    "last_name": "Papa",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 4",
+    "guest_email": "giacomo.volpi@unicreditgroup.hu",
+    "first_name": "Giacomo",
+    "last_name": "Volpi",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 4",
+    "guest_email": "veronika.bekefi@balatonair.eu",
+    "first_name": "Veronika",
+    "last_name": "Békefi",
+    "title": "Dr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 5",
+    "guest_email": "mark.arato@siemens.com",
+    "first_name": "Márk",
+    "last_name": "Arato",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 5",
+    "guest_email": "norbert.halasz@siemens.com",
+    "first_name": "Norbert",
+    "last_name": "Halász",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 5",
+    "guest_email": "orsolya.pajer@siemens.com",
+    "first_name": "Orsolya",
+    "last_name": "Pájer",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 5",
+    "guest_email": "attila.verner@siemens.com",
+    "first_name": "Attila",
+    "last_name": "Verner",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 5",
+    "guest_email": "erika.balogh@evosoft.com",
+    "first_name": "Erika",
+    "last_name": "Balogh",
+    "title": "Mrs.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 5",
+    "guest_email": "monika.monus@siemens.com",
+    "first_name": "Mónika",
+    "last_name": "Mónus",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 5",
+    "guest_email": "zsolt.szekendi@siemens.com",
+    "first_name": "Zsolt",
+    "last_name": "Szekendi",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 5",
+    "guest_email": "levente.balasa@siemens.com",
+    "first_name": "Levente",
+    "last_name": "Balasa",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 5",
+    "guest_email": "zsolt.karolyi@siemens.com",
+    "first_name": "Zsolt",
+    "last_name": "Károlyi",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 5",
+    "guest_email": "istvan.petenyi@evosoft.com",
+    "first_name": "István",
+    "last_name": "Petényi",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 6",
+    "guest_email": "gergely.karbuczky@hipa.hu",
+    "first_name": "Gergely",
+    "last_name": "Karbuczky",
+    "title": "Dr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 6",
+    "guest_email": "xaviera.sancho@bt.com",
+    "first_name": "Xaviera",
+    "last_name": "Sancho",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 6",
+    "guest_email": "avarga20@its.jnj.com",
+    "first_name": "Ana Maria",
+    "last_name": "Vargas",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 6",
+    "guest_email": "evi@kubik.hu",
+    "first_name": "Éva",
+    "last_name": "Mocsár",
+    "title": "Mrs.",
+    "paired_with_email": "karoly.radnai@hu.andersen.com"
+  },
+  {
+    "table_name": "Asztal 6",
+    "guest_email": "tokarzewski_pawel@lilly.com",
+    "first_name": "Pawel",
+    "last_name": "Tokarzewski",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 6",
+    "guest_email": "woelfer@ahkungarn.hu",
+    "first_name": "Dirk",
+    "last_name": "Woelfer",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 6",
+    "guest_email": "karoly.radnai@hu.andersen.com",
+    "first_name": "Károly",
+    "last_name": "Radnai",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 6",
+    "guest_email": "tothadamfoto@gmail.com",
+    "first_name": "Adam",
+    "last_name": "Toth",
+    "title": "Mr.",
+    "paired_with_email": "xaviera.sancho@bt.com"
+  },
+  {
+    "table_name": "Asztal 6",
+    "guest_email": "cabeto5@hotmail.com",
+    "first_name": "Carlos",
+    "last_name": "Vasquez",
+    "title": "Mr.",
+    "paired_with_email": "avarga20@its.jnj.com"
+  },
+  {
+    "table_name": "Asztal 7",
+    "guest_email": "klara.urban@bayer.com",
+    "first_name": "Klára",
+    "last_name": "Urbán",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 7",
+    "guest_email": "aniko.deszk@sanofi.com",
+    "first_name": "Anikó",
+    "last_name": "Deszk",
+    "title": "Dr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 7",
+    "guest_email": "christoph.sensen@hcemm.eu",
+    "first_name": "Christoph",
+    "last_name": "Sensen",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 7",
+    "guest_email": "margit.farkas@hu.ey.com",
+    "first_name": "Margit",
+    "last_name": "Farkas",
+    "title": "Ms.",
+    "paired_with_email": "erik.slooten@hu.ey.com"
+  },
+  {
+    "table_name": "Asztal 7",
+    "guest_email": "foldibernadett@yahoo.com",
+    "first_name": "Bernadett",
+    "last_name": "Foeldi",
+    "title": "Ms.",
+    "paired_with_email": "karsten.zang@dlh.de"
+  },
+  {
+    "table_name": "Asztal 7",
+    "guest_email": "dora.mihaly@citi.com",
+    "first_name": "Dóra",
+    "last_name": "Mihály",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 7",
+    "guest_email": "erik.slooten@hu.ey.com",
+    "first_name": "Erik",
+    "last_name": "Slooten",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 7",
+    "guest_email": "karsten.zang@dlh.de",
+    "first_name": "Karsten",
+    "last_name": "Zang",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 7",
+    "guest_email": "massimiliano.magnelli@bms.com",
+    "first_name": "Massimiliano",
+    "last_name": "Magnelli",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 7",
+    "guest_email": "janka.ferenczi@hcemm.eu",
+    "first_name": "Janka",
+    "last_name": "Ferenczi",
+    "title": "Ms.",
+    "paired_with_email": "christoph.sensen@hcemm.eu"
+  },
+  {
+    "table_name": "Asztal 8",
+    "guest_email": "t.braner@taylorwessing.com",
+    "first_name": "Torsten",
+    "last_name": "Braner",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 8",
+    "guest_email": "cserba.andrea@outlook.com",
+    "first_name": "Andrea",
+    "last_name": "Kozma-Cserba",
+    "title": "Dr.",
+    "paired_with_email": "kozma.david@cig.eu"
+  },
+  {
+    "table_name": "Asztal 8",
+    "guest_email": "d.odor@taylorwessing.com",
+    "first_name": "Dániel",
+    "last_name": "Ódor",
+    "title": "Dr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 8",
+    "guest_email": "kozma.david@cig.eu",
+    "first_name": "Dávid",
+    "last_name": "Kozma",
+    "title": "Dr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 8",
+    "guest_email": "lanyizsofia1@gmail.com",
+    "first_name": "Zsófia",
+    "last_name": "Mátés-Lányi",
+    "title": "Dr.",
+    "paired_with_email": "a.mates@taylorwessing.com"
+  },
+  {
+    "table_name": "Asztal 8",
+    "guest_email": "enemeth@gmx.de",
+    "first_name": "Eszter",
+    "last_name": "Braner-Németh",
+    "title": "Mrs.",
+    "paired_with_email": "t.braner@taylorwessing.com"
+  },
+  {
+    "table_name": "Asztal 8",
+    "guest_email": "a.mates@taylorwessing.com",
+    "first_name": "Ákos",
+    "last_name": "Mátés-Lányi",
+    "title": "Dr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 8",
+    "guest_email": "dorottya.huszar@yahoo.fr",
+    "first_name": "Dorottya",
+    "last_name": "Huszar",
+    "title": "Mrs.",
+    "paired_with_email": "d.odor@taylorwessing.com"
+  },
+  {
+    "table_name": "Asztal 9",
+    "guest_email": "zsofi@csaszari.hu",
+    "first_name": "Zsófia",
+    "last_name": "Császári",
+    "title": "Ms.",
+    "paired_with_email": "akos.janza@gmail.com"
+  },
+  {
+    "table_name": "Asztal 9",
+    "guest_email": "agnes.rako@kpmg.hu",
+    "first_name": "Agnes",
+    "last_name": "Rakó",
+    "title": "Mrs.",
+    "paired_with_email": "rezso.rozsai@kpmg.hu"
+  },
+  {
+    "table_name": "Asztal 9",
+    "guest_email": "tamas.wachtler@porschehungaria.hu",
+    "first_name": "Tamas",
+    "last_name": "Wachtler",
+    "title": "Mr.",
+    "paired_with_email": "greta.posza.ext@porschehungaria.hu"
+  },
+  {
+    "table_name": "Asztal 9",
+    "guest_email": "akos.janza@gmail.com",
+    "first_name": "Ákos",
+    "last_name": "Janza",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 9",
+    "guest_email": "rezso.rozsai@kpmg.hu",
+    "first_name": "Rezső",
+    "last_name": "Rózsai",
+    "title": "Mr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 9",
+    "guest_email": "greta.posza.ext@porschehungaria.hu",
+    "first_name": "Brigitte",
+    "last_name": "Auernigg",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 9",
+    "guest_email": "barbara.arvay@gmail.com",
+    "first_name": "Barbara",
+    "last_name": "Árvay",
+    "title": "Ms.",
+    "paired_with_email": "tamas.botka@bbj.hu"
+  },
+  {
+    "table_name": "Asztal 9",
+    "guest_email": "robert.keszte@aumovio.com",
+    "first_name": "Róbert",
+    "last_name": "Keszte",
+    "title": "Dr.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 9",
+    "guest_email": "elnok@hblf.hu",
+    "first_name": "Andrea",
+    "last_name": "Solti",
+    "title": "Ms.",
+    "paired_with_email": null
+  },
+  {
+    "table_name": "Asztal 9",
+    "guest_email": "tamas.botka@bbj.hu",
+    "first_name": "Tamás",
+    "last_name": "Botka",
+    "title": "Mr.",
+    "paired_with_email": null
+  }
+]
