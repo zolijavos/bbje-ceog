@@ -34,6 +34,60 @@ interface ChangelogEntry {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: '4.2.0',
+    date: '2026-03-26',
+    changes: [
+      {
+        type: 'feature',
+        category: 'display',
+        titleEn: 'Interactive Live Seating Display',
+        titleHu: 'Interaktív Élő Ülésrend Kijelző',
+        descriptionEn: 'Full interactive controls for the live seating display: fullscreen toggle (F key + button), Ctrl+scroll zoom, +/- buttons, click-to-zoom on tables (smooth animated transition), pinch-to-zoom on touch devices, drag-to-pan when zoomed. All controls auto-hide after 3 seconds.',
+        descriptionHu: 'Teljes interaktív vezérlés az élő ülésrend kijelzőn: teljes képernyő (F billentyű + gomb), Ctrl+görgetés zoom, +/− gombok, asztalra kattintás zoom (smooth animáció), pinch-to-zoom érintőképernyőn, húzás nagyított nézetben. Minden vezérlő 3 másodperc után eltűnik.',
+      },
+      {
+        type: 'feature',
+        category: 'display',
+        titleEn: 'Auto-zoom on Check-in',
+        titleHu: 'Automatikus Zoom Becsekkoláskor',
+        descriptionEn: 'When a guest checks in, the live display automatically smooth-zooms to their table for 3 seconds, then returns to the full view. Toggleable via eye icon button. Does not interrupt manual zoom. State persisted in localStorage.',
+        descriptionHu: 'Amikor egy vendég becsekkolódik, az élő kijelző automatikusan ráközelít az asztalára 3 másodpercre, majd visszatér a teljes nézetre. Ki/bekapcsolható a szem ikonnal. Nem szakítja meg a kézi zoomot. Állapot megmarad localStorage-ban.',
+      },
+      {
+        type: 'fix',
+        category: 'checkin',
+        titleEn: 'Display SSE Broadcast on Admin Check-in',
+        titleHu: 'Display SSE Broadcast Admin Check-in-nél',
+        descriptionEn: 'When an admin manually changes a guest status to checked_in via the guest edit form, the live seating display now updates in real-time via SSE broadcast. Previously only QR scanner check-ins triggered display updates.',
+        descriptionHu: 'Amikor az admin kézzel állítja a vendég státuszát checked_in-re a vendég szerkesztő felületen, az élő ülésrend kijelző mostantól valós időben frissül SSE broadcast-on keresztül. Korábban csak a QR szkenner check-in frissítette a kijelzőt.',
+      },
+      {
+        type: 'fix',
+        category: 'checkin',
+        titleEn: '"Special" Dietary Label on Scanner',
+        titleHu: '"Special" Diétás Címke a Szkennerben',
+        descriptionEn: 'The check-in scanner now shows "Special" instead of the actual dietary text for guests with dietary requirements. This provides privacy while still alerting staff to special needs.',
+        descriptionHu: 'A check-in szkenner mostantól "Special" szöveget mutat a tényleges diétás szöveg helyett, ha a vendégnek van diétás igénye. Ez biztosítja a magánéletet, miközben figyelmezteti a személyzetet.',
+      },
+      {
+        type: 'improvement',
+        category: 'display',
+        titleEn: 'MyForge Labs Branding Visibility',
+        titleHu: 'MyForge Labs Branding Láthatóság',
+        descriptionEn: 'Slightly improved visibility of the MyForge Labs branding text in the live display footer — darker color and semibold weight for the brand name.',
+        descriptionHu: 'A MyForge Labs branding szöveg kicsit láthatóbbá téve az élő kijelző láblécében — sötétebb szín és félkövér betűtípus a márkanévhez.',
+      },
+      {
+        type: 'fix',
+        category: 'display',
+        titleEn: 'Display Edge Case Fixes',
+        titleHu: 'Display Edge Case Javítások',
+        descriptionEn: 'Fixed 8 edge cases from code review: auto-zoom timer race condition, stale zoom closure, transformed rect calculation, localStorage crash in private browsing, keyboard shortcuts in input fields, touch tap support for table zoom, auth error UI on session expiry, fullscreen button hidden on unsupported browsers.',
+        descriptionHu: '8 edge case javítva a code review alapján: auto-zoom timer versenyhelyzet, elavult zoom closure, transzformált rect számítás, localStorage crash privát böngészésben, billentyűparancsok input mezőkben, touch tap támogatás asztal zoomhoz, auth hiba UI session lejáratkor, fullscreen gomb elrejtése nem támogatott böngészőkben.',
+      },
+    ],
+  },
+  {
     version: '4.1.2',
     date: '2026-03-25',
     changes: [

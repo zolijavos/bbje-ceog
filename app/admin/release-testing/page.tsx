@@ -52,6 +52,66 @@ interface TestResultData {
 
 const releaseTests: ReleaseTest[] = [
   {
+    version: '4.2.0',
+    date: '2026-03-26',
+    features: [
+      {
+        nameEn: 'Display — Zoom Controls',
+        nameHu: 'Kijelző — Zoom Vezérlők',
+        steps: [
+          { en: 'Log in as admin and navigate to /display/seating', hu: 'Jelentkezz be adminként és navigálj a /display/seating oldalra' },
+          { en: 'Move the mouse — verify +/- buttons, fullscreen button, and auto-zoom toggle appear in bottom-right, then auto-hide after 3 seconds', hu: 'Mozgasd az egeret — ellenőrizd hogy a +/- gombok, fullscreen gomb és auto-zoom toggle megjelenik jobb alul, majd 3 másodperc után eltűnik' },
+          { en: 'Click the + button — verify zoom increases and zoom percentage indicator appears in top-right', hu: 'Kattints a + gombra — ellenőrizd hogy a zoom növekszik és a zoom százalék kijelző megjelenik jobb felül' },
+          { en: 'Hold Ctrl and scroll — verify smooth zoom in/out centered on cursor position', hu: 'Tartsd lenyomva a Ctrl-t és görgess — ellenőrizd hogy smooth zoom be/ki a kurzor pozíciójára középre' },
+          { en: 'Click near a table name — verify the display smooth-zooms to that table at 250%. Click again on the same table — verify it returns to 1:1', hu: 'Kattints egy asztal neve közelében — ellenőrizd hogy a kijelző smooth-zoomol az asztalra 250%-ra. Kattints újra ugyanarra — ellenőrizd hogy visszatér 1:1-re' },
+        ],
+        expected: { en: 'All zoom methods work smoothly, zoom indicator shows correct percentage, controls auto-hide after 3s', hu: 'Minden zoom módszer simán működik, zoom kijelző helyes százalékot mutat, vezérlők 3mp után eltűnnek' },
+      },
+      {
+        nameEn: 'Display — Fullscreen',
+        nameHu: 'Kijelző — Teljes Képernyő',
+        steps: [
+          { en: 'On the display page, move mouse to show controls and click the fullscreen button (arrows icon)', hu: 'A kijelző oldalon mozgasd az egeret a vezérlők megjelenítéséhez és kattints a fullscreen gombra (nyilak ikon)' },
+          { en: 'Verify the page enters fullscreen mode. Press F key — verify it exits fullscreen', hu: 'Ellenőrizd hogy az oldal teljes képernyőre vált. Nyomd meg az F billentyűt — ellenőrizd hogy kilép a teljes képernyőből' },
+          { en: 'Press F again — verify it re-enters fullscreen. Press Escape — verify it exits', hu: 'Nyomd meg az F-et újra — ellenőrizd hogy visszalép teljes képernyőre. Nyomd meg az Escape-t — ellenőrizd hogy kilép' },
+        ],
+        expected: { en: 'Fullscreen toggles correctly via button and F key', hu: 'Teljes képernyő helyesen vált gombbal és F billentyűvel' },
+      },
+      {
+        nameEn: 'Display — Auto-zoom on Check-in',
+        nameHu: 'Kijelző — Automatikus Zoom Becsekkoláskor',
+        steps: [
+          { en: 'Open /display/seating in one browser tab. Open /admin/guests in another tab', hu: 'Nyisd meg a /display/seating-et egy böngésző fülön. Nyisd meg a /admin/guests-et egy másik fülön' },
+          { en: 'On the display, verify the eye icon (auto-zoom toggle) is green (enabled)', hu: 'A kijelzőn ellenőrizd hogy a szem ikon (auto-zoom toggle) zöld (bekapcsolva)' },
+          { en: 'In admin guests, change any guest status to checked_in. Switch to the display tab — verify it auto-zooms to the guest\'s table for ~3 seconds then smoothly returns to 1:1', hu: 'Az admin vendégeknél változtasd bármely vendég státuszát checked_in-re. Válts a kijelző fülre — ellenőrizd hogy automatikusan ráközelít a vendég asztalára ~3 másodpercre, majd simán visszatér 1:1-re' },
+          { en: 'Click the eye icon to disable auto-zoom (turns grey). Repeat the check-in — verify the display does NOT auto-zoom this time', hu: 'Kattints a szem ikonra az auto-zoom kikapcsolásához (szürkére vált). Ismételd a check-in-t — ellenőrizd hogy a kijelző NEM zoomol automatikusan' },
+        ],
+        expected: { en: 'Auto-zoom activates on check-in when enabled, skips when disabled, returns to 1:1 after 3 seconds', hu: 'Auto-zoom aktiválódik check-in-nél ha be van kapcsolva, kimarad ha ki van kapcsolva, 3 másodperc után visszatér 1:1-re' },
+      },
+      {
+        nameEn: 'Admin Check-in — Display Real-time Update',
+        nameHu: 'Admin Check-in — Kijelző Valós Idejű Frissítés',
+        steps: [
+          { en: 'Open /display/seating and /admin/guests side by side', hu: 'Nyisd meg a /display/seating-et és /admin/guests-et egymás mellett' },
+          { en: 'Find a guest who is not checked in. Note their name on the display (should be italic/grey)', hu: 'Keress egy vendéget aki nincs becsekkolva. Jegyezd meg a nevüket a kijelzőn (dőlt/szürke)' },
+          { en: 'In admin, edit the guest and change status to checked_in. Save', hu: 'Az admin felületen szerkeszd a vendéget és változtasd a státuszt checked_in-re. Mentés' },
+          { en: 'Verify on the display: guest name changes to bold/black in real-time, check-in counter increments', hu: 'Ellenőrizd a kijelzőn: vendég neve félkövér/feketére vált valós időben, check-in számláló növekszik' },
+        ],
+        expected: { en: 'Admin status change triggers real-time display update via SSE', hu: 'Admin státuszváltozás valós idejű kijelző frissítést triggerel SSE-n keresztül' },
+      },
+      {
+        nameEn: 'Scanner — Special Dietary Label',
+        nameHu: 'Szkenner — Special Diétás Címke',
+        steps: [
+          { en: 'Ensure a test guest has dietary_requirements set (e.g., "vegetarian")', hu: 'Győződj meg hogy egy teszt vendégnek van dietary_requirements beállítva (pl. "vegetarian")' },
+          { en: 'Check in the guest via QR scanner at /checkin', hu: 'Csekkolj be a vendéget a QR szkennerrel a /checkin oldalon' },
+          { en: 'On the green check-in card, verify "Dietary: Special" appears instead of the actual dietary text', hu: 'A zöld check-in kártyán ellenőrizd hogy "Dietary: Special" jelenik meg a tényleges diétás szöveg helyett' },
+        ],
+        expected: { en: 'Scanner shows "Special" label instead of dietary details for privacy', hu: 'Szkenner "Special" címkét mutat a diétás részletek helyett a magánélet védelmében' },
+      },
+    ],
+  },
+  {
     version: '4.1.2',
     date: '2026-03-25',
     features: [

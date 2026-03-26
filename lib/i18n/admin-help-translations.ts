@@ -1821,6 +1821,56 @@ This makes it easy to identify paired relationships in spreadsheets and verify t
 • Accessible from badges on both Changelog and Release Testing pages`,
     keywords: ['navigation', 'changelog', 'testing', 'help', 'badges', 'deep link', 'cross-link', 'v4.1.1'],
   },
+  // ==========================================
+  // SYSTEM & TECHNICAL - v4.2.0 additions
+  // ==========================================
+  {
+    id: 'display-zoom-controls',
+    category: 'System & Technical',
+    question: 'How do I zoom and navigate the live seating display?',
+    answer: `The live seating display (/display/seating) supports multiple zoom and navigation methods:
+
+**Zoom methods:**
+• **Ctrl + scroll wheel** — Zoom in/out centered on cursor position
+• **+/- buttons** — Appear when you move the mouse (bottom-right), auto-hide after 3 seconds
+• **Click on a table** — Smooth zoom to that table at 250%. Click the same table again to reset
+• **Pinch-to-zoom** — On touch devices and trackpads
+• **Keyboard: + and -** — Zoom in and out
+
+**Navigation when zoomed:**
+• **Drag** — Click and drag to pan around the zoomed view
+• **Double-click** or **Escape** — Reset to 1:1 view
+• **1:1 button** — Appears in controls when zoomed
+
+**Fullscreen:**
+• **F key** or **fullscreen button** — Toggle fullscreen mode
+• Button hidden on unsupported browsers (e.g., iOS Safari)
+
+**Zoom indicator** — Shows current zoom percentage and focused table number in top-right when zoomed.`,
+    keywords: ['display', 'zoom', 'pan', 'fullscreen', 'scroll', 'pinch', 'touch', 'navigate', 'seating', 'v4.2.0'],
+  },
+  {
+    id: 'display-auto-zoom',
+    category: 'Check-in',
+    question: 'What is auto-zoom on check-in and how do I control it?',
+    answer: `When a guest checks in (via QR scanner or admin manual status change), the live seating display can automatically zoom to their table for 3 seconds, then smoothly return to the full view.
+
+**How it works:**
+• Guest checks in → display smooth-zooms to their table → holds for 3 seconds → returns to 1:1
+• Only triggers when the display is at 1:1 view (does not interrupt manual zoom)
+• If multiple guests check in rapidly, it jumps to the latest table
+
+**Toggle control:**
+• **Eye icon** (👁) in the bottom-right control panel
+• **Green** = auto-zoom enabled (default)
+• **Grey** = auto-zoom disabled
+• Setting persists across page refreshes (saved in browser)
+
+**When to disable:**
+• During bulk check-in when many guests arrive simultaneously
+• When you want to manually inspect specific tables without interruption`,
+    keywords: ['auto-zoom', 'check-in', 'display', 'zoom', 'toggle', 'eye', 'automatic', 'table', 'v4.2.0'],
+  },
 ];
 
 // Guide content - Hungarian version
@@ -3537,6 +3587,56 @@ Ez megkönnyíti a páros kapcsolatok azonosítását táblázatkezelőkben és 
 **Help Guide oldal**:
 • Elérhető a badge-ekről mind a Changelog, mind a Release Testing oldalakról`,
     keywords: ['navigáció', 'changelog', 'tesztelés', 'help', 'badge', 'deep link', 'keresztlink', 'v4.1.1'],
+  },
+  // ==========================================
+  // RENDSZER & TECHNIKAI - v4.2.0 kiegészítések
+  // ==========================================
+  {
+    id: 'display-zoom-controls',
+    category: 'Rendszer & Technikai',
+    question: 'Hogyan zoomolhatok és navigálhatok az élő ülésrend kijelzőn?',
+    answer: `Az élő ülésrend kijelző (/display/seating) többféle zoom és navigációs módszert támogat:
+
+**Zoom módszerek:**
+• **Ctrl + görgő** — Zoom be/ki a kurzor pozíciójára
+• **+/- gombok** — Megjelennek egérmozgáskor (jobb alul), 3 másodperc után eltűnnek
+• **Kattintás asztalra** — Smooth zoom az asztalra 250%-ra. Újra kattintás ugyanarra visszaállít
+• **Csípés zoom** — Érintőképernyőn és trackpad-on
+• **Billentyűzet: + és -** — Zoom be és ki
+
+**Navigáció zoom-ban:**
+• **Húzás** — Kattints és húzd a nagyított nézet mozgatásához
+• **Dupla kattintás** vagy **Escape** — Visszaállítás 1:1 nézetre
+• **1:1 gomb** — Megjelenik a vezérlőkben zoom-ban
+
+**Teljes képernyő:**
+• **F billentyű** vagy **fullscreen gomb** — Teljes képernyő váltás
+• Gomb rejtve nem támogatott böngészőkben (pl. iOS Safari)
+
+**Zoom kijelző** — Megmutatja az aktuális zoom százalékot és a kiválasztott asztal számát jobb felül zoom-ban.`,
+    keywords: ['kijelző', 'zoom', 'pan', 'teljes képernyő', 'görgetés', 'csípés', 'érintő', 'navigálás', 'ülésrend', 'v4.2.0'],
+  },
+  {
+    id: 'display-auto-zoom',
+    category: 'Check-in',
+    question: 'Mi az automatikus zoom becsekkoláskor és hogyan vezérelhetem?',
+    answer: `Amikor egy vendég becsekkolódik (QR szkennerrel vagy admin kézi státuszváltoztatással), az élő ülésrend kijelző automatikusan ráközelít az asztalára 3 másodpercre, majd simán visszatér a teljes nézetre.
+
+**Hogyan működik:**
+• Vendég becsekkolódik → kijelző smooth-zoomol az asztalára → 3 másodpercig tartja → visszatér 1:1-re
+• Csak 1:1 nézetben aktiválódik (nem szakítja meg a kézi zoomot)
+• Ha több vendég gyorsan egymás után csekkolódik, a legutolsó asztalra ugrik
+
+**Vezérlő gomb:**
+• **Szem ikon** (👁) a jobb alsó vezérlőpanelen
+• **Zöld** = auto-zoom bekapcsolva (alapértelmezett)
+• **Szürke** = auto-zoom kikapcsolva
+• Beállítás megmarad oldalfrissítés után (böngészőben mentve)
+
+**Mikor érdemes kikapcsolni:**
+• Tömeges becsekkoláskor, amikor sok vendég érkezik egyszerre
+• Amikor kézzel szeretnél bizonyos asztalokat megvizsgálni megszakítás nélkül`,
+    keywords: ['auto-zoom', 'check-in', 'kijelző', 'zoom', 'váltás', 'szem', 'automatikus', 'asztal', 'v4.2.0'],
   },
 ];
 

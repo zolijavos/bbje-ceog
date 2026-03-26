@@ -4,6 +4,40 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
 
 ---
 
+## v4.2.0 (2026-03-26)
+
+### New Features / Új funkciók
+
+- **Interactive Live Seating Display** / **Interaktív Élő Ülésrend Kijelző**
+  - EN: Full interactive controls: fullscreen (F key + button), Ctrl+scroll zoom, +/- buttons, click-to-zoom on tables, pinch-to-zoom, drag-to-pan. All controls auto-hide after 3 seconds.
+  - HU: Teljes interaktív vezérlés: teljes képernyő (F billentyű + gomb), Ctrl+görgetés zoom, +/− gombok, asztalra kattintás zoom, pinch-to-zoom, húzás. Vezérlők 3mp után eltűnnek.
+
+- **Auto-zoom on Check-in** / **Automatikus Zoom Becsekkoláskor**
+  - EN: Display auto-zooms to guest's table for 3 seconds on check-in, then returns to full view. Toggleable via eye icon. Persisted in localStorage.
+  - HU: Kijelző automatikusan ráközelít a vendég asztalára 3mp-re becsekkoláskor, majd visszatér. Szem ikonnal ki/bekapcsolható. localStorage-ban mentve.
+
+### Fixes / Hibajavítások
+
+- **Display SSE Broadcast on Admin Check-in** / **Display SSE Broadcast Admin Check-in-nél**
+  - EN: Admin manual status change to checked_in now triggers real-time display update via SSE.
+  - HU: Admin kézi státuszváltoztatás checked_in-re mostantól valós időben frissíti a kijelzőt SSE-n keresztül.
+
+- **"Special" Dietary Label on Scanner** / **"Special" Diétás Címke a Szkennerben**
+  - EN: Scanner shows "Special" instead of actual dietary text for privacy.
+  - HU: Szkenner "Special" szöveget mutat a tényleges diétás szöveg helyett.
+
+- **Display Edge Case Fixes** / **Display Edge Case Javítások**
+  - EN: 8 fixes from code review: auto-zoom timer race condition, stale zoom closure, touch tap support, auth error UI, fullscreen API detection, and more.
+  - HU: 8 javítás a code review alapján: auto-zoom timer versenyhelyzet, elavult zoom closure, touch tap támogatás, auth hiba UI, fullscreen API detekció, és több.
+
+### Improvements / Fejlesztések
+
+- **MyForge Labs Branding Visibility** / **MyForge Labs Branding Láthatóság**
+  - EN: Slightly improved branding visibility in display footer.
+  - HU: Branding kicsit láthatóbbá téve a kijelző láblécében.
+
+---
+
 ## v4.1.2 (2026-03-25)
 
 ### New Features / Új funkciók
