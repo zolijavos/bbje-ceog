@@ -171,6 +171,9 @@ export default function PrintableSeating() {
         <div className="mt-6 text-center text-xs text-gray-400 border-t pt-3">
           Generated {now} — CEO Gala Event Registration System
         </div>
+        <div className="mt-2 text-center" style={{ fontSize: '9px', color: '#bbb' }}>
+          Built by MyForge Labs
+        </div>
       </div>
     </>
   );
