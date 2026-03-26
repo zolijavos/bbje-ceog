@@ -34,6 +34,44 @@ interface ChangelogEntry {
 
 const changelogData: ChangelogEntry[] = [
   {
+    version: '4.2.1',
+    date: '2026-03-26',
+    changes: [
+      {
+        type: 'feature',
+        category: 'display',
+        titleEn: 'Printable Seating Plan',
+        titleHu: 'Nyomtatható Ülésrend',
+        descriptionEn: 'New /display/seating/print page with A4-optimized layout: 6 tables per page across 4 pages, alphabetical guest lists, check-in markers. Accessible via printer icon on the live display controls.',
+        descriptionHu: 'Új /display/seating/print oldal A4-re optimalizált elrendezéssel: 6 asztal oldalanként 4 oldalon, ABC-rendű vendéglisták, check-in jelölők. Elérhető a nyomtató ikonnal az élő kijelző vezérlőin.',
+      },
+      {
+        type: 'feature',
+        category: 'display',
+        titleEn: 'Guest Title Prefixes on Display',
+        titleHu: 'Vendég Megszólítás a Kijelzőn',
+        descriptionEn: 'The live display and print view now show guest title prefixes (Dr., Mr., Ms., H.E., Prof.) before names.',
+        descriptionHu: 'Az élő kijelző és a nyomtatható nézet mostantól mutatja a vendég megszólítását (Dr., Mr., Ms., H.E., Prof.) a nevek előtt.',
+      },
+      {
+        type: 'fix',
+        category: 'display',
+        titleEn: 'Click-to-zoom Consistency Fix',
+        titleHu: 'Asztal-klikk Zoom Konzisztencia Javítás',
+        descriptionEn: 'Fixed inconsistent click-to-zoom behavior on tables by replacing stale React closure values with refs. Table click zoom now works reliably every time.',
+        descriptionHu: 'Javítva az inkonzisztens asztal-klikk zoom viselkedés — elavult React closure értékek ref-ekre cserélve. Az asztal klikk zoom mostantól megbízhatóan működik.',
+      },
+      {
+        type: 'fix',
+        category: 'admin',
+        titleEn: 'Dietary Requirements Cleanup Script',
+        titleHu: 'Diétás Igények Takarító Script',
+        descriptionEn: 'New script to clear non-meaningful dietary values (n/a, none, no, etc.) from guest records. Case-insensitive matching with confirmation prompt.',
+        descriptionHu: 'Új script az értelmetlen diétás értékek (n/a, none, no, stb.) törléséhez a vendég rekordokból. Kis-nagybetű független egyeztetés megerősítéssel.',
+      },
+    ],
+  },
+  {
     version: '4.2.0',
     date: '2026-03-26',
     changes: [

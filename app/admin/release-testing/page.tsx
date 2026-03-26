@@ -52,6 +52,44 @@ interface TestResultData {
 
 const releaseTests: ReleaseTest[] = [
   {
+    version: '4.2.1',
+    date: '2026-03-26',
+    features: [
+      {
+        nameEn: 'Printable Seating Plan',
+        nameHu: 'Nyomtatható Ülésrend',
+        steps: [
+          { en: 'Navigate to /display/seating, move mouse to show controls', hu: 'Navigálj a /display/seating oldalra, mozgasd az egeret a vezérlők megjelenítéséhez' },
+          { en: 'Click the printer icon — verify /display/seating/print opens in a new tab', hu: 'Kattints a nyomtató ikonra — ellenőrizd hogy /display/seating/print új fülben nyílik' },
+          { en: 'Verify 24 tables displayed in 2-column grid with guest names alphabetically', hu: 'Ellenőrizd hogy 24 asztal jelenik meg 2 oszlopos gridben ABC-rendű vendégnevekkel' },
+          { en: 'Press Ctrl+P — verify print preview shows exactly 4 pages, 6 tables per page', hu: 'Nyomd meg Ctrl+P-t — ellenőrizd hogy a nyomtatási előnézet pontosan 4 oldalt mutat, 6 asztal oldalanként' },
+          { en: 'Verify "Built by MyForge Labs" appears only at the bottom of the last page', hu: 'Ellenőrizd hogy "Built by MyForge Labs" csak az utolsó oldal alján jelenik meg' },
+        ],
+        expected: { en: 'Print layout fits 4 A4 pages with 6 tables each, branding on last page only', hu: 'Nyomtatási elrendezés 4 A4 oldalra fér 6 asztallal, branding csak az utolsó oldalon' },
+      },
+      {
+        nameEn: 'Guest Title Prefixes',
+        nameHu: 'Vendég Megszólítás Prefix',
+        steps: [
+          { en: 'Navigate to /display/seating', hu: 'Navigálj a /display/seating oldalra' },
+          { en: 'Find a guest with a title (Dr., Mr., Ms.) — verify prefix appears before their name', hu: 'Keress egy vendéget megszólítással (Dr., Mr., Ms.) — ellenőrizd hogy a prefix megjelenik a neve előtt' },
+          { en: 'Open /display/seating/print — verify titles also appear in print view', hu: 'Nyisd meg /display/seating/print — ellenőrizd hogy a megszólítások a nyomtatható nézetben is megjelennek' },
+        ],
+        expected: { en: 'Title prefixes visible on both live display and print view', hu: 'Megszólítás prefixek láthatók az élő kijelzőn és a nyomtatható nézetben is' },
+      },
+      {
+        nameEn: 'Click-to-zoom Reliability',
+        nameHu: 'Asztal-klikk Zoom Megbízhatóság',
+        steps: [
+          { en: 'On /display/seating, click near a table name — verify smooth zoom to table', hu: 'A /display/seating oldalon kattints egy asztalnév közelében — ellenőrizd a smooth zoomot' },
+          { en: 'Click the same table again — verify it returns to 1:1 view', hu: 'Kattints újra ugyanarra az asztalra — ellenőrizd hogy visszatér 1:1 nézetre' },
+          { en: 'Repeat 5 times rapidly with different tables — verify it works every time consistently', hu: 'Ismételd meg 5-ször gyorsan különböző asztalokkal — ellenőrizd hogy minden alkalommal konzisztensen működik' },
+        ],
+        expected: { en: 'Click-to-zoom works reliably on every click without inconsistency', hu: 'Asztal-klikk zoom megbízhatóan működik minden kattintásnál inkonzisztencia nélkül' },
+      },
+    ],
+  },
+  {
     version: '4.2.0',
     date: '2026-03-26',
     features: [

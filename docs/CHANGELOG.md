@@ -4,6 +4,30 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
 
 ---
 
+## v4.2.1 (2026-03-26)
+
+### New Features / Új funkciók
+
+- **Printable Seating Plan** / **Nyomtatható Ülésrend**
+  - EN: New /display/seating/print page — A4 layout, 6 tables per page, 4 pages. Printer icon on live display controls.
+  - HU: Új /display/seating/print oldal — A4 elrendezés, 6 asztal/oldal, 4 oldal. Nyomtató ikon a kijelző vezérlőin.
+
+- **Guest Title Prefixes on Display** / **Vendég Megszólítás a Kijelzőn**
+  - EN: Live display and print view show Dr., Mr., Ms., H.E., Prof. before guest names.
+  - HU: Élő kijelző és nyomtatható nézet mutatja a Dr., Mr., Ms., H.E., Prof. prefixeket.
+
+### Fixes / Hibajavítások
+
+- **Click-to-zoom Consistency Fix** / **Asztal-klikk Zoom Konzisztencia Javítás**
+  - EN: Fixed unreliable table click zoom by replacing stale React closures with refs.
+  - HU: Megbízhatatlan asztal-klikk zoom javítva — elavult React closure-ök ref-ekre cserélve.
+
+- **Dietary Requirements Cleanup Script** / **Diétás Igények Takarító Script**
+  - EN: Script to clear non-meaningful dietary values (n/a, none, no, etc.) with confirmation prompt.
+  - HU: Script az értelmetlen diétás értékek törléséhez megerősítéssel.
+
+---
+
 ## v4.2.0 (2026-03-26)
 
 ### New Features / Új funkciók
