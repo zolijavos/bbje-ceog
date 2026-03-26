@@ -45,7 +45,8 @@ export function DroppableTable({
 }: DroppableTableProps) {
   const { t } = useLanguage();
   const containerId = `table-${table.id}`;
-  const currentOccupancy = calculateOccupancy(guests);
+  // Use actual assignment count from DB, not filtered guest list
+  const currentOccupancy = table._count.assignments;
   const isFull = currentOccupancy >= table.capacity;
 
   // Tooltip state for collapsed cards
