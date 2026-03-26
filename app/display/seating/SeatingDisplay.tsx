@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { ArrowsOut, ArrowsIn, Plus, Minus, Eye, EyeSlash } from '@phosphor-icons/react';
+import { ArrowsOut, ArrowsIn, Plus, Minus, Eye, EyeSlash, Printer } from '@phosphor-icons/react';
+import Link from 'next/link';
 
 // Table position mapping (calibrated from mockup, center-based with translateX(-50%))
 const TABLE_POSITIONS: Record<number, { top: string; left: string }> = {
@@ -728,6 +729,15 @@ export default function SeatingDisplay() {
         >
           {autoZoomEnabled ? <Eye size={20} /> : <EyeSlash size={20} />}
         </button>
+        <Link
+          href="/display/seating/print"
+          onClick={(e) => e.stopPropagation()}
+          className="bg-black/60 hover:bg-black/80 text-white rounded-full p-3 backdrop-blur-sm transition-colors inline-flex"
+          title="Print seating plan"
+          target="_blank"
+        >
+          <Printer size={20} />
+        </Link>
         {fullscreenSupported && (
           <button
             onClick={(e) => { e.stopPropagation(); toggleFullscreen(); }}
