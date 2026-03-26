@@ -101,6 +101,7 @@ export default function PrintableSeating() {
           body { margin: 0; padding: 0; font-size: 11px; }
           @page { margin: 1cm 1cm 1.2cm 1cm; size: A4; }
           .page-break { break-inside: avoid; }
+          .print-page-break { break-after: page; }
           .print-content { padding: 0 !important; }
           .print-header h1 { font-size: 16px !important; margin-bottom: 2px !important; }
           .print-header p { font-size: 10px !important; }
@@ -142,42 +143,47 @@ export default function PrintableSeating() {
           <p className="text-sm text-gray-500 mt-1">{now} — {stats.total} guests / vendég, {tables.length} tables / asztal</p>
         </div>
 
-        {/* Tables grid — 2 columns */}
-        <div className="print-grid grid grid-cols-2 gap-4">
-          {tables.map((table) => {
-            const tableNum = parseTableNumber(table.name);
-            return (
-              <div key={table.id} className="print-table page-break border border-gray-300 rounded-lg p-3">
-                {/* Table header */}
-                <div className="flex items-center justify-between border-b border-gray-200 pb-2 mb-2">
-                  <h2 className="text-base font-bold">
-                    {tableNum !== null ? `Table ${tableNum}` : table.name}
-                  </h2>
-                  <span className="text-xs text-gray-500">{table.guests.length} guests</span>
-                </div>
-
-                {/* Guest list */}
-                {table.guests.length === 0 ? (
-                  <p className="text-xs text-gray-400 italic">Empty / Üres</p>
-                ) : (
-                  <ol className="text-sm space-y-0">
-                    {table.guests.map((guest, idx) => (
-                      <li key={guest.id} className="flex items-center gap-2">
-                        <span className="text-xs text-gray-400 w-4 text-right">{idx + 1}.</span>
-                        <span className={guest.checkedIn ? 'font-semibold' : ''}>
-                          {guest.title ? `${guest.title} ` : ''}{guest.lastName} {guest.firstName}
-                        </span>
-                        {guest.checkedIn && (
-                          <span className="text-xs text-green-600">✓</span>
-                        )}
-                      </li>
-                    ))}
-                  </ol>
-                )}
+        {/* Tables — 6 per page (3 rows × 2 columns), explicit page breaks */}
+        {Array.from({ length: Math.ceil(tables.length / 6) }, (_, pageIdx) => {
+          const pageTables = tables.slice(pageIdx * 6, (pageIdx + 1) * 6);
+          const isLastPage = pageIdx === Math.ceil(tables.length / 6) - 1;
+          return (
+            <div key={pageIdx} className={isLastPage ? '' : 'print-page-break'}>
+              <div className="print-grid grid grid-cols-2 gap-4">
+                {pageTables.map((table) => {
+                  const tableNum = parseTableNumber(table.name);
+                  return (
+                    <div key={table.id} className="print-table border border-gray-300 rounded-lg p-3">
+                      <div className="flex items-center justify-between border-b border-gray-200 pb-2 mb-2">
+                        <h2 className="text-base font-bold">
+                          {tableNum !== null ? `Table ${tableNum}` : table.name}
+                        </h2>
+                        <span className="text-xs text-gray-500">{table.guests.length} guests</span>
+                      </div>
+                      {table.guests.length === 0 ? (
+                        <p className="text-xs text-gray-400 italic">Empty / Üres</p>
+                      ) : (
+                        <ol className="text-sm space-y-0">
+                          {table.guests.map((guest, idx) => (
+                            <li key={guest.id} className="flex items-center gap-2">
+                              <span className="text-xs text-gray-400 w-4 text-right">{idx + 1}.</span>
+                              <span className={guest.checkedIn ? 'font-semibold' : ''}>
+                                {guest.title ? `${guest.title} ` : ''}{guest.lastName} {guest.firstName}
+                              </span>
+                              {guest.checkedIn && (
+                                <span className="text-xs text-green-600">✓</span>
+                              )}
+                            </li>
+                          ))}
+                        </ol>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
 
         {/* Footer */}
         <div className="mt-6 text-center text-xs text-gray-400 border-t pt-3">
