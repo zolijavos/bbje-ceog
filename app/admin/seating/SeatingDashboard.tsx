@@ -283,12 +283,18 @@ export default function SeatingDashboard() {
   const tableGuestsMap = useMemo(() => {
     const map: Record<number, DraggableGuest[]> = {};
     tables.forEach((table) => {
+      // Build set of all assigned guest IDs on this table for partner check
+      const assignedGuestIds = new Set(table.assignments.map(a => a.guest.id));
+
       const mainGuestAssignments = table.assignments.filter(
         (a) => !isPartnerAssignment(a)
       );
-      map[table.id] = mainGuestAssignments.map((a) =>
-        assignmentToDraggableGuest(a, table.id)
-      );
+      map[table.id] = mainGuestAssignments.map((a) => {
+        // Check if this guest's partner also has their own assignment on the table
+        const partnerId = a.guest.partner_of?.id;
+        const partnerHasOwnAssignment = partnerId ? assignedGuestIds.has(partnerId) : false;
+        return assignmentToDraggableGuest(a, table.id, partnerHasOwnAssignment);
+      });
     });
     return map;
   }, [tables]);

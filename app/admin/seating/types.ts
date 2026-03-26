@@ -181,7 +181,8 @@ export function toDraggableGuest(
 // Partners should be filtered out before calling this
 export function assignmentToDraggableGuest(
   assignment: Assignment,
-  tableId: number
+  tableId: number,
+  partnerHasOwnAssignment = false
 ): DraggableGuest {
   const guest = assignment.guest;
 
@@ -198,6 +199,10 @@ export function assignmentToDraggableGuest(
       ? formatFullName(guest.partner_of.first_name, guest.partner_of.last_name)
       : null;
 
+  // If partner has their own table assignment, they count as their own seat (1 each)
+  // Only count as 2 seats if partner is NOT separately assigned
+  const seatsRequired: 1 | 2 = (hasPartner && !partnerHasOwnAssignment) ? 2 : 1;
+
   return {
     id: createDraggableId(guest.id),
     guestId: guest.id,
@@ -211,7 +216,7 @@ export function assignmentToDraggableGuest(
       name: partnerName,
       email: null,
     } : undefined,
-    seatsRequired: hasPartner ? 2 : 1,
+    seatsRequired,
     assignmentId: assignment.id,
     tableId,
   };

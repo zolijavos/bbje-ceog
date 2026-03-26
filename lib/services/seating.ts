@@ -1025,23 +1025,10 @@ export async function getSeatingStats() {
     }),
   ]);
 
-  // Calculate total occupied seats (paired guests = 2 seats, skip partner records)
+  // Calculate total occupied seats — each assignment = 1 seat
+  // Partners with their own assignment count individually
   const calculateOccupiedSeats = (tableAssignments: typeof assignments) => {
-    let seats = 0;
-    for (const assignment of tableAssignments) {
-      // Skip partner guests - they're counted with their main guest
-      if (assignment.guest.paired_with_id) {
-        continue;
-      }
-      // Paired guests take 2 seats
-      if (assignment.guest.guest_type === 'paying_paired' ||
-          assignment.guest.registration?.ticket_type === 'paid_paired') {
-        seats += 2;
-      } else {
-        seats += 1;
-      }
-    }
-    return seats;
+    return tableAssignments.length;
   };
 
   const totalOccupiedSeats = calculateOccupiedSeats(assignments);
