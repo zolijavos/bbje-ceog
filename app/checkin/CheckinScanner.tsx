@@ -307,7 +307,7 @@ export default function CheckinScanner() {
         {dietary && (
           <div className="flex items-center justify-between text-sm">
             <span style={{ opacity: 0.7 }}>Dietary</span>
-            <span className="font-semibold" style={{ color: '#e8a035' }}>{dietary}</span>
+            <span className="font-semibold" style={{ color: '#e8a035' }}>Special</span>
           </div>
         )}
         {partnerName && (
