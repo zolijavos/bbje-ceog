@@ -187,7 +187,7 @@ export default function PrintableSeating() {
 
         {/* Footer */}
         <div className="mt-6 text-center text-xs text-gray-400 border-t pt-3">
-          Generated {now} — CEO Gala Event Registration System
+          Generated {now} — CEO Gala Event Management System
         </div>
         {/* Branding — printed on every page footer via fixed positioning */}
         <div className="print-branding" style={{ fontSize: '9px', color: '#bbb', textAlign: 'center' }}>
