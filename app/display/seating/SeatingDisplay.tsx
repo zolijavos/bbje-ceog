@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { ArrowsOut, ArrowsIn, Plus, Minus } from '@phosphor-icons/react';
+import { ArrowsOut, ArrowsIn, Plus, Minus, Eye, EyeSlash } from '@phosphor-icons/react';
 
 // Table position mapping (calibrated from mockup, center-based with translateX(-50%))
 const TABLE_POSITIONS: Record<number, { top: string; left: string }> = {
@@ -93,6 +93,16 @@ export default function SeatingDisplay() {
   const [showControls, setShowControls] = useState(false);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Auto-zoom on check-in
+  const [autoZoomEnabled, setAutoZoomEnabled] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('display-auto-zoom') !== 'false';
+    }
+    return true;
+  });
+  const autoZoomTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const autoZoomFnRef = useRef<(tableName: string | null) => void>(() => {});
+
   // Zoom & pan
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -118,8 +128,18 @@ export default function SeatingDisplay() {
     hideTimerRef.current = setTimeout(() => setShowControls(false), 3000);
   }, []);
 
+  // --- Toggle auto-zoom ---
+  const toggleAutoZoom = useCallback(() => {
+    setAutoZoomEnabled(prev => {
+      const next = !prev;
+      localStorage.setItem('display-auto-zoom', String(next));
+      return next;
+    });
+  }, []);
+
   // --- Reset zoom ---
   const resetZoom = useCallback(() => {
+    if (autoZoomTimerRef.current) clearTimeout(autoZoomTimerRef.current);
     setSmoothTransition(true);
     setZoom(1);
     setPan({ x: 0, y: 0 });
@@ -157,6 +177,24 @@ export default function SeatingDisplay() {
     setFocusedTable(tableNum);
     setTimeout(() => setSmoothTransition(false), 400);
   }, []);
+
+  // --- Auto-zoom on check-in (zoom to table for 3s, then back) ---
+  const autoZoomToTable = useCallback((tableName: string | null) => {
+    if (!tableName) return;
+    const tableNum = parseTableNumber(tableName);
+    if (!tableNum) return;
+    // Only auto-zoom if at 1:1 (don't interrupt manual zoom)
+    if (zoom > 1) return;
+
+    if (autoZoomTimerRef.current) clearTimeout(autoZoomTimerRef.current);
+    zoomToTable(tableNum);
+    autoZoomTimerRef.current = setTimeout(() => {
+      resetZoom();
+    }, 3000);
+  }, [zoom, zoomToTable, resetZoom]);
+
+  // Keep ref in sync for SSE handler — only if enabled
+  autoZoomFnRef.current = autoZoomEnabled ? autoZoomToTable : () => {};
 
   // --- Find nearest table to a click point ---
   const findNearestTable = useCallback((clientX: number, clientY: number): number | null => {
@@ -439,6 +477,8 @@ export default function SeatingDisplay() {
             next.add(data.guestId);
             return next;
           });
+          // Auto-zoom to the checked-in guest's table
+          autoZoomFnRef.current(data.tableName);
         }
       } catch {
         // Ignore parse errors
@@ -621,6 +661,13 @@ export default function SeatingDisplay() {
           title="Zoom in (+)"
         >
           <Plus size={20} />
+        </button>
+        <button
+          onClick={(e) => { e.stopPropagation(); toggleAutoZoom(); showControlsBriefly(); }}
+          className={`${autoZoomEnabled ? 'bg-emerald-600/70 hover:bg-emerald-600/90' : 'bg-black/60 hover:bg-black/80'} text-white rounded-full p-3 backdrop-blur-sm transition-colors`}
+          title={autoZoomEnabled ? 'Auto-zoom on check-in: ON' : 'Auto-zoom on check-in: OFF'}
+        >
+          {autoZoomEnabled ? <Eye size={20} /> : <EyeSlash size={20} />}
         </button>
         <button
           onClick={(e) => { e.stopPropagation(); toggleFullscreen(); }}
