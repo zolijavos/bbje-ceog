@@ -10,8 +10,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth, validateBody, parseIdParam, errorResponse, type RouteContext } from '@/lib/api';
 import { getGuestById, updateGuest, deleteGuest } from '@/lib/services/guest';
 import { createAuditLog } from '@/lib/services/audit';
+import { broadcastToDisplay, DisplayCheckinEvent } from '@/lib/services/event-broadcaster';
 import { logError } from '@/lib/utils/logger';
 import { getFullName } from '@/lib/utils/name';
+import { prisma } from '@/lib/db/prisma';
 import { z } from 'zod';
 
 // Validation schema for updating a guest
@@ -108,6 +110,31 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       } : undefined,
       newValues: validation.data,
     });
+
+    // Broadcast to display if status changed to checked_in
+    if (
+      validation.data.registration_status === 'checked_in' &&
+      oldGuest?.registration_status !== 'checked_in'
+    ) {
+      const tableAssignment = await prisma.tableAssignment.findUnique({
+        where: { guest_id: guest.id },
+        include: { table: { select: { name: true, type: true } } },
+      });
+
+      const displayEvent: DisplayCheckinEvent = {
+        type: 'DISPLAY_CHECKED_IN',
+        guestId: guest.id,
+        guestName: getFullName(guest.first_name, guest.last_name),
+        tableName: tableAssignment?.table.name || null,
+        tableType: tableAssignment?.table.type || null,
+        seatNumber: tableAssignment?.seat_number || null,
+        checkedInAt: new Date().toISOString(),
+        dietaryRequirements: guest.dietary_requirements || null,
+        title: guest.title || null,
+        guestType: guest.guest_type,
+      };
+      broadcastToDisplay(displayEvent);
+    }
 
     return NextResponse.json({
       success: true,
