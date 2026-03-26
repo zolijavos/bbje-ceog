@@ -70,14 +70,6 @@ const changelogData: ChangelogEntry[] = [
         descriptionHu: 'A check-in szkenner mostantól "Special" szöveget mutat a tényleges diétás szöveg helyett, ha a vendégnek van diétás igénye. Ez biztosítja a magánéletet, miközben figyelmezteti a személyzetet.',
       },
       {
-        type: 'improvement',
-        category: 'display',
-        titleEn: 'MyForge Labs Branding Visibility',
-        titleHu: 'MyForge Labs Branding Láthatóság',
-        descriptionEn: 'Slightly improved visibility of the MyForge Labs branding text in the live display footer — darker color and semibold weight for the brand name.',
-        descriptionHu: 'A MyForge Labs branding szöveg kicsit láthatóbbá téve az élő kijelző láblécében — sötétebb szín és félkövér betűtípus a márkanévhez.',
-      },
-      {
         type: 'fix',
         category: 'display',
         titleEn: 'Display Edge Case Fixes',

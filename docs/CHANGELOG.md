@@ -30,12 +30,6 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
   - EN: 8 fixes from code review: auto-zoom timer race condition, stale zoom closure, touch tap support, auth error UI, fullscreen API detection, and more.
   - HU: 8 javítás a code review alapján: auto-zoom timer versenyhelyzet, elavult zoom closure, touch tap támogatás, auth hiba UI, fullscreen API detekció, és több.
 
-### Improvements / Fejlesztések
-
-- **MyForge Labs Branding Visibility** / **MyForge Labs Branding Láthatóság**
-  - EN: Slightly improved branding visibility in display footer.
-  - HU: Branding kicsit láthatóbbá téve a kijelző láblécében.
-
 ---
 
 ## v4.1.2 (2026-03-25)
