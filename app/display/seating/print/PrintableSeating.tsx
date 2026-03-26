@@ -8,6 +8,7 @@ interface DisplayGuest {
   id: number;
   firstName: string;
   lastName: string;
+  title: string | null;
   checkedIn: boolean;
 }
 
@@ -152,7 +153,7 @@ export default function PrintableSeating() {
                       <li key={guest.id} className="flex items-center gap-2">
                         <span className="text-xs text-gray-400 w-4 text-right">{idx + 1}.</span>
                         <span className={guest.checkedIn ? 'font-semibold' : ''}>
-                          {guest.lastName} {guest.firstName}
+                          {guest.title ? `${guest.title} ` : ''}{guest.lastName} {guest.firstName}
                         </span>
                         {guest.checkedIn && (
                           <span className="text-xs text-green-600">✓</span>

@@ -33,6 +33,7 @@ export async function GET() {
                 id: true,
                 first_name: true,
                 last_name: true,
+                title: true,
                 registration_status: true,
               },
             },
@@ -53,6 +54,7 @@ export async function GET() {
           id: a.guest.id,
           firstName: a.guest.first_name,
           lastName: a.guest.last_name,
+          title: a.guest.title || null,
           checkedIn: isCheckedIn,
         };
       });

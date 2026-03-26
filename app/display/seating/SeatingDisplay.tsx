@@ -50,6 +50,7 @@ interface DisplayGuest {
   id: number;
   firstName: string;
   lastName: string;
+  title: string | null;
   checkedIn: boolean;
 }
 
@@ -676,7 +677,7 @@ export default function SeatingDisplay() {
                       transition: 'all 0.8s ease',
                     }}
                   >
-                    {guest.lastName} {guest.firstName}
+                    {guest.title ? `${guest.title} ` : ''}{guest.lastName} {guest.firstName}
                   </div>
                 );
               })}
