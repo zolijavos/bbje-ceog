@@ -128,7 +128,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
         tableName: tableAssignment?.table.name || null,
         tableType: tableAssignment?.table.type || null,
         seatNumber: tableAssignment?.seat_number || null,
-        checkedInAt: new Date().toISOString(),
+        checkedInAt: new Date().toISOString(), // Admin manual check-in — no Checkin record, use current time
         dietaryRequirements: guest.dietary_requirements || null,
         title: guest.title || null,
         guestType: guest.guest_type,
