@@ -98,18 +98,18 @@ export default function PrintableSeating() {
       <style>{`
         @media print {
           .no-print { display: none !important; }
-          body { margin: 0; padding: 0; }
-          @page { margin: 1.5cm 1.5cm 2cm 1.5cm; size: A4; }
+          body { margin: 0; padding: 0; font-size: 11px; }
+          @page { margin: 1cm 1cm 1.2cm 1cm; size: A4; }
           .page-break { break-inside: avoid; }
-          .print-branding {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            text-align: center;
-            font-size: 9px;
-            color: #bbb;
-          }
+          .print-content { padding: 0 !important; }
+          .print-header h1 { font-size: 16px !important; margin-bottom: 2px !important; }
+          .print-header p { font-size: 10px !important; }
+          .print-grid { gap: 6px !important; }
+          .print-table { padding: 6px !important; }
+          .print-table h2 { font-size: 12px !important; }
+          .print-table ol { font-size: 11px !important; }
+          .print-table li { margin: 0 !important; }
+          .print-branding { margin-top: 4px; }
         }
         @media screen {
           .print-branding { margin-top: 8px; }
@@ -135,19 +135,19 @@ export default function PrintableSeating() {
       </div>
 
       {/* Printable content */}
-      <div className="max-w-[210mm] mx-auto px-8 py-6">
+      <div className="print-content max-w-[210mm] mx-auto px-8 py-6">
         {/* Header */}
-        <div className="text-center mb-6">
+        <div className="print-header text-center mb-6">
           <h1 className="text-2xl font-bold">CEO Gala — Seating Plan / Ülésrend</h1>
           <p className="text-sm text-gray-500 mt-1">{now} — {stats.total} guests / vendég, {tables.length} tables / asztal</p>
         </div>
 
         {/* Tables grid — 2 columns */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="print-grid grid grid-cols-2 gap-4">
           {tables.map((table) => {
             const tableNum = parseTableNumber(table.name);
             return (
-              <div key={table.id} className="page-break border border-gray-300 rounded-lg p-3">
+              <div key={table.id} className="print-table page-break border border-gray-300 rounded-lg p-3">
                 {/* Table header */}
                 <div className="flex items-center justify-between border-b border-gray-200 pb-2 mb-2">
                   <h2 className="text-base font-bold">
@@ -160,7 +160,7 @@ export default function PrintableSeating() {
                 {table.guests.length === 0 ? (
                   <p className="text-xs text-gray-400 italic">Empty / Üres</p>
                 ) : (
-                  <ol className="text-sm space-y-0.5">
+                  <ol className="text-sm space-y-0">
                     {table.guests.map((guest, idx) => (
                       <li key={guest.id} className="flex items-center gap-2">
                         <span className="text-xs text-gray-400 w-4 text-right">{idx + 1}.</span>
