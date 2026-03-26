@@ -6,18 +6,30 @@
  */
 
 const { PrismaClient } = require('@prisma/client');
+const readline = require('readline');
 const prisma = new PrismaClient();
 
+// Canonical lowercase values to clear (includes non-dietary restrictions per client request)
 const CLEAR_VALUES = new Set([
-  'n.a.', 'n/a', 'N/A',
-  'No', 'no',
-  'no allergies', 'No allergies', 'No allergies.',
-  'No mushroom',
-  'No Pork + No Alcohol', 'No pork, no alcohol',
-  'No pork, no alcohol', 'Pork free',
-  'non', 'none', 'None',
+  'n.a.', 'n/a',
+  'no',
+  'no allergies', 'no allergies.',
+  'no mushroom',
+  'no pork + no alcohol', 'no pork, no alcohol',
+  'pork free',
+  'non', 'none',
   '-',
 ]);
+
+function confirm(question) {
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  return new Promise(resolve => {
+    rl.question(question, answer => {
+      rl.close();
+      resolve(answer.trim().toLowerCase() === 'y');
+    });
+  });
+}
 
 async function main() {
   const dry = process.argv.includes('--dry');
@@ -27,7 +39,10 @@ async function main() {
     select: { id: true, first_name: true, last_name: true, dietary_requirements: true },
   });
 
-  const toClear = guests.filter(g => CLEAR_VALUES.has(g.dietary_requirements?.trim()));
+  const toClear = guests.filter(g => {
+    const val = g.dietary_requirements?.trim().toLowerCase();
+    return val && CLEAR_VALUES.has(val);
+  });
 
   console.log(`Found ${toClear.length} guests with noise dietary values:`);
   for (const g of toClear) {
@@ -44,9 +59,22 @@ async function main() {
     return;
   }
 
-  const ids = toClear.map(g => g.id);
+  const confirmed = await confirm(`\nClear dietary_requirements for ${toClear.length} guests? (y/N): `);
+  if (!confirmed) {
+    console.log('Cancelled.');
+    return;
+  }
+
+  // Use original values in where clause to avoid race condition
+  const clearValuesArray = [...CLEAR_VALUES];
   const result = await prisma.guest.updateMany({
-    where: { id: { in: ids } },
+    where: {
+      id: { in: toClear.map(g => g.id) },
+      dietary_requirements: { in: guests.filter(g => {
+        const val = g.dietary_requirements?.trim().toLowerCase();
+        return val && CLEAR_VALUES.has(val);
+      }).map(g => g.dietary_requirements) },
+    },
     data: { dietary_requirements: null },
   });
 
@@ -55,4 +83,4 @@ async function main() {
 
 main()
   .catch(e => { console.error(e); process.exit(1); })
-  .finally(() => prisma.$disconnect());
+  .finally(async () => { await prisma.$disconnect(); });
