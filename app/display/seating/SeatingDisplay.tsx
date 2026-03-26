@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { ArrowsOut, ArrowsIn } from '@phosphor-icons/react';
 
 // Table position mapping (calibrated from mockup, center-based with translateX(-50%))
 const TABLE_POSITIONS: Record<number, { top: string; left: string }> = {
@@ -29,6 +30,9 @@ const TABLE_POSITIONS: Record<number, { top: string; left: string }> = {
   23: { top: '78%',   left: '80.5%' },
   24: { top: '78%',   left: '93%' },
 };
+
+const MIN_ZOOM = 1;
+const MAX_ZOOM = 4;
 
 interface DisplayGuest {
   id: number;
@@ -74,11 +78,174 @@ export default function SeatingDisplay() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Fullscreen & controls
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showControls, setShowControls] = useState(false);
+  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Zoom & pan
+  const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const isPanningRef = useRef(false);
+  const panStartRef = useRef({ x: 0, y: 0 });
+  const panOffsetRef = useRef({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
   const eventSourceRef = useRef<EventSource | null>(null);
   const reconnectRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const reconnectDelayRef = useRef(3000);
   const mountedRef = useRef(true);
 
+  // --- Controls auto-hide on mouse move ---
+  const showControlsBriefly = useCallback(() => {
+    setShowControls(true);
+    if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+    hideTimerRef.current = setTimeout(() => setShowControls(false), 3000);
+  }, []);
+
+  const handleMouseMove = useCallback(() => {
+    showControlsBriefly();
+  }, [showControlsBriefly]);
+
+  // --- Fullscreen ---
+  const toggleFullscreen = useCallback(async () => {
+    try {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+      } else {
+        await document.exitFullscreen();
+      }
+    } catch {
+      // Fullscreen not supported
+    }
+  }, []);
+
+  useEffect(() => {
+    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', onFsChange);
+    return () => document.removeEventListener('fullscreenchange', onFsChange);
+  }, []);
+
+  // --- Zoom (wheel + pinch) ---
+  const applyZoom = useCallback((newZoom: number, clientX: number, clientY: number) => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const rect = container.getBoundingClientRect();
+    // Point in container space (0..1)
+    const px = (clientX - rect.left) / rect.width;
+    const py = (clientY - rect.top) / rect.height;
+
+    setZoom(prev => {
+      const clamped = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, newZoom));
+      if (clamped === 1) {
+        setPan({ x: 0, y: 0 });
+        return 1;
+      }
+      // Adjust pan to keep the point under cursor stable
+      const scale = clamped / prev;
+      setPan(p => ({
+        x: clientX - (clientX - p.x) * scale,
+        y: clientY - (clientY - p.y) * scale,
+      }));
+      return clamped;
+    });
+  }, []);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const onWheel = (e: WheelEvent) => {
+      if (e.ctrlKey || Math.abs(e.deltaY) < 5) return; // Skip pinch (handled by gesture)
+      e.preventDefault();
+      const factor = e.deltaY > 0 ? 0.9 : 1.1;
+      applyZoom(zoom * factor, e.clientX, e.clientY);
+    };
+
+    container.addEventListener('wheel', onWheel, { passive: false });
+    return () => container.removeEventListener('wheel', onWheel);
+  }, [zoom, applyZoom]);
+
+  // Pinch-to-zoom via touch
+  const lastTouchDistRef = useRef<number | null>(null);
+  const lastTouchCenterRef = useRef<{ x: number; y: number } | null>(null);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      lastTouchDistRef.current = Math.sqrt(dx * dx + dy * dy);
+      lastTouchCenterRef.current = {
+        x: (e.touches[0].clientX + e.touches[1].clientX) / 2,
+        y: (e.touches[0].clientY + e.touches[1].clientY) / 2,
+      };
+    }
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length === 2 && lastTouchDistRef.current !== null && lastTouchCenterRef.current !== null) {
+      e.preventDefault();
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const scale = dist / lastTouchDistRef.current;
+      const center = {
+        x: (e.touches[0].clientX + e.touches[1].clientX) / 2,
+        y: (e.touches[0].clientY + e.touches[1].clientY) / 2,
+      };
+      applyZoom(zoom * scale, center.x, center.y);
+      lastTouchDistRef.current = dist;
+      lastTouchCenterRef.current = center;
+    } else if (e.touches.length === 1 && zoom > 1 && isPanningRef.current) {
+      const dx = e.touches[0].clientX - panStartRef.current.x;
+      const dy = e.touches[0].clientY - panStartRef.current.y;
+      setPan({ x: panOffsetRef.current.x + dx, y: panOffsetRef.current.y + dy });
+    }
+  }, [zoom, applyZoom]);
+
+  const handleTouchEnd = useCallback(() => {
+    lastTouchDistRef.current = null;
+    lastTouchCenterRef.current = null;
+    isPanningRef.current = false;
+  }, []);
+
+  // --- Pan (mouse drag when zoomed) ---
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    if (zoom <= 1) return;
+    isPanningRef.current = true;
+    panStartRef.current = { x: e.clientX, y: e.clientY };
+    panOffsetRef.current = { ...pan };
+  }, [zoom, pan]);
+
+  const handleMouseMovePan = useCallback((e: React.MouseEvent) => {
+    handleMouseMove(); // Show controls
+    if (!isPanningRef.current || zoom <= 1) return;
+    const dx = e.clientX - panStartRef.current.x;
+    const dy = e.clientY - panStartRef.current.y;
+    setPan({ x: panOffsetRef.current.x + dx, y: panOffsetRef.current.y + dy });
+  }, [zoom, handleMouseMove]);
+
+  const handleMouseUp = useCallback(() => {
+    isPanningRef.current = false;
+  }, []);
+
+  // --- Double-click to reset zoom ---
+  const handleDoubleClick = useCallback(() => {
+    setZoom(1);
+    setPan({ x: 0, y: 0 });
+  }, []);
+
+  // --- Keyboard: F for fullscreen ---
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [toggleFullscreen]);
+
+  // --- Data fetching & SSE ---
   const fetchData = useCallback(async (): Promise<boolean> => {
     try {
       const res = await fetch('/api/admin/seating-display-data');
@@ -215,8 +382,22 @@ export default function SeatingDisplay() {
     );
   }
 
+  const isZoomed = zoom > 1;
+
   return (
-    <div className="fixed inset-0 overflow-hidden bg-black flex items-center justify-center" style={{ fontFamily: "'Futura', 'Century Gothic', 'Trebuchet MS', sans-serif" }}>
+    <div
+      ref={containerRef}
+      className="fixed inset-0 overflow-hidden bg-black flex items-center justify-center select-none"
+      style={{ fontFamily: "'Futura', 'Century Gothic', 'Trebuchet MS', sans-serif", cursor: isZoomed ? 'grab' : 'default' }}
+      onMouseMove={handleMouseMovePan}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+      onDoubleClick={handleDoubleClick}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       {/* Aspect-ratio container matching the background image (1920x1280 = 3:2) */}
       <div
         className="relative"
@@ -226,6 +407,9 @@ export default function SeatingDisplay() {
           maxHeight: '100vh',
           width: '100vw',
           height: 'auto',
+          transform: `scale(${zoom}) translate(${pan.x / zoom}px, ${pan.y / zoom}px)`,
+          transformOrigin: '0 0',
+          transition: isPanningRef.current ? 'none' : 'transform 0.2s ease-out',
         }}
       >
         {/* Background image fills the container exactly */}
@@ -292,6 +476,38 @@ export default function SeatingDisplay() {
           </span>
         </div>
       </div>
+
+      {/* Fullscreen + zoom reset buttons — auto-hide */}
+      <div
+        className="fixed bottom-6 right-6 z-50 flex gap-2 transition-opacity duration-500"
+        style={{ opacity: showControls ? 1 : 0, pointerEvents: showControls ? 'auto' : 'none' }}
+      >
+        {isZoomed && (
+          <button
+            onClick={(e) => { e.stopPropagation(); handleDoubleClick(); }}
+            className="bg-black/60 hover:bg-black/80 text-white rounded-full p-3 backdrop-blur-sm transition-colors"
+            title="Reset zoom"
+          >
+            <span style={{ fontSize: '14px', fontWeight: 600 }}>1:1</span>
+          </button>
+        )}
+        <button
+          onClick={(e) => { e.stopPropagation(); toggleFullscreen(); }}
+          className="bg-black/60 hover:bg-black/80 text-white rounded-full p-3 backdrop-blur-sm transition-colors"
+          title={isFullscreen ? 'Exit fullscreen (F)' : 'Fullscreen (F)'}
+        >
+          {isFullscreen ? <ArrowsIn size={20} /> : <ArrowsOut size={20} />}
+        </button>
+      </div>
+
+      {/* Zoom indicator — shows briefly when zoomed */}
+      {isZoomed && showControls && (
+        <div
+          className="fixed top-6 right-6 z-50 bg-black/60 text-white px-3 py-1 rounded-full backdrop-blur-sm text-sm transition-opacity duration-500"
+        >
+          {Math.round(zoom * 100)}%
+        </div>
+      )}
     </div>
   );
 }
