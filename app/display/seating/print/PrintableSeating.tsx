@@ -99,8 +99,20 @@ export default function PrintableSeating() {
         @media print {
           .no-print { display: none !important; }
           body { margin: 0; padding: 0; }
-          @page { margin: 1.5cm; size: A4; }
+          @page { margin: 1.5cm 1.5cm 2cm 1.5cm; size: A4; }
           .page-break { break-inside: avoid; }
+          .print-branding {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 9px;
+            color: #bbb;
+          }
+        }
+        @media screen {
+          .print-branding { margin-top: 8px; }
         }
       `}</style>
 
@@ -171,7 +183,8 @@ export default function PrintableSeating() {
         <div className="mt-6 text-center text-xs text-gray-400 border-t pt-3">
           Generated {now} — CEO Gala Event Registration System
         </div>
-        <div className="mt-2 text-center" style={{ fontSize: '9px', color: '#bbb' }}>
+        {/* Branding — printed on every page footer via fixed positioning */}
+        <div className="print-branding" style={{ fontSize: '9px', color: '#bbb', textAlign: 'center' }}>
           Built by MyForge Labs
         </div>
       </div>
