@@ -22,9 +22,19 @@ Legfrissebb fejlesztések és javítások / Latest updates and improvements
   - EN: Fixed unreliable table click zoom by replacing stale React closures with refs.
   - HU: Megbízhatatlan asztal-klikk zoom javítva — elavult React closure-ök ref-ekre cserélve.
 
-- **Dietary Requirements Cleanup Script** / **Diétás Igények Takarító Script**
-  - EN: Script to clear non-meaningful dietary values (n/a, none, no, etc.) with confirmation prompt.
-  - HU: Script az értelmetlen diétás értékek törléséhez megerősítéssel.
+- **Dietary Requirements Cleanup** / **Diétás Igények Takarítás**
+  - EN: Cleared 35 non-meaningful dietary values while preserving real dietary needs.
+  - HU: 35 értelmetlen diétás érték törölve, valós diétás igények érintetlenek.
+
+- **Seating Occupancy Count Fix** / **Ülésrend Foglaltsági Számolás Javítás**
+  - EN: Fixed admin seating page showing wrong occupancy when partners have separate assignments.
+  - HU: Javítva a hibás foglaltsági számok amikor a partnerek külön hozzárendeléssel vannak.
+
+### New Features / Új funkciók
+
+- **Seating Plan Import from Excel** / **Ülésrend Import Excelből**
+  - EN: Production import script for finalized seating plan (24 tables, 233 guests, 76 pairs). Email-based matching with dry-run preview.
+  - HU: Production import script a véglegesített ülésrendhez (24 asztal, 233 vendég, 76 pár). Email alapú párosítás előnézettel.
 
 ---
 
