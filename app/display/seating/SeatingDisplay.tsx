@@ -112,9 +112,10 @@ export default function SeatingDisplay() {
 
   // Zoom & pan
   const [zoom, setZoom] = useState(1);
-  const zoomRef = useRef(1); // Mirror for non-stale access in event handlers
+  const zoomRef = useRef(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [focusedTable, setFocusedTable] = useState<number | null>(null);
+  const focusedTableRef = useRef<number | null>(null);
   const [smoothTransition, setSmoothTransition] = useState(false);
   const isPanningRef = useRef(false);
   const panStartRef = useRef({ x: 0, y: 0 });
@@ -153,6 +154,7 @@ export default function SeatingDisplay() {
     zoomRef.current = 1;
     setPan({ x: 0, y: 0 });
     setFocusedTable(null);
+    focusedTableRef.current = null;
     setTimeout(() => setSmoothTransition(false), 400);
   }, []);
 
@@ -190,6 +192,7 @@ export default function SeatingDisplay() {
     zoomRef.current = TABLE_ZOOM;
     setPan({ x: newPanX, y: newPanY });
     setFocusedTable(tableNum);
+    focusedTableRef.current = tableNum;
     setTimeout(() => setSmoothTransition(false), 400);
   }, []);
 
@@ -217,6 +220,10 @@ export default function SeatingDisplay() {
     if (!content) return null;
 
     const rect = content.getBoundingClientRect();
+    // Use natural dimensions (divide out current zoom) for consistent hit detection
+    const currentZoom = zoomRef.current || 1;
+    const naturalWidth = rect.width / currentZoom;
+    const naturalHeight = rect.height / currentZoom;
     const clickX = (clientX - rect.left) / rect.width;
     const clickY = (clientY - rect.top) / rect.height;
 
@@ -259,6 +266,7 @@ export default function SeatingDisplay() {
   const applyZoom = useCallback((newZoom: number, clientX: number, clientY: number) => {
     if (autoZoomTimerRef.current) { clearTimeout(autoZoomTimerRef.current); autoZoomTimerRef.current = null; }
     setFocusedTable(null);
+    focusedTableRef.current = null;
     setZoom(prev => {
       const clamped = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, newZoom));
       if (clamped === 1) {
@@ -328,13 +336,13 @@ export default function SeatingDisplay() {
     } else if (e.touches.length === 1) {
       touchStartTimeRef.current = Date.now();
       touchStartPosRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-      if (zoom > 1) {
+      if (zoomRef.current > 1) {
         isPanningRef.current = true;
         panStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-        panOffsetRef.current = { ...pan };
+        panOffsetRef.current = { ...panRef.current };
       }
     }
-  }, [zoom, pan]);
+  }, []);
 
   const handleTouchMove = useCallback((e: React.TouchEvent) => {
     if (e.touches.length === 2 && lastTouchDistRef.current !== null && lastTouchCenterRef.current !== null) {
@@ -347,15 +355,15 @@ export default function SeatingDisplay() {
         x: (e.touches[0].clientX + e.touches[1].clientX) / 2,
         y: (e.touches[0].clientY + e.touches[1].clientY) / 2,
       };
-      applyZoom(zoom * scale, center.x, center.y);
+      applyZoom(zoomRef.current * scale, center.x, center.y);
       lastTouchDistRef.current = dist;
       lastTouchCenterRef.current = center;
-    } else if (e.touches.length === 1 && zoom > 1 && isPanningRef.current) {
+    } else if (e.touches.length === 1 && zoomRef.current > 1 && isPanningRef.current) {
       const dx = e.touches[0].clientX - panStartRef.current.x;
       const dy = e.touches[0].clientY - panStartRef.current.y;
       setPan({ x: panOffsetRef.current.x + dx, y: panOffsetRef.current.y + dy });
     }
-  }, [zoom, applyZoom]);
+  }, [applyZoom]);
 
   const handleTouchEnd = useCallback((e: React.TouchEvent) => {
     // Tap detection for table-click zoom (single finger, short duration, small movement)
@@ -367,7 +375,7 @@ export default function SeatingDisplay() {
       if (elapsed < CLICK_THRESHOLD_MS && dx < CLICK_THRESHOLD_PX && dy < CLICK_THRESHOLD_PX) {
         const tableNum = findNearestTable(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
         if (tableNum !== null) {
-          if (focusedTable === tableNum) { resetZoom(); }
+          if (focusedTableRef.current === tableNum) { resetZoom(); }
           else { zoomToTable(tableNum); }
         } else if (zoomRef.current > 1) {
           resetZoom();
@@ -378,29 +386,33 @@ export default function SeatingDisplay() {
     lastTouchDistRef.current = null;
     lastTouchCenterRef.current = null;
     isPanningRef.current = false;
-  }, [findNearestTable, focusedTable, resetZoom, zoomToTable]);
+  }, [findNearestTable, resetZoom, zoomToTable]);
 
   // --- Mouse down/up/move: pan when zoomed, click-to-zoom on tables ---
+  const panRef = useRef({ x: 0, y: 0 });
+
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     mouseDownTimeRef.current = Date.now();
     mouseDownPosRef.current = { x: e.clientX, y: e.clientY };
-    if (zoom > 1) {
+    if (zoomRef.current > 1) {
       isPanningRef.current = true;
       panStartRef.current = { x: e.clientX, y: e.clientY };
-      panOffsetRef.current = { ...pan };
+      panOffsetRef.current = { ...panRef.current };
     }
-  }, [zoom, pan]);
+  }, []);
+
+  // Keep panRef in sync
+  useEffect(() => { panRef.current = pan; }, [pan]);
 
   const handleMouseMovePan = useCallback((e: React.MouseEvent) => {
     showControlsBriefly();
-    if (!isPanningRef.current || zoom <= 1) return;
+    if (!isPanningRef.current || zoomRef.current <= 1) return;
     const dx = e.clientX - panStartRef.current.x;
     const dy = e.clientY - panStartRef.current.y;
     setPan({ x: panOffsetRef.current.x + dx, y: panOffsetRef.current.y + dy });
-  }, [zoom, showControlsBriefly]);
+  }, [showControlsBriefly]);
 
   const handleMouseUp = useCallback((e: React.MouseEvent) => {
-    const wasPanning = isPanningRef.current;
     isPanningRef.current = false;
 
     // Detect click (short duration + small movement)
@@ -409,23 +421,19 @@ export default function SeatingDisplay() {
     const dy = Math.abs(e.clientY - mouseDownPosRef.current.y);
 
     if (elapsed < CLICK_THRESHOLD_MS && dx < CLICK_THRESHOLD_PX && dy < CLICK_THRESHOLD_PX) {
-      // Click detected — find nearest table
       const tableNum = findNearestTable(e.clientX, e.clientY);
 
       if (tableNum !== null) {
-        if (focusedTable === tableNum) {
-          // Already focused on this table — reset zoom
+        if (focusedTableRef.current === tableNum) {
           resetZoom();
         } else {
-          // Zoom to this table
           zoomToTable(tableNum);
         }
-      } else if (zoom > 1) {
-        // Clicked empty area while zoomed — reset
+      } else if (zoomRef.current > 1) {
         resetZoom();
       }
     }
-  }, [findNearestTable, focusedTable, zoom, resetZoom, zoomToTable]);
+  }, [findNearestTable, resetZoom, zoomToTable]);
 
   const handleMouseLeave = useCallback(() => {
     isPanningRef.current = false;
