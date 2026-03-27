@@ -35,6 +35,7 @@ export async function GET() {
                 last_name: true,
                 title: true,
                 registration_status: true,
+                paired_with_id: true,
               },
             },
           },
@@ -46,7 +47,26 @@ export async function GET() {
     let checkedIn = 0;
 
     const tableData = tables.map((table) => {
-      const guests = table.assignments.map((a) => {
+      // Sort: main guests first (no paired_with_id), partners directly after their main guest
+      const mainGuests = table.assignments.filter(a => !a.guest.paired_with_id);
+      const partners = table.assignments.filter(a => !!a.guest.paired_with_id);
+      const partnerByMainId = new Map(partners.map(a => [a.guest.paired_with_id!, a]));
+
+      const sorted: typeof table.assignments = [];
+      for (const main of mainGuests) {
+        sorted.push(main);
+        const partner = partnerByMainId.get(main.guest.id);
+        if (partner) {
+          sorted.push(partner);
+          partnerByMainId.delete(main.guest.id);
+        }
+      }
+      // Append any remaining partners without a main guest on this table
+      Array.from(partnerByMainId.values()).forEach(remaining => {
+        sorted.push(remaining);
+      });
+
+      const guests = sorted.map((a) => {
         totalAssigned++;
         const isCheckedIn = a.guest.registration_status === 'checked_in';
         if (isCheckedIn) checkedIn++;
