@@ -646,14 +646,6 @@ export default function SeatingDisplay() {
           draggable={false}
         />
 
-        {/* Check-in counter */}
-        <div
-          className="absolute top-[2%] right-[2%] z-10"
-          style={{ fontSize: '1.25vw', fontWeight: 'bold', color: '#000000' }}
-        >
-          {checkedInIds.size}/{total} CHECKED IN
-        </div>
-
         {/* Table overlays — positioned relative to the image container */}
         {Array.from(tableGuests.entries()).map(([tableNum, guests]) => {
           const pos = TABLE_POSITIONS[tableNum];
