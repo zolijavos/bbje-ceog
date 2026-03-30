@@ -32,6 +32,7 @@ const INVITATION_TEMPLATES = [
   { slug: 'reminder_2wks', labelKey: 'templateReminder2wks' },
   { slug: 'final_reminder_general', labelKey: 'templateFinalReminderGeneral' },
   { slug: 'final_reminder_vip', labelKey: 'templateFinalReminderVip' },
+  { slug: 'gala_thank_you', labelKey: 'templateGalaThankYou' },
 ] as const;
 
 export default function EmailPreviewModal({

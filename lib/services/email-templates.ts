@@ -4819,6 +4819,151 @@ Business Publishing Services Kft.
 Publisher of Budapest Business Journal
 Event website: ceogala.com`,
   },
+  gala_thank_you: {
+    slug: 'gala_thank_you',
+    name: 'Gala Thank You',
+    subject: 'Thank you for joining us at the CEO Gala 2026',
+    variables: ['title', 'guestName', 'baseUrl'],
+    html_body: `<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <![endif]-->
+  <title>Thank you for joining us at the CEO Gala 2026</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f3f3f3; font-family: Verdana, Arial, sans-serif; font-size: 15px; line-height: 1.67; color: #222222;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f3f3f3;">
+    <tr>
+      <td align="center" style="padding: 0;">
+        <table role="presentation" width="710" cellpadding="0" cellspacing="0" border="0" style="max-width: 710px; width: 100%; background-color: #ffffff;">
+          <!-- Banner Image -->
+          <tr>
+            <td align="center" style="padding: 0;">
+              <img src="{{baseUrl}}/email-assets/CEO_Gala_2026_thank_you_banner.jpg" alt="CEO Gala 2026 banner" width="710" style="width: 100%; max-width: 710px; height: auto; display: block; border: 0;" />
+            </td>
+          </tr>
+          <!-- Content -->
+          <tr>
+            <td style="padding: 34px 78px 10px 78px; text-align: left; font-size: 15px; line-height: 1.67; color: #222222; font-family: Verdana, Arial, sans-serif;">
+              <!-- Greeting -->
+              <p style="margin: 0 0 26px 0; font-size: 15px; line-height: 1.67; color: #222222; font-family: Verdana, Arial, sans-serif;">Dear {{title}} {{guestName}},</p>
+
+              <p style="margin: 0 0 21px 0; font-size: 15px; line-height: 1.67; color: #222222; font-family: Verdana, Arial, sans-serif;">We sincerely appreciate your presence at the 12th edition of our annual CEO Gala. We came together to celebrate the distinguished and inspiring community we have collectively forged over the past years, as well as the success and accomplishments of our nominated CEOs. The Grand Ballroom at the Corinthia Hotel Budapest once again provided a suitably elegant setting for the evening&#8217;s festivities. We hope you had a wonderful time and were able to create some lasting memories with us.</p>
+
+              <p style="margin: 0 0 21px 0; font-size: 15px; line-height: 1.67; color: #222222; font-family: Verdana, Arial, sans-serif;">We would also like to thank the Singing Lawyers for their performance, which added a special highlight to the evening.</p>
+
+              <p style="margin: 0 0 21px 0; font-size: 15px; line-height: 1.67; color: #222222; font-family: Verdana, Arial, sans-serif;">Bringing this event to life was a year-long effort, and we were delighted to honor this year&#8217;s well-deserving winners. To recap:</p>
+
+              <p style="margin: 0 0 21px 0; font-size: 15px; line-height: 1.67; color: #222222; font-family: Verdana, Arial, sans-serif;">The CEO Community Award was presented to<br>
+              Rezső Rózsai, Managing Partner, KPMG Hungary.</p>
+
+              <p style="margin: 0 0 21px 0; font-size: 15px; line-height: 1.67; color: #222222; font-family: Verdana, Arial, sans-serif;">The Expat CEO Award winner was<br>
+              Xaviera Sancho, General Manager, BT Hungary.</p>
+
+              <p style="margin: 0 0 21px 0; font-size: 15px; line-height: 1.67; color: #222222; font-family: Verdana, Arial, sans-serif;">We hope the evening offered plenty of opportunities to build meaningful connections and form new relationships. We are already beginning to look ahead, and we hope you will anticipate the CEO Gala 2027 as eagerly as we do. We will keep you informed with further details as the event approaches.</p>
+
+              <p style="margin: 0 0 21px 0; font-size: 15px; line-height: 1.67; color: #222222; font-family: Verdana, Arial, sans-serif;">We would like to take this opportunity to thank our official event partner, HIPA, and our generous sponsors Penny, Audi, PwC, Synergy, Siemens, CBRE, Taylor Wessing, and Market Asset Management for their contributions towards making the CEO Gala 2026 a reality.</p>
+
+              <p style="margin: 0 0 21px 0; font-size: 15px; line-height: 1.67; color: #222222; font-family: Verdana, Arial, sans-serif;">Thank you again for joining us. We hope to see you at next year&#8217;s gala or at one or more of our other events throughout the year.</p>
+
+              <p style="margin: 0 0 21px 0; font-size: 15px; line-height: 1.67; color: #222222; font-family: Verdana, Arial, sans-serif;">Photos and event videos are now available &#8212; <a href="https://ceogala.com" style="color: inherit; text-decoration: underline;">click here to view the gallery</a>.</p>
+
+              <p style="margin: 0 0 21px 0; font-size: 15px; line-height: 1.67; color: #222222; font-family: Verdana, Arial, sans-serif;">In the meantime, you can continue reading the Budapest Business Journal at bbj.hu, and follow us on LinkedIn and our YouTube channel to stay updated with the CEO community.</p>
+
+              <!-- Closing -->
+              <p style="margin: 8px 0 28px 0; font-size: 15px; line-height: 1.67; color: #222222; text-align: left; font-family: Verdana, Arial, sans-serif;">Warm regards,</p>
+
+              <!-- Signatures -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 2px 0 6px 0;">
+                <tr>
+                  <td width="50%" align="center" valign="top" style="font-size: 15px; line-height: 1.45; color: #1f2233; font-family: Verdana, Arial, sans-serif;">
+                    <p style="margin: 0; font-weight: 700; font-size: 15px; color: #1f2233; font-family: Verdana, Arial, sans-serif;">Tamás Botka</p>
+                    <p style="margin: 0; font-size: 15px; color: #1f2233; font-family: Verdana, Arial, sans-serif;">Publisher</p>
+                    <p style="margin: 0; font-size: 15px; color: #1f2233; font-family: Verdana, Arial, sans-serif;">Budapest Business Journal</p>
+                  </td>
+                  <td width="50%" align="center" valign="top" style="font-size: 15px; line-height: 1.45; color: #1f2233; font-family: Verdana, Arial, sans-serif;">
+                    <p style="margin: 0; font-weight: 700; font-size: 15px; color: #1f2233; font-family: Verdana, Arial, sans-serif;">Balázs Román</p>
+                    <p style="margin: 0; font-size: 15px; color: #1f2233; font-family: Verdana, Arial, sans-serif;">CEO</p>
+                    <p style="margin: 0; font-size: 15px; color: #1f2233; font-family: Verdana, Arial, sans-serif;">Budapest Business Journal</p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- BBJ Logo -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 14px 0 2px 0;">
+                <tr>
+                  <td align="center">
+                    <img src="{{baseUrl}}/email-assets/CEO_Gala_2026_thank_you_bbj_logo.png" alt="Budapest Business Journal logo" width="300" style="max-width: 300px; height: auto; display: block; margin: 0 auto; border: 0;" />
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Company Info -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" style="padding: 0;">
+                    <p style="margin: 0 0 14px 0; font-style: normal; color: #4d4d4d; font-size: 12.5px; line-height: 1.48; text-align: center; font-family: Verdana, Arial, sans-serif;">Business Publishing Services Kft.<br>
+                    1075 Budapest, Madách Imre út 13–14., Hungary<br>
+                    Publisher of Budapest Business Journal</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`,
+    text_body: `Thank you for joining us at the CEO Gala 2026
+
+Dear {{title}} {{guestName}},
+
+We sincerely appreciate your presence at the 12th edition of our annual CEO Gala. We came together to celebrate the distinguished and inspiring community we have collectively forged over the past years, as well as the success and accomplishments of our nominated CEOs. The Grand Ballroom at the Corinthia Hotel Budapest once again provided a suitably elegant setting for the evening's festivities. We hope you had a wonderful time and were able to create some lasting memories with us.
+
+We would also like to thank the Singing Lawyers for their performance, which added a special highlight to the evening.
+
+Bringing this event to life was a year-long effort, and we were delighted to honor this year's well-deserving winners. To recap:
+
+The CEO Community Award was presented to
+Rezső Rózsai, Managing Partner, KPMG Hungary.
+
+The Expat CEO Award winner was
+Xaviera Sancho, General Manager, BT Hungary.
+
+We hope the evening offered plenty of opportunities to build meaningful connections and form new relationships. We are already beginning to look ahead, and we hope you will anticipate the CEO Gala 2027 as eagerly as we do. We will keep you informed with further details as the event approaches.
+
+We would like to take this opportunity to thank our official event partner, HIPA, and our generous sponsors Penny, Audi, PwC, Synergy, Siemens, CBRE, Taylor Wessing, and Market Asset Management for their contributions towards making the CEO Gala 2026 a reality.
+
+Thank you again for joining us. We hope to see you at next year's gala or at one or more of our other events throughout the year.
+
+Photos and event videos are now available — click here to view the gallery: https://ceogala.com
+
+In the meantime, you can continue reading the Budapest Business Journal at bbj.hu, and follow us on LinkedIn and our YouTube channel to stay updated with the CEO community.
+
+Warm regards,
+
+Tamás Botka                    Balázs Román
+Publisher                      CEO
+Budapest Business Journal      Budapest Business Journal
+
+---
+
+Business Publishing Services Kft.
+1075 Budapest, Madách Imre út 13–14., Hungary
+Publisher of Budapest Business Journal`,
+  },
 } as const;
 
 export type TemplateSlug = keyof typeof DEFAULT_TEMPLATES;

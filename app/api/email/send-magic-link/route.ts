@@ -26,6 +26,7 @@ const ALLOWED_TEMPLATE_SLUGS = [
   'reminder_2wks',
   'final_reminder_general',
   'final_reminder_vip',
+  'gala_thank_you',
 ] as const;
 
 // Request body schema

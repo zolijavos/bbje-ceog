@@ -112,6 +112,7 @@ const TEMPLATE_LABELS: Record<string, string> = {
   invitation_reminder: 'Invitation Reminder',
   final_reminder_general: 'Final Reminder - General',
   final_reminder_vip: 'Final Reminder - VIP',
+  gala_thank_you: 'Gala Thank You',
 };
 
 const TEMPLATES = Object.entries(TEMPLATE_LABELS);
