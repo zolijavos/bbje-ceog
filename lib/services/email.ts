@@ -243,7 +243,7 @@ export async function sendMagicLinkEmail(
       magic_link_hash: hash,
       magic_link_expires_at: expiresAt,
     };
-    if (guest.registration_status !== 'registered' && guest.registration_status !== 'approved') {
+    if (guest.registration_status !== 'registered' && guest.registration_status !== 'approved' && guest.registration_status !== 'checked_in') {
       updateData.registration_status = 'invited';
     }
     await prisma.guest.update({

@@ -111,11 +111,31 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       newValues: validation.data,
     });
 
-    // Broadcast to display if status changed to checked_in
+    // If status changed to checked_in, create checkin record + broadcast to display
     if (
       validation.data.registration_status === 'checked_in' &&
       oldGuest?.registration_status !== 'checked_in'
     ) {
+      // Create checkin record if guest has a registration and no existing checkin
+      const registration = await prisma.registration.findUnique({
+        where: { guest_id: guest.id },
+      });
+      if (registration) {
+        const existingCheckin = await prisma.checkin.findUnique({
+          where: { registration_id: registration.id },
+        });
+        if (!existingCheckin) {
+          await prisma.checkin.create({
+            data: {
+              registration_id: registration.id,
+              guest_id: guest.id,
+              method: 'manual',
+              is_override: false,
+            },
+          });
+        }
+      }
+
       const tableAssignment = await prisma.tableAssignment.findUnique({
         where: { guest_id: guest.id },
         include: { table: { select: { name: true, type: true } } },
@@ -128,7 +148,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
         tableName: tableAssignment?.table.name || null,
         tableType: tableAssignment?.table.type || null,
         seatNumber: tableAssignment?.seat_number || null,
-        checkedInAt: new Date().toISOString(), // Admin manual check-in — no Checkin record, use current time
+        checkedInAt: new Date().toISOString(),
         dietaryRequirements: guest.dietary_requirements || null,
         title: guest.title || null,
         guestType: guest.guest_type,
